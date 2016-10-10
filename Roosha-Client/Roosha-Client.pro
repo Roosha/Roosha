@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     Helpers/bootstrap.cpp \
     Helpers/configuremanager.cpp \
     DB/dbmanager.cpp \
-    Network/networkmanager.cpp
+    Network/networkmanager.cpp \
+    Core/applicationdaemon.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -24,6 +25,7 @@ QML_IMPORT_PATH = QML/
 
 # Default rules for deployment.
 include(deployment.pri)
+include(lib/qtservice/src/qtservice.pri)
 
 HEADERS += \
     Core/centralcontroller.h \
@@ -35,4 +37,5 @@ HEADERS += \
     Helpers/bootstrap.h \
     Helpers/configuremanager.h \
     DB/dbmanager.h \
-    Network/networkmanager.h
+    Network/networkmanager.h \
+    Core/applicationdaemon.h
