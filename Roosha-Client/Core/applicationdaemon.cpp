@@ -3,7 +3,7 @@
 
 ApplicationDaemon::ApplicationDaemon(int argc, char **argv) : QtService<QApplication>(argc, argv, "Roosha") {
     setServiceDescription("Roosha - spaces repetition flashcard program");
-    setServiceFlags(QtServiceBase::Default);
+    setServiceFlags(QtServiceBase::CannotBeStopped);
     //    setStartupType(type); TODO: this line need to run daemon during system startup.
 }
 
@@ -11,12 +11,13 @@ ApplicationDaemon::~ApplicationDaemon(){
 }
 
 
+void ApplicationDaemon::start() {
 
-void ApplicationDaemon::start() { // aka main
+    QApplication * app = application();
+    app->setQuitOnLastWindowClosed(false);
 
     CentralController centralController;
     centralController.start();
-
 }
 
 void ApplicationDaemon::stop() {

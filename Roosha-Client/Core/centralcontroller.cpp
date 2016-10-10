@@ -1,7 +1,7 @@
 #include "Core/centralcontroller.h"
 #include "Helpers/bootstrap.h"
 #include "Core/hotkeylistener.h"
-#include "QMessageBox"
+#include <QMessageBox>
 
 CentralController::CentralController() {
     Bootstrap boot(this);

@@ -26,6 +26,7 @@ QML_IMPORT_PATH = QML/
 # Default rules for deployment.
 include(deployment.pri)
 include(lib/qtservice/src/qtservice.pri)
+include(lib/QHotkey/qhotkey.pri)
 
 HEADERS += \
     Core/centralcontroller.h \
