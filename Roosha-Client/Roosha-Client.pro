@@ -14,7 +14,8 @@ SOURCES += main.cpp \
     Helpers/bootstrap.cpp \
     Helpers/configuremanager.cpp \
     DB/dbmanager.cpp \
-    Network/networkmanager.cpp
+    Network/networkmanager.cpp \
+    Network/translation_service.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -35,4 +36,22 @@ HEADERS += \
     Helpers/bootstrap.h \
     Helpers/configuremanager.h \
     DB/dbmanager.h \
-    Network/networkmanager.h
+    Network/networkmanager.h \
+    Network/translation_service.h
+
+# protobuf generated files
+SOURCES += Network/Proto/commons.pb.cc \
+    Network/Proto/translation_service.pb.cc \
+    Network/Proto/translation_service.grpc.pb.cc
+
+HEADERS += Network/Proto/commons.pb.h \
+    Network/Proto/translation_service.pb.h \
+    Network/Proto/translation_service.grpc.pb.h
+
+# grpc compiler flags
+
+# `prg-config --libs grpc++` output
+GRPC_LIBS = -L/usr/local/lib -lgrpc++
+QMAKE_CXXFLAGS += $$GRPC_LIBS
+QMAKE_CXXFLAGS += -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed \
+    -lprotobuf -lpthread -ldl
