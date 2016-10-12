@@ -4,6 +4,8 @@ QT += qml quick widgets core
 
 CONFIG += c++11
 
+QMAKE_CXX = g++
+
 SOURCES += main.cpp \
     Core/centralcontroller.cpp \
     Core/hotkeylistener.cpp \

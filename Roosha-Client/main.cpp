@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+void testNetwork();
+
 int main(int argc, char *argv[])
 {
     testNetwork();
@@ -23,8 +25,8 @@ int main(int argc, char *argv[])
 }
 
 void testNetwork() {
-    NetworkManager networkManager = NetworkManager::getInstance();
-    std::shared_ptr<TranslationService> translationService = networkManager.getTranslationService();
+    std::shared_ptr<NetworkManager> networkManager = NetworkManager::getInstance();
+    std::shared_ptr<TranslationService> translationService = networkManager->getTranslationService();
     roosha::translation::Translations translations = translationService->translate("exhibit");
     std::cout << translations.SerializeAsString();
 }
