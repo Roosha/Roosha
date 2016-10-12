@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+using roosha::translation::Translations;
+
 void testNetwork();
 
 int main(int argc, char *argv[])
@@ -27,6 +29,6 @@ int main(int argc, char *argv[])
 void testNetwork() {
     std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
     std::shared_ptr<TranslationService> translationService = networkManager->getTranslationService();
-    roosha::translation::Translations translations = translationService->translate("exhibit");
-//    std::cout << translations.SerializeAsString();
+    std::unique_ptr<Translations> translations = translationService->translate("exhibit");
+    std::cout << translations->SerializeAsString() << std::endl;
 }

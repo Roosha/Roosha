@@ -12,7 +12,7 @@ class TranslationService {
  public:
     TranslationService(const grpc::string &target);
 
-    roosha::translation::Translations&& translate(QString source);
+    std::unique_ptr<roosha::translation::Translations> translate(QString source);
 
     void proposeUserTranslation(roosha::translation::Translation userTranslation);
 

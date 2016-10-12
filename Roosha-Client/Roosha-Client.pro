@@ -6,6 +6,9 @@ CONFIG += c++11
 
 QMAKE_CXX = g++
 
+# grpc
+QMAKE_LIBS += -L/usr/local/lib -lgrpc++ -lgrpc++_reflection -lprotobuf -lpthread -ldl
+
 SOURCES += main.cpp \
     Core/centralcontroller.cpp \
     Core/hotkeylistener.cpp \
@@ -49,11 +52,4 @@ SOURCES += Network/Proto/commons.pb.cc \
 HEADERS += Network/Proto/commons.pb.h \
     Network/Proto/translation_service.pb.h \
     Network/Proto/translation_service.grpc.pb.h
-
-# grpc compiler flags
-
-# `prg-config --libs grpc++` output
-GRPC_LIBS = -L/usr/local/lib -lgrpc++
-QMAKE_CXXFLAGS += $$GRPC_LIBS
-QMAKE_CXXFLAGS += -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed \
-    -lprotobuf -lpthread -ldl
+#-------------------------------

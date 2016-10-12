@@ -20,16 +20,16 @@ TranslationService::TranslationService(const grpc::string &target) {
     stub_ = RooshaTranslationService::NewStub(channel);
 }
 
-Translations&& TranslationService::translate(QString source) {
+std::unique_ptr<Translations> TranslationService::translate(QString source) {
     ClientContext clientContext;
 
     TranslationRequest request;
     request.set_source(source.toStdString());
 
-    Translations response;
-    Status status = stub_->translate(&clientContext, request, &response);
+    std::unique_ptr<Translations> response(new Translations);
+    Status status = stub_->translate(&clientContext, request, response.get());
     if (status.ok()) {
-        return std::move(response);
+        return response;
     }
     throw std::exception();
 }
