@@ -17,41 +17,13 @@
  */
 syntax = "proto3";
 
-package roosha.translation;
+package roosha.commons;
 
-import "commons.proto";
-
-option java_package = "com.github.roosha.proto.translation";
-option java_outer_classname = "TranslationServiceProto";
+option java_package = "com.github.roosha.proto.commons";
+option java_outer_classname = "CommonsProto";
 
 option cc_enable_arenas = false;
 
 option optimize_for = SPEED;
 
-
-service RooshaTranslationService {
-    rpc translate(TranslationRequest) returns (Translations) {}
-    rpc proposeUserTranslation(Translation) returns (roosha.commons.Void) {}
-}
-
-message TranslationRequest {
-    // Text to be translated
-    string source = 1;
-}
-
-message Translations {
-    string source = 1;
-    repeated Translation translation = 2;
-}
-
-message Translation {
-    repeated string target = 1;
-    repeated string example = 2;
-    TranslationProvider provider = 3;
-}
-
-enum TranslationProvider {
-    UNKNOWN = 0;
-    YANDEX_DICTIONARY = 1;
-    YANDEX_TRANSLATOR = 2;
-}
+message Void{}

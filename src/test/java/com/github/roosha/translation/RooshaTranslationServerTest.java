@@ -18,10 +18,10 @@
 
 package com.github.roosha.translation;
 
-import com.github.roosha.translation.proto.RooshaTranslationServiceGrpc;
-import com.github.roosha.translation.proto.TranslationServiceProto.TranslationOrBuilder;
-import com.github.roosha.translation.proto.TranslationServiceProto.TranslationRequest;
-import com.github.roosha.translation.proto.TranslationServiceProto.Translations;
+import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc;
+import com.github.roosha.proto.translation.TranslationServiceProto.TranslationOrBuilder;
+import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
+import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ public class RooshaTranslationServerTest {
     }
 
     public static void main(String[] args) {
-        final RooshaTranslationServerTest client = new RooshaTranslationServerTest("127.0.0.1", 1488);
+        final RooshaTranslationServerTest client = new RooshaTranslationServerTest("127.0.0.1", 1543);
 
         for (String str : new String[]{"exhibit", "gobbles"}) {
             @NotNull Translations translations = Translations.getDefaultInstance();
@@ -58,6 +58,8 @@ public class RooshaTranslationServerTest {
                 for (String example : translationOrBuilder.getExampleList()) {
                     System.out.println("example: " + example);
                 }
+
+                System.out.println(translationOrBuilder.getProvider());
             }
 
             System.out.println("\n");

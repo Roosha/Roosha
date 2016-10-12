@@ -18,7 +18,7 @@
 
 package com.github.roosha.translation;
 
-import com.github.roosha.translation.proto.RooshaTranslationService;
+import com.github.roosha.proto.translation.RooshaTranslationService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import org.jetbrains.annotations.Nullable;
@@ -54,7 +54,7 @@ public class RooshaTranslationServer {
     }
 
     public static void main(String[] args) throws Exception {
-        final RooshaTranslationServer translationServer = new RooshaTranslationServer(1488);
+        final RooshaTranslationServer translationServer = new RooshaTranslationServer(1543);
         translationServer.start();
         translationServer.blockUntilShutdown();
     }
