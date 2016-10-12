@@ -7,11 +7,10 @@
 
 class NetworkManager {
  public:
-    static std::shared_ptr<NetworkManager> getInstance();
+    NetworkManager();
 
     std::shared_ptr<TranslationService> getTranslationService();
  private:
-    NetworkManager();
 
     static std::shared_ptr<NetworkManager> instance_(NetworkManager());
 

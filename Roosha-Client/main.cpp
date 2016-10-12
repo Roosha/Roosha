@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
 }
 
 void testNetwork() {
-    std::shared_ptr<NetworkManager> networkManager = NetworkManager::getInstance();
+    std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
     std::shared_ptr<TranslationService> translationService = networkManager->getTranslationService();
     roosha::translation::Translations translations = translationService->translate("exhibit");
-    std::cout << translations.SerializeAsString();
+//    std::cout << translations.SerializeAsString();
 }

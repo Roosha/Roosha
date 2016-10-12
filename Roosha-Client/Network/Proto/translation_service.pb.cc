@@ -50,13 +50,14 @@ void protobuf_AssignDesc_translation_5fservice_2eproto() {
   TranslationRequest_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       TranslationRequest_descriptor_,
-      TranslationRequest::internal_default_instance(),
+      TranslationRequest::default_instance_,
       TranslationRequest_offsets_,
       -1,
       -1,
       -1,
       sizeof(TranslationRequest),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, _is_default_instance_));
   Translations_descriptor_ = file->message_type(1);
   static const int Translations_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translations, source_),
@@ -65,13 +66,14 @@ void protobuf_AssignDesc_translation_5fservice_2eproto() {
   Translations_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       Translations_descriptor_,
-      Translations::internal_default_instance(),
+      Translations::default_instance_,
       Translations_offsets_,
       -1,
       -1,
       -1,
       sizeof(Translations),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translations, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translations, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translations, _is_default_instance_));
   Translation_descriptor_ = file->message_type(2);
   static const int Translation_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translation, target_),
@@ -81,20 +83,21 @@ void protobuf_AssignDesc_translation_5fservice_2eproto() {
   Translation_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
       Translation_descriptor_,
-      Translation::internal_default_instance(),
+      Translation::default_instance_,
       Translation_offsets_,
       -1,
       -1,
       -1,
       sizeof(Translation),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translation, _internal_metadata_));
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translation, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translation, _is_default_instance_));
   TranslationProvider_descriptor_ = file->enum_type(0);
 }
 
 namespace {
 
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-void protobuf_AssignDescriptorsOnce() {
+inline void protobuf_AssignDescriptorsOnce() {
   ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
                  &protobuf_AssignDesc_translation_5fservice_2eproto);
 }
@@ -103,48 +106,32 @@ void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      TranslationRequest_descriptor_, TranslationRequest::internal_default_instance());
+      TranslationRequest_descriptor_, &TranslationRequest::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      Translations_descriptor_, Translations::internal_default_instance());
+      Translations_descriptor_, &Translations::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      Translation_descriptor_, Translation::internal_default_instance());
+      Translation_descriptor_, &Translation::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_translation_5fservice_2eproto() {
-  TranslationRequest_default_instance_.Shutdown();
+  delete TranslationRequest::default_instance_;
   delete TranslationRequest_reflection_;
-  Translations_default_instance_.Shutdown();
+  delete Translations::default_instance_;
   delete Translations_reflection_;
-  Translation_default_instance_.Shutdown();
+  delete Translation::default_instance_;
   delete Translation_reflection_;
 }
 
-void protobuf_InitDefaults_translation_5fservice_2eproto_impl() {
+void protobuf_AddDesc_translation_5fservice_2eproto() GOOGLE_ATTRIBUTE_COLD;
+void protobuf_AddDesc_translation_5fservice_2eproto() {
+  static bool already_here = false;
+  if (already_here) return;
+  already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::roosha::commons::protobuf_InitDefaults_commons_2eproto();
-  ::google::protobuf::internal::GetEmptyString();
-  TranslationRequest_default_instance_.DefaultConstruct();
-  ::google::protobuf::internal::GetEmptyString();
-  Translations_default_instance_.DefaultConstruct();
-  ::google::protobuf::internal::GetEmptyString();
-  Translation_default_instance_.DefaultConstruct();
-  TranslationRequest_default_instance_.get_mutable()->InitAsDefaultInstance();
-  Translations_default_instance_.get_mutable()->InitAsDefaultInstance();
-  Translation_default_instance_.get_mutable()->InitAsDefaultInstance();
-}
-
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_InitDefaults_translation_5fservice_2eproto_once_);
-void protobuf_InitDefaults_translation_5fservice_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_InitDefaults_translation_5fservice_2eproto_once_,
-                 &protobuf_InitDefaults_translation_5fservice_2eproto_impl);
-}
-void protobuf_AddDesc_translation_5fservice_2eproto_impl() {
-  GOOGLE_PROTOBUF_VERIFY_VERSION;
-
-  protobuf_InitDefaults_translation_5fservice_2eproto();
+  ::roosha::commons::protobuf_AddDesc_commons_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\031translation_service.proto\022\022roosha.tran"
     "slation\032\rcommons.proto\"$\n\022TranslationReq"
@@ -165,15 +152,15 @@ void protobuf_AddDesc_translation_5fservice_2eproto_impl() {
     "H\001\370\001\000b\006proto3", 653);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "translation_service.proto", &protobuf_RegisterTypes);
-  ::roosha::commons::protobuf_AddDesc_commons_2eproto();
+  TranslationRequest::default_instance_ = new TranslationRequest();
+  Translations::default_instance_ = new Translations();
+  Translation::default_instance_ = new Translation();
+  TranslationRequest::default_instance_->InitAsDefaultInstance();
+  Translations::default_instance_->InitAsDefaultInstance();
+  Translation::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_translation_5fservice_2eproto);
 }
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_translation_5fservice_2eproto_once_);
-void protobuf_AddDesc_translation_5fservice_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_translation_5fservice_2eproto_once_,
-                 &protobuf_AddDesc_translation_5fservice_2eproto_impl);
-}
 // Force AddDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_translation_5fservice_2eproto {
   StaticDescriptorInitializer_translation_5fservice_2eproto() {
@@ -185,7 +172,7 @@ const ::google::protobuf::EnumDescriptor* TranslationProvider_descriptor() {
   return TranslationProvider_descriptor_;
 }
 bool TranslationProvider_IsValid(int value) {
-  switch (value) {
+  switch(value) {
     case 0:
     case 1:
     case 2:
@@ -196,16 +183,6 @@ bool TranslationProvider_IsValid(int value) {
 }
 
 
-namespace {
-
-static void MergeFromFail(int line) GOOGLE_ATTRIBUTE_COLD GOOGLE_ATTRIBUTE_NORETURN;
-static void MergeFromFail(int line) {
-  ::google::protobuf::internal::MergeFromFail(__FILE__, line);
-}
-
-}  // namespace
-
-
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -214,25 +191,27 @@ const int TranslationRequest::kSourceFieldNumber;
 
 TranslationRequest::TranslationRequest()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_translation_5fservice_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:roosha.translation.TranslationRequest)
 }
 
 void TranslationRequest::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
 }
 
 TranslationRequest::TranslationRequest(const TranslationRequest& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:roosha.translation.TranslationRequest)
 }
 
 void TranslationRequest::SharedCtor() {
-  source_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  source_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 TranslationRequest::~TranslationRequest() {
@@ -242,6 +221,8 @@ TranslationRequest::~TranslationRequest() {
 
 void TranslationRequest::SharedDtor() {
   source_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != default_instance_) {
+  }
 }
 
 void TranslationRequest::SetCachedSize(int size) const {
@@ -255,11 +236,11 @@ const ::google::protobuf::Descriptor* TranslationRequest::descriptor() {
 }
 
 const TranslationRequest& TranslationRequest::default_instance() {
-  protobuf_InitDefaults_translation_5fservice_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_translation_5fservice_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<TranslationRequest> TranslationRequest_default_instance_;
+TranslationRequest* TranslationRequest::default_instance_ = NULL;
 
 TranslationRequest* TranslationRequest::New(::google::protobuf::Arena* arena) const {
   TranslationRequest* n = new TranslationRequest;
@@ -339,7 +320,6 @@ void TranslationRequest::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* TranslationRequest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:roosha.translation.TranslationRequest)
   // optional string source = 1;
   if (this->source().size() > 0) {
@@ -356,9 +336,9 @@ void TranslationRequest::SerializeWithCachedSizes(
   return target;
 }
 
-size_t TranslationRequest::ByteSizeLong() const {
+int TranslationRequest::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:roosha.translation.TranslationRequest)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // optional string source = 1;
   if (this->source().size() > 0) {
@@ -367,17 +347,18 @@ size_t TranslationRequest::ByteSizeLong() const {
         this->source());
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void TranslationRequest::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:roosha.translation.TranslationRequest)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const TranslationRequest* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const TranslationRequest* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const TranslationRequest>(
           &from);
   if (source == NULL) {
@@ -385,21 +366,15 @@ void TranslationRequest::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.translation.TranslationRequest)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void TranslationRequest::MergeFrom(const TranslationRequest& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:roosha.translation.TranslationRequest)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void TranslationRequest::UnsafeMergeFrom(const TranslationRequest& from) {
-  GOOGLE_DCHECK(&from != this);
   if (from.source().size() > 0) {
 
     source_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.source_);
@@ -417,7 +392,7 @@ void TranslationRequest::CopyFrom(const TranslationRequest& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:roosha.translation.TranslationRequest)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool TranslationRequest::IsInitialized() const {
@@ -450,37 +425,37 @@ void TranslationRequest::InternalSwap(TranslationRequest* other) {
 void TranslationRequest::clear_source() {
   source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& TranslationRequest::source() const {
+ const ::std::string& TranslationRequest::source() const {
   // @@protoc_insertion_point(field_get:roosha.translation.TranslationRequest.source)
   return source_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void TranslationRequest::set_source(const ::std::string& value) {
+ void TranslationRequest::set_source(const ::std::string& value) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:roosha.translation.TranslationRequest.source)
 }
-void TranslationRequest::set_source(const char* value) {
+ void TranslationRequest::set_source(const char* value) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:roosha.translation.TranslationRequest.source)
 }
-void TranslationRequest::set_source(const char* value, size_t size) {
+ void TranslationRequest::set_source(const char* value, size_t size) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:roosha.translation.TranslationRequest.source)
 }
-::std::string* TranslationRequest::mutable_source() {
+ ::std::string* TranslationRequest::mutable_source() {
   
   // @@protoc_insertion_point(field_mutable:roosha.translation.TranslationRequest.source)
   return source_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* TranslationRequest::release_source() {
+ ::std::string* TranslationRequest::release_source() {
   // @@protoc_insertion_point(field_release:roosha.translation.TranslationRequest.source)
   
   return source_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void TranslationRequest::set_allocated_source(::std::string* source) {
+ void TranslationRequest::set_allocated_source(::std::string* source) {
   if (source != NULL) {
     
   } else {
@@ -490,9 +465,6 @@ void TranslationRequest::set_allocated_source(::std::string* source) {
   // @@protoc_insertion_point(field_set_allocated:roosha.translation.TranslationRequest.source)
 }
 
-inline const TranslationRequest* TranslationRequest::internal_default_instance() {
-  return &TranslationRequest_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -504,25 +476,27 @@ const int Translations::kTranslationFieldNumber;
 
 Translations::Translations()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_translation_5fservice_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:roosha.translation.Translations)
 }
 
 void Translations::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
 }
 
 Translations::Translations(const Translations& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:roosha.translation.Translations)
 }
 
 void Translations::SharedCtor() {
-  source_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  source_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 Translations::~Translations() {
@@ -532,6 +506,8 @@ Translations::~Translations() {
 
 void Translations::SharedDtor() {
   source_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (this != default_instance_) {
+  }
 }
 
 void Translations::SetCachedSize(int size) const {
@@ -545,11 +521,11 @@ const ::google::protobuf::Descriptor* Translations::descriptor() {
 }
 
 const Translations& Translations::default_instance() {
-  protobuf_InitDefaults_translation_5fservice_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_translation_5fservice_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<Translations> Translations_default_instance_;
+Translations* Translations::default_instance_ = NULL;
 
 Translations* Translations::New(::google::protobuf::Arena* arena) const {
   Translations* n = new Translations;
@@ -653,7 +629,6 @@ void Translations::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Translations::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:roosha.translation.Translations)
   // optional string source = 1;
   if (this->source().size() > 0) {
@@ -677,9 +652,9 @@ void Translations::SerializeWithCachedSizes(
   return target;
 }
 
-size_t Translations::ByteSizeLong() const {
+int Translations::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:roosha.translation.Translations)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // optional string source = 1;
   if (this->source().size() > 0) {
@@ -689,27 +664,25 @@ size_t Translations::ByteSizeLong() const {
   }
 
   // repeated .roosha.translation.Translation translation = 2;
-  {
-    unsigned int count = this->translation_size();
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->translation(i));
-    }
+  total_size += 1 * this->translation_size();
+  for (int i = 0; i < this->translation_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->translation(i));
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void Translations::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:roosha.translation.Translations)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const Translations* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const Translations* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const Translations>(
           &from);
   if (source == NULL) {
@@ -717,21 +690,15 @@ void Translations::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.translation.Translations)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void Translations::MergeFrom(const Translations& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:roosha.translation.Translations)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void Translations::UnsafeMergeFrom(const Translations& from) {
-  GOOGLE_DCHECK(&from != this);
   translation_.MergeFrom(from.translation_);
   if (from.source().size() > 0) {
 
@@ -750,7 +717,7 @@ void Translations::CopyFrom(const Translations& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:roosha.translation.Translations)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool Translations::IsInitialized() const {
@@ -784,37 +751,37 @@ void Translations::InternalSwap(Translations* other) {
 void Translations::clear_source() {
   source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-const ::std::string& Translations::source() const {
+ const ::std::string& Translations::source() const {
   // @@protoc_insertion_point(field_get:roosha.translation.Translations.source)
   return source_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void Translations::set_source(const ::std::string& value) {
+ void Translations::set_source(const ::std::string& value) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:roosha.translation.Translations.source)
 }
-void Translations::set_source(const char* value) {
+ void Translations::set_source(const char* value) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:roosha.translation.Translations.source)
 }
-void Translations::set_source(const char* value, size_t size) {
+ void Translations::set_source(const char* value, size_t size) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:roosha.translation.Translations.source)
 }
-::std::string* Translations::mutable_source() {
+ ::std::string* Translations::mutable_source() {
   
   // @@protoc_insertion_point(field_mutable:roosha.translation.Translations.source)
   return source_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-::std::string* Translations::release_source() {
+ ::std::string* Translations::release_source() {
   // @@protoc_insertion_point(field_release:roosha.translation.Translations.source)
   
   return source_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void Translations::set_allocated_source(::std::string* source) {
+ void Translations::set_allocated_source(::std::string* source) {
   if (source != NULL) {
     
   } else {
@@ -854,9 +821,6 @@ Translations::translation() const {
   return translation_;
 }
 
-inline const Translations* Translations::internal_default_instance() {
-  return &Translations_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -869,25 +833,27 @@ const int Translation::kProviderFieldNumber;
 
 Translation::Translation()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  if (this != internal_default_instance()) protobuf_InitDefaults_translation_5fservice_2eproto();
   SharedCtor();
   // @@protoc_insertion_point(constructor:roosha.translation.Translation)
 }
 
 void Translation::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
 }
 
 Translation::Translation(const Translation& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:roosha.translation.Translation)
 }
 
 void Translation::SharedCtor() {
-  provider_ = 0;
+    _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  provider_ = 0;
 }
 
 Translation::~Translation() {
@@ -896,6 +862,8 @@ Translation::~Translation() {
 }
 
 void Translation::SharedDtor() {
+  if (this != default_instance_) {
+  }
 }
 
 void Translation::SetCachedSize(int size) const {
@@ -909,11 +877,11 @@ const ::google::protobuf::Descriptor* Translation::descriptor() {
 }
 
 const Translation& Translation::default_instance() {
-  protobuf_InitDefaults_translation_5fservice_2eproto();
-  return *internal_default_instance();
+  if (default_instance_ == NULL) protobuf_AddDesc_translation_5fservice_2eproto();
+  return *default_instance_;
 }
 
-::google::protobuf::internal::ExplicitlyConstructed<Translation> Translation_default_instance_;
+Translation* Translation::default_instance_ = NULL;
 
 Translation* Translation::New(::google::protobuf::Arena* arena) const {
   Translation* n = new Translation;
@@ -1049,7 +1017,6 @@ void Translation::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Translation::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  (void)deterministic; // Unused
   // @@protoc_insertion_point(serialize_to_array_start:roosha.translation.Translation)
   // repeated string target = 1;
   for (int i = 0; i < this->target_size(); i++) {
@@ -1081,9 +1048,9 @@ void Translation::SerializeWithCachedSizes(
   return target;
 }
 
-size_t Translation::ByteSizeLong() const {
+int Translation::ByteSize() const {
 // @@protoc_insertion_point(message_byte_size_start:roosha.translation.Translation)
-  size_t total_size = 0;
+  int total_size = 0;
 
   // optional .roosha.translation.TranslationProvider provider = 3;
   if (this->provider() != 0) {
@@ -1092,32 +1059,31 @@ size_t Translation::ByteSizeLong() const {
   }
 
   // repeated string target = 1;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->target_size());
+  total_size += 1 * this->target_size();
   for (int i = 0; i < this->target_size(); i++) {
     total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
       this->target(i));
   }
 
   // repeated string example = 2;
-  total_size += 1 *
-      ::google::protobuf::internal::FromIntSize(this->example_size());
+  total_size += 1 * this->example_size();
   for (int i = 0; i < this->example_size(); i++) {
     total_size += ::google::protobuf::internal::WireFormatLite::StringSize(
       this->example(i));
   }
 
-  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = cached_size;
+  _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void Translation::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:roosha.translation.Translation)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const Translation* source =
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
+  }
+  const Translation* source = 
       ::google::protobuf::internal::DynamicCastToGenerated<const Translation>(
           &from);
   if (source == NULL) {
@@ -1125,23 +1091,17 @@ void Translation::MergeFrom(const ::google::protobuf::Message& from) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
   // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.translation.Translation)
-    UnsafeMergeFrom(*source);
+    MergeFrom(*source);
   }
 }
 
 void Translation::MergeFrom(const Translation& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:roosha.translation.Translation)
-  if (GOOGLE_PREDICT_TRUE(&from != this)) {
-    UnsafeMergeFrom(from);
-  } else {
-    MergeFromFail(__LINE__);
+  if (GOOGLE_PREDICT_FALSE(&from == this)) {
+    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
-}
-
-void Translation::UnsafeMergeFrom(const Translation& from) {
-  GOOGLE_DCHECK(&from != this);
-  target_.UnsafeMergeFrom(from.target_);
-  example_.UnsafeMergeFrom(from.example_);
+  target_.MergeFrom(from.target_);
+  example_.MergeFrom(from.example_);
   if (from.provider() != 0) {
     set_provider(from.provider());
   }
@@ -1158,7 +1118,7 @@ void Translation::CopyFrom(const Translation& from) {
 // @@protoc_insertion_point(class_specific_copy_from_start:roosha.translation.Translation)
   if (&from == this) return;
   Clear();
-  UnsafeMergeFrom(from);
+  MergeFrom(from);
 }
 
 bool Translation::IsInitialized() const {
@@ -1196,49 +1156,49 @@ int Translation::target_size() const {
 void Translation::clear_target() {
   target_.Clear();
 }
-const ::std::string& Translation::target(int index) const {
+ const ::std::string& Translation::target(int index) const {
   // @@protoc_insertion_point(field_get:roosha.translation.Translation.target)
   return target_.Get(index);
 }
-::std::string* Translation::mutable_target(int index) {
+ ::std::string* Translation::mutable_target(int index) {
   // @@protoc_insertion_point(field_mutable:roosha.translation.Translation.target)
   return target_.Mutable(index);
 }
-void Translation::set_target(int index, const ::std::string& value) {
+ void Translation::set_target(int index, const ::std::string& value) {
   // @@protoc_insertion_point(field_set:roosha.translation.Translation.target)
   target_.Mutable(index)->assign(value);
 }
-void Translation::set_target(int index, const char* value) {
+ void Translation::set_target(int index, const char* value) {
   target_.Mutable(index)->assign(value);
   // @@protoc_insertion_point(field_set_char:roosha.translation.Translation.target)
 }
-void Translation::set_target(int index, const char* value, size_t size) {
+ void Translation::set_target(int index, const char* value, size_t size) {
   target_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_set_pointer:roosha.translation.Translation.target)
 }
-::std::string* Translation::add_target() {
+ ::std::string* Translation::add_target() {
   // @@protoc_insertion_point(field_add_mutable:roosha.translation.Translation.target)
   return target_.Add();
 }
-void Translation::add_target(const ::std::string& value) {
+ void Translation::add_target(const ::std::string& value) {
   target_.Add()->assign(value);
   // @@protoc_insertion_point(field_add:roosha.translation.Translation.target)
 }
-void Translation::add_target(const char* value) {
+ void Translation::add_target(const char* value) {
   target_.Add()->assign(value);
   // @@protoc_insertion_point(field_add_char:roosha.translation.Translation.target)
 }
-void Translation::add_target(const char* value, size_t size) {
+ void Translation::add_target(const char* value, size_t size) {
   target_.Add()->assign(reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_add_pointer:roosha.translation.Translation.target)
 }
-const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ const ::google::protobuf::RepeatedPtrField< ::std::string>&
 Translation::target() const {
   // @@protoc_insertion_point(field_list:roosha.translation.Translation.target)
   return target_;
 }
-::google::protobuf::RepeatedPtrField< ::std::string>*
+ ::google::protobuf::RepeatedPtrField< ::std::string>*
 Translation::mutable_target() {
   // @@protoc_insertion_point(field_mutable_list:roosha.translation.Translation.target)
   return &target_;
@@ -1251,49 +1211,49 @@ int Translation::example_size() const {
 void Translation::clear_example() {
   example_.Clear();
 }
-const ::std::string& Translation::example(int index) const {
+ const ::std::string& Translation::example(int index) const {
   // @@protoc_insertion_point(field_get:roosha.translation.Translation.example)
   return example_.Get(index);
 }
-::std::string* Translation::mutable_example(int index) {
+ ::std::string* Translation::mutable_example(int index) {
   // @@protoc_insertion_point(field_mutable:roosha.translation.Translation.example)
   return example_.Mutable(index);
 }
-void Translation::set_example(int index, const ::std::string& value) {
+ void Translation::set_example(int index, const ::std::string& value) {
   // @@protoc_insertion_point(field_set:roosha.translation.Translation.example)
   example_.Mutable(index)->assign(value);
 }
-void Translation::set_example(int index, const char* value) {
+ void Translation::set_example(int index, const char* value) {
   example_.Mutable(index)->assign(value);
   // @@protoc_insertion_point(field_set_char:roosha.translation.Translation.example)
 }
-void Translation::set_example(int index, const char* value, size_t size) {
+ void Translation::set_example(int index, const char* value, size_t size) {
   example_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_set_pointer:roosha.translation.Translation.example)
 }
-::std::string* Translation::add_example() {
+ ::std::string* Translation::add_example() {
   // @@protoc_insertion_point(field_add_mutable:roosha.translation.Translation.example)
   return example_.Add();
 }
-void Translation::add_example(const ::std::string& value) {
+ void Translation::add_example(const ::std::string& value) {
   example_.Add()->assign(value);
   // @@protoc_insertion_point(field_add:roosha.translation.Translation.example)
 }
-void Translation::add_example(const char* value) {
+ void Translation::add_example(const char* value) {
   example_.Add()->assign(value);
   // @@protoc_insertion_point(field_add_char:roosha.translation.Translation.example)
 }
-void Translation::add_example(const char* value, size_t size) {
+ void Translation::add_example(const char* value, size_t size) {
   example_.Add()->assign(reinterpret_cast<const char*>(value), size);
   // @@protoc_insertion_point(field_add_pointer:roosha.translation.Translation.example)
 }
-const ::google::protobuf::RepeatedPtrField< ::std::string>&
+ const ::google::protobuf::RepeatedPtrField< ::std::string>&
 Translation::example() const {
   // @@protoc_insertion_point(field_list:roosha.translation.Translation.example)
   return example_;
 }
-::google::protobuf::RepeatedPtrField< ::std::string>*
+ ::google::protobuf::RepeatedPtrField< ::std::string>*
 Translation::mutable_example() {
   // @@protoc_insertion_point(field_mutable_list:roosha.translation.Translation.example)
   return &example_;
@@ -1303,19 +1263,16 @@ Translation::mutable_example() {
 void Translation::clear_provider() {
   provider_ = 0;
 }
-::roosha::translation::TranslationProvider Translation::provider() const {
+ ::roosha::translation::TranslationProvider Translation::provider() const {
   // @@protoc_insertion_point(field_get:roosha.translation.Translation.provider)
   return static_cast< ::roosha::translation::TranslationProvider >(provider_);
 }
-void Translation::set_provider(::roosha::translation::TranslationProvider value) {
+ void Translation::set_provider(::roosha::translation::TranslationProvider value) {
   
   provider_ = value;
   // @@protoc_insertion_point(field_set:roosha.translation.Translation.provider)
 }
 
-inline const Translation* Translation::internal_default_instance() {
-  return &Translation_default_instance_.get();
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)

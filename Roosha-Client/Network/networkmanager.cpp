@@ -4,15 +4,9 @@ NetworkManager::NetworkManager():
         target_(DEFAULT_TRANSLATION_SERVICE_HOST) {
 }
 
-static std::shared_ptr<NetworkManager> NetworkManager::getInstance() {
-    return instance_;
-}
-
 std::shared_ptr<TranslationService> NetworkManager::getTranslationService() {
-    if (translationService_) {
-        return translationService_;
+    if (!translationService_) {
+        translationService_.reset(new TranslationService(target_));
     }
-    else {
-        return translationService_.reset(new TranslationService(target_));
-    }
+    return translationService_;
 }

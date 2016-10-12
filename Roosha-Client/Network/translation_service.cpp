@@ -1,7 +1,7 @@
 #include "translation_service.h"
 
 #include <grpc/grpc.h>
-#include <grpc/grpc.h>
+#include <grpc++/grpc++.h>
 #include <grpc++/channel.h>
 #include <grpc++/client_context.h>
 #include <grpc++/create_channel.h>
@@ -38,8 +38,8 @@ void TranslationService::proposeUserTranslation(Translation userTranslation) {
     ClientContext ClientContext;
 
     roosha::commons::Void response;
-
-    Status status = stub_->proposeUserTranslation(ClientContext, userTranslation, &response);
+//::grpc::Status proposeUserTranslation(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::roosha::commons::Void* response) GRPC_OVERRIDE;
+    Status status = stub_->proposeUserTranslation(&ClientContext, userTranslation, &response);
 
     if (!status.ok()) {
         throw std::exception();
