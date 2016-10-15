@@ -1,8 +1,10 @@
-#include "Core/hotkeylistener.h"
 #include <QEventLoop>
 #include <QApplication>
+#include <QClipboard>
 
-HotkeyListener::HotkeyListener() {
+#include "Core/hotkeylistener.h"
+
+HotkeyListener::HotkeyListener(QObject *parent) : QThread(parent) {
     qhk = new QHotkey(QKeySequence("ctrl+alt+Q"), true);
 }
 
@@ -10,16 +12,28 @@ HotkeyListener::~HotkeyListener() {
     delete qhk;
 }
 
-void HotkeyListener::startListen() {
+void HotkeyListener::run() {
     emit newWord("Hello");
 
-    QEventLoop l;
+//    QEventLoop l;
 
       connect(qhk, SIGNAL(activated()), this, SLOT(newUserAction()));
 
-    l.exec();
+//    l.exec();
 }
 
 void HotkeyListener::newUserAction() {
-    emit newWord("I am from the hotkey");
+    QString userText;
+    if(QApplication::clipboard()->supportsSelection()) {
+        userText = QApplication::clipboard()->text(QClipboard::Selection);
+    } else {
+        userText = getTextUsingClipboardSwap();
+    }
+    if(!userText.isEmpty()) {
+        emit newWord(userText);
+    }
+}
+
+QString HotkeyListener::getTextUsingClipboardSwap() {
+    return QString(); // TODO: support Win and Max OS #Roosha-28
 }

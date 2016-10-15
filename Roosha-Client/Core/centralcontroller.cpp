@@ -1,7 +1,8 @@
+#include <QLabel>
+
 #include "Core/centralcontroller.h"
 #include "Helpers/bootstrap.h"
 #include "Core/hotkeylistener.h"
-#include <QMessageBox>
 
 CentralController::CentralController() {
     Bootstrap boot(this);
@@ -11,11 +12,10 @@ CentralController::CentralController() {
 }
 
 void CentralController::start() {
-    hkListener->startListen();
+    hkListener->start();
 }
 
 void CentralController::handleNewWord(QString word) {
-    QMessageBox m;
-    m.setText(word);
-    m.exec();
+    QLabel * label = new QLabel(word); //TODO: make a request trought NetManager and show mini window with transaltion #Roosha-21
+    label->show();
 }
