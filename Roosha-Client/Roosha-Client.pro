@@ -52,4 +52,7 @@ SOURCES += Network/Proto/commons.pb.cc \
 HEADERS += Network/Proto/commons.pb.h \
     Network/Proto/translation_service.pb.h \
     Network/Proto/translation_service.grpc.pb.h
+
+OTHER_FILES += Network/Proto/commons.proto \
+    Network/Proto/translation_service.proto
 #-------------------------------
