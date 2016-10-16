@@ -3,12 +3,16 @@
 #include "Core/centralcontroller.h"
 #include "Helpers/bootstrap.h"
 #include "Core/hotkeylistener.h"
+#include "Network/networkmanager.h"
+#include "GUI/guimanager.h"
+#include <QMessageBox>
 
 CentralController::CentralController() {
     Bootstrap boot(this);
     boot.run();
 
     connect(hkListener, SIGNAL(newWord(QString)), this, SLOT(handleNewWord(QString)));
+    connect(networkManager, SIGNAL(newTranslation(Translations)), guiManager, SLOT(showNewTranslationWindow(Translations)));
 }
 
 void CentralController::start() {
@@ -16,6 +20,5 @@ void CentralController::start() {
 }
 
 void CentralController::handleNewWord(QString word) {
-    QLabel * label = new QLabel(word); //TODO: make a request trought NetManager and show mini window with transaltion #Roosha-21
-    label->show();
+    networkManager->requestTranslations(word);
 }
