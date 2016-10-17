@@ -2,6 +2,9 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MainForm.ui.qml</file>
-        <file>showTranslation.qml</file>
+    </qresource>
+    <qresource prefix="/translation">
+        <file>ShowTranslation.qml</file>
+        <file>TranslationView.qml</file>
     </qresource>
 </RCC>
