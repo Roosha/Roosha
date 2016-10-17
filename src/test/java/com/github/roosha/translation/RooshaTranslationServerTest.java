@@ -19,15 +19,17 @@
 package com.github.roosha.translation;
 
 import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc;
-import com.github.roosha.proto.translation.TranslationServiceProto.TranslationOrBuilder;
+import com.github.roosha.proto.translation.TranslationServiceProto.Translation;
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.jetbrains.annotations.NotNull;
 
+import static java.lang.String.join;
+
 public class RooshaTranslationServerTest {
-    private final  RooshaTranslationServiceGrpc.RooshaTranslationServiceBlockingStub blockingStub;
+    private final RooshaTranslationServiceGrpc.RooshaTranslationServiceBlockingStub blockingStub;
     private final RooshaTranslationServiceGrpc.RooshaTranslationServiceStub asynchronousStub;
     private final ManagedChannel channel;
 
@@ -41,28 +43,26 @@ public class RooshaTranslationServerTest {
     public static void main(String[] args) {
         final RooshaTranslationServerTest client = new RooshaTranslationServerTest("127.0.0.1", 1543);
 
-        for (String str : new String[]{"exhibit", "gobbles"}) {
+        for (String str : new String[]{"exhibit", "time"}) {
             @NotNull Translations translations = Translations.getDefaultInstance();
             try {
                 translations = client.translate(str);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("Error occurred");
+                //                e.printStackTrace();
             }
 
             System.out.println("source: " + translations.getSource());
 
-            for (TranslationOrBuilder translationOrBuilder : translations.getTranslationOrBuilderList()) {
-                for (String target : translationOrBuilder.getTargetList()) {
-                    System.out.println("target: " + target);
-                }
-                for (String example : translationOrBuilder.getExampleList()) {
-                    System.out.println("example: " + example);
-                }
-
-                System.out.println(translationOrBuilder.getProvider());
+            for (Translation translation : translations.getTranslationList()) {
+                System.out.println("Translation:");
+                final String targets = join(", ", translation.getTargetList());
+                final String examples = join(", ", translation.getExampleList());
+                System.out.println("targets: " + targets);
+                System.out.println("examples: " + examples);
+                System.out.println();
             }
-
-            System.out.println("\n");
+            System.out.println("---------------------------");
         }
     }
 

@@ -18,38 +18,12 @@
 
 package com.github.roosha.translation;
 
-import io.grpc.BindableService;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PreDestroy;
 import java.io.IOException;
 
-@Component
-public class RooshaTranslationServer implements TranslationServer {
-    private Integer port = 1543;
+public interface TranslationServer {
+    void start() throws IOException;
 
-    @Autowired
-    private BindableService service;
+    void stop();
 
-    private Server server;
-
-    @Override
-    public void start() throws IOException {
-        server = ServerBuilder.forPort(port).addService(service).build();
-        server.start();
-    }
-
-    @Override
-    public void blockAndWait() throws InterruptedException {
-        server.awaitTermination();
-    }
-
-    @Override
-    @PreDestroy
-    public void stop() {
-        server.shutdown();
-    }
+    void blockAndWait() throws InterruptedException;
 }
