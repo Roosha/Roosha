@@ -1,6 +1,5 @@
 #include "idiff.h"
 
-IDiff::IDiff()
-{
+IDiff::IDiff() {
 
 }

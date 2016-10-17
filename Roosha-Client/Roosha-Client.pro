@@ -40,3 +40,6 @@ HEADERS += \
     DB/dbmanager.h \
     Network/networkmanager.h \
     Core/applicationdaemon.h
+
+DISTFILES += \
+    codeStyle.astylerc
