@@ -4,12 +4,32 @@ Translation::Translation() {
 
 }
 
-Translation::Translation(QString d) : data(d) {}
-
-QString Translation::getSource() const {
-    return data;
+QString Translation::getSource() const
+{
+    return source;
 }
 
-void Translation::setSource(const QString &src) {
-    data = src;
+void Translation::setSource(const QString &value)
+{
+    source = value;
+}
+
+QStringList Translation::getTarget() const
+{
+    return target;
+}
+
+void Translation::setTarget(const QStringList &value)
+{
+    target = value;
+}
+
+QStringList Translation::getExamples() const
+{
+    return examples;
+}
+
+void Translation::setExamples(const QStringList &value)
+{
+    examples = value;
 }

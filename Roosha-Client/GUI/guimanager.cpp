@@ -11,6 +11,5 @@ GUIManager::GUIManager() {
 }
 
 void GUIManager::showNewTranslationWindow(Translations trans) {
-    translationController->setData(trans);
-    translationController->show();
+    translationController->addData(trans);
 }
