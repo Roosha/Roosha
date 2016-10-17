@@ -4,21 +4,28 @@
 
 class CardBuilder{
  public:
-   CardBuilder();
-   CardBuilder(const CardBuilder &) = delete;
-   CardBuilder &operator=(const CardBuilder &) = delete;
-   ~CardBuilder() {}
+    CardBuilder();
+    CardBuilder(const CardBuilder &) = delete;
+    CardBuilder &operator=(const CardBuilder &) = delete;
+    ~CardBuilder() {}
 
-   CardBuilder& setSource(QString sourse);
-   DBCard&& build();
+    CardBuilder& setSource(const QString &sourse);
+    CardBuilder& editExample(const QString &example, const qint32 &pos);
+    CardBuilder& insertExample(const QString &example, const qint32 &pos);
+    CardBuilder& deleteExample(const qint32 &pos);
+    CardBuilder& editTarget(const QString &target, const qint32 &pos);
+    CardBuilder& insertTarget(const QString &target, const qint32 &pos);
+    CardBuilder& deleteTarget(const qint32 &pos);
+
+    DBCard&& build();
 //    CardBuilder& setExamples(QVector<QString> examples);
 //    CardBuilder& setTargets(QVector<QString> targets);
 
  private:
-   void check_flag();
+    void check_flag();
 
-   bool built;
-   DBCard newCard;
+    bool built;
+    DBCard newCard;
 };
 
 #endif // CARDBUILDER_H

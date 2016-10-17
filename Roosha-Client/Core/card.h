@@ -8,14 +8,14 @@ class Card {
     Card();
 
     QString getSource();
-//    QVector<QString> getTarget();
-//    QVector<QString> getExamples();
+    QVector<QString> getTargets();
+    QVector<QString> getExamples();
 
  protected:
    // quint32 id;
     QString source;
-//    QVector<QString> target;
-//    QVector<QString> examples;
+    QVector<QString> targets;
+    QVector<QString> examples;
 };
 
 #endif // CARD_H
