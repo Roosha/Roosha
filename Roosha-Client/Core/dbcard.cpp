@@ -1,36 +1,29 @@
 #include "Core/dbcard.h"
 
-DBCard::DBCard()
-{
+DBCard::DBCard() {
 
 }
 
-void DBCard::setSource(QString newSource)
-{
+void DBCard::setSource(QString newSource) {
 
 }
 
-void DBCard::setExamples(QVector<QString> newExamples)
-{
+void DBCard::setExamples(QVector<QString> newExamples) {
 
 }
 
-void DBCard::setTarget(QVector<QString> newTarget)
-{
+void DBCard::setTarget(QVector<QString> newTarget) {
 
 }
 
-void DBCard::saveToDB()
-{
+void DBCard::saveToDB() {
 
 }
 
-void DBCard::applyDiffs()
-{
+void DBCard::applyDiffs() {
 
 }
 
-void DBCard::applyDiff(IDiff *diff)
-{
+void DBCard::applyDiff(IDiff *diff) {
 
 }
