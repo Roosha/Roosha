@@ -1,24 +1,26 @@
 #ifndef DBCARD_H
 #define DBCARD_H
-
+#include <QSharedPointer>
 #include "Core/card.h"
-#include "Core/idiff.h"
+#include "Core/ichange.h"
+#include "changes.h"
+#include "ichange.h"
 
 class DBCard : public Card {
-public:
+ public:
     DBCard();
 
     void setSource(QString newSource);
-    void setExamples(QVector<QString> newExamples);
-    void setTarget(QVector<QString> newTarget);
+//    void setExamples(QVector<QString> newExamples);
+//    void setTarget(QVector<QString> newTarget);
 
     void saveToDB();
-    void applyDiffs();
-    void applyDiff(IDiff * diff);
+    void applyChanges();
 
-private:
-    quint32 lastSavedDiff;
-    QVector<IDiff *> diffs;
+ private:
+    friend class ChangeSource;
+    quint32 lastSavedChange;
+    QVector<QSharedPointer<IChange>> changes;
 };
 
 #endif // DBCARD_H

@@ -9,13 +9,14 @@ SOURCES += main.cpp \
     Core/hotkeylistener.cpp \
     Core/card.cpp \
     Core/dbcard.cpp \
-    Core/idiff.cpp \
     GUI/guimanager.cpp \
     Helpers/bootstrap.cpp \
     Helpers/configuremanager.cpp \
     DB/dbmanager.cpp \
     Network/networkmanager.cpp \
-    Core/applicationdaemon.cpp
+    Core/applicationdaemon.cpp \
+    Core/changes.cpp \
+    Core/cardbuilder.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -33,13 +34,15 @@ HEADERS += \
     Core/hotkeylistener.h \
     Core/card.h \
     Core/dbcard.h \
-    Core/idiff.h \
     GUI/guimanager.h \
     Helpers/bootstrap.h \
     Helpers/configuremanager.h \
     DB/dbmanager.h \
     Network/networkmanager.h \
-    Core/applicationdaemon.h
+    Core/applicationdaemon.h \
+    Core/ichange.h \
+    Core/changes.h \
+    Core/cardbuilder.h
 
 DISTFILES += \
     codeStyle.astylerc
