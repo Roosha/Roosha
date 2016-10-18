@@ -20,7 +20,6 @@ package com.github.roosha.proto.translation;
 
 import com.github.roosha.proto.commons.CommonsProto.Void;
 import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc.RooshaTranslationServiceImplBase;
-import com.github.roosha.proto.translation.TranslationServiceProto.Translation;
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import com.github.roosha.translation.providers.RawTranslation;
@@ -56,7 +55,7 @@ public class RooshaTranslationService extends RooshaTranslationServiceImplBase {
     }
 
     @Override
-    public void proposeUserTranslation(Translation request, StreamObserver<Void> responseObserver) {
+    public void proposeUserTranslations(Translations request, StreamObserver<Void> responseObserver) {
         responseObserver.onNext(Void.getDefaultInstance());
         responseObserver.onCompleted();
     }

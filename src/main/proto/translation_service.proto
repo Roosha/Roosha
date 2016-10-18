@@ -31,7 +31,7 @@ option optimize_for = SPEED;
 
 service RooshaTranslationService {
     rpc translate(TranslationRequest) returns (Translations) {}
-    rpc proposeUserTranslation(Translation) returns (roosha.commons.Void) {}
+    rpc proposeUserTranslations(Translations) returns (roosha.commons.Void) {}
 }
 
 message TranslationRequest {
