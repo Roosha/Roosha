@@ -22,8 +22,24 @@ import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * External service-specific translation format.
+ */
 public interface RawTranslation {
+    /**
+     * Convert raw translation to Roosha protocol format.
+     * Builder used as the return type to ease composition of several raw translations(from different translation
+     * services).
+     * <b>Note:</b> this method sets {@link Translations#source_}.
+     * @return
+     */
     @Nullable Translations.Builder convertToProtoTranslationsBuilder();
 
+    /**
+     * Add this raw translation to {@code target}.
+     * <b>Note:</b> this method doesn't set {@link Translations#source_}. Furthermore, it doesn't check whether
+     * {@code target.source_} corresponds to this translation source or not.
+     * @param target translations builder to be supplemented.
+     */
     void addToProtoTranslationsBuilder(@NotNull Translations.Builder target);
 }

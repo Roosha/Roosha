@@ -29,10 +29,12 @@ import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static com.github.roosha.proto.translation.Errors.noTranslation;
+
 @Component
 public class RooshaTranslationService extends RooshaTranslationServiceImplBase {
     @Autowired
-    TranslationProvider provider;
+    private TranslationProvider provider;
 
     @Override
     public void translate(TranslationRequest request, StreamObserver<Translations> responseObserver) {
@@ -41,6 +43,7 @@ public class RooshaTranslationService extends RooshaTranslationServiceImplBase {
             final RawTranslation rawTranslation = provider.translate(request.getSource());
             if (rawTranslation != null) {
                 rawTranslation.addToProtoTranslationsBuilder(responseBuilder);
+                responseBuilder.setSource(request.getSource());
             }
             else {
                 throw new Exception("no translation");
@@ -48,39 +51,9 @@ public class RooshaTranslationService extends RooshaTranslationServiceImplBase {
             responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
         } catch (Throwable t) {
-            responseObserver.onError(t);
+            responseObserver.onError(noTranslation(request.getSource()));
         }
     }
-
-//    private Translations translate(@NotNull TranslationRequest request) throws Throwable {
-//        final String source = request.getSource();
-//        if (source.equals("exhibit")) {
-//            final List<String> targets1 = asList("экспонат", "выставка", "экспозиция", "экспозиционирование");
-//            final String example1 = "the museum is rich in exhibits";
-//            final Translation translation1 =
-//                    Translation.newBuilder()
-//                               .addAllTarget(targets1)
-//                               .addExample(example1)
-//                               .build();
-//
-//            final List<String> targets2 = asList("выставлять", "экспонировать", "выставить");
-//            final String example2 = "only one sculpture was exhibited in the artist's lifetime";
-//            final Translation translation2 =
-//                    Translation.newBuilder()
-//                               .addAllTarget(targets2)
-//                               .addExample(example2)
-//                               .build();
-//
-//            return Translations.newBuilder()
-//                               .setSource(source)
-//                               .addTranslation(translation1)
-//                               .addTranslation(translation2)
-//                               .build();
-//        }
-//
-//        // TODO: implement appropriate exception generation.
-//        throw new IllegalArgumentException("request.source expected to be 'exhibit', but '" + source + "' received");
-//    }
 
     @Override
     public void proposeUserTranslation(Translation request, StreamObserver<Void> responseObserver) {

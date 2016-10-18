@@ -43,7 +43,8 @@ class YDRawTranslation implements RawTranslation {
         }
 
         final Translations.Builder resultBuilder = Translations.newBuilder();
-        resultBuilder.setSource(definitions[0].text);
+        resultBuilder.setSource(definitions[0].text); // definitions always contain the source text in 'text' field.
+
         stream(definitions).filter(def -> def != null)
                            .map(def -> def.translations)
                            .filter(trs -> trs != null)
@@ -59,10 +60,6 @@ class YDRawTranslation implements RawTranslation {
         if (definitions == null) {
             return;
         }
-        if (definitions[0] != null) {
-            target.setSource(definitions[0].text);
-        }
-
         stream(definitions).filter(def -> def != null)
                            .map(def -> def.translations)
                            .filter(trs -> trs != null)

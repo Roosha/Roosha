@@ -19,50 +19,56 @@
 package com.github.roosha.translation;
 
 import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc;
-import com.github.roosha.proto.translation.TranslationServiceProto.Translation;
+import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc.RooshaTranslationServiceBlockingStub;
+import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc.RooshaTranslationServiceStub;
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
+import com.github.roosha.translation.config.TranslationServiceConfig;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import org.jetbrains.annotations.NotNull;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static java.lang.String.join;
+import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TranslationServiceConfig.class)
 public class RooshaTranslationServerTest {
-    private final RooshaTranslationServiceGrpc.RooshaTranslationServiceBlockingStub blockingStub;
-    private final RooshaTranslationServiceGrpc.RooshaTranslationServiceStub asynchronousStub;
-    private final ManagedChannel channel;
+    private RooshaTranslationServiceBlockingStub blockingStub;
+    private RooshaTranslationServiceStub asynchronousStub;
+    private ManagedChannel channel;
 
+    @Autowired
+    private TranslationServer server;
 
-    public RooshaTranslationServerTest(String host, int port) {
+    @Before
+    public void setUp() throws IOException {
+        final String host = "127.0.0.1";
+        final int port = 1543;
         this.channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build();
         blockingStub = RooshaTranslationServiceGrpc.newBlockingStub(channel);
         asynchronousStub = RooshaTranslationServiceGrpc.newStub(channel);
+
+        server.start();
     }
 
-    public static void main(String[] args) {
-        final RooshaTranslationServerTest client = new RooshaTranslationServerTest("127.0.0.1", 1543);
+    @After
+    public void shutDown() {
+        server.stop();
+    }
 
-        for (String str : new String[]{"exhibit", "time"}) {
-            @NotNull Translations translations = Translations.getDefaultInstance();
-            try {
-                translations = client.translate(str);
-            } catch (Exception e) {
-                System.err.println("Error occurred");
-                //                e.printStackTrace();
-            }
-
-            System.out.println("source: " + translations.getSource());
-
-            for (Translation translation : translations.getTranslationList()) {
-                System.out.println("Translation:");
-                final String targets = join(", ", translation.getTargetList());
-                final String examples = join(", ", translation.getExampleList());
-                System.out.println("targets: " + targets);
-                System.out.println("examples: " + examples);
-                System.out.println();
-            }
-            System.out.println("---------------------------");
+    @Test
+    public void translationServiceRespectsSource() {
+        for (String source : new String[]{"source", "exhibit", "house", "noise"}) {
+            final Translations response = translate(source);
+            assertEquals(source, response.getSource());
         }
     }
 
