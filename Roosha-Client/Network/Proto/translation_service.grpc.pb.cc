@@ -18,7 +18,7 @@ namespace translation {
 
 static const char* RooshaTranslationService_method_names[] = {
   "/roosha.translation.RooshaTranslationService/translate",
-  "/roosha.translation.RooshaTranslationService/proposeUserTranslation",
+  "/roosha.translation.RooshaTranslationService/proposeUserTranslations",
 };
 
 std::unique_ptr< RooshaTranslationService::Stub> RooshaTranslationService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -28,7 +28,7 @@ std::unique_ptr< RooshaTranslationService::Stub> RooshaTranslationService::NewSt
 
 RooshaTranslationService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
   : channel_(channel), rpcmethod_translate_(RooshaTranslationService_method_names[0], ::grpc::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_proposeUserTranslation_(RooshaTranslationService_method_names[1], ::grpc::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_proposeUserTranslations_(RooshaTranslationService_method_names[1], ::grpc::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status RooshaTranslationService::Stub::translate(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::roosha::translation::Translations* response) {
@@ -39,12 +39,12 @@ RooshaTranslationService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInter
   return new ::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>(channel_.get(), cq, rpcmethod_translate_, context, request);
 }
 
-::grpc::Status RooshaTranslationService::Stub::proposeUserTranslation(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::roosha::commons::Void* response) {
-  return ::grpc::BlockingUnaryCall(channel_.get(), rpcmethod_proposeUserTranslation_, context, request, response);
+::grpc::Status RooshaTranslationService::Stub::proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::Translations& request, ::roosha::commons::Void* response) {
+  return ::grpc::BlockingUnaryCall(channel_.get(), rpcmethod_proposeUserTranslations_, context, request, response);
 }
 
-::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>* RooshaTranslationService::Stub::AsyncproposeUserTranslationRaw(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::grpc::CompletionQueue* cq) {
-  return new ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>(channel_.get(), cq, rpcmethod_proposeUserTranslation_, context, request);
+::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>* RooshaTranslationService::Stub::AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::translation::Translations& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>(channel_.get(), cq, rpcmethod_proposeUserTranslations_, context, request);
 }
 
 RooshaTranslationService::Service::Service() {
@@ -57,8 +57,8 @@ RooshaTranslationService::Service::Service() {
   AddMethod(new ::grpc::RpcServiceMethod(
       RooshaTranslationService_method_names[1],
       ::grpc::RpcMethod::NORMAL_RPC,
-      new ::grpc::RpcMethodHandler< RooshaTranslationService::Service, ::roosha::translation::Translation, ::roosha::commons::Void>(
-          std::mem_fn(&RooshaTranslationService::Service::proposeUserTranslation), this)));
+      new ::grpc::RpcMethodHandler< RooshaTranslationService::Service, ::roosha::translation::Translations, ::roosha::commons::Void>(
+          std::mem_fn(&RooshaTranslationService::Service::proposeUserTranslations), this)));
 }
 
 RooshaTranslationService::Service::~Service() {
@@ -71,7 +71,7 @@ RooshaTranslationService::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status RooshaTranslationService::Service::proposeUserTranslation(::grpc::ServerContext* context, const ::roosha::translation::Translation* request, ::roosha::commons::Void* response) {
+::grpc::Status RooshaTranslationService::Service::proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::translation::Translations* request, ::roosha::commons::Void* response) {
   (void) context;
   (void) request;
   (void) response;

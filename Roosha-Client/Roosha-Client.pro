@@ -19,8 +19,9 @@ SOURCES += main.cpp \
     Helpers/bootstrap.cpp \
     Helpers/configuremanager.cpp \
     DB/dbmanager.cpp \
-    Network/networkmanager.cpp \
-    Network/translation_service.cpp
+    Network/translation_service.cpp \
+    Network/network_manager.cpp \
+    Test/Network/translations_test_slot_holder.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -41,8 +42,11 @@ HEADERS += \
     Helpers/bootstrap.h \
     Helpers/configuremanager.h \
     DB/dbmanager.h \
-    Network/networkmanager.h \
-    Network/translation_service.h
+    Network/translation_service.h \
+    Network/async_client_call.h \
+    Network/network_manager.h \
+    Test/Network/translations_test_slot_holder.h \
+    Network/proto_classes_registration.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

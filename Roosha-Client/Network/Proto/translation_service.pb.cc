@@ -142,14 +142,14 @@ void protobuf_AddDesc_translation_5fservice_2eproto() {
     "ovider\030\003 \001(\0162\'.roosha.translation.Transl"
     "ationProvider*P\n\023TranslationProvider\022\013\n\007"
     "UNKNOWN\020\000\022\025\n\021YANDEX_DICTIONARY\020\001\022\025\n\021YAND"
-    "EX_TRANSLATOR\020\0022\306\001\n\030RooshaTranslationSer"
+    "EX_TRANSLATOR\020\0022\310\001\n\030RooshaTranslationSer"
     "vice\022W\n\ttranslate\022&.roosha.translation.T"
     "ranslationRequest\032 .roosha.translation.T"
-    "ranslations\"\000\022Q\n\026proposeUserTranslation\022"
-    "\037.roosha.translation.Translation\032\024.roosh"
-    "a.commons.Void\"\000BC\n#com.github.roosha.pr"
-    "oto.translationB\027TranslationServiceProto"
-    "H\001\370\001\000b\006proto3", 653);
+    "ranslations\"\000\022S\n\027proposeUserTranslations"
+    "\022 .roosha.translation.Translations\032\024.roo"
+    "sha.commons.Void\"\000BC\n#com.github.roosha."
+    "proto.translationB\027TranslationServicePro"
+    "toH\001\370\001\000b\006proto3", 655);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "translation_service.proto", &protobuf_RegisterTypes);
   TranslationRequest::default_instance_ = new TranslationRequest();

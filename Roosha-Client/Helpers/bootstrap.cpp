@@ -3,7 +3,7 @@
 #include "Core/hotkeylistener.h"
 #include "Helpers/configuremanager.h"
 #include "DB/dbmanager.h"
-#include "Network/networkmanager.h"
+#include "Network/network_manager.h"
 #include "GUI/guimanager.h"
 
 Bootstrap::Bootstrap(CentralController *cc) : cc(cc) {

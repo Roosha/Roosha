@@ -1,4 +1,4 @@
-#include "Network/networkmanager.h"
+#include "Network/network_manager.h"
 
 NetworkManager::NetworkManager():
         target_(DEFAULT_TRANSLATION_SERVICE_HOST) {

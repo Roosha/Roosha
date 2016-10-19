@@ -52,13 +52,13 @@ class RooshaTranslationService GRPC_FINAL {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::translation::Translations>> Asynctranslate(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::translation::Translations>>(AsynctranslateRaw(context, request, cq));
     }
-    virtual ::grpc::Status proposeUserTranslation(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::roosha::commons::Void* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>> AsyncproposeUserTranslation(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>>(AsyncproposeUserTranslationRaw(context, request, cq));
+    virtual ::grpc::Status proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::Translations& request, ::roosha::commons::Void* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>> AsyncproposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::Translations& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>>(AsyncproposeUserTranslationsRaw(context, request, cq));
     }
   private:
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::translation::Translations>* AsynctranslateRaw(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>* AsyncproposeUserTranslationRaw(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>* AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::translation::Translations& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub GRPC_FINAL : public StubInterface {
    public:
@@ -67,17 +67,17 @@ class RooshaTranslationService GRPC_FINAL {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>> Asynctranslate(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>>(AsynctranslateRaw(context, request, cq));
     }
-    ::grpc::Status proposeUserTranslation(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::roosha::commons::Void* response) GRPC_OVERRIDE;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>> AsyncproposeUserTranslation(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>>(AsyncproposeUserTranslationRaw(context, request, cq));
+    ::grpc::Status proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::Translations& request, ::roosha::commons::Void* response) GRPC_OVERRIDE;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>> AsyncproposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::Translations& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>>(AsyncproposeUserTranslationsRaw(context, request, cq));
     }
 
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     ::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>* AsynctranslateRaw(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
-    ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>* AsyncproposeUserTranslationRaw(::grpc::ClientContext* context, const ::roosha::translation::Translation& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
+    ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>* AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::translation::Translations& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
     const ::grpc::RpcMethod rpcmethod_translate_;
-    const ::grpc::RpcMethod rpcmethod_proposeUserTranslation_;
+    const ::grpc::RpcMethod rpcmethod_proposeUserTranslations_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -86,7 +86,7 @@ class RooshaTranslationService GRPC_FINAL {
     Service();
     virtual ~Service();
     virtual ::grpc::Status translate(::grpc::ServerContext* context, const ::roosha::translation::TranslationRequest* request, ::roosha::translation::Translations* response);
-    virtual ::grpc::Status proposeUserTranslation(::grpc::ServerContext* context, const ::roosha::translation::Translation* request, ::roosha::commons::Void* response);
+    virtual ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::translation::Translations* request, ::roosha::commons::Void* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_translate : public BaseClass {
@@ -109,26 +109,26 @@ class RooshaTranslationService GRPC_FINAL {
     }
   };
   template <class BaseClass>
-  class WithAsyncMethod_proposeUserTranslation : public BaseClass {
+  class WithAsyncMethod_proposeUserTranslations : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service *service) {}
    public:
-    WithAsyncMethod_proposeUserTranslation() {
+    WithAsyncMethod_proposeUserTranslations() {
       ::grpc::Service::MarkMethodAsync(1);
     }
-    ~WithAsyncMethod_proposeUserTranslation() GRPC_OVERRIDE {
+    ~WithAsyncMethod_proposeUserTranslations() GRPC_OVERRIDE {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status proposeUserTranslation(::grpc::ServerContext* context, const ::roosha::translation::Translation* request, ::roosha::commons::Void* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::translation::Translations* request, ::roosha::commons::Void* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestproposeUserTranslation(::grpc::ServerContext* context, ::roosha::translation::Translation* request, ::grpc::ServerAsyncResponseWriter< ::roosha::commons::Void>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestproposeUserTranslations(::grpc::ServerContext* context, ::roosha::translation::Translations* request, ::grpc::ServerAsyncResponseWriter< ::roosha::commons::Void>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_translate<WithAsyncMethod_proposeUserTranslation<Service > > AsyncService;
+  typedef WithAsyncMethod_translate<WithAsyncMethod_proposeUserTranslations<Service > > AsyncService;
   template <class BaseClass>
   class WithGenericMethod_translate : public BaseClass {
    private:
@@ -147,18 +147,18 @@ class RooshaTranslationService GRPC_FINAL {
     }
   };
   template <class BaseClass>
-  class WithGenericMethod_proposeUserTranslation : public BaseClass {
+  class WithGenericMethod_proposeUserTranslations : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service *service) {}
    public:
-    WithGenericMethod_proposeUserTranslation() {
+    WithGenericMethod_proposeUserTranslations() {
       ::grpc::Service::MarkMethodGeneric(1);
     }
-    ~WithGenericMethod_proposeUserTranslation() GRPC_OVERRIDE {
+    ~WithGenericMethod_proposeUserTranslations() GRPC_OVERRIDE {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status proposeUserTranslation(::grpc::ServerContext* context, const ::roosha::translation::Translation* request, ::roosha::commons::Void* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::translation::Translations* request, ::roosha::commons::Void* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
