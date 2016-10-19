@@ -19,7 +19,6 @@
 package com.github.roosha.translation.providers;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Interface for external translation service adapters.
@@ -31,5 +30,5 @@ public interface TranslationProvider {
      * @return result of translation
      * @throws Exception
      */
-    @Nullable RawTranslation translate(@NotNull String source) throws Exception;
+    @NotNull RawTranslation translate(@NotNull String source) throws Exception;
 }

@@ -21,7 +21,6 @@ package com.github.roosha.translation.providers.yandexdict;
 import com.github.roosha.translation.providers.RawTranslation;
 import com.github.roosha.translation.providers.TranslationProvider;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -40,7 +39,7 @@ public class YandexDictionaryProvider implements TranslationProvider {
     private final String DEFAULT_LANG = "en-ru";
 
     @Override
-    public @Nullable RawTranslation translate(@NotNull String source) throws Exception {
+    public @NotNull RawTranslation translate(@NotNull String source) throws Exception {
         final String query = createQueryString(source);
         final InputStream responseStream = new URL(query).openConnection().getInputStream();
         final Scanner responseScanner = new Scanner(responseStream).useDelimiter("\\A");

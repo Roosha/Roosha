@@ -38,9 +38,10 @@ public class RooshaTranslationService extends RooshaTranslationServiceImplBase {
     @Override
     public void translate(TranslationRequest request, StreamObserver<Translations> responseObserver) {
         try {
-            final Translations.Builder responseBuilder = Translations.newBuilder();
             final RawTranslation rawTranslation = provider.translate(request.getSource());
-            if (rawTranslation != null) {
+            final Translations.Builder responseBuilder =
+                    rawTranslation.convertToProtoTranslationsBuilder();
+            if (responseBuilder != null) {
                 rawTranslation.addToProtoTranslationsBuilder(responseBuilder);
                 responseBuilder.setSource(request.getSource());
             }

@@ -39,25 +39,20 @@ class YDRawTranslation implements RawTranslation {
     @Override
     public @Nullable Translations.Builder convertToProtoTranslationsBuilder() {
         if (definitions == null || definitions.length == 0 || definitions[0] == null) {
+            System.out.println("return null");
             return null;
         }
 
         final Translations.Builder resultBuilder = Translations.newBuilder();
         resultBuilder.setSource(definitions[0].text); // definitions always contain the source text in 'text' field.
 
-        stream(definitions).filter(def -> def != null)
-                           .map(def -> def.translations)
-                           .filter(trs -> trs != null)
-                           .flatMap(Arrays::stream)
-                           .filter(tr -> tr != null)
-                           .map(YDTranslation::toProtoTranslation)
-                           .forEach(resultBuilder::addTranslation);
+        addToProtoTranslationsBuilder(resultBuilder);
         return resultBuilder;
     }
 
     @Override
     public void addToProtoTranslationsBuilder(@NotNull Translations.Builder target) {
-        if (definitions == null) {
+        if (definitions == null || definitions.length == 0) {
             return;
         }
         stream(definitions).filter(def -> def != null)
@@ -70,7 +65,7 @@ class YDRawTranslation implements RawTranslation {
                            .forEach(target::addTranslation);
     }
 
-    public static RawTranslation fromJson(@NotNull String json) {
+    public static @NotNull RawTranslation fromJson(@NotNull String json) {
         return new Gson().fromJson(json, YDRawTranslation.class);
     }
 
