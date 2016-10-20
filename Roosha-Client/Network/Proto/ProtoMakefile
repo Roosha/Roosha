@@ -2,14 +2,27 @@ PROTOC = protoc
 GRPC_CPP_PLUGIN = grpc_cpp_plugin
 GRPC_CPP_PLUGIN_PATH ?= `which $(GRPC_CPP_PLUGIN)`
 
+REGISTER_METATYPES=./register_metatypes.py
+PROTOS_DIR=.
+GENERATED_SOURCES_DIR=.
 
-all: translation_service.pb.cc translation_service.grpc.pb.cc commons.pb.cc
+all: register_metatypes
+
+register_metatypes: generated_sources make_register_metatypes_script_executable
+	$(REGISTER_METATYPES) -i $(PROTOS_DIR) -o $(GENERATED_SOURCES_DIR)
+
+generated_sources: translation_service.pb.cc translation_service.grpc.pb.cc commons.pb.cc
 
 %.grpc.pb.cc: %.proto
 	$(PROTOC) --grpc_out=. --plugin=protoc-gen-grpc=$(GRPC_CPP_PLUGIN_PATH) $<
 
 %.pb.cc: %.proto
 	$(PROTOC) --cpp_out=. $<
+
+
+make_register_metatypes_script_executable:
+	echo 'making script executable'
+	chmod +x $(REGISTER_METATYPES)
 
 clean:
 	rm -f *.pb.cc *.pb.h

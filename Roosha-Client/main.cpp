@@ -5,7 +5,6 @@
 #include "Network/network_manager.h"
 #include "Network/translation_service.h"
 #include "Network/Proto/translation_service.pb.h"
-#include "Network/proto_classes_registration.h" // this header makes it possible to use protobuf classes in signals
 #include "Test/Network/translations_test_slot_holder.h"
 
 #include <grpc++/grpc++.h>
@@ -39,7 +38,6 @@ TranslationsTestSlotHolder* testTranslationServiceConnection() {
     std::shared_ptr<TranslationService> translationService = networkManager->getTranslationService();
 
     qRegisterMetaType<Translations>();
-    qRegisterMetaType<grpc::Status>();
     QObject::connect(translationService.get(), &TranslationService::translationSucceeded,
                      receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
     QObject::connect(translationService.get(), &TranslationService::translationFailed,

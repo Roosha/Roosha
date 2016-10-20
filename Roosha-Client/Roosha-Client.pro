@@ -45,8 +45,7 @@ HEADERS += \
     Network/translation_service.h \
     Network/async_client_call.h \
     Network/network_manager.h \
-    Test/Network/translations_test_slot_holder.h \
-    Network/proto_classes_registration.h
+    Test/Network/translations_test_slot_holder.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

@@ -3,7 +3,6 @@
 
 #include "Proto/translation_service.grpc.pb.h"
 #include "Proto/translation_service.pb.h"
-#include "proto_classes_registration.h" // this header makes it possible to use protobuf classes in signals
 #include "async_client_call.h"
 
 #include <grpc/status.h>
