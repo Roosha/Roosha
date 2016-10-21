@@ -3,19 +3,18 @@
 #include <QtGlobal>
 #include <QVector>
 
-class Card
-{
-public:
+class Card {
+ public:
     Card();
 
     QString getSource();
-    QVector<QString> getTarget();
+    QVector<QString> getTargets();
     QVector<QString> getExamples();
 
-private:
-    quint32 id;
+ protected:
+   // quint32 id;
     QString source;
-    QVector<QString> target;
+    QVector<QString> targets;
     QVector<QString> examples;
 };
 
