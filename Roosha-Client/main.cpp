@@ -89,7 +89,7 @@ TranslationsTestSlotHolder* testTranslationServiceConnection() {
     std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
     std::shared_ptr<TranslationService> translationService = networkManager->getTranslationService();
 
-    qRegisterMetaType<Translations>();
+    qRegisterMetaType<TestTranslations>();
     QObject::connect(translationService.get(), &TranslationService::translationSucceeded,
                      receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
     QObject::connect(translationService.get(), &TranslationService::translationFailed,

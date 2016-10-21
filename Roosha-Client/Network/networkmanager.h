@@ -4,18 +4,17 @@
 #include "Core/translation.h"
 #include <QObject>
 
-class NetworkManager : public QObject
-{
+class TestNetworkManager : public QObject {
     Q_OBJECT
 
 public:
-    NetworkManager(QObject * parent = Q_NULLPTR);
-    ~NetworkManager();
+    TestNetworkManager(QObject * parent = Q_NULLPTR);
+    ~TestNetworkManager();
 
     void requestTranslations(QString source);
 
 signals:
-    void newTranslation( Translations trans);
+    void newTranslation( TestTranslations trans);
 };
 
 #endif // NETWORKMANAGER_H

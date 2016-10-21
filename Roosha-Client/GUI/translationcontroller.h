@@ -13,7 +13,7 @@ class TranslationController : public QObject {
 public:
     TranslationController(QObject * parent = nullptr);
 
-    void addData(Translations translations);
+    void addData(TestTranslations translations);
 
     Q_INVOKABLE void closeWindow(quint32 id);
     Q_INVOKABLE void createCard(quint32 id);
@@ -23,7 +23,7 @@ private:
     quint32 lastId;
 
     QMap<quint32, QQuickWidget* > widgets;
-    QMap<quint32, Translations> data;
+    QMap<quint32, TestTranslations> data;
 };
 
 #endif // TRANSLATIONCONTROLLER_H

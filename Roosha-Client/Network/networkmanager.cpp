@@ -4,15 +4,15 @@
 #include <QMessageBox>
 #include <QThread>
 
-NetworkManager::NetworkManager(QObject *parent) : QObject(parent) {
+TestNetworkManager::TestNetworkManager(QObject *parent) : QObject(parent) {
 }
 
-NetworkManager::~NetworkManager() {
+TestNetworkManager::~TestNetworkManager() {
 }
 
-void NetworkManager::requestTranslations(QString source) {
+void TestNetworkManager::requestTranslations(QString source) {
     // TODO: here must be a real request to server
-    Translations testData;
+    TestTranslations testData;
 
     QSharedPointer<Translation> a(new Translation);
     a->setSource(source);

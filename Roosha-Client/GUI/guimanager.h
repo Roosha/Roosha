@@ -14,7 +14,7 @@ private:
     TranslationController* translationController;
 
 public slots:
-    void showNewTranslationWindow(Translations trans);
+    void showNewTranslationWindow(TestTranslations trans);
 };
 
 #endif // GUIMANAGER_H

@@ -21,11 +21,10 @@ SOURCES += main.cpp \
     Core/applicationdaemon.cpp \
     Core/translation.cpp \
     GUI/translationcontroller.cpp \
-    Helpers/qmlconvertation.cpp
+    Helpers/qmlconvertation.cpp \
     Network/translation_service.cpp \
     Network/network_manager.cpp \
     Test/Network/translations_test_slot_holder.cpp \
-    Core/applicationdaemon.cpp \
     Core/changes.cpp \
     Core/cardbuilder.cpp
 
@@ -53,8 +52,7 @@ HEADERS += \
     Core/applicationdaemon.h \
     Core/translation.h \
     GUI/translationcontroller.h \
-    Helpers/qmlconvertation.h
-    Core/applicationdaemon.h \
+    Helpers/qmlconvertation.h \
     Core/ichange.h \
     Core/changes.h \
     Core/cardbuilder.h \

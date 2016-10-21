@@ -22,10 +22,10 @@ class AsyncRpcStatusListener;
 class TranslationService : public QObject {
     Q_OBJECT
 
- public:
+public:
     TranslationService(const grpc::string &target);
     ~TranslationService();
- public slots:
+public slots:
     /**
      * Send translation request to translation server request. When the response is received or any error occured,
      * suitable signal(translationSucceeded or translationFailed respectively) will be emitted.
@@ -61,16 +61,18 @@ class TranslationService : public QObject {
       * see http://doc.qt.io/qt-5/qt.html#ConnectionType-enum
       */
 
- signals:
+signals:
     void translationSucceeded(quint32 requestId, roosha::translation::Translations translations);
     void translationFailed(quint32 requestId, grpc::Status status);
     void userTranslationProposalSucceeded(quint32 requestId, roosha::commons::Void response);
     void userTranslationProposalFailed(quint32 requestId, grpc::Status status);
 
- private:
+private:
     friend class AsyncRpcStatusListener;
     void emitTranslationSucceeded(quint32 id, roosha::translation::Translations translations);
     void emitTranslationFailed(quint32 id, grpc::Status status);
+    void emitUserTranslationProposalSucceeded(quint32 requestId, roosha::commons::Void response);
+    void emitUserTranslationProposalFailed(quint32 requestId, grpc::Status status);
 
     std::atomic<quint32> requestIdCount_;
     std::unique_ptr<roosha::translation::RooshaTranslationService::Stub> stub_;
@@ -87,9 +89,9 @@ class AsyncRpcStatusListener : public QThread {
 
     void run() Q_DECL_OVERRIDE;
 
- public:
+public:
     void setTranslationService(TranslationService* translationService);
- private:
+private:
     TranslationService* translationService_;
 };
 

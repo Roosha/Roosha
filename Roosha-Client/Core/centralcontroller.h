@@ -8,22 +8,22 @@
 class Bootstrap;
 class ConfigureManager;
 class DBManager;
-class NetworkManager;
+class TestNetworkManager;
 class GUIManager;
 class HotkeyListener;
 
 class CentralController : public QObject {
     Q_OBJECT
 
-friend class ::Bootstrap;
- public:
+    friend class ::Bootstrap;
+public:
     CentralController();
 
     void start();
 
- private:
+private:
     ConfigureManager * configureManager;
-    NetworkManager * networkManager;
+    TestNetworkManager * networkManager;
     DBManager * dbManager;
     GUIManager * guiManager;
     HotkeyListener * hkListener;

@@ -31,6 +31,6 @@ private:
     QStringList examples;
 };
 
-typedef QList<QSharedPointer<Translation> > Translations;
+typedef QList<QSharedPointer<Translation> > TestTranslations;
 
 #endif // TRANSLATION_H

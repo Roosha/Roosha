@@ -24,7 +24,7 @@ using roosha::translation::TranslationRequest;
 using roosha::translation::RooshaTranslationService;
 
 TranslationService::TranslationService(const grpc::string &target):
-        requestIdCount_(0) {
+    requestIdCount_(0) {
     std::shared_ptr<grpc::Channel> channel =  grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
     stub_ = RooshaTranslationService::NewStub(channel);
 
@@ -78,6 +78,13 @@ void TranslationService::emitTranslationFailed(quint32 id, Status status) {
     emit translationFailed(id, status);
 }
 
+void TranslationService::emitUserTranslationProposalSucceeded(quint32 requestId, roosha::commons::Void response) {
+    emit userTranslationProposalSucceeded(requestId, response);
+}
+
+void TranslationService::emitUserTranslationProposalFailed(quint32 requestId, grpc::Status status) {
+    emit userTranslationProposalFailed(requestId, status);
+}
 
 void AsyncRpcStatusListener::setTranslationService(TranslationService* translationService) {
     translationService_ = translationService;
@@ -88,16 +95,23 @@ void AsyncRpcStatusListener::run() {
     bool ok;
     while (translationService_->completionQueue_.Next(&label, &ok)) {
         auto call = static_cast<AsyncClientCall*>(label);
-        if (call->status_.ok()) {
-            switch (call->requestType_) {
-                case TRANSLATE:
-                    auto response = *static_cast<Translations*>(call->response_);
-                    translationService_->emitTranslationSucceeded(call->id_, response);
-
+        switch (call->requestType_) {
+        case TRANSLATE:
+            if (call->status_.ok()) {
+                auto translationResponse = *static_cast<Translations*>(call->response_);
+                translationService_->emitTranslationSucceeded(call->id_, translationResponse);
+            } else {
+                translationService_->emitTranslationFailed(call->id_, call->status_);
             }
-        }
-        else {
-            translationService_->emitTranslationFailed(call->id_, call->status_);
+            break;
+        case PROPOSE_USER_TRANSLATION:
+            if (call->status_.ok()) {
+                auto proposalResponse = *static_cast<Void*>(call->response_);
+                translationService_->emitUserTranslationProposalSucceeded(call->id_, proposalResponse);
+            } else {
+                translationService_->emitUserTranslationProposalFailed(call->id_, call->status_);
+            }
+            break;
         }
         delete call;
     }
