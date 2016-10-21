@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <thread>
+#include <atomic>
 
 #include <QString>
 #include <QObject>
@@ -27,7 +28,7 @@ class TranslationService : public QObject {
  public slots:
     /**
      * Send translation request to translation server request. When the response is received or any error occured,
-     * suitable signal(translationSucceeded or translationFailed.
+     * suitable signal(translationSucceeded or translationFailed respectively) will be emitted.
      * @note request ID is not unique across different application launches, but is unique whithin each application
      * launch.
      * @note this function is not thread-safe.
@@ -40,35 +41,40 @@ class TranslationService : public QObject {
     quint32 translate(QString source, quint32 timeoutMillis);
 
     /**
-     * Send user translation proposal to server.
+     * Send user translation proposal to server. When server responds or any error occurs, suitable
+     * signal(userTranslationProposalSecceeded or userTranslationProposalFailed respectively) will be emitted.
      * @note this function is not blocking
      *
      * @param userTranslation proposal to be sent to server.
+     * @return ID of request(will be passed to signal emitted as a result of request).
      */
-    void proposeUserTranslations(roosha::translation::Translations userTranslations);
+    quint32 proposeUserTranslations(roosha::translation::Translations userTranslations, quint32 timeoutMillis);
+
+    /**
+      * Slots with signature fooBarSucceeded(quint32, T) are emitted when a response from server to suitable
+      * client request is recieved.
+      * Slots with signature fooBarFailed(quint32, grpc::Status) are emitted when a suitable request to server
+      * failed(because of whether connection problems or server-side error).
+      *
+      * @note these signals are emitted in the same background thread each time, so if you use direct connection to
+      * these slots, you will block reception of server responses. For further documentation,
+      * see http://doc.qt.io/qt-5/qt.html#ConnectionType-enum
+      */
 
  signals:
-    /**
-     * This signal is emitted when translation request succeeded.
-     * @param requestId ID of translation request
-     * @param translations server response
-     */
     void translationSucceeded(quint32 requestId, roosha::translation::Translations translations);
-    /**
-     * This signal is emitted when translation request failed.
-     * @param requestId ID of translation request
-     * @param status grpc status of translation RPC.
-     */
     void translationFailed(quint32 requestId, grpc::Status status);
+    void userTranslationProposalSucceeded(quint32 requestId, roosha::commons::Void response);
+    void userTranslationProposalFailed(quint32 requestId, grpc::Status status);
+
  private:
     friend class AsyncRpcStatusListener;
     void emitTranslationSucceeded(quint32 id, roosha::translation::Translations translations);
     void emitTranslationFailed(quint32 id, grpc::Status status);
 
+    std::atomic<quint32> requestIdCount_;
     std::unique_ptr<roosha::translation::RooshaTranslationService::Stub> stub_;
     grpc::CompletionQueue completionQueue_;
-    //TODO: responseListener_ sould be instance of QThread in order to be able to emit signals!
-    //TODO: replace std::thread with QThread.
     AsyncRpcStatusListener* rpcStatusListener_;
 };
 

@@ -17,12 +17,14 @@
 using grpc::ClientContext;
 using grpc::Status;
 
+using roosha::commons::Void;
 using roosha::translation::Translation;
 using roosha::translation::Translations;
 using roosha::translation::TranslationRequest;
 using roosha::translation::RooshaTranslationService;
 
-TranslationService::TranslationService(const grpc::string &target) {
+TranslationService::TranslationService(const grpc::string &target):
+        requestIdCount_(0) {
     std::shared_ptr<grpc::Channel> channel =  grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
     stub_ = RooshaTranslationService::NewStub(channel);
 
@@ -41,24 +43,31 @@ TranslationService::~TranslationService() {
 
 
 quint32 TranslationService::translate(QString source, quint32 timeoutMillis) {
-    static quint32 currentId = 0;
-
     TranslationRequest request;
     request.set_source(source.toStdString());
 
-    AsyncClientCall<Translations>* call = new AsyncClientCall<Translations>;
-    call->id_ = currentId++;
+    AsyncClientCall* call = new AsyncClientCall;
+    call->id_ = requestIdCount_++;
+    call->requestType_ = TRANSLATE;
+    call->response_ = new Translations;
     call->context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
-    call->responseReader_ = stub_->Asynctranslate(&call->context_, request, &completionQueue_);
-    call->responseReader_->Finish(&call->response_, &call->status_, static_cast<void*>(call));
+
+    auto responseReader = stub_->Asynctranslate(&call->context_, request, &completionQueue_);
+    responseReader->Finish(static_cast<Translations*>(call->response_), &call->status_, static_cast<void*>(call));
 
     return call->id_;
 }
 
-void TranslationService::proposeUserTranslations(Translations userTranslation) {
-    ClientContext context;
-    //TODO: check if skipping of response reader produces any error.
-    stub_->AsyncproposeUserTranslations(&context, userTranslation, &completionQueue_);
+quint32 TranslationService::proposeUserTranslations(Translations userTranslation, quint32 timeoutMillis) {
+    AsyncClientCall* call = new AsyncClientCall;
+    call->id_ = requestIdCount_++;
+    call->requestType_ = PROPOSE_USER_TRANSLATION;
+    call->response_ = new Void;
+    call->context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
+
+    auto responseReader = stub_->AsyncproposeUserTranslations(&call->context_, userTranslation, &completionQueue_);
+    responseReader->Finish(static_cast<Void*>(call->response_), &call->status_, static_cast<void*>(call));
+    return call->id_;
 }
 
 void TranslationService::emitTranslationSucceeded(quint32 id, Translations translations) {
@@ -75,22 +84,21 @@ void AsyncRpcStatusListener::setTranslationService(TranslationService* translati
 }
 
 void AsyncRpcStatusListener::run() {
-    void* call;
+    void* label;
     bool ok;
-    while (translationService_->completionQueue_.Next(&call, &ok)) {
-        // TODO: make possible to receive different message types via union or something like that.
-        auto translateResponse = static_cast<AsyncClientCall<Translations>*>(call);
-        if (translateResponse->status_.ok()) {
-//            std::cout << "emit translationSucceeded" << std::endl;
-            translationService_->emitTranslationSucceeded(translateResponse->id_, translateResponse->response_);
+    while (translationService_->completionQueue_.Next(&label, &ok)) {
+        auto call = static_cast<AsyncClientCall*>(label);
+        if (call->status_.ok()) {
+            switch (call->requestType_) {
+                case TRANSLATE:
+                    auto response = *static_cast<Translations*>(call->response_);
+                    translationService_->emitTranslationSucceeded(call->id_, response);
+
+            }
         }
         else {
-//            std::cout << "emit translationFaled:" << std::endl <<
-//                         "id = " << translateResponse->id_ << std::endl <<
-//                         "error_code = " << translateResponse->status_.error_code() << std::endl <<
-//                         "error_message = " << translateResponse->status_.error_message() << std::endl;
-            translationService_->emitTranslationFailed(translateResponse->id_, translateResponse->status_);
+            translationService_->emitTranslationFailed(call->id_, call->status_);
         }
-        delete translateResponse;
+        delete call;
     }
 }

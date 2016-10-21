@@ -25,4 +25,5 @@ void TranslationsTestSlotHolder::translationFailedSlot(quint32 id, grpc::Status 
     std::cout << "id: " << id << std::endl;
     std::cout << "error code: " << status.error_code() << std::endl;
     std::cout << "error message: " << status.error_message() << std::endl;
+    std::cout << std::endl << "-----------------------------------------" << std::endl;
 }
