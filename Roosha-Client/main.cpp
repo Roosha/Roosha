@@ -2,21 +2,34 @@
 #include "Network/translation_service.h"
 #include "Network/Proto/translation_service.pb.h"
 #include "Test/Network/translations_test_slot_holder.h"
-
-
-using roosha::translation::Translations;
-TranslationsTestSlotHolder* testTranslationServiceConnection();
 #include "Core/dbcard.h"
 #include "Core/card.h"
 #include "Core/ichange.h"
 #include "Core/changes.h"
 #include "Core/cardbuilder.h"
+
 #include <QDebug>
+
 #include <grpc++/grpc++.h>
+
 #include <iostream>
 #include <chrono>
 #include <thread>
 #include <memory>
+
+using roosha::translation::Translations;
+TranslationsTestSlotHolder* testTranslationServiceConnection();
+
+void printCard(DBCard card);
+
+
+void testDBCardBuilder();
+
+int main(int argc, char *argv[]) {
+    auto ptr = testTranslationServiceConnection();
+    delete ptr;
+    testDBCardBuilder();
+}
 
 void printCard(DBCard card) {
     qInfo() << "src: ";
@@ -31,7 +44,7 @@ void printCard(DBCard card) {
     }
 }
 
-void test() {
+void testDBCardBuilder() {
     CardBuilder builder;
     builder.setSource("src1");
 
@@ -68,30 +81,6 @@ void test() {
     printCard(card);
 
 }
-
-int main(int argc, char *argv[]) {
-    auto ptr = testTranslationServiceConnection();
-    delete ptr;
-    //    QApplication app(argc, argv);
-
-//    CentralController centralController;
-//    centralController.start();
-
-//    CentralController centralController;
-//    centralController.start();
-
-//    return app.exec();
-//#endif
-    test();
-}
-
-
-// QML:
-//    QQmlApplicationEngine engine;
-//    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-//return app.exec();
-//}
-
 
 TranslationsTestSlotHolder* testTranslationServiceConnection() {
     TranslationsTestSlotHolder* receiver = new TranslationsTestSlotHolder;
