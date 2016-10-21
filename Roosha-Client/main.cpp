@@ -7,6 +7,8 @@
 #include "Core/ichange.h"
 #include "Core/changes.h"
 #include "Core/cardbuilder.h"
+#include <QApplication>
+#include "Core/centralcontroller.h"
 
 #include <QDebug>
 

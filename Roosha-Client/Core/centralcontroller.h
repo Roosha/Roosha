@@ -2,6 +2,8 @@
 #define CENTRALCONTROLLER_H
 
 #include <QObject>
+#include <QSharedPointer>
+#include "Core/translation.h"
 
 class Bootstrap;
 class ConfigureManager;

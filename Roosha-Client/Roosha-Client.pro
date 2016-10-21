@@ -1,7 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets core
-
+QT += qml quick widgets core quickwidgets quickcontrols2
 CONFIG += c++11
 
 QMAKE_CXX = g++
@@ -18,6 +17,11 @@ SOURCES += main.cpp \
     Helpers/bootstrap.cpp \
     Helpers/configuremanager.cpp \
     DB/dbmanager.cpp \
+    Network/networkmanager.cpp \
+    Core/applicationdaemon.cpp \
+    Core/translation.cpp \
+    GUI/translationcontroller.cpp \
+    Helpers/qmlconvertation.cpp
     Network/translation_service.cpp \
     Network/network_manager.cpp \
     Test/Network/translations_test_slot_holder.cpp \
@@ -29,7 +33,7 @@ RESOURCES += \
     QML/qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH = QML/
+#QML_IMPORT_PATH = /home/alex/IDE/Qt/5.6/gcc_64/qml
 
 # Default rules for deployment.
 include(deployment.pri)
@@ -45,6 +49,11 @@ HEADERS += \
     Helpers/bootstrap.h \
     Helpers/configuremanager.h \
     DB/dbmanager.h \
+    Network/networkmanager.h \
+    Core/applicationdaemon.h \
+    Core/translation.h \
+    GUI/translationcontroller.h \
+    Helpers/qmlconvertation.h
     Core/applicationdaemon.h \
     Core/ichange.h \
     Core/changes.h \

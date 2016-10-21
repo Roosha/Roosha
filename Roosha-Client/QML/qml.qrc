@@ -3,4 +3,8 @@
         <file>main.qml</file>
         <file>MainForm.ui.qml</file>
     </qresource>
+    <qresource prefix="/translation">
+        <file>ShowTranslation.qml</file>
+        <file>TranslationView.qml</file>
+    </qresource>
 </RCC>
