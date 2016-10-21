@@ -1,21 +1,7 @@
-
-
-//#define DAEMON // uncomment, if you want to run application in daemon mode
-
-
-//#if defined DAEMON
-//    #include "Core/applicationdaemon.h"
-//#else
-//    #include <QApplication>
-//    #include "Core/centralcontroller.h"
-//#endif
-#include "Core/dbcard.h"
-#include "Core/card.h"
-#include "Core/changes.h"
-#include "Core/ichange.h"
-#include "Core/cardbuilder.h"
-
-#include <QDebug>
+#include "Network/network_manager.h"
+#include "Network/translation_service.h"
+#include "Network/Proto/translation_service.pb.h"
+#include "Test/Network/translations_test_slot_holder.h"
 
 void printCard(DBCard card) {
     qInfo() << "src: ";
@@ -68,15 +54,29 @@ void test() {
 
 }
 
+using roosha::translation::Translations;
+TranslationsTestSlotHolder* testTranslationServiceConnection();
+#include "Core/dbcard.h"
+#include "Core/card.h"
+#include "Core/ichange.h"
+#include "Core/changes.h"
+#include "Core/cardbuilder.h"
+#include <QDebug>
+#include <grpc++/grpc++.h>
+#include <iostream>
+#include <chrono>
+#include <thread>
+
+
+
 int main(int argc, char *argv[])
 {
-//#if defined DAEMON
-//    ApplicationDaemon daemon(argc, argv);  // not confortable to debugging daemon
-//    return daemon.exec();
-//#else
-//    QApplication app(argc, argv);
+    auto ptr = testTranslationServiceConnection();
+    delete ptr;
+    //    QApplication app(argc, argv);
 
-//    app.setQuitOnLastWindowClosed(false);
+    CentralController centralController;
+    centralController.start();
 
 //    CentralController centralController;
 //    centralController.start();
@@ -90,4 +90,27 @@ int main(int argc, char *argv[])
 // QML:
 //    QQmlApplicationEngine engine;
 //    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-//#include <QQmlApplicationEngine>
+    return app.exec();
+}
+
+
+TranslationsTestSlotHolder* testTranslationServiceConnection() {
+    TranslationsTestSlotHolder* receiver = new TranslationsTestSlotHolder;
+    std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
+    std::shared_ptr<TranslationService> translationService = networkManager->getTranslationService();
+
+    qRegisterMetaType<Translations>();
+    QObject::connect(translationService.get(), &TranslationService::translationSucceeded,
+                     receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
+    QObject::connect(translationService.get(), &TranslationService::translationFailed,
+                     receiver, &TranslationsTestSlotHolder::translationFailedSlot, Qt::DirectConnection);
+
+    QStringList str;
+    str << "hello" << "gobbles" << "exhibit" << "apple" << "jkajhwvnejkw";
+    for (auto cur: str) {
+        quint32 id = translationService->translate(cur, 5000u);
+        std::cout << "Sent request with id: " << id << std::endl;
+    }
+
+    return receiver;
+}
