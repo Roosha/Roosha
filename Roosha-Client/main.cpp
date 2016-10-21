@@ -3,6 +3,21 @@
 #include "Network/Proto/translation_service.pb.h"
 #include "Test/Network/translations_test_slot_holder.h"
 
+
+using roosha::translation::Translations;
+TranslationsTestSlotHolder* testTranslationServiceConnection();
+#include "Core/dbcard.h"
+#include "Core/card.h"
+#include "Core/ichange.h"
+#include "Core/changes.h"
+#include "Core/cardbuilder.h"
+#include <QDebug>
+#include <grpc++/grpc++.h>
+#include <iostream>
+#include <chrono>
+#include <thread>
+#include <memory>
+
 void printCard(DBCard card) {
     qInfo() << "src: ";
     qInfo() << card.getSource();
@@ -54,29 +69,13 @@ void test() {
 
 }
 
-using roosha::translation::Translations;
-TranslationsTestSlotHolder* testTranslationServiceConnection();
-#include "Core/dbcard.h"
-#include "Core/card.h"
-#include "Core/ichange.h"
-#include "Core/changes.h"
-#include "Core/cardbuilder.h"
-#include <QDebug>
-#include <grpc++/grpc++.h>
-#include <iostream>
-#include <chrono>
-#include <thread>
-
-
-
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     auto ptr = testTranslationServiceConnection();
     delete ptr;
     //    QApplication app(argc, argv);
 
-    CentralController centralController;
-    centralController.start();
+//    CentralController centralController;
+//    centralController.start();
 
 //    CentralController centralController;
 //    centralController.start();
@@ -90,8 +89,8 @@ int main(int argc, char *argv[])
 // QML:
 //    QQmlApplicationEngine engine;
 //    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-    return app.exec();
-}
+//return app.exec();
+//}
 
 
 TranslationsTestSlotHolder* testTranslationServiceConnection() {

@@ -20,7 +20,7 @@ SOURCES += main.cpp \
     DB/dbmanager.cpp \
     Network/translation_service.cpp \
     Network/network_manager.cpp \
-    Test/Network/translations_test_slot_holder.cpp
+    Test/Network/translations_test_slot_holder.cpp \
     Core/applicationdaemon.cpp \
     Core/changes.cpp \
     Core/cardbuilder.cpp
@@ -48,7 +48,7 @@ HEADERS += \
     Core/applicationdaemon.h \
     Core/ichange.h \
     Core/changes.h \
-    Core/cardbuilder.h
+    Core/cardbuilder.h \
     Network/translation_service.h \
     Network/async_client_call.h \
     Network/network_manager.h \
