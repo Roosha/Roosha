@@ -18,3 +18,11 @@ make clean && make
 This will copy .proto files to Java modules to appropriate folder, and generate C++ sources in appropriate folder.
 
 **Note:** you need to `make` generated files whenever you change any .proto file. Also you should not create any other file in `Client/Network/Proto` and `TranslationService/src/main/proto` directories because they will be removed by `make clean`
+
+**Note:** if you have some problems with protobuf after you've installed grpc(e.g. protobuf headers not found or wrong version, protobuf compiler
+not found etc.), this is probably because you already had some parts of protobuf. To fix this, go to grpc sources directory(after you have
+built it) and do the following:
+```
+cd third_party/protobuf
+sudo make uninstall && sudo make install
+```
