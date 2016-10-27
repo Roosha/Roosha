@@ -26,6 +26,9 @@ import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import com.github.roosha.translation.config.TranslationServiceConfig;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.NettyChannelBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -52,7 +56,15 @@ public class RooshaTranslationServerTest {
     public void setUp() throws IOException {
         final String host = "127.0.0.1";
         final int port = 1543;
-        this.channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build();
+
+
+        this.channel = NettyChannelBuilder.forAddress(host, port)
+                                          .sslContext(GrpcSslContexts.forClient()
+//                                                                     .trustManager(getClass().getResourceAsStream("/security/ca.crt"))
+// Now, in test cases, we're using self signed SSL sertificate on the Server, thereby we disable sertificate validation.
+                                                                     .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                                                                     .build())
+                                          .build();
         blockingStub = RooshaTranslationServiceGrpc.newBlockingStub(channel);
         asynchronousStub = RooshaTranslationServiceGrpc.newStub(channel);
 
@@ -68,6 +80,7 @@ public class RooshaTranslationServerTest {
     public void translationServiceRespectsSource() {
         for (String source : new String[]{"source", "exhibit", "house", "noise"}) {
             final Translations response = translate(source);
+            System.out.println(response);
             assertEquals(source, response.getSource());
         }
     }

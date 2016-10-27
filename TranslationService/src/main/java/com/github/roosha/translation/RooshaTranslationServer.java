@@ -21,11 +21,18 @@ package com.github.roosha.translation;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.NettyServerBuilder;
+import io.netty.handler.ssl.SslContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Scanner;
 
 @Component
 public class RooshaTranslationServer implements TranslationServer {
@@ -38,7 +45,16 @@ public class RooshaTranslationServer implements TranslationServer {
 
     @Override
     public void start() throws IOException {
-        server = ServerBuilder.forPort(port).addService(service).build();
+        final File privateKeyFile = new File(getClass().getResource("/security/server.pkcs8.key").getFile());
+        final File certicateFile = new File(getClass().getResource("/security/server.crt").getFile());
+
+        final SslContext sslContext = GrpcSslContexts.forServer(certicateFile, privateKeyFile).build();
+
+        server = NettyServerBuilder.forPort(port)
+                                   .sslContext(sslContext)
+                                   .addService(service)
+                                   .build();
+        System.out.println(server == null);
         server.start();
     }
 
