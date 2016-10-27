@@ -24,10 +24,11 @@ import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc.RooshaTr
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import com.github.roosha.translation.config.TranslationServiceConfig;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
+import io.grpc.*;
+import io.grpc.ForwardingClientCall.SimpleForwardingClientCall;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.stub.MetadataUtils;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -37,7 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -47,7 +47,7 @@ import static org.junit.Assert.assertEquals;
 public class RooshaTranslationServerTest {
     private RooshaTranslationServiceBlockingStub blockingStub;
     private RooshaTranslationServiceStub asynchronousStub;
-    private ManagedChannel channel;
+    private Channel channel;
 
     @Autowired
     private TranslationServer server;
@@ -60,13 +60,18 @@ public class RooshaTranslationServerTest {
 
         this.channel = NettyChannelBuilder.forAddress(host, port)
                                           .sslContext(GrpcSslContexts.forClient()
-//                                                                     .trustManager(getClass().getResourceAsStream("/security/ca.crt"))
-// Now, in test cases, we're using self signed SSL sertificate on the Server, thereby we disable sertificate validation.
+                                                                     //                                                                     .trustManager(getClass().getResourceAsStream("/security/ca.crt"))
+                                                                     // Now, in test cases, we're using self signed SSL sertificate on the Server, thereby we disable sertificate validation.
                                                                      .trustManager(InsecureTrustManagerFactory.INSTANCE)
                                                                      .build())
                                           .build();
+        this.channel = io.grpc.ClientInterceptors.intercept(channel, new TestClientInterceptor());
         blockingStub = RooshaTranslationServiceGrpc.newBlockingStub(channel);
         asynchronousStub = RooshaTranslationServiceGrpc.newStub(channel);
+
+        final Metadata metadata = new Metadata();
+        metadata.put(Metadata.Key.of("key", Metadata.ASCII_STRING_MARSHALLER), "gobbles");
+        MetadataUtils.attachHeaders(blockingStub, metadata);
 
         server.start();
     }
@@ -88,5 +93,23 @@ public class RooshaTranslationServerTest {
     private Translations translate(String source) {
         final TranslationRequest request = TranslationRequest.newBuilder().setSource(source).build();
         return blockingStub.translate(request);
+    }
+
+    private static class TestClientInterceptor implements ClientInterceptor {
+        private static final Metadata.Key<String> customHeaderKey =
+                Metadata.Key.of("my_key", Metadata.ASCII_STRING_MARSHALLER);
+
+        @Override
+        public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
+                MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+            System.out.println("intercept client call");
+            return new SimpleForwardingClientCall<ReqT, RespT>(next.newCall(method, callOptions)) {
+                @Override
+                public void start(Listener<RespT> responseListener, Metadata headers) {
+                    headers.put(customHeaderKey, "gobbles");
+                    super.start(responseListener, headers);
+                }
+            };
+        }
     }
 }

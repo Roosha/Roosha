@@ -18,9 +18,13 @@
 
 package com.github.roosha.translation;
 
+import com.github.roosha.proto.translation.AuthorizationInterceptor;
+import com.sun.xml.internal.ws.api.client.ServiceInterceptor;
+import com.sun.xml.internal.ws.api.client.ServiceInterceptorFactory;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.ServerInterceptors;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyServerBuilder;
 import io.netty.handler.ssl.SslContext;
@@ -49,10 +53,9 @@ public class RooshaTranslationServer implements TranslationServer {
         final File certicateFile = new File(getClass().getResource("/security/server.crt").getFile());
 
         final SslContext sslContext = GrpcSslContexts.forServer(certicateFile, privateKeyFile).build();
-
         server = NettyServerBuilder.forPort(port)
                                    .sslContext(sslContext)
-                                   .addService(service)
+                                   .addService(ServerInterceptors.intercept(service, new AuthorizationInterceptor()))
                                    .build();
         System.out.println(server == null);
         server.start();
