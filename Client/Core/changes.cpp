@@ -10,50 +10,50 @@ void ChangeSource::apply(DBCard * cardptr) {
     cardptr->source = newSource;
 }
 
-EditExampleElem::EditExampleElem() { }
+EditElem::EditElem() { }
 
-EditExampleElem::EditExampleElem(const QString & newEl, const qint32 & p) : newElem(newEl), pos(p) {}
+EditElem::EditElem(const enum Field & field, const QString & newEl, const qint32 & p) :
+        fieldName(field), newElem(newEl), pos(p) {}
 
-void EditExampleElem::apply(DBCard * cardptr) {
-    cardptr->examples[pos] = newElem;
+void EditElem::apply(DBCard * cardptr) {
+    switch (fieldName) {
+        case TARGET:
+            cardptr->targets[pos] = newElem;
+            break;
+        case EXAMPLE:
+            cardptr->examples[pos] = newElem;
+            break;
+    }
 }
 
-InsertExampleElem::InsertExampleElem() { }
+InsertElem::InsertElem() { }
 
-InsertExampleElem::InsertExampleElem(const QString & insertingEl, const qint32 & p) : insertingElem(insertingEl), pos(p) {}
+InsertElem::InsertElem(const enum Field & field, const QString & insertingEl, const qint32 & p) :
+        fieldName(field), insertingElem(insertingEl), pos(p) {}
 
-void InsertExampleElem::apply(DBCard * cardptr) {
-    cardptr->examples.insert(pos, insertingElem);
+void InsertElem::apply(DBCard * cardptr) {
+    switch (fieldName) {
+        case TARGET:
+            cardptr->targets.insert(pos, insertingElem);
+            break;
+        case EXAMPLE:
+            cardptr->examples.insert(pos, insertingElem);
+            break;
+    }
 }
 
-DeleteExampleElem::DeleteExampleElem() { }
+DeleteElem::DeleteElem() { }
 
-DeleteExampleElem::DeleteExampleElem(const qint32 & p) : pos(p) {}
+DeleteElem::DeleteElem(const enum Field & field, const qint32 & p) : fieldName(field), pos(p) {}
 
-void DeleteExampleElem::apply(DBCard * cardptr) {
-    cardptr->examples.erase(cardptr->examples.begin() + pos);
+void DeleteElem::apply(DBCard * cardptr) {
+    switch (fieldName) {
+        case TARGET:
+            cardptr->targets.erase(cardptr->targets.begin() + pos);
+            break;
+        case EXAMPLE:
+            cardptr->examples.erase(cardptr->examples.begin() + pos);
+            break;
+    }
 }
 
-EditTargetElem::EditTargetElem() { }
-
-EditTargetElem::EditTargetElem(const QString & newEl, const qint32 & p) : newElem(newEl), pos(p) {}
-
-void EditTargetElem::apply(DBCard * cardptr) {
-    cardptr->targets[pos] = newElem;
-}
-
-InsertTargetElem::InsertTargetElem() { }
-
-InsertTargetElem::InsertTargetElem(const QString & insertingEl, const qint32 & p) : insertingElem(insertingEl), pos(p) {}
-
-void InsertTargetElem::apply(DBCard * cardptr) {
-    cardptr->targets.insert(pos, insertingElem);
-}
-
-DeleteTargetElem::DeleteTargetElem() { }
-
-DeleteTargetElem::DeleteTargetElem(const qint32 & p) : pos(p) {}
-
-void DeleteTargetElem::apply(DBCard * cardptr) {
-    cardptr->targets.erase(cardptr->targets.begin() + pos);
-}

@@ -1,5 +1,5 @@
 #include "cardbuilder.h"
-
+#include "changes.h"
 
 CardBuilder::CardBuilder() {
     built = false;
@@ -13,39 +13,21 @@ CardBuilder& CardBuilder::setSource(const QString &source) {
 }
 
 
-CardBuilder& CardBuilder::editExample(const QString &example, const qint32 &pos) {
+CardBuilder& CardBuilder::edit(const enum Field field, const QString &example, const qint32 &pos) {
     check_flag();
-    newCard.editExampleElem(example, pos);
+    newCard.editElem(field, example, pos);
     return *this;
 }
 
-CardBuilder& CardBuilder::insertExample(const QString &example, const qint32 &pos) {
+CardBuilder& CardBuilder::insert(const enum Field field, const QString &example, const qint32 &pos) {
     check_flag();
-    newCard.insertExampleElem(example, pos);
+    newCard.insertElem(field, example, pos);
     return *this;
 }
 
-CardBuilder& CardBuilder::deleteExample(const qint32 &pos) {
+CardBuilder& CardBuilder::del(const enum Field field, const qint32 &pos) {
     check_flag();
-    newCard.deleteExampleElem(pos);
-    return *this;
-}
-
-CardBuilder& CardBuilder::editTarget(const QString &target, const qint32 &pos) {
-    check_flag();
-    newCard.editTargetElem(target, pos);
-    return *this;
-}
-
-CardBuilder& CardBuilder::insertTarget(const QString &target, const qint32 &pos) {
-    check_flag();
-    newCard.insertTargetElem(target, pos);
-    return *this;
-}
-
-CardBuilder& CardBuilder::deleteTarget(const qint32 &pos) {
-    check_flag();
-    newCard.deleteTargetElem(pos);
+    newCard.deleteElem(field, pos);
     return *this;
 }
 

@@ -1,9 +1,10 @@
 #ifndef CHANGES_H
 #define CHANGES_H
 #include "ichange.h"
-#include "dbcard.h"
+
 #include <QSharedPointer>
 
+#include "dbcard.h"
 
 class ChangeSource : public IChange {
  public:
@@ -17,79 +18,44 @@ class ChangeSource : public IChange {
     QString newSource;
 };
 
-class EditExampleElem : public IChange {
+class EditElem : public IChange {
  public:
 
-    EditExampleElem();
-    EditExampleElem(const QString & newEl, const qint32 & p);
+    EditElem();
+    EditElem(const enum Field & field, const QString & newEl, const qint32 & p);
 
     void apply(DBCard * cardptr);
 
  private:
+    enum Field fieldName;
     QString newElem;
     qint32 pos;
 };
 
-class InsertExampleElem : public IChange {
+class InsertElem : public IChange {
  public:
 
-    InsertExampleElem();
-    InsertExampleElem(const QString & insertingEl, const qint32 & p);
+    InsertElem();
+    InsertElem(const enum Field & field, const QString & insertingEl, const qint32 & p);
 
     void apply(DBCard * cardptr);
 
  private:
+    enum Field fieldName;
     QString insertingElem;
     qint32 pos;
 };
 
-class DeleteExampleElem : public IChange {
+class DeleteElem : public IChange {
  public:
 
-    DeleteExampleElem();
-    DeleteExampleElem(const qint32 & p);
+    DeleteElem();
+    DeleteElem(const enum Field & field, const qint32 & p);
 
     void apply(DBCard * cardptr);
 
  private:
-    qint32 pos;
-};
-
-class EditTargetElem : public IChange {
- public:
-
-    EditTargetElem();
-    EditTargetElem(const QString & newEl, const qint32 & p);
-
-    void apply(DBCard * cardptr);
-
- private:
-    QString newElem;
-    qint32 pos;
-};
-
-class InsertTargetElem : public IChange {
- public:
-
-    InsertTargetElem();
-    InsertTargetElem(const QString & insertingEl, const qint32 & p);
-
-    void apply(DBCard * cardptr);
-
- private:
-    QString insertingElem;
-    qint32 pos;
-};
-
-class DeleteTargetElem : public IChange {
- public:
-
-    DeleteTargetElem();
-    DeleteTargetElem(const qint32 & p);
-
-    void apply(DBCard * cardptr);
-
- private:
+    enum Field fieldName;
     qint32 pos;
 };
 

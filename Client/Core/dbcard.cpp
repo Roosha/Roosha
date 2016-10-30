@@ -21,39 +21,20 @@ void DBCard::setTarget(QVector<QString> newTarget) {
 //      compare newTarget and current target and generate changes
 }
 
-void DBCard::editExampleElem(QString newElem, qint32 pos) {
-    QSharedPointer<EditExampleElem> change = QSharedPointer<EditExampleElem>::create(newElem, pos);
+void DBCard::editElem(const enum Field & fieldName, const QString & newElem, qint32 pos) {
+    QSharedPointer<EditElem> change = QSharedPointer<EditElem>::create(fieldName, newElem, pos);
     changes.append(change);
     change->apply(this);
 }
 
-void DBCard::editTargetElem(QString newElem, qint32 pos) {
-    QSharedPointer<EditTargetElem> change = QSharedPointer<EditTargetElem>::create(newElem, pos);
+void DBCard::insertElem(const enum Field & fieldName, const QString & insertingElem, qint32 pos) {
+    QSharedPointer<InsertElem> change = QSharedPointer<InsertElem>::create(fieldName, insertingElem, pos);
     changes.append(change);
     change->apply(this);
 }
 
-
-void DBCard::deleteExampleElem(qint32 pos) {
-    QSharedPointer<DeleteExampleElem> change = QSharedPointer<DeleteExampleElem>::create(pos);
-    changes.append(change);
-    change->apply(this);
-}
-
-void DBCard::deleteTargetElem(qint32 pos) {
-    QSharedPointer<DeleteTargetElem> change = QSharedPointer<DeleteTargetElem>::create(pos);
-    changes.append(change);
-    change->apply(this);
-}
-
-void DBCard::insertExampleElem(QString insertingElem, qint32 pos) {
-    QSharedPointer<InsertExampleElem> change = QSharedPointer<InsertExampleElem>::create(insertingElem, pos);
-    changes.append(change);
-    change->apply(this);
-}
-
-void DBCard::insertTargetElem(QString insertingElem, qint32 pos){
-    QSharedPointer<InsertTargetElem> change = QSharedPointer<InsertTargetElem>::create(insertingElem, pos);
+void DBCard::deleteElem(const enum Field & fieldName, qint32 pos) {
+    QSharedPointer<DeleteElem> change = QSharedPointer<DeleteElem>::create(fieldName, pos);
     changes.append(change);
     change->apply(this);
 }

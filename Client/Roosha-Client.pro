@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     Network/network_manager.cpp \
     Test/Network/translations_test_slot_holder.cpp \
     Core/changes.cpp \
-    Core/cardbuilder.cpp
+    Core/cardbuilder.cpp \
+    Test/Core/changes/builderandchangestest.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -59,7 +60,8 @@ HEADERS += \
     Network/translation_service.h \
     Network/async_client_call.h \
     Network/network_manager.h \
-    Test/Network/translations_test_slot_holder.h
+    Test/Network/translations_test_slot_holder.h \
+    Test/Core/changes/builderandchangestest.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

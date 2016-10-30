@@ -3,6 +3,11 @@
 
 class DBCard;
 
+enum Field {
+    EXAMPLE,
+    TARGET
+};
+
 class IChange {
  public:
     ~IChange() {}

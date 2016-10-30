@@ -10,12 +10,9 @@ class CardBuilder{
     ~CardBuilder() {}
 
     CardBuilder& setSource(const QString &sourse);
-    CardBuilder& editExample(const QString &example, const qint32 &pos);
-    CardBuilder& insertExample(const QString &example, const qint32 &pos);
-    CardBuilder& deleteExample(const qint32 &pos);
-    CardBuilder& editTarget(const QString &target, const qint32 &pos);
-    CardBuilder& insertTarget(const QString &target, const qint32 &pos);
-    CardBuilder& deleteTarget(const qint32 &pos);
+    CardBuilder& edit(const enum Field field, const QString &example, const qint32 &pos);
+    CardBuilder& insert(const enum Field field, const QString &example, const qint32 &pos);
+    CardBuilder& del(const enum Field field, const qint32 &pos);
 
     DBCard&& build();
 //    CardBuilder& setExamples(QVector<QString> examples);
