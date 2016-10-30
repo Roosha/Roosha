@@ -9,7 +9,7 @@
 #include "Core/cardbuilder.h"
 #include <QApplication>
 #include "Core/centralcontroller.h"
-#include "Test/Core/changes/builderandchangestest.h"
+#include "Test/Core/changes/worldtest.h"
 
 #include <QDebug>
 
@@ -25,10 +25,10 @@ TranslationsTestSlotHolder* testTranslationServiceConnection();
 
 
 int main(int argc, char *argv[]) {
-    BuilderAndChangesTest testChanges;
+    WorldTest testChanges;
     testChanges.run();
-    auto ptr = testTranslationServiceConnection();
-    delete ptr;
+//    auto ptr = testTranslationServiceConnection();
+//    delete ptr;
 }
 
 

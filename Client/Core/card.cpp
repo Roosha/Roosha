@@ -6,10 +6,10 @@ QString Card::getSource() {
     return source;
 }
 
-QVector<QString> Card::getTargets() {
+QStringList Card::getTargets() {
     return targets;
 }
 
-QVector<QString> Card::getExamples() {
+QStringList Card::getExamples() {
     return examples;
 }

@@ -2,20 +2,19 @@
 #define CARD_H
 #include <QtGlobal>
 #include <QVector>
-
+#include <QUuid>
 class Card {
  public:
     Card();
 
     QString getSource();
-    QVector<QString> getTargets();
-    QVector<QString> getExamples();
+    QStringList getTargets();
+    QStringList getExamples();
 
  protected:
-   // quint32 id;
     QString source;
-    QVector<QString> targets;
-    QVector<QString> examples;
+    QStringList targets;
+    QStringList examples;
 };
 
 #endif // CARD_H

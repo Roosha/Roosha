@@ -26,8 +26,8 @@ SOURCES += main.cpp \
     Network/network_manager.cpp \
     Test/Network/translations_test_slot_holder.cpp \
     Core/changes.cpp \
-    Core/cardbuilder.cpp \
-    Test/Core/changes/builderandchangestest.cpp
+    Core/world.cpp \
+    Test/Core/changes/worldtest.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -56,12 +56,12 @@ HEADERS += \
     Helpers/qmlconvertation.h \
     Core/ichange.h \
     Core/changes.h \
-    Core/cardbuilder.h \
     Network/translation_service.h \
     Network/async_client_call.h \
     Network/network_manager.h \
     Test/Network/translations_test_slot_holder.h \
-    Test/Core/changes/builderandchangestest.h
+    Core/world.h \
+    Test/Core/changes/worldtest.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \
