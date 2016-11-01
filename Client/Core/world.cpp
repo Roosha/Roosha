@@ -5,6 +5,21 @@
 
 World::World() { }
 
+World::~World() { }
+
+World& World::Instance() {
+    static World world;
+    return world;
+}
+
+QMap<QUuid, QSharedPointer<DBCard>> & World::getCards() {
+    return cards;
+}
+
+QVector<QSharedPointer<IChange>> & World::getChanges() {
+    return changes;
+}
+
 QUuid World::createCard() {
     QSharedPointer<CreateCard> change = QSharedPointer<CreateCard>::create();
     this->changes.append(change);

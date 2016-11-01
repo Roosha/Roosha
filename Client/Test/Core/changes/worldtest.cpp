@@ -19,8 +19,8 @@ void WorldTest::printCard(QSharedPointer<DBCard> card) {
 }
 
 void WorldTest::printCards(World * world) {
-    QMap<QUuid, QSharedPointer<DBCard>>::const_iterator i = world->cards.constBegin();
-    while (i != world->cards.constEnd()) {
+    QMap<QUuid, QSharedPointer<DBCard>>::const_iterator i = world->getCards().constBegin();
+    while (i != world->getCards().constEnd()) {
         qInfo() << i.key() << ": ";
         printCard(i.value());
         ++i;
@@ -29,7 +29,7 @@ void WorldTest::printCards(World * world) {
 
 void WorldTest::run() {
     QUuid id;
-    World world;
+    World& world = World::Instance();
     id = world.createCard();
     world.insertElem(id, EXAMPLE,"ex1", 0);
     world.setSource(id, "src1");
@@ -59,11 +59,5 @@ void WorldTest::run() {
     world.applyChanges();
     qInfo() << "after reapplying in world\n";
     printCards(&world);
-    World anotherWorld;
-    anotherWorld.changes = world.changes;
-    anotherWorld.applyChanges();
-
-    qInfo() << "after applying in another world\n";
-    printCards(&anotherWorld);
 }
 

@@ -8,9 +8,10 @@
 
 class World {
  public:
-    World();
-    QMap<QUuid, QSharedPointer<DBCard>> cards;
-    QVector<QSharedPointer<IChange>> changes;
+    static World& Instance();
+
+    QMap<QUuid, QSharedPointer<DBCard>>& getCards();
+    QVector<QSharedPointer<IChange>>& getChanges();
 
     QUuid createCard();
     void deleteCard(QUuid id);
@@ -24,6 +25,16 @@ class World {
 
     void saveToDB();
     void applyChanges();
+
+ private:
+    World();
+    ~World();
+    World(const World& world) = delete;
+    World& operator=(const World&) = delete;
+
+    QMap<QUuid, QSharedPointer<DBCard>> cards;
+    QVector<QSharedPointer<IChange>> changes;
+
 };
 
 #endif // WORLD_H

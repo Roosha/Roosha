@@ -6,7 +6,6 @@
 #include "Core/card.h"
 #include "Core/ichange.h"
 #include "Core/changes.h"
-#include "Core/cardbuilder.h"
 #include <QApplication>
 #include "Core/centralcontroller.h"
 #include "Test/Core/changes/worldtest.h"

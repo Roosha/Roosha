@@ -10,7 +10,7 @@
 
 class TranslationController : public QObject {
     Q_OBJECT
-public:
+ public:
     TranslationController(QObject * parent = nullptr);
 
     void addData(TestTranslations translations);
@@ -19,7 +19,7 @@ public:
     Q_INVOKABLE void createCard(quint32 id);
     Q_INVOKABLE void createLater(quint32 id);
 
-private:
+ private:
     quint32 lastId;
 
     QMap<quint32, QQuickWidget* > widgets;
