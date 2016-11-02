@@ -27,3 +27,12 @@ option cc_enable_arenas = false;
 option optimize_for = SPEED;
 
 message Void{}
+
+message Credentials {
+	string login = 1;
+	bytes passwordHash = 2;	
+}
+
+message AuthenticationToken {
+	bytes token = 1;
+}

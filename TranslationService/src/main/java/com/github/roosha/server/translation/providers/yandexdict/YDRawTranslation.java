@@ -16,12 +16,12 @@
  *
  */
 
-package com.github.roosha.translation.providers.yandexdict;
+package com.github.roosha.server.translation.providers.yandexdict;
 
 import com.github.roosha.proto.translation.TranslationServiceProto;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translation;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
-import com.github.roosha.translation.providers.RawTranslation;
+import com.github.roosha.server.translation.providers.RawTranslation;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import org.jetbrains.annotations.NotNull;

@@ -16,10 +16,10 @@
  *
  */
 
-package com.github.roosha.translation.providers.yandexdict;
+package com.github.roosha.server.translation.providers.yandexdict;
 
-import com.github.roosha.translation.providers.RawTranslation;
-import com.github.roosha.translation.providers.TranslationProvider;
+import com.github.roosha.server.translation.providers.RawTranslation;
+import com.github.roosha.server.translation.providers.TranslationProvider;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 

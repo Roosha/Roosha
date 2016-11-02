@@ -16,7 +16,7 @@
  *
  */
 
-package com.github.roosha.translation.providers;
+package com.github.roosha.server.translation.providers;
 
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import org.jetbrains.annotations.NotNull;

@@ -16,16 +16,16 @@
  *
  */
 
-package com.github.roosha.translation;
+package com.github.roosha.server;
 
-import com.github.roosha.translation.config.TranslationServiceConfig;
+import com.github.roosha.server.config.Config;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         final AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext(TranslationServiceConfig.class);
-        final TranslationServer server = context.getBean(TranslationServer.class);
+                new AnnotationConfigApplicationContext(Config.class);
+        final RooshaServer server = context.getBean(RooshaServer.class);
         server.start();
         server.blockAndWait();
 //        Thread.sleep(1000);

@@ -16,11 +16,11 @@
  *
  */
 
-package com.github.roosha.translation;
+package com.github.roosha.server;
 
 import java.io.IOException;
 
-public interface TranslationServer {
+public interface RooshaServer {
     void start() throws IOException;
 
     void stop();

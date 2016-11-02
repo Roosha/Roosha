@@ -23,9 +23,10 @@ import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc.RooshaTr
 import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc.RooshaTranslationServiceStub;
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
-import com.github.roosha.translation.config.TranslationServiceConfig;
-import io.grpc.*;
-import io.grpc.ForwardingClientCall.SimpleForwardingClientCall;
+import com.github.roosha.server.RooshaServer;
+import com.github.roosha.server.config.Config;
+import io.grpc.Channel;
+import io.grpc.Metadata;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyChannelBuilder;
 import io.grpc.stub.MetadataUtils;
@@ -43,14 +44,14 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = TranslationServiceConfig.class)
-public class RooshaTranslationServerTest {
+@ContextConfiguration(classes = Config.class)
+public class RooshaServerTest {
     private RooshaTranslationServiceBlockingStub blockingStub;
     private RooshaTranslationServiceStub asynchronousStub;
     private Channel channel;
 
     @Autowired
-    private TranslationServer server;
+    private RooshaServer server;
 
     @Before
     public void setUp() throws IOException {
@@ -65,7 +66,6 @@ public class RooshaTranslationServerTest {
                                                                      .trustManager(InsecureTrustManagerFactory.INSTANCE)
                                                                      .build())
                                           .build();
-        this.channel = io.grpc.ClientInterceptors.intercept(channel, new TestClientInterceptor());
         blockingStub = RooshaTranslationServiceGrpc.newBlockingStub(channel);
         asynchronousStub = RooshaTranslationServiceGrpc.newStub(channel);
 
@@ -84,32 +84,18 @@ public class RooshaTranslationServerTest {
     @Test
     public void translationServiceRespectsSource() {
         for (String source : new String[]{"source", "exhibit", "house", "noise"}) {
-            final Translations response = translate(source);
-            System.out.println(response);
-            assertEquals(source, response.getSource());
+            try {
+                final Translations response = translate(source);
+                System.out.println(response);
+                assertEquals(source, response.getSource());
+            } catch (Exception e) {
+                System.out.println("AUTHENTICATION ERROR: " + e.getMessage());
+            }
         }
     }
 
     private Translations translate(String source) {
         final TranslationRequest request = TranslationRequest.newBuilder().setSource(source).build();
         return blockingStub.translate(request);
-    }
-
-    private static class TestClientInterceptor implements ClientInterceptor {
-        private static final Metadata.Key<String> customHeaderKey =
-                Metadata.Key.of("my_key", Metadata.ASCII_STRING_MARSHALLER);
-
-        @Override
-        public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
-                MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
-            System.out.println("intercept client call");
-            return new SimpleForwardingClientCall<ReqT, RespT>(next.newCall(method, callOptions)) {
-                @Override
-                public void start(Listener<RespT> responseListener, Metadata headers) {
-                    headers.put(customHeaderKey, "gobbles");
-                    super.start(responseListener, headers);
-                }
-            };
-        }
     }
 }

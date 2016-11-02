@@ -16,15 +16,10 @@
  *
  */
 
-package com.github.roosha.translation;
+package com.github.roosha.server;
 
-import com.github.roosha.proto.translation.AuthorizationInterceptor;
-import com.sun.xml.internal.ws.api.client.ServiceInterceptor;
-import com.sun.xml.internal.ws.api.client.ServiceInterceptorFactory;
 import io.grpc.BindableService;
 import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import io.grpc.ServerInterceptors;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyServerBuilder;
 import io.netty.handler.ssl.SslContext;
@@ -32,14 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
-import javax.net.ssl.SSLContext;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Scanner;
 
 @Component
-public class RooshaTranslationServer implements TranslationServer {
+public class RooshaServerImpl implements RooshaServer {
     private Integer port = 1543;
 
     @Autowired
@@ -55,7 +47,7 @@ public class RooshaTranslationServer implements TranslationServer {
         final SslContext sslContext = GrpcSslContexts.forServer(certicateFile, privateKeyFile).build();
         server = NettyServerBuilder.forPort(port)
                                    .sslContext(sslContext)
-                                   .addService(ServerInterceptors.intercept(service, new AuthorizationInterceptor()))
+                                   .addService(service)
                                    .build();
         System.out.println(server == null);
         server.start();

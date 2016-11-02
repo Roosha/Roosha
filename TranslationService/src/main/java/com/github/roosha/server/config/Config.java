@@ -16,15 +16,23 @@
  *
  */
 
-package com.github.roosha.translation.config;
+package com.github.roosha.server.config;
 
-import com.github.roosha.proto.translation.RooshaTranslationService;
-import com.github.roosha.translation.RooshaTranslationServer;
+import com.github.roosha.server.RooshaServerImpl;
+import com.github.roosha.server.RooshaService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-@Configuration()
-@ComponentScan(basePackageClasses = {RooshaTranslationServer.class, RooshaTranslationService.class})
-
-public class TranslationServiceConfig {
+@Configuration
+@ComponentScan(basePackageClasses = {RooshaServerImpl.class, RooshaService.class})
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+public class Config {
+//    @Bean
+//    public AuthAspect authAspect() {
+//        System.out.println("========================================");
+//        System.out.println("        CREATING AUTH ASPECT            ");
+//        System.out.println("========================================");
+//        return new AuthAspect();
+//    }
 }

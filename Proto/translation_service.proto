@@ -30,13 +30,32 @@ option optimize_for = SPEED;
 
 
 service RooshaTranslationService {
+  	rpc register(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
+	rpc authorize(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
+
+	// All methods below are required to pass authorization token in 'roosha-auth-token' metadata key.
     rpc translate(TranslationRequest) returns (Translations) {}
-    rpc proposeUserTranslations(Translations) returns (roosha.commons.Void) {}
+    rpc proposeUserTranslations(UserTranslationsProposal) returns (roosha.commons.Void) {}
 }
 
 message TranslationRequest {
+	// NOTE: 'token' should be passed always. 'id' is added only for convenience inside server side.
+	oneof tokenOrId {
+		bytes token = 1;
+		uint64 id = 100;
+	}
     // Text to be translated
-    string source = 1;
+    string source = 2;
+}
+
+message UserTranslationsProposal {
+	// NOTE: 'token' should be passed always. 'id' is added only for convenience inside server side.
+	oneof tokenOrId {
+		bytes token = 1;
+		uint64 id = 100;
+	}
+	// Translations, proposed by user.
+	Translations proposedTranslations = 2;
 }
 
 message Translations {

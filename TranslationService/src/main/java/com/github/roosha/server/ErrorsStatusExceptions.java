@@ -16,10 +16,11 @@
  *
  */
 
-package com.github.roosha.proto.translation;
+package com.github.roosha.server;
 
 import io.grpc.Status;
 import io.grpc.StatusException;
+import io.grpc.StatusRuntimeException;
 import org.jetbrains.annotations.NotNull;
 
 import static java.lang.String.format;
@@ -27,12 +28,11 @@ import static java.lang.String.format;
 /**
  * This class provides default error statuses for translation service protocol.
  */
-public class Errors {
+public class ErrorsStatusExceptions {
     /**
      * Translation failure status exception for default translation direction.
-     * @param source
-     * @return
-     * @see Errors#noTranslation(String, String)
+     * @param source the text fail to be translated
+     * @see ErrorsStatusExceptions#noTranslation(String, String)
      */
     public static StatusException noTranslation(@NotNull String source) {
         return noTranslation(source, "AUTO");
@@ -44,11 +44,34 @@ public class Errors {
      * supported translation providers.
      * @param source the text fail to be translated
      * @param direction translation direction
-     * @return
      */
     public static StatusException noTranslation(@NotNull String source, @NotNull String direction) {
         return Status.NOT_FOUND.augmentDescription(
                 format("Can not translate '%s' in translation direction '%s'", source, direction)
         ).asException();
+    }
+
+    /**
+     * This error should be thrown whenever gotten authorization token is invalid or expired.
+     */
+    public static StatusRuntimeException expiredAuthToken() {
+        return Status.UNAUTHENTICATED.augmentDescription(
+                "Specified token is expired, call 'register' or 'authorize' rpc to get new valid token."
+        ).asRuntimeException();
+    }
+
+    /**
+     * This error should be thrown whenever failed to  register new user.
+     */
+    public static StatusRuntimeException registrationFailure() {
+        return Status.UNAUTHENTICATED.augmentDescription(
+                "Failed to register new user, most likely due to login is already used."
+        ).asRuntimeException();
+    }
+
+    public static StatusRuntimeException authorizationFailure() {
+        return Status.UNAUTHENTICATED.augmentDescription(
+                "Failed to authorize user, most likely due to incorrect credentials."
+        ).asRuntimeException();
     }
 }
