@@ -29,11 +29,10 @@ option cc_enable_arenas = false;
 option optimize_for = SPEED;
 
 
-service RooshaTranslationService {
-  	rpc register(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
+service RooshaService {
+  	rpc registrate(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
 	rpc authorize(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
 
-	// All methods below are required to pass authorization token in 'roosha-auth-token' metadata key.
     rpc translate(TranslationRequest) returns (Translations) {}
     rpc proposeUserTranslations(UserTranslationsProposal) returns (roosha.commons.Void) {}
 }

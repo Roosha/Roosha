@@ -21,12 +21,13 @@ using roosha::commons::Void;
 using roosha::translation::Translation;
 using roosha::translation::Translations;
 using roosha::translation::TranslationRequest;
-using roosha::translation::RooshaTranslationService;
+using roosha::translation::RooshaService;
+using roosha::translation::UserTranslationsProposal;
 
 TranslationService::TranslationService(const grpc::string &target):
     requestIdCount_(0) {
     std::shared_ptr<grpc::Channel> channel =  grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
-    stub_ = RooshaTranslationService::NewStub(channel);
+    stub_ = RooshaService::NewStub(channel);
 
     // run thread which will wait for translation service responces and
     rpcStatusListener_ = new AsyncRpcStatusListener;
@@ -65,7 +66,10 @@ quint32 TranslationService::proposeUserTranslations(Translations userTranslation
     call->response_ = new Void;
     call->context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
 
-    auto responseReader = stub_->AsyncproposeUserTranslations(&call->context_, userTranslation, &completionQueue_);
+    UserTranslationsProposal request;
+    // TODO: figure out, whether doest 'set_allocated_*' free allocated message automatically or not.
+    request.set_allocated_proposedtranslations(&userTranslation);
+    auto responseReader = stub_->AsyncproposeUserTranslations(&call->context_, request, &completionQueue_);
     responseReader->Finish(static_cast<Void*>(call->response_), &call->status_, static_cast<void*>(call));
     return call->id_;
 }

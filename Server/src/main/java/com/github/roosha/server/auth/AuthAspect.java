@@ -24,6 +24,7 @@ public class AuthAspect {
      * For more information, see <a href=http://stackoverflow.com/a/18822005/6632036>discussion at stackoverflow</a>.
      */
     public static AuthAspect aspectOf() {
+        System.err.println("====================AuthAspect created=======================");
         return SpringApplicationContextHolder.getApplicationContext().getBean(AuthAspect.class);
     }
 
@@ -33,6 +34,7 @@ public class AuthAspect {
             RequireAuthentication requireAuthentication,
             Object request,
             StreamObserver responseObserver) throws Throwable {
+        System.err.println("---------------------authorizeIfPossible advice called------------------------------");
         final RequestType requestTypeType = requireAuthentication.request();
         final long userId = authorizationManager.getUserIdByToken(requestTypeType.getToken(request));
 

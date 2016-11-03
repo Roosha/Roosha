@@ -3,7 +3,7 @@
 
 #include "translation_service.h"
 
-#define DEFAULT_TRANSLATION_SERVICE_HOST "localhost:1543"
+#define DEFAULT_ROOSHA_SERVICE_HOST "localhost:1543"
 
 class NetworkManager {
  public:

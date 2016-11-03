@@ -18,7 +18,7 @@
 
 package com.github.roosha.server;
 
-import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc.RooshaTranslationServiceImplBase;
+import com.github.roosha.proto.translation.RooshaServiceGrpc.RooshaServiceImplBase;
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import com.github.roosha.proto.translation.TranslationServiceProto.UserTranslationsProposal;
@@ -35,7 +35,7 @@ import static com.github.roosha.proto.commons.CommonsProto.*;
 import static com.github.roosha.proto.commons.CommonsProto.Void;
 
 @Component
-public class RooshaService extends RooshaTranslationServiceImplBase {
+public class RooshaRpcService extends RooshaServiceImplBase {
     @Autowired
     private TranslationProvider provider;
 
@@ -71,7 +71,7 @@ public class RooshaService extends RooshaTranslationServiceImplBase {
     }
 
     @Override
-    public void register(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
+    public void registrate(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
         try {
             final ByteString authToken = authManager.register(request);
             if (authToken != null) {

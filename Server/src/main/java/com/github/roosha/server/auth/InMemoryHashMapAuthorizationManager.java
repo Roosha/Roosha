@@ -19,7 +19,10 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
 
     @Override
     public long getUserIdByToken(@NotNull ByteString token) {
-        return authorizedUsers.getOrDefault(token, -1L);
+        final Long result = authorizedUsers.getOrDefault(token, -1L);
+        System.err.println("================== For token: " + token + " ==================");
+        System.err.println("================== Extracted iser id: " + result + " ==================");
+        return result;
     }
 
     @Override

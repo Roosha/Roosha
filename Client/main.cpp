@@ -1,6 +1,6 @@
 #include "Network/network_manager.h"
 #include "Network/translation_service.h"
-#include "Network/Proto/translation_service.pb.h"
+#include "Network/Proto/roosha_service.pb.h"
 #include "Test/Network/translations_test_slot_holder.h"
 #include "Core/dbcard.h"
 #include "Core/card.h"

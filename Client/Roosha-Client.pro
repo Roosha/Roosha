@@ -63,15 +63,15 @@ HEADERS += \
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \
-    Network/Proto/translation_service.pb.cc \
-    Network/Proto/translation_service.grpc.pb.cc
+    Network/Proto/roosha_service.pb.cc \
+    Network/Proto/roosha_service.grpc.pb.cc
 
 HEADERS += Network/Proto/commons.pb.h \
-    Network/Proto/translation_service.pb.h \
-    Network/Proto/translation_service.grpc.pb.h
+    Network/Proto/roosha_service.pb.h \
+    Network/Proto/roosha_service.grpc.pb.h
 
 OTHER_FILES += Network/Proto/commons.proto \
-    Network/Proto/translation_service.proto
+    Network/Proto/roosha_service.proto
 #-------------------------------
 
 DISTFILES += \

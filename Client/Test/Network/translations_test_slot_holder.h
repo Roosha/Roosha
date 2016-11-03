@@ -5,7 +5,7 @@
 
 #include <grpc++/grpc++.h>
 
-#include "Network/Proto/translation_service.pb.h"
+#include "Network/Proto/roosha_service.pb.h"
 
 using roosha::translation::Translations;
 

@@ -6,7 +6,7 @@
 
 #include <grpc++/grpc++.h>
 
-#include "Proto/translation_service.pb.h"
+#include "Proto/roosha_service.pb.h"
 #include "Proto/commons.pb.h"
 
 enum RequestType {
@@ -22,12 +22,12 @@ struct AsyncClientCall {
             return;
         }
         switch(requestType_) {
-            case TRANSLATE:
-                delete static_cast<roosha::translation::Translations*>(response_);
-                break;
-            case PROPOSE_USER_TRANSLATION:
-                delete static_cast<roosha::commons::Void*>(response_);
-                break;
+        case TRANSLATE:
+            delete static_cast<roosha::translation::Translations*>(response_);
+            break;
+        case PROPOSE_USER_TRANSLATION:
+            delete static_cast<roosha::commons::Void*>(response_);
+            break;
         }
     }
 

@@ -1,8 +1,8 @@
 #ifndef TRANSLATIONSERVICE_H
 #define TRANSLATIONSERVICE_H
 
-#include "Proto/translation_service.grpc.pb.h"
-#include "Proto/translation_service.pb.h"
+#include "Proto/roosha_service.grpc.pb.h"
+#include "Proto/roosha_service.pb.h"
 #include "async_client_call.h"
 
 #include <grpc/status.h>
@@ -75,7 +75,7 @@ private:
     void emitUserTranslationProposalFailed(quint32 requestId, grpc::Status status);
 
     std::atomic<quint32> requestIdCount_;
-    std::unique_ptr<roosha::translation::RooshaTranslationService::Stub> stub_;
+    std::unique_ptr<roosha::translation::RooshaService::Stub> stub_;
     grpc::CompletionQueue completionQueue_;
     AsyncRpcStatusListener* rpcStatusListener_;
 };

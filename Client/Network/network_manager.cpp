@@ -1,7 +1,7 @@
 #include "Network/network_manager.h"
 
 NetworkManager::NetworkManager():
-        target_(DEFAULT_TRANSLATION_SERVICE_HOST) {
+    target_(DEFAULT_ROOSHA_SERVICE_HOST) {
 }
 
 std::shared_ptr<TranslationService> NetworkManager::getTranslationService() {

@@ -19,13 +19,13 @@
 package com.github.roosha.server.config;
 
 import com.github.roosha.server.RooshaServerImpl;
-import com.github.roosha.server.RooshaService;
+import com.github.roosha.server.RooshaRpcService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @Configuration
-@ComponentScan(basePackageClasses = {RooshaServerImpl.class, RooshaService.class})
+@ComponentScan(basePackageClasses = {RooshaServerImpl.class, RooshaRpcService.class, SpringApplicationContextHolder.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class Config {
 }

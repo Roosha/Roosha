@@ -20,8 +20,8 @@ package com.github.roosha.translation;
 
 import com.github.roosha.proto.commons.CommonsProto.AuthenticationToken;
 import com.github.roosha.proto.commons.CommonsProto.Credentials;
-import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc;
-import com.github.roosha.proto.translation.RooshaTranslationServiceGrpc.RooshaTranslationServiceBlockingStub;
+import com.github.roosha.proto.translation.RooshaServiceGrpc;
+import com.github.roosha.proto.translation.RooshaServiceGrpc.RooshaServiceBlockingStub;
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
 import com.github.roosha.proto.translation.TranslationServiceProto.UserTranslationsProposal;
@@ -208,7 +208,7 @@ public class RooshaServerAuthorizationTest {
 }
 
 class RooshaTestClient {
-    private final RooshaTranslationServiceBlockingStub blockingStub;
+    private final RooshaServiceBlockingStub blockingStub;
     private final Channel channel;
 
     public RooshaTestClient() throws SSLException {
@@ -223,7 +223,7 @@ class RooshaTestClient {
                                                                      .trustManager(InsecureTrustManagerFactory.INSTANCE)
                                                                      .build())
                                           .build();
-        blockingStub = RooshaTranslationServiceGrpc.newBlockingStub(channel);
+        blockingStub = RooshaServiceGrpc.newBlockingStub(channel);
     }
 
     AuthenticationToken authorize(Credentials credentials) throws StatusRuntimeException {
@@ -231,7 +231,7 @@ class RooshaTestClient {
     }
 
     AuthenticationToken register(Credentials credentials) throws StatusRuntimeException {
-        return blockingStub.register(credentials);
+        return blockingStub.registrate(credentials);
     }
 
     Translations translate(TranslationRequest request) throws StatusRuntimeException {
