@@ -1,5 +1,5 @@
 #include "Network/network_manager.h"
-#include "Network/translation_service.h"
+#include "Network/roosha_service.h"
 #include "Network/Proto/roosha_service.pb.h"
 #include "Test/Network/translations_test_slot_holder.h"
 #include "Core/dbcard.h"
@@ -87,12 +87,12 @@ void testDBCardBuilder() {
 TranslationsTestSlotHolder* testTranslationServiceConnection() {
     TranslationsTestSlotHolder* receiver = new TranslationsTestSlotHolder;
     std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
-    std::shared_ptr<TranslationService> translationService = networkManager->getTranslationService();
+    std::shared_ptr<RooshaRpcService> translationService = networkManager->getTranslationService();
 
     qRegisterMetaType<TestTranslations>();
-    QObject::connect(translationService.get(), &TranslationService::translationSucceeded,
+    QObject::connect(translationService.get(), &RooshaRpcService::translationSucceeded,
                      receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
-    QObject::connect(translationService.get(), &TranslationService::translationFailed,
+    QObject::connect(translationService.get(), &RooshaRpcService::translationFailed,
                      receiver, &TranslationsTestSlotHolder::translationFailedSlot, Qt::DirectConnection);
 
     QStringList str;

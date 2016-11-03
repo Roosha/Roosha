@@ -3,7 +3,6 @@
 
 #include "Proto/roosha_service.grpc.pb.h"
 #include "Proto/roosha_service.pb.h"
-#include "async_client_call.h"
 
 #include <grpc/status.h>
 
@@ -15,16 +14,16 @@
 #include <QObject>
 #include <QThread>
 
-class TranslationService;
+class RooshaRpcService;
 class AsyncRpcStatusListener;
 
 
-class TranslationService : public QObject {
+class RooshaRpcService : public QObject {
     Q_OBJECT
 
 public:
-    TranslationService(const grpc::string &target);
-    ~TranslationService();
+    RooshaRpcService(const grpc::string &target);
+    ~RooshaRpcService();
 public slots:
     /**
      * Send translation request to translation server request. When the response is received or any error occured,
@@ -69,8 +68,12 @@ signals:
 
 private:
     friend class AsyncRpcStatusListener;
+
+    friend class TranslateResponse;
     void emitTranslationSucceeded(quint32 id, roosha::translation::Translations translations);
     void emitTranslationFailed(quint32 id, grpc::Status status);
+
+    friend class ProposeUserTranslationsResponse;
     void emitUserTranslationProposalSucceeded(quint32 requestId, roosha::commons::Void response);
     void emitUserTranslationProposalFailed(quint32 requestId, grpc::Status status);
 
@@ -90,9 +93,9 @@ class AsyncRpcStatusListener : public QThread {
     void run() Q_DECL_OVERRIDE;
 
 public:
-    void setTranslationService(TranslationService* translationService);
+    void setTranslationService(RooshaRpcService* translationService);
 private:
-    TranslationService* translationService_;
+    RooshaRpcService* rpcService_;
 };
 
 #endif // TRANSLATIONSERVICE_H

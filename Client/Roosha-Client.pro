@@ -22,11 +22,12 @@ SOURCES += main.cpp \
     Core/translation.cpp \
     GUI/translationcontroller.cpp \
     Helpers/qmlconvertation.cpp \
-    Network/translation_service.cpp \
     Network/network_manager.cpp \
     Test/Network/translations_test_slot_holder.cpp \
     Core/changes.cpp \
-    Core/cardbuilder.cpp
+    Core/cardbuilder.cpp \
+    Network/roosha_service.cpp \
+    Network/server_response.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -56,10 +57,10 @@ HEADERS += \
     Core/ichange.h \
     Core/changes.h \
     Core/cardbuilder.h \
-    Network/translation_service.h \
-    Network/async_client_call.h \
     Network/network_manager.h \
-    Test/Network/translations_test_slot_holder.h
+    Test/Network/translations_test_slot_holder.h \
+    Network/roosha_service.h \
+    Network/server_response.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \
