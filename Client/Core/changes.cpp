@@ -3,7 +3,6 @@
 #include "world.h"
 #include <QSharedPointer>
 
-ChangeSource::ChangeSource() { }
 
 ChangeSource::ChangeSource(QUuid cardId, const QString & newSrc) : cardId(cardId), newSource(newSrc) {}
 
@@ -11,8 +10,6 @@ void ChangeSource::apply(World * world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     cardptr->source = newSource;
 }
-
-EditElem::EditElem() { }
 
 EditElem::EditElem(QUuid cardId, const enum Field & field, const QString & newEl, const qint32 & p) :
                     cardId(cardId), fieldName(field), newElem(newEl), pos(p) {}
@@ -29,8 +26,6 @@ void EditElem::apply(World * world) {
     }
 }
 
-InsertElem::InsertElem() { }
-
 InsertElem::InsertElem(QUuid cardId, const enum Field & field, const QString & insertingEl, const qint32 & p) :
                         cardId(cardId), fieldName(field), insertingElem(insertingEl), pos(p) {}
 
@@ -46,7 +41,6 @@ void InsertElem::apply(World * world) {
     }
 }
 
-DeleteElem::DeleteElem() { }
 
 DeleteElem::DeleteElem(QUuid cardId, const enum Field & field, const qint32 & p) :
                         cardId(cardId), fieldName(field), pos(p) {}
@@ -63,11 +57,14 @@ void DeleteElem::apply(World * world) {
     }
 }
 
-CreateCard::CreateCard() : cardId(QUuid()) {}
+CreateCard::CreateCard(QUuid id) : cardId(id) { }
+QUuid CreateCard::getId() {
+    return cardId;
+}
 
 void CreateCard::apply(World * world) {
-    if (cardId.isNull())
-        cardId = QUuid::createUuid();
+//    if (cardId.isNull())
+//        cardId = QUuid::createUuid();
     world->getCards().insert(cardId, QSharedPointer<DBCard>::create(cardId));
 }
 

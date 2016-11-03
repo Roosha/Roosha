@@ -21,10 +21,10 @@ QVector<QSharedPointer<IChange>> & World::getChanges() {
 }
 
 QUuid World::createCard() {
-    QSharedPointer<CreateCard> change = QSharedPointer<CreateCard>::create();
+    QSharedPointer<CreateCard> change = QSharedPointer<CreateCard>::create(QUuid::createUuid());
     this->changes.append(change);
     change->apply(this);
-    return change->cardId;
+    return change->getId();
 }
 
 void World::deleteCard(QUuid id) {

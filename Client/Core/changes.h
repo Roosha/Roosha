@@ -8,80 +8,69 @@
 
 class ChangeSource : public IChange {
  public:
-
-    ChangeSource();
     ChangeSource(QUuid id, const QString & newSrc);
 
-    void apply(World * world);
+    void apply(World * world) override;
 
  private:
-    QUuid cardId;
-    QString newSource;
+    const QUuid cardId;
+    const QString newSource;
 };
 
 class EditElem : public IChange {
  public:
-
-    EditElem();
     EditElem(QUuid cardId, const enum Field & field, const QString & newEl, const qint32 & p);
 
-    void apply(World * world);
+    void apply(World * world) override;
 
  private:
-    QUuid cardId;
-    enum Field fieldName;
-    QString newElem;
-    qint32 pos;
+    const QUuid cardId;
+    const enum Field fieldName;
+    const QString newElem;
+    const qint32 pos;
 };
 
 class InsertElem : public IChange {
  public:
-
-    InsertElem();
     InsertElem(QUuid id, const enum Field & field, const QString & insertingEl, const qint32 & p);
 
-    void apply(World * world);
+    void apply(World * world) override;
 
  private:
-    QUuid cardId;
-    enum Field fieldName;
-    QString insertingElem;
-    qint32 pos;
+    const QUuid cardId;
+    const enum Field fieldName;
+    const QString insertingElem;
+    const qint32 pos;
 };
 
 class DeleteElem : public IChange {
  public:
-
-    DeleteElem();
     DeleteElem(QUuid id, const enum Field & field, const qint32 & p);
 
-    void apply(World * world);
+    void apply(World * world) override;
 
  private:
-    QUuid cardId;
-    enum Field fieldName;
-    qint32 pos;
+    const QUuid cardId;
+    const enum Field fieldName;
+    const qint32 pos;
 };
 
 class CreateCard : public IChange {
  public:
-
-    CreateCard();
-
-    void apply(World * world);
+    CreateCard(QUuid id);
+    QUuid getId();
+    void apply(World * world) override;
  private:
-    friend class World;
-    QUuid cardId;
+    const QUuid cardId;
 };
 
 class DeleteCard : public IChange {
  public:
-
     DeleteCard(QUuid id);
 
-    void apply(World * world);
+    void apply(World * world) override;
  private:
-    QUuid cardId;
+    const QUuid cardId;
 };
 
 #endif // CHANGES_H
