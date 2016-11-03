@@ -38,7 +38,6 @@ public class AuthAspect {
 
         if (userId == -1) {
             responseObserver.onError(ErrorsStatusExceptions.expiredAuthToken());
-            responseObserver.onCompleted();
         } else {
             joinPoint.proceed(new Object[]{requestTypeType.withUserId(request, userId), responseObserver});
         }
