@@ -17,6 +17,11 @@
 class RooshaRpcService;
 class AsyncRpcStatusListener;
 
+class TranslateAsyncCall;
+class ProposeUserTranslationsAsyncCall;
+
+class AuthenticationManager;
+
 
 class RooshaRpcService : public QObject {
     Q_OBJECT
@@ -69,18 +74,22 @@ signals:
 private:
     friend class AsyncRpcStatusListener;
 
-    friend class TranslateResponse;
+    friend class TranslateAsyncCall;
     void emitTranslationSucceeded(quint32 id, roosha::translation::Translations translations);
     void emitTranslationFailed(quint32 id, grpc::Status status);
+    void sendTranslateRequest(TranslateAsyncCall *call);
 
-    friend class ProposeUserTranslationsResponse;
+    friend class ProposeUserTranslationsAsyncCall;
     void emitUserTranslationProposalSucceeded(quint32 requestId, roosha::commons::Void response);
     void emitUserTranslationProposalFailed(quint32 requestId, grpc::Status status);
+    void sendUserTranslationProposal(ProposeUserTranslationsAsyncCall *call);
 
     std::atomic<quint32> requestIdCount_;
     std::unique_ptr<roosha::translation::RooshaService::Stub> stub_;
     grpc::CompletionQueue completionQueue_;
     AsyncRpcStatusListener* rpcStatusListener_;
+    AuthenticationManager* authManager_;
+
 };
 
 

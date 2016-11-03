@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     Core/changes.cpp \
     Core/cardbuilder.cpp \
     Network/roosha_service.cpp \
-    Network/server_response.cpp
+    Network/server_response.cpp \
+    Network/authentication_manager.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -60,7 +61,8 @@ HEADERS += \
     Network/network_manager.h \
     Test/Network/translations_test_slot_holder.h \
     Network/roosha_service.h \
-    Network/server_response.h
+    Network/server_response.h \
+    Network/authentication_manager.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

@@ -1,5 +1,6 @@
 #include "roosha_service.h"
 #include "server_response.h"
+#include "authentication_manager.h"
 
 #include <grpc/grpc.h>
 #include <grpc++/grpc++.h>
@@ -25,7 +26,8 @@ using roosha::translation::RooshaService;
 using roosha::translation::UserTranslationsProposal;
 
 RooshaRpcService::RooshaRpcService(const grpc::string &target):
-    requestIdCount_(0) {
+    requestIdCount_(0),
+    authManager_(new AuthenticationManager) {
     std::shared_ptr<grpc::Channel> channel =  grpc::CreateChannel(target, grpc::InsecureChannelCredentials());
     stub_ = RooshaService::NewStub(channel);
 
@@ -40,34 +42,30 @@ RooshaRpcService::~RooshaRpcService() {
     rpcStatusListener_->quit();
     rpcStatusListener_->wait();
     delete rpcStatusListener_;
+    delete authManager_;
 }
 
 
 quint32 RooshaRpcService::translate(QString source, quint32 timeoutMillis) {
-    TranslationRequest request;
-    request.set_source(source.toStdString());
+    TranslateAsyncCall* call = new TranslateAsyncCall(this, authManager_);
+    call->request_.set_source(source.toStdString());
+    call->id_ = requestIdCount_++;
+    call->context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
 
-    TranslateResponse* response = new TranslateResponse(this);
-    response->id_ = requestIdCount_++;
-    response->context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
-
-    auto responseReader = stub_->Asynctranslate(&response->context_, request, &completionQueue_);
-    responseReader->Finish(static_cast<Translations*>(&response->translations_), &response->status_, static_cast<void*>(response));
-
-    return response->id_;
+    sendTranslateRequest(call);
+    return call->id_;
 }
 
 quint32 RooshaRpcService::proposeUserTranslations(Translations userTranslation, quint32 timeoutMillis) {
-    ProposeUserTranslationsResponse* response = new ProposeUserTranslationsResponse(this);
-    response->id_ = requestIdCount_++;
-    response->context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
+    ProposeUserTranslationsAsyncCall* call = new ProposeUserTranslationsAsyncCall(this, authManager_);
+    call->id_ = requestIdCount_++;
+    call->context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
 
-    UserTranslationsProposal request;
     // TODO: figure out, whether doest 'set_allocated_*' free allocated message automatically or not.
-    request.set_allocated_proposedtranslations(&userTranslation);
-    auto responseReader = stub_->AsyncproposeUserTranslations(&response->context_, request, &completionQueue_);
-    responseReader->Finish(static_cast<Void*>(&response->response_), &response->status_, static_cast<void*>(response));
-    return response->id_;
+    call->request_.set_allocated_proposedtranslations(&userTranslation);
+
+    sendUserTranslationProposal(call);
+    return call->id_;
 }
 
 void RooshaRpcService::emitTranslationSucceeded(quint32 id, Translations translations) {
@@ -78,12 +76,22 @@ void RooshaRpcService::emitTranslationFailed(quint32 id, Status status) {
     emit translationFailed(id, status);
 }
 
+void RooshaRpcService::sendTranslateRequest(TranslateAsyncCall *call) {
+    auto responseReader = stub_->Asynctranslate(&call->context_, call->request_, &completionQueue_);
+    responseReader->Finish(static_cast<Translations*>(&call->response_), &call->status_, static_cast<void*>(call));
+}
+
 void RooshaRpcService::emitUserTranslationProposalSucceeded(quint32 requestId, roosha::commons::Void response) {
     emit userTranslationProposalSucceeded(requestId, response);
 }
 
 void RooshaRpcService::emitUserTranslationProposalFailed(quint32 requestId, grpc::Status status) {
     emit userTranslationProposalFailed(requestId, status);
+}
+
+void RooshaRpcService::sendUserTranslationProposal(ProposeUserTranslationsAsyncCall *call) {
+    auto responseReader = stub_->AsyncproposeUserTranslations(&call->context_, call->request_, &completionQueue_);
+    responseReader->Finish(static_cast<Void*>(&call->response_), &call->status_, static_cast<void*>(call));
 }
 
 void AsyncRpcStatusListener::setTranslationService(RooshaRpcService* translationService) {
@@ -94,8 +102,9 @@ void AsyncRpcStatusListener::run() {
     void* label;
     bool ok;
     while (rpcService_->completionQueue_.Next(&label, &ok)) {
-        auto response = static_cast<ServerResponse*>(label);
-        response->process();
-        delete response;
+        auto response = static_cast<RpcAsyncCall*>(label);
+        response->handle();
+        //TODO: here is a memory leak. Need something to do with it.
+//        delete response;
     }
 }

@@ -1,24 +1,53 @@
 #include <QtDebug>
 
+#include <grpc++/grpc++.h>
+
 #include "server_response.h"
+#include "authentication_manager.h"
 
 
-ServerResponse::ServerResponse(RooshaRpcService *rpcService):
-    rpcService_(rpcService) {
+void ProposeUserTranslationsAsyncCall::emitSucceded() {
+    rpcService_->emitUserTranslationProposalSucceeded(id_, response_);
 }
 
-void TranslateResponse::process() {
-    if (status_.ok()) {
-        rpcService_->emitTranslationSucceeded(id_, translations_);
+void ProposeUserTranslationsAsyncCall::emitFailure() {
+    rpcService_->emitUserTranslationProposalFailed(id_, status_);
+}
+
+void ProposeUserTranslationsAsyncCall::retry() {
+    rpcService_->sendUserTranslationProposal(this);
+}
+
+void TranslateAsyncCall::emitSucceded() {
+    rpcService_->emitTranslationSucceeded(id_, response_);
+}
+
+void TranslateAsyncCall::emitFailure() {
+    rpcService_->emitTranslationFailed(id_, status_);
+}
+
+void TranslateAsyncCall::retry() {
+    rpcService_->sendTranslateRequest(this);
+}
+
+void GeneralPurposeAsyncCall::handle() {
+    if (isAuthenticationFailed()) {
+        authManager_->handle(this);
+    } else if (status_.ok()) {
+        emitSucceded();
     } else {
-        rpcService_->emitTranslationFailed(id_, status_);
+        emitFailure();
     }
 }
 
-void ProposeUserTranslationsResponse::process() {
-    if (status_.ok()) {
-        rpcService_->emitUserTranslationProposalSucceeded(id_, response_);
-    } else {
-        rpcService_->emitUserTranslationProposalFailed(id_, status_);
-    }
+bool RpcAsyncCall::isAuthenticationFailed() {
+    return status_.error_code() == grpc::UNAUTHENTICATED;
+}
+
+void RegistrateAsyncCall::handle() {
+    authManager_->handle(this);
+}
+
+void AuthorizeAsyncCall::handle() {
+    authManager_->handle(this);
 }
