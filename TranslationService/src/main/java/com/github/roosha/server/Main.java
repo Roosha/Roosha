@@ -28,8 +28,5 @@ public class Main {
         final RooshaServer server = context.getBean(RooshaServer.class);
         server.start();
         server.blockAndWait();
-//        Thread.sleep(1000);
-//        System.out.println("closing context");
-//        context.close();
     }
 }

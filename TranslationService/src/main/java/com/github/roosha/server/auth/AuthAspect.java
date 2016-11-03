@@ -1,6 +1,7 @@
 package com.github.roosha.server.auth;
 
 import com.github.roosha.server.ErrorsStatusExceptions;
+import com.github.roosha.server.auth.RequireAuthentication.RequestType;
 import com.github.roosha.server.config.SpringApplicationContextHolder;
 import io.grpc.stub.StreamObserver;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -32,7 +33,7 @@ public class AuthAspect {
             RequireAuthentication requireAuthentication,
             Object request,
             StreamObserver responseObserver) throws Throwable {
-        final RequireAuthentication.RequestType requestTypeType = requireAuthentication.request();
+        final RequestType requestTypeType = requireAuthentication.request();
         final long userId = authorizationManager.getUserIdByToken(requestTypeType.getToken(request));
 
         if (userId == -1) {

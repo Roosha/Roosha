@@ -28,11 +28,4 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @ComponentScan(basePackageClasses = {RooshaServerImpl.class, RooshaService.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class Config {
-//    @Bean
-//    public AuthAspect authAspect() {
-//        System.out.println("========================================");
-//        System.out.println("        CREATING AUTH ASPECT            ");
-//        System.out.println("========================================");
-//        return new AuthAspect();
-//    }
 }

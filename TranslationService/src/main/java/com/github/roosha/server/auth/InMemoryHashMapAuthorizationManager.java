@@ -6,9 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import static com.github.roosha.server.util.UuidUtil.generateUuidASByteString;
 
 @Component
 public class InMemoryHashMapAuthorizationManager implements AuthorizationManager {
@@ -28,15 +29,15 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
     }
 
     @Override
-    public synchronized @Nullable ByteString authorize(@NotNull Credentials userCredentials) {
+    public synchronized @Nullable ByteString authorize(@NotNull Credentials creds) {
         final IdAndPasswordHash userIdAndPasswordHash =
-                registeredUsers.getOrDefault(new CaseSensitiveString(userCredentials.getLogin()), null);
-        if (userIdAndPasswordHash != null) {
+                registeredUsers.getOrDefault(new CaseSensitiveString(creds.getLogin()), null);
+        if (userIdAndPasswordHash != null && creds.getPasswordHash().equals(userIdAndPasswordHash.passwordHash)) {
             final Long userId = userIdAndPasswordHash.id;
             ByteString token;
             do {
                 token = generateUuidASByteString();
-            } while (authorizedUsers.putIfAbsent(token, userId).equals(userId));
+            } while (authorizedUsers.putIfAbsent(token, userId) != null);
             return token;
         } else {
             return null;
@@ -44,42 +45,22 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
     }
 
     @Override
-    public synchronized @Nullable ByteString register(@NotNull Credentials userCredentials) {
-        final CaseSensitiveString caseSensitiveLogin = new CaseSensitiveString(userCredentials.getLogin());
+    public synchronized @Nullable ByteString register(@NotNull Credentials creds) {
+        final CaseSensitiveString caseSensitiveLogin = new CaseSensitiveString(creds.getLogin());
         if (registeredUsers.containsKey(caseSensitiveLogin)) {
             return null;
         }
         final long userId = firstFreeId++;
-        registeredUsers.put(caseSensitiveLogin, new IdAndPasswordHash(userId, userCredentials.getPasswordHash()));
+        registeredUsers.put(caseSensitiveLogin, new IdAndPasswordHash(userId, creds.getPasswordHash()));
         ByteString token;
         do {
             token = generateUuidASByteString();
-        } while (authorizedUsers.putIfAbsent(token, userId).equals(userId));
+        } while (authorizedUsers.putIfAbsent(token, userId) != null);
         return token;
 
     }
 
-    private @NotNull ByteString generateUuidASByteString() {
-        final UUID uuid = UUID.randomUUID();
-        final long hi = uuid.getMostSignificantBits();
-        final long lo = uuid.getLeastSignificantBits();
-        return ByteString.copyFrom(new byte[] {
-                (byte) (hi >>> 56),
-                (byte) (hi >>> 48),
-                (byte) (hi >>> 40),
-                (byte) (hi >>> 32),
-                (byte) (hi >>> 16),
-                (byte) (hi >>> 8),
-                (byte) hi,
-                (byte) (lo >>> 56),
-                (byte) (lo >>> 48),
-                (byte) (lo >>> 40),
-                (byte) (lo >>> 32),
-                (byte) (lo >>> 16),
-                (byte) (lo >>> 8),
-                (byte) lo
-        });
-    }
+
 
     private static class CaseSensitiveString {
         private final String string;
@@ -95,7 +76,9 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
 
         @Override
         public int hashCode() {
-            return string.hashCode();
+            // TODO: afaik, this is not correct because of some strange symbols like ß
+            // who convert to combination of different letters when chenging case
+            return string.toLowerCase().hashCode();
         }
     }
 
@@ -113,6 +96,11 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
             return obj instanceof IdAndPasswordHash
                     && id.equals(((IdAndPasswordHash) obj).id)
                     && passwordHash.equals(((IdAndPasswordHash) obj).passwordHash);
+        }
+
+        @Override
+        public String toString() {
+            return "id: " + id + "\npasswordHash: " + passwordHash;
         }
     }
 }

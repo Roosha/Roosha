@@ -39,7 +39,6 @@ class YDRawTranslation implements RawTranslation {
     @Override
     public @Nullable Translations.Builder convertToProtoTranslationsBuilder() {
         if (definitions == null || definitions.length == 0 || definitions[0] == null) {
-            System.out.println("return null");
             return null;
         }
 

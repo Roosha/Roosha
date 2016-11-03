@@ -45,7 +45,6 @@ public class RooshaService extends RooshaTranslationServiceImplBase {
     @Override
     @RequireAuthentication(request = RequireAuthentication.RequestType.TRANSLATE)
     public void translate(TranslationRequest request, StreamObserver<Translations> responseObserver) {
-        System.out.println("==============translate method invoked=================");
         try {
             final RawTranslation rawTranslation = provider.translate(request.getSource());
             final Translations.Builder responseBuilder =

@@ -49,7 +49,6 @@ public class RooshaServerImpl implements RooshaServer {
                                    .sslContext(sslContext)
                                    .addService(service)
                                    .build();
-        System.out.println(server == null);
         server.start();
     }
 
