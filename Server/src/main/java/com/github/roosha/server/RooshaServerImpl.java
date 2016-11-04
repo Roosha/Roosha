@@ -24,6 +24,7 @@ import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyServerBuilder;
 import io.netty.handler.ssl.SslContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Component
+@Primary
 public class RooshaServerImpl implements RooshaServer {
     private Integer port = 1543;
 

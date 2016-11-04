@@ -24,7 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Scanner;
 
 import static java.lang.String.format;
@@ -47,7 +49,13 @@ public class YandexDictionaryProvider implements TranslationProvider {
         return YDRawTranslation.fromJson(response);
     }
 
-    private String createQueryString(String source) {
-        return format(LOOKUP_FORMAT_STRING, API_KEY, source, DEFAULT_LANG);
+    private String createQueryString(String source, String... lang) {
+        try {
+            source = URLEncoder.encode(source, "UTF-8");
+            final String languge = lang.length == 0 ? DEFAULT_LANG : lang[0];
+            return format(LOOKUP_FORMAT_STRING, API_KEY, source, languge);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

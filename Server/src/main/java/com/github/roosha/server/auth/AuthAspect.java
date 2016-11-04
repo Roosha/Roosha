@@ -35,13 +35,13 @@ public class AuthAspect {
             Object request,
             StreamObserver responseObserver) throws Throwable {
         System.err.println("---------------------authorizeIfPossible advice called------------------------------");
-        final RequestType requestTypeType = requireAuthentication.request();
-        final long userId = authorizationManager.getUserIdByToken(requestTypeType.getToken(request));
+        final RequestType requestType = requireAuthentication.request();
+        final long userId = authorizationManager.getUserIdByToken(requestType.getToken(request));
 
         if (userId == -1) {
             responseObserver.onError(ErrorsStatusExceptions.expiredAuthToken());
         } else {
-            joinPoint.proceed(new Object[]{requestTypeType.withUserId(request, userId), responseObserver});
+            joinPoint.proceed(new Object[]{requestType.withUserId(request, userId), responseObserver});
         }
     }
 }

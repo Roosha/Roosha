@@ -25,7 +25,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         final AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(Config.class);
-        final RooshaServer server = context.getBean(RooshaServer.class);
+        final RooshaServer server = (RooshaServer) context.getBean("insecureRooshaServer");
         server.start();
         server.blockAndWait();
     }
