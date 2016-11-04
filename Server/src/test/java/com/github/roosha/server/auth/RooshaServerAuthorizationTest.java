@@ -16,7 +16,7 @@
  *
  */
 
-package com.github.roosha.translation;
+package com.github.roosha.server.auth;
 
 import com.github.roosha.proto.commons.CommonsProto.AuthenticationToken;
 import com.github.roosha.proto.commons.CommonsProto.Credentials;
@@ -24,28 +24,26 @@ import com.github.roosha.proto.translation.RooshaServiceGrpc;
 import com.github.roosha.proto.translation.RooshaServiceGrpc.RooshaServiceBlockingStub;
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
-import com.github.roosha.proto.translation.TranslationServiceProto.UserTranslationsProposal;
 import com.github.roosha.server.ErrorsStatusExceptions;
 import com.github.roosha.server.RooshaServer;
 import com.github.roosha.server.config.Config;
-import com.github.roosha.server.util.UuidUtil;
-import com.google.protobuf.ByteString;
-import io.grpc.Channel;
-import io.grpc.StatusRuntimeException;
+import io.grpc.*;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.stub.MetadataUtils;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.net.ssl.SSLException;
 import java.io.IOException;
-import java.security.SecureRandom;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import static com.github.roosha.server.ErrorsStatusExceptions.authorizationFailure;
@@ -57,48 +55,42 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Config.class)
 public class RooshaServerAuthorizationTest {
-    private RooshaTestClient client;
-
     @Autowired
     private RooshaServer server;
+
+    @Autowired
+    @Qualifier("authTokenMetadataKey")
+    private Metadata.Key<String> TOKEN_METADATA_KEY;
+
+    @Autowired
+    @Qualifier("serverPort")
+    private Integer port;
 
     @Before
     public void setUp() throws IOException {
         server.start();
-        client = new RooshaTestClient();
     }
 
     @After
     public void shutDown() {
         server.stop();
-        client = null;
     }
 
     @Test
     public void invalidTokenPassCausesExpiredTokenException() {
         for (String source : new String[]{"source", "exhibit", "apple", "noise"}) {
-            final TranslationRequest notEmptyTokenRequest =
-                    TranslationRequest.newBuilder()
-                                      .setSource(source)
-                                      .setToken(UuidUtil.generateUuidASByteString())
-                                      .build();
-            final TranslationRequest emptyTokenRequest =
-                    TranslationRequest.newBuilder().setSource(source).build();
-            final TranslationRequest requestWithIdSet =
-                    TranslationRequest.newBuilder().setSource(source).setId(new SecureRandom().nextLong()).build();
+            final TranslationRequest request = TranslationRequest.newBuilder().setSource(source).build();
+
+            final RooshaTestClient clientWithNoToken = new RooshaTestClient();
+            final RooshaTestClient clientWithRandomToken = new RooshaTestClient(UUID.randomUUID().toString());
 
             assertAppropriateStatusRuntimeExceptionThrown(
-                    () -> client.translate(notEmptyTokenRequest),
+                    () -> clientWithNoToken.translate(request),
                     StatusRuntimeException.class,
                     ErrorsStatusExceptions.expiredAuthToken().getMessage()
             );
             assertAppropriateStatusRuntimeExceptionThrown(
-                    () -> client.translate(emptyTokenRequest),
-                    StatusRuntimeException.class,
-                    ErrorsStatusExceptions.expiredAuthToken().getMessage()
-            );
-            assertAppropriateStatusRuntimeExceptionThrown(
-                    () -> client.translate(requestWithIdSet),
+                    () -> clientWithRandomToken.translate(request),
                     StatusRuntimeException.class,
                     ErrorsStatusExceptions.expiredAuthToken().getMessage()
             );
@@ -111,14 +103,16 @@ public class RooshaServerAuthorizationTest {
             final Credentials credentials =
                     Credentials.newBuilder()
                                .setLogin(login)
-                               .setPasswordHash(UuidUtil.generateUuidASByteString())
+                               .setPasswordHash(UUID.randomUUID().toString())
                                .build();
-            final ByteString token = client.register(credentials).getToken();
 
-            final TranslationRequest translationRequestWithToken =
-                    TranslationRequest.newBuilder().setToken(token).setSource("exhibit").build();
-            final Translations response = client.translate(translationRequestWithToken);
-            assertEquals("Invalid response source", translationRequestWithToken.getSource(), response.getSource());
+            RooshaTestClient client = new RooshaTestClient();
+            final String token = client.register(credentials).getToken();
+            client = new RooshaTestClient(token);
+
+            final TranslationRequest request = TranslationRequest.newBuilder().setSource("exhibit").build();
+            final Translations response = client.translate(request);
+            assertEquals("Invalid response source", request.getSource(), response.getSource());
         }
     }
 
@@ -127,9 +121,10 @@ public class RooshaServerAuthorizationTest {
         final Credentials initialRegistrationRequest =
                 Credentials.newBuilder()
                            .setLogin("anykuzya48")
-                           .setPasswordHash(UuidUtil.generateUuidASByteString())
+                           .setPasswordHash(UUID.randomUUID().toString())
                            .build();
-        client.register(initialRegistrationRequest);
+        final RooshaTestClient client =
+                new RooshaTestClient(new RooshaTestClient().register(initialRegistrationRequest).getToken());
 
         for (String login : new String[]{"Anykuzya48", "anYkuzya48", "AnYkUzYa48", "aNyKuZyA48", "ANYKUZYA48", "anykuzya48"}) {
             final Credentials credentialsWithTheSamePasswordHash =
@@ -137,7 +132,7 @@ public class RooshaServerAuthorizationTest {
             final Credentials credentialsWithDifferentPasswordHash =
                     Credentials.newBuilder()
                                .setLogin(login)
-                               .setPasswordHash(UuidUtil.generateUuidASByteString())
+                               .setPasswordHash(UUID.randomUUID().toString())
                                .build();
             assertAppropriateStatusRuntimeExceptionThrown(
                     () -> client.register(credentialsWithDifferentPasswordHash),
@@ -157,14 +152,15 @@ public class RooshaServerAuthorizationTest {
         final Credentials validCredentials =
                 Credentials.newBuilder()
                            .setLogin("registeredLogin")
-                           .setPasswordHash(UuidUtil.generateUuidASByteString())
+                           .setPasswordHash(UUID.randomUUID().toString())
                            .build();
-        client.register(validCredentials);
+        final RooshaTestClient client =
+                new RooshaTestClient(new RooshaTestClient().register(validCredentials).getToken());
         final Credentials invalidPasswordCreds =
-                validCredentials.toBuilder().setPasswordHash(UuidUtil.generateUuidASByteString()).build();
+                validCredentials.toBuilder().setPasswordHash(UUID.randomUUID().toString()).build();
         final Credentials invalidLoginCreds = validCredentials.toBuilder().setLogin("notRegisteredLogin").build();
         final Credentials fullyInvalidCreds = Credentials.newBuilder()
-                                                    .setPasswordHash(UuidUtil.generateUuidASByteString())
+                                                    .setPasswordHash(UUID.randomUUID().toString())
                                                     .setLogin("invalidLogin")
                                                     .build();
 
@@ -205,40 +201,52 @@ public class RooshaServerAuthorizationTest {
         }
         assertTrue("No exception thrown, but reveived result:\n" + resultGotten, exceptionThrown);
     }
-}
-
-class RooshaTestClient {
-    private final RooshaServiceBlockingStub blockingStub;
-    private final Channel channel;
-
-    public RooshaTestClient() throws SSLException {
-        final String host = "127.0.0.1";
-        final int port = 1543;
 
 
-        this.channel = NettyChannelBuilder.forAddress(host, port)
-                                          .sslContext(GrpcSslContexts.forClient()
-                                                                     // .trustManager(getClass().getResourceAsStream("/security/ca.crt"))
-                                                                     // Now, in test cases, we're using self signed SSL sertificate on the Server, thereby we disable sertificate validation.
-                                                                     .trustManager(InsecureTrustManagerFactory.INSTANCE)
-                                                                     .build())
-                                          .build();
-        blockingStub = RooshaServiceGrpc.newBlockingStub(channel);
-    }
+    class RooshaTestClient {
+        private final RooshaServiceBlockingStub blockingStub;
 
-    AuthenticationToken authorize(Credentials credentials) throws StatusRuntimeException {
-        return blockingStub.authorize(credentials);
-    }
+        RooshaTestClient(){
+            this(null);
+        }
 
-    AuthenticationToken register(Credentials credentials) throws StatusRuntimeException {
-        return blockingStub.registrate(credentials);
-    }
+        RooshaTestClient(String token) {
+            try {
+                final String host = "127.0.0.1";
+                Channel channel = NettyChannelBuilder.forAddress(host, port)
+                                                     .sslContext(GrpcSslContexts.forClient()
+                                                                                // .trustManager(getClass().getResourceAsStream("/security/ca.crt"))
+                                                                                // Now, in test cases, we're using self signed SSL sertificate on the Server, thereby we disable sertificate validation.
+                                                                                .trustManager(InsecureTrustManagerFactory.INSTANCE)
+                                                                                .build())
+                                                     .build();
+                if (token != null) {
+                    final Metadata tokenHeader = new Metadata();
+                    tokenHeader.put(TOKEN_METADATA_KEY, token);
+                    final ClientInterceptor interceptor = MetadataUtils.newAttachHeadersInterceptor(tokenHeader);
+                    channel = ClientInterceptors.intercept(channel, interceptor);
+                }
 
-    Translations translate(TranslationRequest request) throws StatusRuntimeException {
-        return blockingStub.translate(request);
-    }
+                blockingStub = RooshaServiceGrpc.newBlockingStub(channel);
+            } catch (SSLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
-    void poposeUserTranslations(UserTranslationsProposal proposal) throws StatusRuntimeException {
-        blockingStub.proposeUserTranslations(proposal);
+        AuthenticationToken authorize(Credentials credentials) throws StatusRuntimeException {
+            return blockingStub.authorize(credentials);
+        }
+
+        AuthenticationToken register(Credentials credentials) throws StatusRuntimeException {
+            return blockingStub.registrate(credentials);
+        }
+
+        Translations translate(TranslationRequest request) throws StatusRuntimeException {
+            return blockingStub.translate(request);
+        }
+
+        void poposeUserTranslations(Translations proposal) throws StatusRuntimeException {
+            blockingStub.proposeUserTranslations(proposal);
+        }
     }
 }

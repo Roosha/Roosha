@@ -33,28 +33,14 @@ service RooshaService {
   	rpc registrate(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
 	rpc authorize(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
 
+	// methods declared below should pass authorization token in 'roosha-auth-token' metadata key.
     rpc translate(TranslationRequest) returns (Translations) {}
-    rpc proposeUserTranslations(UserTranslationsProposal) returns (roosha.commons.Void) {}
+    rpc proposeUserTranslations(Translations) returns (roosha.commons.Void) {}
 }
 
 message TranslationRequest {
-	// NOTE: 'token' should be passed always. 'id' is added only for convenience inside server side.
-	oneof tokenOrId {
-		bytes token = 1;
-		uint64 id = 100;
-	}
     // Text to be translated
-    string source = 2;
-}
-
-message UserTranslationsProposal {
-	// NOTE: 'token' should be passed always. 'id' is added only for convenience inside server side.
-	oneof tokenOrId {
-		bytes token = 1;
-		uint64 id = 100;
-	}
-	// Translations, proposed by user.
-	Translations proposedTranslations = 2;
+    string source = 1;
 }
 
 message Translations {

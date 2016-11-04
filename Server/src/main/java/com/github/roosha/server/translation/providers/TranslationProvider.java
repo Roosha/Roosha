@@ -28,7 +28,7 @@ public interface TranslationProvider {
      * Blocking external translation service call.
      * @param source text to be translated
      * @return result of translation
-     * @throws Exception
+     * @throws RuntimeException if any error occures
      */
-    @NotNull RawTranslation translate(@NotNull String source) throws Exception;
+    @NotNull RawTranslation translate(@NotNull String source) throws RuntimeException;
 }

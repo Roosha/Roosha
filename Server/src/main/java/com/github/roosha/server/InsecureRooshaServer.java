@@ -1,8 +1,6 @@
 package com.github.roosha.server;
 
-import io.grpc.BindableService;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import io.grpc.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +14,24 @@ import java.io.IOException;
 public class InsecureRooshaServer implements RooshaServer {
     private final int port = 1543;
 
-    @Autowired
-    private BindableService service;
+    private final BindableService service;
+
+    private final ServerInterceptor[] interceptors;
 
     private Server server;
 
+    @Autowired
+    public InsecureRooshaServer(
+            ServerInterceptor[] interceptors,
+            BindableService service) {
+        this.interceptors = interceptors;
+        this.service = service;
+    }
+
     @Override
     public void start() throws IOException {
-        server = ServerBuilder.forPort(port).addService(service).build();
+        final ServerServiceDefinition serviceWithInterceptors = ServerInterceptors.intercept(service, interceptors);
+        server = ServerBuilder.forPort(port).addService(serviceWithInterceptors).build();
         server.start();
     }
 

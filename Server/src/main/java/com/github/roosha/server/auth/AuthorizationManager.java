@@ -1,7 +1,6 @@
 package com.github.roosha.server.auth;
 
 import com.github.roosha.proto.commons.CommonsProto.Credentials;
-import com.google.protobuf.ByteString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +10,7 @@ public interface AuthorizationManager {
      * @param token user authorization login.
      * @return authorized user id, if token is valid, -1 otherwise.
      */
-    long getUserIdByToken(@NotNull ByteString token);
+    long getUserIdByToken(@NotNull String token);
 
     /**
      * Try to get id of user authorized with this token.
@@ -25,12 +24,12 @@ public interface AuthorizationManager {
      * @param userCredentials authorization credentials
      * @return generated token or {@code null} if authorization failed.
      */
-    @Nullable ByteString authorize(@NotNull Credentials userCredentials);
+    @Nullable String authorize(@NotNull Credentials userCredentials);
 
     /**
      * Register and authorize user with specified credentials.
      * @param userCredentials authorization credentials
      * @return generated token if registration dsucceeded, {@code null} otherwise
      */
-    @Nullable ByteString register(@NotNull Credentials userCredentials);
+    @Nullable String register(@NotNull Credentials userCredentials);
 }

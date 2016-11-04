@@ -18,12 +18,12 @@
 
 package com.github.roosha.server;
 
-import io.grpc.BindableService;
-import io.grpc.Server;
+import io.grpc.*;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyServerBuilder;
 import io.netty.handler.ssl.SslContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -31,25 +31,37 @@ import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
 
+import static com.github.roosha.server.util.Assertions.assertNotNull;
+
 @Component
 @Primary
 public class RooshaServerImpl implements RooshaServer {
-    private Integer port = 1543;
+    private final int port;
+    private final ServerServiceDefinition serviceDefinition;
+    private Server server;
 
     @Autowired
-    private BindableService service;
+    private RooshaServerImpl(
+            @Qualifier("serverPort") Integer port,
+            BindableService service,
+            ServerInterceptor[] interceptors) {
+        assertNotNull(port, "port must not be not null");
+        assertNotNull(service, "service must be not null");
+        assertNotNull(interceptors, "interceptors must be not null");
 
-    private Server server;
+        this.port = port;
+        serviceDefinition = ServerInterceptors.intercept(service, interceptors);
+    }
 
     @Override
     public void start() throws IOException {
         final File privateKeyFile = new File(getClass().getResource("/security/server.pkcs8.key").getFile());
-        final File certicateFile = new File(getClass().getResource("/security/server.crt").getFile());
+        final File certFile = new File(getClass().getResource("/security/server.crt").getFile());
 
-        final SslContext sslContext = GrpcSslContexts.forServer(certicateFile, privateKeyFile).build();
+        final SslContext sslContext = GrpcSslContexts.forServer(certFile, privateKeyFile).build();
         server = NettyServerBuilder.forPort(port)
                                    .sslContext(sslContext)
-                                   .addService(service)
+                                   .addService(serviceDefinition)
                                    .build();
         server.start();
     }

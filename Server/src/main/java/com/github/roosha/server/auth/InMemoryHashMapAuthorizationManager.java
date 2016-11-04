@@ -1,28 +1,23 @@
 package com.github.roosha.server.auth;
 
 import com.github.roosha.proto.commons.CommonsProto.Credentials;
-import com.google.protobuf.ByteString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
-import static com.github.roosha.server.util.UuidUtil.generateUuidASByteString;
 
 @Component
 public class InMemoryHashMapAuthorizationManager implements AuthorizationManager {
     private long firstFreeId = 1;
-    private final ConcurrentMap<ByteString, Long> authorizedUsers = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String, Long> authorizedUsers = new ConcurrentHashMap<>();
     private final ConcurrentMap<CaseSensitiveString, IdAndPasswordHash> registeredUsers = new ConcurrentHashMap<>();
 
     @Override
-    public long getUserIdByToken(@NotNull ByteString token) {
-        final Long result = authorizedUsers.getOrDefault(token, -1L);
-        System.err.println("================== For token: " + token + " ==================");
-        System.err.println("================== Extracted iser id: " + result + " ==================");
-        return result;
+    public long getUserIdByToken(@NotNull String token) {
+        return authorizedUsers.getOrDefault(token, -1L);
     }
 
     @Override
@@ -32,14 +27,14 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
     }
 
     @Override
-    public synchronized @Nullable ByteString authorize(@NotNull Credentials creds) {
+    public synchronized @Nullable String authorize(@NotNull Credentials creds) {
         final IdAndPasswordHash userIdAndPasswordHash =
                 registeredUsers.getOrDefault(new CaseSensitiveString(creds.getLogin()), null);
         if (userIdAndPasswordHash != null && creds.getPasswordHash().equals(userIdAndPasswordHash.passwordHash)) {
             final Long userId = userIdAndPasswordHash.id;
-            ByteString token;
+            String token;
             do {
-                token = generateUuidASByteString();
+                token = UUID.randomUUID().toString();
             } while (authorizedUsers.putIfAbsent(token, userId) != null);
             return token;
         } else {
@@ -48,27 +43,25 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
     }
 
     @Override
-    public synchronized @Nullable ByteString register(@NotNull Credentials creds) {
+    public synchronized @Nullable String register(@NotNull Credentials creds) {
         final CaseSensitiveString caseSensitiveLogin = new CaseSensitiveString(creds.getLogin());
         if (registeredUsers.containsKey(caseSensitiveLogin)) {
             return null;
         }
         final long userId = firstFreeId++;
         registeredUsers.put(caseSensitiveLogin, new IdAndPasswordHash(userId, creds.getPasswordHash()));
-        ByteString token;
+        String token;
         do {
-            token = generateUuidASByteString();
+            token = UUID.randomUUID().toString();
         } while (authorizedUsers.putIfAbsent(token, userId) != null);
         return token;
 
     }
 
-
-
     private static class CaseSensitiveString {
         private final String string;
 
-        public CaseSensitiveString(String string) {
+        CaseSensitiveString(String string) {
             this.string = string;
         }
 
@@ -87,9 +80,9 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
 
     private static class IdAndPasswordHash {
         final Long id;
-        final ByteString passwordHash;
+        final String passwordHash;
 
-        public IdAndPasswordHash(Long id, ByteString passwordHash) {
+        IdAndPasswordHash(Long id, String passwordHash) {
             this.id = id;
             this.passwordHash = passwordHash;
         }

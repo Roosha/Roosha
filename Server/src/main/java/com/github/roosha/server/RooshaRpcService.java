@@ -21,51 +21,64 @@ package com.github.roosha.server;
 import com.github.roosha.proto.translation.RooshaServiceGrpc.RooshaServiceImplBase;
 import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
-import com.github.roosha.proto.translation.TranslationServiceProto.UserTranslationsProposal;
 import com.github.roosha.server.auth.AuthorizationManager;
-import com.github.roosha.server.auth.RequireAuthentication;
 import com.github.roosha.server.translation.providers.RawTranslation;
 import com.github.roosha.server.translation.providers.TranslationProvider;
-import com.google.protobuf.ByteString;
+import io.grpc.Context;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import static com.github.roosha.proto.commons.CommonsProto.*;
 import static com.github.roosha.proto.commons.CommonsProto.Void;
+import static com.github.roosha.server.ErrorsStatusExceptions.expiredAuthToken;
+import static com.github.roosha.server.util.Assertions.assertNotNull;
 
 @Component
 public class RooshaRpcService extends RooshaServiceImplBase {
-    @Autowired
-    private TranslationProvider provider;
+    private final TranslationProvider provider;
+
+    private final AuthorizationManager authManager;
+
+    private final Context.Key<Long> USER_ID_CONTEXT_KEY;
 
     @Autowired
-    private AuthorizationManager authManager;
+    public RooshaRpcService(
+            TranslationProvider provider,
+            AuthorizationManager authManager,
+            @Qualifier("authorizedUserIdContextKey") Context.Key<Long> USER_ID_CONTEXT_KEY) {
+        assertNotNull(provider, "provider must not be null");
+        assertNotNull(authManager, "authorization manager must not be null");
+        assertNotNull(USER_ID_CONTEXT_KEY, "userId context key must not be null");
+
+        this.provider = provider;
+        this.authManager = authManager;
+        this.USER_ID_CONTEXT_KEY = USER_ID_CONTEXT_KEY;
+    }
+
 
     @Override
-    @RequireAuthentication(request = RequireAuthentication.RequestType.TRANSLATE)
     public void translate(TranslationRequest request, StreamObserver<Translations> responseObserver) {
-        try {
-            final RawTranslation rawTranslation = provider.translate(request.getSource());
-            final Translations.Builder responseBuilder =
-                    rawTranslation.convertToProtoTranslationsBuilder();
-            if (responseBuilder != null) {
-                rawTranslation.addToProtoTranslationsBuilder(responseBuilder);
-                responseBuilder.setSource(request.getSource());
-            }
-            else {
-                throw ErrorsStatusExceptions.noTranslation(request.getSource());
-            }
-            responseObserver.onNext(responseBuilder.build());
-            responseObserver.onCompleted();
-        } catch (Throwable t) {
-            responseObserver.onError(t);
+        requireCallerUserId();
+
+        final RawTranslation rawTranslation = provider.translate(request.getSource());
+        final Translations.Builder responseBuilder = rawTranslation.convertToProtoTranslationsBuilder();
+        if (responseBuilder != null) {
+            rawTranslation.addToProtoTranslationsBuilder(responseBuilder);
+            responseBuilder.setSource(request.getSource());
+        } else {
+            throw ErrorsStatusExceptions.noTranslation(request.getSource());
         }
+        responseObserver.onNext(responseBuilder.build());
+        responseObserver.onCompleted();
     }
 
     @Override
-    @RequireAuthentication(request = RequireAuthentication.RequestType.PROPOSE_USER_TRANSLATIONS)
-    public void proposeUserTranslations(UserTranslationsProposal request, StreamObserver<Void> responseObserver) {
+    public void proposeUserTranslations(Translations request, StreamObserver<Void> responseObserver) {
+        requireCallerUserId();
+
         responseObserver.onNext(Void.getDefaultInstance());
         responseObserver.onCompleted();
     }
@@ -73,7 +86,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     @Override
     public void registrate(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
         try {
-            final ByteString authToken = authManager.register(request);
+            final String authToken = authManager.register(request);
             if (authToken != null) {
                 responseObserver.onNext(AuthenticationToken.newBuilder().setToken(authToken).build());
                 responseObserver.onCompleted();
@@ -88,7 +101,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     @Override
     public void authorize(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
         try {
-            final ByteString authToken = authManager.authorize(request);
+            final String authToken = authManager.authorize(request);
             if (authToken != null) {
                 responseObserver.onNext(AuthenticationToken.newBuilder().setToken(authToken).build());
                 responseObserver.onCompleted();
@@ -98,5 +111,17 @@ public class RooshaRpcService extends RooshaServiceImplBase {
         } catch (Throwable t) {
             responseObserver.onError(t);
         }
+    }
+
+    /**
+     * Extract userId of caller if call is authorized, throw {@link ErrorsStatusExceptions#expiredAuthToken()} otherwise.
+     */
+    private long requireCallerUserId() throws StatusRuntimeException {
+        final long userId = USER_ID_CONTEXT_KEY.get();
+        if (userId == -1) {
+            throw expiredAuthToken();
+        }
+
+        return userId;
     }
 }

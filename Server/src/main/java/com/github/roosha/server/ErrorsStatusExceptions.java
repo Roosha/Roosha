@@ -19,7 +19,6 @@
 package com.github.roosha.server;
 
 import io.grpc.Status;
-import io.grpc.StatusException;
 import io.grpc.StatusRuntimeException;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,13 +27,14 @@ import static java.lang.String.format;
 /**
  * This class provides default error statuses for translation service protocol.
  */
+@SuppressWarnings("WeakerAccess")
 public class ErrorsStatusExceptions {
     /**
      * Translation failure status exception for default translation direction.
      * @param source the text fail to be translated
      * @see ErrorsStatusExceptions#noTranslation(String, String)
      */
-    public static StatusException noTranslation(@NotNull String source) {
+    public static StatusRuntimeException noTranslation(@NotNull String source) {
         return noTranslation(source, "AUTO");
     }
 
@@ -45,10 +45,10 @@ public class ErrorsStatusExceptions {
      * @param source the text fail to be translated
      * @param direction translation direction
      */
-    public static StatusException noTranslation(@NotNull String source, @NotNull String direction) {
+    public static StatusRuntimeException noTranslation(@NotNull String source, @NotNull String direction) {
         return Status.NOT_FOUND.augmentDescription(
                 format("Can not translate '%s' in translation direction '%s'", source, direction)
-        ).asException();
+        ).asRuntimeException();
     }
 
     /**
