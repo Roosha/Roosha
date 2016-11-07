@@ -1,5 +1,6 @@
 #include "world.h"
 #include "card.h"
+#include "dbcard.h"
 #include "changes.h"
 #include <QUuid>
 
@@ -12,19 +13,19 @@ World& World::Instance() {
     return world;
 }
 
-QMap<QUuid, QSharedPointer<DBCard>> & World::getCards() {
+const QMap<QUuid, QSharedPointer<DBCard>> & World::getCards() {
     return cards;
 }
 
-QVector<QSharedPointer<IChange>> & World::getChanges() {
+const QVector<QSharedPointer<IChange>> & World::getChanges() {
     return changes;
 }
 
-QUuid World::createCard() {
+QSharedPointer<DBCard> World::createCard() {
     QSharedPointer<CreateCard> change = QSharedPointer<CreateCard>::create(QUuid::createUuid());
     this->changes.append(change);
     change->apply(this);
-    return change->getId();
+    return cards.value(change->getId());
 }
 
 void World::deleteCard(QUuid id) {
@@ -37,16 +38,6 @@ void World::setSource(QUuid cardId, QString newSource) {
     QSharedPointer<ChangeSource> change = QSharedPointer<ChangeSource>::create(cardId, newSource);
     changes.append(change);
     change->apply(this);
-}
-
-void World::setExamples(QUuid cardId, QStringList newExamples) {
-//TODO: create elemenary changes instead calling simplified card methods:
-//      compare newExample and current example and generate changes
-}
-
-void World::setTarget(QUuid cardId, QStringList newTarget) {
-//TODO: create elemenary changes instead calling simplified card methods:
-//      compare newTarget and current target and generate changes
 }
 
 void World::editElem(QUuid cardId, const enum Field & fieldName, const QString & newElem, qint32 pos) {
@@ -78,3 +69,11 @@ void World::applyChanges() {
     }
 }
 
+
+void World::insertCard(QUuid key, QSharedPointer<DBCard> card) {
+    cards.insert(key, card);
+}
+
+void World::removeCard(QUuid key){
+    cards.remove(key);
+}

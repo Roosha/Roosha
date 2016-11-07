@@ -16,17 +16,17 @@ void TestNetworkManager::requestTranslations(QString source) {
 
     QSharedPointer<Translation> a(new Translation);
     a->setSource(source);
-    a->setExamples(QStringList({"Fish", source, "Words"}));
-    a->setTarget(QStringList({"I love fosh text", "And I hope, that fish text love me"}));
+    a->setExamples(QStringList({"Fish", source, "Words", "A"}));
+    a->setTarget(QStringList({"I love fosh text", source, "And I hope, that fish text love me"}));
 
     QSharedPointer<Translation> b(new Translation);
     b->setSource(source);
-    b->setExamples(QStringList({"Fish", source, "Words"}));
-    b->setTarget(QStringList({"I love fosh text", "And I hope, that fish text love me"}));
+    b->setExamples(QStringList({"Fish", source, "Words", "B"}));
+    b->setTarget(QStringList({"I love fosh target", "And I hope, that fish text love me"}));
 
     QSharedPointer<Translation> c(new Translation);
     c->setSource(source);
-    c->setExamples(QStringList({"Fish", source, "Words"}));
+    c->setExamples(QStringList({"Fish", source, "Words", "C"}));
     c->setTarget(QStringList({"I love fosh text", "And I hope, that fish text love me"}));
 
     testData.push_back(a);

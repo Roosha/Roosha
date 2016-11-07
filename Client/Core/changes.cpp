@@ -65,11 +65,11 @@ QUuid CreateCard::getId() {
 void CreateCard::apply(World * world) {
 //    if (cardId.isNull())
 //        cardId = QUuid::createUuid();
-    world->getCards().insert(cardId, QSharedPointer<DBCard>::create(cardId));
+    world->insertCard(cardId, QSharedPointer<DBCard>::create(cardId));
 }
 
 DeleteCard::DeleteCard(QUuid id) : cardId(id) {}
 
 void DeleteCard::apply(World * world) {
-    world->getCards().remove(cardId);
+    world->removeCard(cardId);
 }

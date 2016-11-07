@@ -37,12 +37,12 @@ void TranslationController::closeWindow(quint32 id) {
     data.remove(id);
 }
 
-void TranslationController::createCard(quint32 id)
-{
+void TranslationController::createCard(quint32 id) {
+    emit createNewCard(data[id][0]);
     // TODO: send signal
 }
 
-void TranslationController::createLater(quint32 id)
-{
-    //TODO: save to special buffer
-}
+//void TranslationController::createLater(quint32 id)
+//{
+//    //TODO: save to special buffer
+//}

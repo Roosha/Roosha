@@ -10,10 +10,10 @@ class World {
  public:
     static World& Instance();
 
-    QMap<QUuid, QSharedPointer<DBCard>>& getCards();
-    QVector<QSharedPointer<IChange>>& getChanges();
+    const QMap<QUuid, QSharedPointer<DBCard>>& getCards();
+    const QVector<QSharedPointer<IChange>>& getChanges();
 
-    QUuid createCard();
+    QSharedPointer<DBCard> createCard();
     void deleteCard(QUuid id);
 
     void setSource(QUuid cardId, QString newSource);
@@ -26,6 +26,9 @@ class World {
     void saveToDB();
     void applyChanges();
 
+
+    void insertCard(QUuid key, QSharedPointer<DBCard> card);
+    void removeCard(QUuid key);
  private:
     World();
     ~World();

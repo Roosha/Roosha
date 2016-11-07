@@ -27,7 +27,9 @@ SOURCES += main.cpp \
     Test/Network/translations_test_slot_holder.cpp \
     Core/changes.cpp \
     Core/world.cpp \
-    Test/Core/changes/worldtest.cpp
+    Test/Core/changes/worldtest.cpp \
+    GUI/cardcreationcontroller.cpp \
+    GUI/cardlistcontroller.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -61,7 +63,9 @@ HEADERS += \
     Network/network_manager.h \
     Test/Network/translations_test_slot_holder.h \
     Core/world.h \
-    Test/Core/changes/worldtest.h
+    Test/Core/changes/worldtest.h \
+    GUI/cardcreationcontroller.h \
+    GUI/cardlistcontroller.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

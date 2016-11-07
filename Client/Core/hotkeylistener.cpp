@@ -13,7 +13,7 @@ HotkeyListener::~HotkeyListener() {
 }
 
 void HotkeyListener::run() {
-    emit newWord("Hello");
+//    emit newWord("Hello");
 
 //    QEventLoop l;
 

@@ -17,7 +17,10 @@ class TranslationController : public QObject {
 
     Q_INVOKABLE void closeWindow(quint32 id);
     Q_INVOKABLE void createCard(quint32 id);
-    Q_INVOKABLE void createLater(quint32 id);
+//    Q_INVOKABLE void createLater(quint32 id);
+
+signals:
+    void createNewCard(QSharedPointer<Translation> trans);
 
  private:
     quint32 lastId;

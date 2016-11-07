@@ -8,7 +8,7 @@ Rectangle {
     color: "#fff8c2"
 
     Text {
-        id: sourceElement
+        id: mainWin
 
         width: parent.width
         anchors.top: parent.top
@@ -19,18 +19,18 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
 
-        text: trans[0].source
+        text: qsTr("Your Cards List:")
     }
 
     ListView {
         width: parent.width
         height: parent.height * 2 / 3
-        anchors.top: sourceElement.bottom
+        anchors.top: mainWin.bottom
 
         clip: true
 
-        model: trans
-        delegate: TranslationView {}
+        model: cards
+        delegate: CLView {}
     }
 
     Row {
@@ -51,13 +51,14 @@ Rectangle {
             text: qsTr("Close")
             height: parent.height - 6
             width: 100
-
+            anchors.left: parent.left
+            anchors.leftMargin: 10
             background: Rectangle {
                 color: closeButton.down ? '#7fb5b5' : '#c7d0cc'
             }
 
             onClicked: {
-                controller.closeWindow(identificator);
+                controller.closeWindow();
             }
         }
 
@@ -67,35 +68,14 @@ Rectangle {
             text: qsTr("Create Card")
             height: parent.height - 6
             width: 100
-
+            anchors.right: parent.right
+            anchors.rightMargin: 10
             background: Rectangle {
                 color: createButton.down ? '#7fb5b5' : '#c7d0cc'
             }
             onClicked: {
-                controller.createCard(identificator);
+                controller.createCard();
             }
         }
-
-//        Button {
-//            id: createLaterButton
-
-//            text: "Create later"
-//            height: parent.height - 6
-//            width: 100
-
-//            background: Rectangle {
-//                color: createLaterButton.down ? '#7fb5b5' : '#c7d0cc'
-//            }
-//        }
-
     }
-
-
-//    Button {
-//        text: "YPdsfdsfdsf"
-//        onClicked: {
-//            console.log(identificator)
-//        }
-//    }
-
 }

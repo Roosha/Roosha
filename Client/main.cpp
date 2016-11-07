@@ -19,6 +19,8 @@
 #include <thread>
 #include <memory>
 
+#include <QApplication>
+
 using roosha::translation::Translations;
 TranslationsTestSlotHolder* testTranslationServiceConnection();
 
@@ -26,8 +28,13 @@ TranslationsTestSlotHolder* testTranslationServiceConnection();
 int main(int argc, char *argv[]) {
     WorldTest testChanges;
     testChanges.run();
-//    auto ptr = testTranslationServiceConnection();
-//    delete ptr;
+    QApplication app(argc, argv);
+    app.setQuitOnLastWindowClosed(false);
+    CentralController cc;
+    cc.start();/*
+    auto ptr = testTranslationServiceConnection();
+    delete ptr;*/
+    return  app.exec();
 }
 
 
