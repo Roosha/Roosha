@@ -12,7 +12,7 @@ CentralController::CentralController() {
     boot.run();
 
     connect(hkListener, SIGNAL(newWord(QString)), this, SLOT(handleNewWord(QString)));
-    connect(networkManager, SIGNAL(newTranslation(TestTranslations)), guiManager, SLOT(showNewTranslationWindow(TestTranslations)));
+    connect(networkManager, SIGNAL(newTranslation(Translations)), guiManager, SLOT(showNewTranslationWindow(Translations)));
 }
 
 void CentralController::start() {
@@ -20,5 +20,5 @@ void CentralController::start() {
 }
 
 void CentralController::handleNewWord(QString word) {
-    networkManager->translate(word);
+    networkManager->translate(word, 5000);
 }

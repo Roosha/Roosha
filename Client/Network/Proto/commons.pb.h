@@ -30,7 +30,6 @@
 // @@protoc_insertion_point(includes)
 
 namespace roosha {
-namespace commons {
 
 // Internal implementation detail -- do not call these.
 void protobuf_AddDesc_commons_2eproto();
@@ -43,7 +42,7 @@ class Void;
 
 // ===================================================================
 
-class Void : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.commons.Void) */ {
+class Void : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.Void) */ {
  public:
   Void();
   virtual ~Void();
@@ -103,7 +102,7 @@ class Void : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:roosha.commons.Void)
+  // @@protoc_insertion_point(class_scope:roosha.Void)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -118,7 +117,7 @@ class Void : public ::google::protobuf::Message /* @@protoc_insertion_point(clas
 };
 // -------------------------------------------------------------------
 
-class Credentials : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.commons.Credentials) */ {
+class Credentials : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.Credentials) */ {
  public:
   Credentials();
   virtual ~Credentials();
@@ -189,18 +188,18 @@ class Credentials : public ::google::protobuf::Message /* @@protoc_insertion_poi
   ::std::string* release_login();
   void set_allocated_login(::std::string* login);
 
-  // optional bytes passwordHash = 2;
+  // optional string passwordHash = 2;
   void clear_passwordhash();
   static const int kPasswordHashFieldNumber = 2;
   const ::std::string& passwordhash() const;
   void set_passwordhash(const ::std::string& value);
   void set_passwordhash(const char* value);
-  void set_passwordhash(const void* value, size_t size);
+  void set_passwordhash(const char* value, size_t size);
   ::std::string* mutable_passwordhash();
   ::std::string* release_passwordhash();
   void set_allocated_passwordhash(::std::string* passwordhash);
 
-  // @@protoc_insertion_point(class_scope:roosha.commons.Credentials)
+  // @@protoc_insertion_point(class_scope:roosha.Credentials)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -217,7 +216,7 @@ class Credentials : public ::google::protobuf::Message /* @@protoc_insertion_poi
 };
 // -------------------------------------------------------------------
 
-class AuthenticationToken : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.commons.AuthenticationToken) */ {
+class AuthenticationToken : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.AuthenticationToken) */ {
  public:
   AuthenticationToken();
   virtual ~AuthenticationToken();
@@ -277,18 +276,18 @@ class AuthenticationToken : public ::google::protobuf::Message /* @@protoc_inser
 
   // accessors -------------------------------------------------------
 
-  // optional bytes token = 1;
+  // optional string token = 1;
   void clear_token();
   static const int kTokenFieldNumber = 1;
   const ::std::string& token() const;
   void set_token(const ::std::string& value);
   void set_token(const char* value);
-  void set_token(const void* value, size_t size);
+  void set_token(const char* value, size_t size);
   ::std::string* mutable_token();
   ::std::string* release_token();
   void set_allocated_token(::std::string* token);
 
-  // @@protoc_insertion_point(class_scope:roosha.commons.AuthenticationToken)
+  // @@protoc_insertion_point(class_scope:roosha.AuthenticationToken)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -319,32 +318,32 @@ inline void Credentials::clear_login() {
   login_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& Credentials::login() const {
-  // @@protoc_insertion_point(field_get:roosha.commons.Credentials.login)
+  // @@protoc_insertion_point(field_get:roosha.Credentials.login)
   return login_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void Credentials::set_login(const ::std::string& value) {
   
   login_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.commons.Credentials.login)
+  // @@protoc_insertion_point(field_set:roosha.Credentials.login)
 }
 inline void Credentials::set_login(const char* value) {
   
   login_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.commons.Credentials.login)
+  // @@protoc_insertion_point(field_set_char:roosha.Credentials.login)
 }
 inline void Credentials::set_login(const char* value, size_t size) {
   
   login_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.commons.Credentials.login)
+  // @@protoc_insertion_point(field_set_pointer:roosha.Credentials.login)
 }
 inline ::std::string* Credentials::mutable_login() {
   
-  // @@protoc_insertion_point(field_mutable:roosha.commons.Credentials.login)
+  // @@protoc_insertion_point(field_mutable:roosha.Credentials.login)
   return login_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* Credentials::release_login() {
-  // @@protoc_insertion_point(field_release:roosha.commons.Credentials.login)
+  // @@protoc_insertion_point(field_release:roosha.Credentials.login)
   
   return login_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -355,40 +354,40 @@ inline void Credentials::set_allocated_login(::std::string* login) {
     
   }
   login_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), login);
-  // @@protoc_insertion_point(field_set_allocated:roosha.commons.Credentials.login)
+  // @@protoc_insertion_point(field_set_allocated:roosha.Credentials.login)
 }
 
-// optional bytes passwordHash = 2;
+// optional string passwordHash = 2;
 inline void Credentials::clear_passwordhash() {
   passwordhash_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& Credentials::passwordhash() const {
-  // @@protoc_insertion_point(field_get:roosha.commons.Credentials.passwordHash)
+  // @@protoc_insertion_point(field_get:roosha.Credentials.passwordHash)
   return passwordhash_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void Credentials::set_passwordhash(const ::std::string& value) {
   
   passwordhash_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.commons.Credentials.passwordHash)
+  // @@protoc_insertion_point(field_set:roosha.Credentials.passwordHash)
 }
 inline void Credentials::set_passwordhash(const char* value) {
   
   passwordhash_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.commons.Credentials.passwordHash)
+  // @@protoc_insertion_point(field_set_char:roosha.Credentials.passwordHash)
 }
-inline void Credentials::set_passwordhash(const void* value, size_t size) {
+inline void Credentials::set_passwordhash(const char* value, size_t size) {
   
   passwordhash_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.commons.Credentials.passwordHash)
+  // @@protoc_insertion_point(field_set_pointer:roosha.Credentials.passwordHash)
 }
 inline ::std::string* Credentials::mutable_passwordhash() {
   
-  // @@protoc_insertion_point(field_mutable:roosha.commons.Credentials.passwordHash)
+  // @@protoc_insertion_point(field_mutable:roosha.Credentials.passwordHash)
   return passwordhash_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* Credentials::release_passwordhash() {
-  // @@protoc_insertion_point(field_release:roosha.commons.Credentials.passwordHash)
+  // @@protoc_insertion_point(field_release:roosha.Credentials.passwordHash)
   
   return passwordhash_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -399,44 +398,44 @@ inline void Credentials::set_allocated_passwordhash(::std::string* passwordhash)
     
   }
   passwordhash_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), passwordhash);
-  // @@protoc_insertion_point(field_set_allocated:roosha.commons.Credentials.passwordHash)
+  // @@protoc_insertion_point(field_set_allocated:roosha.Credentials.passwordHash)
 }
 
 // -------------------------------------------------------------------
 
 // AuthenticationToken
 
-// optional bytes token = 1;
+// optional string token = 1;
 inline void AuthenticationToken::clear_token() {
   token_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& AuthenticationToken::token() const {
-  // @@protoc_insertion_point(field_get:roosha.commons.AuthenticationToken.token)
+  // @@protoc_insertion_point(field_get:roosha.AuthenticationToken.token)
   return token_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline void AuthenticationToken::set_token(const ::std::string& value) {
   
   token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.commons.AuthenticationToken.token)
+  // @@protoc_insertion_point(field_set:roosha.AuthenticationToken.token)
 }
 inline void AuthenticationToken::set_token(const char* value) {
   
   token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.commons.AuthenticationToken.token)
+  // @@protoc_insertion_point(field_set_char:roosha.AuthenticationToken.token)
 }
-inline void AuthenticationToken::set_token(const void* value, size_t size) {
+inline void AuthenticationToken::set_token(const char* value, size_t size) {
   
   token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.commons.AuthenticationToken.token)
+  // @@protoc_insertion_point(field_set_pointer:roosha.AuthenticationToken.token)
 }
 inline ::std::string* AuthenticationToken::mutable_token() {
   
-  // @@protoc_insertion_point(field_mutable:roosha.commons.AuthenticationToken.token)
+  // @@protoc_insertion_point(field_mutable:roosha.AuthenticationToken.token)
   return token_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* AuthenticationToken::release_token() {
-  // @@protoc_insertion_point(field_release:roosha.commons.AuthenticationToken.token)
+  // @@protoc_insertion_point(field_release:roosha.AuthenticationToken.token)
   
   return token_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -447,7 +446,7 @@ inline void AuthenticationToken::set_allocated_token(::std::string* token) {
     
   }
   token_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), token);
-  // @@protoc_insertion_point(field_set_allocated:roosha.commons.AuthenticationToken.token)
+  // @@protoc_insertion_point(field_set_allocated:roosha.AuthenticationToken.token)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -458,7 +457,6 @@ inline void AuthenticationToken::set_allocated_token(::std::string* token) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace commons
 }  // namespace roosha
 
 // @@protoc_insertion_point(global_scope)

@@ -1,5 +1,4 @@
 #include "Network/network_manager.h"
-#include "Network/roosha_service.h"
 #include "Network/Proto/roosha_service.pb.h"
 #include "Test/Network/translations_test_slot_holder.h"
 #include "Core/dbcard.h"
@@ -19,7 +18,6 @@
 #include <thread>
 #include <memory>
 
-using roosha::translation::Translations;
 TranslationsTestSlotHolder* testTranslationServiceConnection();
 
 void printCard(DBCard card);
@@ -30,7 +28,7 @@ void testDBCardBuilder();
 int main(int argc, char *argv[]) {
     auto ptr = testTranslationServiceConnection();
     delete ptr;
-    testDBCardBuilder();
+//    testDBCardBuilder();
 }
 
 void printCard(DBCard card) {
@@ -84,23 +82,22 @@ void testDBCardBuilder() {
 
 }
 
-//TranslationsTestSlotHolder* testTranslationServiceConnection() {
-//    TranslationsTestSlotHolder* receiver = new TranslationsTestSlotHolder;
-//    std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
-//    std::shared_ptr<RooshaRpcService> translationService = networkManager->getTranslationService();
+TranslationsTestSlotHolder* testTranslationServiceConnection() {
+    TranslationsTestSlotHolder* receiver = new TranslationsTestSlotHolder;
+    NetworkManager networkManager;
 
-//    qRegisterMetaType<TestTranslations>();
-//    QObject::connect(translationService.get(), &RooshaRpcService::translationSucceeded,
-//                     receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
-//    QObject::connect(translationService.get(), &RooshaRpcService::translationFailed,
-//                     receiver, &TranslationsTestSlotHolder::translationFailedSlot, Qt::DirectConnection);
+    QObject::connect(&networkManager, &NetworkManager::successTranslate,
+                     receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
+    QObject::connect(&networkManager, &NetworkManager::failTranslate,
+                     receiver, &TranslationsTestSlotHolder::translationFailedSlot, Qt::DirectConnection);
 
-//    QStringList str;
-//    str << "hello" << "gobbles" << "exhibit" << "apple" << "jkajhwvnejkw";
-//    for (auto cur: str) {
-//        quint32 id = translationService->translate(cur, 5000u);
-//        std::cout << "Sent request with id: " << id << std::endl;
-//    }
+    QStringList str;
+    str << "hello" << "gobbles" << "exhibit" << "apple" << "jkajhwvnejkw";
+    for (auto cur: str) {
+        quint32 id = networkManager.translate(cur, 5000u);
+        std::cout << "Sent request with id: " << id << std::endl;
+    }
 
-//    return receiver;
-//}
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000000));
+    return receiver;
+}

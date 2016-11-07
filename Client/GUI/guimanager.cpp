@@ -10,6 +10,6 @@ GUIManager::GUIManager() {
     translationController = new TranslationController(this);
 }
 
-void GUIManager::showNewTranslationWindow(TestTranslations trans) {
+void GUIManager::showNewTranslationWindow(Translations trans) {
     translationController->addData(trans);
 }

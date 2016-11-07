@@ -61,7 +61,8 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
     @Override
     public void translate(TranslationRequest request, StreamObserver<Translations> responseObserver) {
-        requireCallerUserId();
+        System.err.println("translate called");
+//        requireCallerUserId();
 
         final RawTranslation rawTranslation = provider.translate(request.getSource());
         final Translations.Builder responseBuilder = rawTranslation.convertToProtoTranslationsBuilder();

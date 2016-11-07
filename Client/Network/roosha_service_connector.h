@@ -2,7 +2,11 @@
 #define ROOSHASERVICECONNECTOR_H
 
 #include <QThread>
+
+#include <grpc++/grpc++.h>
+
 #include "authentication_manager.h"
+#include "Proto/roosha_service.grpc.pb.h"
 
 class TranslateAsyncCall;
 class ProposeUserTranslationsAsyncCall;
@@ -11,9 +15,11 @@ class RegistrateAsyncCall;
 
 class AsyncRpcResponseListener;
 
-class RooshaServiceConnector {
+class RooshaServiceConnector : public QObject {
+    Q_OBJECT
 public:
     RooshaServiceConnector(AuthenticationManager *m);
+    ~RooshaServiceConnector();
 
     void translate(TranslateAsyncCall *call);
     void proposeUserTranslation(ProposeUserTranslationsAsyncCall *call);
@@ -25,8 +31,12 @@ public:
     void receiveAuthorizeResponse(AuthorizeAsyncCall *call);
     void receiveRegistrateResponse(RegistrateAsyncCall *call);
 private:
-    AsyncRpcResponseListener *listener;
-    AuthenticationManager *authManager;
+    friend class AsyncRpcResponseListener;
+
+    grpc::CompletionQueue completionQueue_;
+    std::unique_ptr<roosha::RooshaService::Stub> stub_;
+    AsyncRpcResponseListener *responseListener_;
+    AuthenticationManager *authManager_;
 };
 
 class AsyncRpcResponseListener : public QThread {
@@ -36,7 +46,7 @@ public:
 
     void run() Q_DECL_OVERRIDE;
 private:
-    RooshaServiceConnector *connector;
+    RooshaServiceConnector *connector_;
 };
 
 #endif // ROOSHASERVICECONNECTOR_H

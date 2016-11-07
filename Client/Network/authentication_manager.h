@@ -20,9 +20,13 @@ public:
     void authorize(AuthorizeAsyncCall *call);
     void registrate(RegistrateAsyncCall *call);
 
+    void receiveTranslateResponse(TranslateAsyncCall *call);
+    void receiveProposeUserTranslationResponse(ProposeUserTranslationsAsyncCall *call);
+    void receiveAuthorizeResponse(AuthorizeAsyncCall *call);
+    void receiveRegistrateResponse(RegistrateAsyncCall *call);
 private:
-    RooshaServiceConnector *connector;
-    NetworkManager *netManager;
+    RooshaServiceConnector *connector_;
+    NetworkManager *netManager_;
 };
 
 #endif // AUTHENTICATIONMANAGER_H

@@ -4,50 +4,52 @@
 
 #include "server_response.h"
 #include "authentication_manager.h"
+#include "roosha_service_connector.h"
 
 
-void ProposeUserTranslationsAsyncCall::emitSucceded() {
-    rpcService_->emitUserTranslationProposalSucceeded(id_, response_);
+void AuthorizeAsyncCall::receive(RooshaServiceConnector *connector) {
+    connector->receiveAuthorizeResponse(this);
 }
 
-void ProposeUserTranslationsAsyncCall::emitFailure() {
-    rpcService_->emitUserTranslationProposalFailed(id_, status_);
+void RegistrateAsyncCall::receive(RooshaServiceConnector *connector) {
+    connector->receiveRegistrateResponse(this);
 }
 
-void ProposeUserTranslationsAsyncCall::retry() {
-    rpcService_->sendUserTranslationProposal(this);
+void TranslateAsyncCall::receive(RooshaServiceConnector *connector) {
+    connector->receiveTranslateResponse(this);
 }
 
-void TranslateAsyncCall::emitSucceded() {
-    rpcService_->emitTranslationSucceeded(id_, response_);
+void ProposeUserTranslationsAsyncCall::receive(RooshaServiceConnector *connector) {
+    connector->receiveProposeUserTranslationResponse(this);
 }
 
-void TranslateAsyncCall::emitFailure() {
-    rpcService_->emitTranslationFailed(id_, status_);
+RpcAsyncCall::RpcAsyncCall(quint32 id, quint32 timeoutMillis): id_(id) {
+    context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
 }
 
-void TranslateAsyncCall::retry() {
-    rpcService_->sendTranslateRequest(this);
+RpcAsyncCall::~RpcAsyncCall() {
+
 }
 
-void GeneralPurposeAsyncCall::handle() {
-    if (isAuthenticationFailed()) {
-        authManager_->handle(this);
-    } else if (status_.ok()) {
-        emitSucceded();
-    } else {
-        emitFailure();
+RPCErrorStatus RpcAsyncCall::getStatus() {
+    switch (status_.error_code()) {
+    case grpc::StatusCode::DEADLINE_EXCEEDED:
+        return DEADLINE_EXCEEDED;
+    case grpc::StatusCode::UNAUTHENTICATED:
+        if (status_.error_message() == "Failed to authorize user, most likely due to incorrect credentials.") {
+            return AUTHORIZATION_ERROR;
+        } else if (status_.error_message() == "Failed to register new user, most likely due to login is already used.") {
+            return REGISTRATION_ERROR;
+        } else if (status_.error_message() == "Specified token is expired, call 'register' or 'authorize' rpc to get new valid token.") {
+            return EXPIRED_TOKEN;
+        } else {
+            goto unknown;
+        }
+    default:
+        goto unknown;
     }
-}
 
-bool RpcAsyncCall::isAuthenticationFailed() {
-    return status_.error_code() == grpc::UNAUTHENTICATED;
-}
-
-void RegistrateAsyncCall::handle() {
-    authManager_->handle(this);
-}
-
-void AuthorizeAsyncCall::handle() {
-    authManager_->handle(this);
+unknown:
+    qWarning("unexpected grpc status: %d\nerror message: %s", status_.error_code(), status_.error_message().c_str());
+    return UNKNOWN;
 }

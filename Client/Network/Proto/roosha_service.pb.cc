@@ -18,24 +18,12 @@
 // @@protoc_insertion_point(includes)
 
 namespace roosha {
-namespace translation {
 
 namespace {
 
 const ::google::protobuf::Descriptor* TranslationRequest_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   TranslationRequest_reflection_ = NULL;
-struct TranslationRequestOneofInstance {
-  ::google::protobuf::internal::ArenaStringPtr token_;
-  ::google::protobuf::uint64 id_;
-}* TranslationRequest_default_oneof_instance_ = NULL;
-const ::google::protobuf::Descriptor* UserTranslationsProposal_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  UserTranslationsProposal_reflection_ = NULL;
-struct UserTranslationsProposalOneofInstance {
-  ::google::protobuf::internal::ArenaStringPtr token_;
-  ::google::protobuf::uint64 id_;
-}* UserTranslationsProposal_default_oneof_instance_ = NULL;
 const ::google::protobuf::Descriptor* Translations_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Translations_reflection_ = NULL;
@@ -55,11 +43,8 @@ void protobuf_AssignDesc_roosha_5fservice_2eproto() {
       "roosha_service.proto");
   GOOGLE_CHECK(file != NULL);
   TranslationRequest_descriptor_ = file->message_type(0);
-  static const int TranslationRequest_offsets_[4] = {
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TranslationRequest_default_oneof_instance_, token_),
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(TranslationRequest_default_oneof_instance_, id_),
+  static const int TranslationRequest_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, source_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, tokenOrId_),
   };
   TranslationRequest_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -69,32 +54,10 @@ void protobuf_AssignDesc_roosha_5fservice_2eproto() {
       -1,
       -1,
       -1,
-      TranslationRequest_default_oneof_instance_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, _oneof_case_[0]),
       sizeof(TranslationRequest),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, _is_default_instance_));
-  UserTranslationsProposal_descriptor_ = file->message_type(1);
-  static const int UserTranslationsProposal_offsets_[4] = {
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(UserTranslationsProposal_default_oneof_instance_, token_),
-    PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET(UserTranslationsProposal_default_oneof_instance_, id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserTranslationsProposal, proposedtranslations_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserTranslationsProposal, tokenOrId_),
-  };
-  UserTranslationsProposal_reflection_ =
-    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
-      UserTranslationsProposal_descriptor_,
-      UserTranslationsProposal::default_instance_,
-      UserTranslationsProposal_offsets_,
-      -1,
-      -1,
-      -1,
-      UserTranslationsProposal_default_oneof_instance_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserTranslationsProposal, _oneof_case_[0]),
-      sizeof(UserTranslationsProposal),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserTranslationsProposal, _internal_metadata_),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserTranslationsProposal, _is_default_instance_));
-  Translations_descriptor_ = file->message_type(2);
+  Translations_descriptor_ = file->message_type(1);
   static const int Translations_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translations, source_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translations, translation_),
@@ -110,7 +73,7 @@ void protobuf_AssignDesc_roosha_5fservice_2eproto() {
       sizeof(Translations),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translations, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translations, _is_default_instance_));
-  Translation_descriptor_ = file->message_type(3);
+  Translation_descriptor_ = file->message_type(2);
   static const int Translation_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translation, target_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Translation, example_),
@@ -144,8 +107,6 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       TranslationRequest_descriptor_, &TranslationRequest::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      UserTranslationsProposal_descriptor_, &UserTranslationsProposal::default_instance());
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       Translations_descriptor_, &Translations::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       Translation_descriptor_, &Translation::default_instance());
@@ -155,11 +116,7 @@ void protobuf_RegisterTypes(const ::std::string&) {
 
 void protobuf_ShutdownFile_roosha_5fservice_2eproto() {
   delete TranslationRequest::default_instance_;
-  delete TranslationRequest_default_oneof_instance_;
   delete TranslationRequest_reflection_;
-  delete UserTranslationsProposal::default_instance_;
-  delete UserTranslationsProposal_default_oneof_instance_;
-  delete UserTranslationsProposal_reflection_;
   delete Translations::default_instance_;
   delete Translations_reflection_;
   delete Translation::default_instance_;
@@ -173,43 +130,32 @@ void protobuf_AddDesc_roosha_5fservice_2eproto() {
   already_here = true;
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::roosha::commons::protobuf_AddDesc_commons_2eproto();
+  ::roosha::protobuf_AddDesc_commons_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\024roosha_service.proto\022\022roosha.translati"
-    "on\032\rcommons.proto\"P\n\022TranslationRequest\022"
-    "\017\n\005token\030\001 \001(\014H\000\022\014\n\002id\030d \001(\004H\000\022\016\n\006source"
-    "\030\002 \001(\tB\013\n\ttokenOrId\"\206\001\n\030UserTranslations"
-    "Proposal\022\017\n\005token\030\001 \001(\014H\000\022\014\n\002id\030d \001(\004H\000\022"
-    ">\n\024proposedTranslations\030\002 \001(\0132 .roosha.t"
-    "ranslation.TranslationsB\013\n\ttokenOrId\"T\n\014"
-    "Translations\022\016\n\006source\030\001 \001(\t\0224\n\013translat"
-    "ion\030\002 \003(\0132\037.roosha.translation.Translati"
-    "on\"i\n\013Translation\022\016\n\006target\030\001 \003(\t\022\017\n\007exa"
-    "mple\030\002 \003(\t\0229\n\010provider\030\003 \001(\0162\'.roosha.tr"
-    "anslation.TranslationProvider*P\n\023Transla"
-    "tionProvider\022\013\n\007UNKNOWN\020\000\022\025\n\021YANDEX_DICT"
-    "IONARY\020\001\022\025\n\021YANDEX_TRANSLATOR\020\0022\354\002\n\rRoos"
-    "haService\022P\n\nregistrate\022\033.roosha.commons"
-    ".Credentials\032#.roosha.commons.Authentica"
-    "tionToken\"\000\022O\n\tauthorize\022\033.roosha.common"
-    "s.Credentials\032#.roosha.commons.Authentic"
-    "ationToken\"\000\022W\n\ttranslate\022&.roosha.trans"
-    "lation.TranslationRequest\032 .roosha.trans"
-    "lation.Translations\"\000\022_\n\027proposeUserTran"
-    "slations\022,.roosha.translation.UserTransl"
-    "ationsProposal\032\024.roosha.commons.Void\"\000BC"
-    "\n#com.github.roosha.proto.translationB\027T"
-    "ranslationServiceProtoH\001\370\001\000b\006proto3", 995);
+    "\n\024roosha_service.proto\022\006roosha\032\rcommons."
+    "proto\"$\n\022TranslationRequest\022\016\n\006source\030\001 "
+    "\001(\t\"H\n\014Translations\022\016\n\006source\030\001 \001(\t\022(\n\013t"
+    "ranslation\030\002 \003(\0132\023.roosha.Translation\"]\n"
+    "\013Translation\022\016\n\006target\030\001 \003(\t\022\017\n\007example\030"
+    "\002 \003(\t\022-\n\010provider\030\003 \001(\0162\033.roosha.Transla"
+    "tionProvider*P\n\023TranslationProvider\022\013\n\007U"
+    "NKNOWN\020\000\022\025\n\021YANDEX_DICTIONARY\020\001\022\025\n\021YANDE"
+    "X_TRANSLATOR\020\0022\224\002\n\rRooshaService\022@\n\nregi"
+    "strate\022\023.roosha.Credentials\032\033.roosha.Aut"
+    "henticationToken\"\000\022\?\n\tauthorize\022\023.roosha"
+    ".Credentials\032\033.roosha.AuthenticationToke"
+    "n\"\000\022\?\n\ttranslate\022\032.roosha.TranslationReq"
+    "uest\032\024.roosha.Translations\"\000\022\?\n\027proposeU"
+    "serTranslations\022\024.roosha.Translations\032\014."
+    "roosha.Void\"\000BC\n#com.github.roosha.proto"
+    ".translationB\027TranslationServiceProtoH\001\370"
+    "\001\000b\006proto3", 690);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "roosha_service.proto", &protobuf_RegisterTypes);
   TranslationRequest::default_instance_ = new TranslationRequest();
-  TranslationRequest_default_oneof_instance_ = new TranslationRequestOneofInstance();
-  UserTranslationsProposal::default_instance_ = new UserTranslationsProposal();
-  UserTranslationsProposal_default_oneof_instance_ = new UserTranslationsProposalOneofInstance();
   Translations::default_instance_ = new Translations();
   Translation::default_instance_ = new Translation();
   TranslationRequest::default_instance_->InitAsDefaultInstance();
-  UserTranslationsProposal::default_instance_->InitAsDefaultInstance();
   Translations::default_instance_->InitAsDefaultInstance();
   Translation::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_roosha_5fservice_2eproto);
@@ -240,21 +186,17 @@ bool TranslationProvider_IsValid(int value) {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int TranslationRequest::kTokenFieldNumber;
-const int TranslationRequest::kIdFieldNumber;
 const int TranslationRequest::kSourceFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 TranslationRequest::TranslationRequest()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(constructor:roosha.TranslationRequest)
 }
 
 void TranslationRequest::InitAsDefaultInstance() {
   _is_default_instance_ = true;
-  TranslationRequest_default_oneof_instance_->token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  TranslationRequest_default_oneof_instance_->id_ = GOOGLE_ULONGLONG(0);
 }
 
 TranslationRequest::TranslationRequest(const TranslationRequest& from)
@@ -262,7 +204,7 @@ TranslationRequest::TranslationRequest(const TranslationRequest& from)
     _internal_metadata_(NULL) {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(copy_constructor:roosha.TranslationRequest)
 }
 
 void TranslationRequest::SharedCtor() {
@@ -270,19 +212,15 @@ void TranslationRequest::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   source_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_has_tokenOrId();
 }
 
 TranslationRequest::~TranslationRequest() {
-  // @@protoc_insertion_point(destructor:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(destructor:roosha.TranslationRequest)
   SharedDtor();
 }
 
 void TranslationRequest::SharedDtor() {
   source_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (has_tokenOrId()) {
-    clear_tokenOrId();
-  }
   if (this != default_instance_) {
   }
 }
@@ -312,79 +250,30 @@ TranslationRequest* TranslationRequest::New(::google::protobuf::Arena* arena) co
   return n;
 }
 
-void TranslationRequest::clear_tokenOrId() {
-// @@protoc_insertion_point(one_of_clear_start:roosha.translation.TranslationRequest)
-  switch(tokenOrId_case()) {
-    case kToken: {
-      tokenOrId_.token_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-      break;
-    }
-    case kId: {
-      // No need to clear
-      break;
-    }
-    case TOKENORID_NOT_SET: {
-      break;
-    }
-  }
-  _oneof_case_[0] = TOKENORID_NOT_SET;
-}
-
-
 void TranslationRequest::Clear() {
-// @@protoc_insertion_point(message_clear_start:roosha.translation.TranslationRequest)
+// @@protoc_insertion_point(message_clear_start:roosha.TranslationRequest)
   source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  clear_tokenOrId();
 }
 
 bool TranslationRequest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(parse_start:roosha.TranslationRequest)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(16383);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional bytes token = 1;
+      // optional string source = 1;
       case 1: {
         if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_token()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(18)) goto parse_source;
-        break;
-      }
-
-      // optional string source = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_source:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_source()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->source().data(), this->source().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "roosha.translation.TranslationRequest.source"));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(800)) goto parse_id;
-        break;
-      }
-
-      // optional uint64 id = 100;
-      case 100: {
-        if (tag == 800) {
-         parse_id:
-          clear_tokenOrId();
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &tokenOrId_.id_)));
-          set_has_id();
+            "roosha.TranslationRequest.source"));
         } else {
           goto handle_unusual;
         }
@@ -405,101 +294,59 @@ bool TranslationRequest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(parse_success:roosha.TranslationRequest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(parse_failure:roosha.TranslationRequest)
   return false;
 #undef DO_
 }
 
 void TranslationRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:roosha.translation.TranslationRequest)
-  // optional bytes token = 1;
-  if (has_token()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      1, this->token(), output);
-  }
-
-  // optional string source = 2;
+  // @@protoc_insertion_point(serialize_start:roosha.TranslationRequest)
+  // optional string source = 1;
   if (this->source().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->source().data(), this->source().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "roosha.translation.TranslationRequest.source");
+      "roosha.TranslationRequest.source");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      2, this->source(), output);
+      1, this->source(), output);
   }
 
-  // optional uint64 id = 100;
-  if (has_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(100, this->id(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(serialize_end:roosha.TranslationRequest)
 }
 
 ::google::protobuf::uint8* TranslationRequest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:roosha.translation.TranslationRequest)
-  // optional bytes token = 1;
-  if (has_token()) {
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        1, this->token(), target);
-  }
-
-  // optional string source = 2;
+  // @@protoc_insertion_point(serialize_to_array_start:roosha.TranslationRequest)
+  // optional string source = 1;
   if (this->source().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->source().data(), this->source().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "roosha.translation.TranslationRequest.source");
+      "roosha.TranslationRequest.source");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        2, this->source(), target);
+        1, this->source(), target);
   }
 
-  // optional uint64 id = 100;
-  if (has_id()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(100, this->id(), target);
-  }
-
-  // @@protoc_insertion_point(serialize_to_array_end:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(serialize_to_array_end:roosha.TranslationRequest)
   return target;
 }
 
 int TranslationRequest::ByteSize() const {
-// @@protoc_insertion_point(message_byte_size_start:roosha.translation.TranslationRequest)
+// @@protoc_insertion_point(message_byte_size_start:roosha.TranslationRequest)
   int total_size = 0;
 
-  // optional string source = 2;
+  // optional string source = 1;
   if (this->source().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->source());
   }
 
-  switch (tokenOrId_case()) {
-    // optional bytes token = 1;
-    case kToken: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::BytesSize(
-          this->token());
-      break;
-    }
-    // optional uint64 id = 100;
-    case kId: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::UInt64Size(
-          this->id());
-      break;
-    }
-    case TOKENORID_NOT_SET: {
-      break;
-    }
-  }
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
@@ -507,7 +354,7 @@ int TranslationRequest::ByteSize() const {
 }
 
 void TranslationRequest::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:roosha.translation.TranslationRequest)
+// @@protoc_insertion_point(generalized_merge_from_start:roosha.TranslationRequest)
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
@@ -515,31 +362,18 @@ void TranslationRequest::MergeFrom(const ::google::protobuf::Message& from) {
       ::google::protobuf::internal::DynamicCastToGenerated<const TranslationRequest>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:roosha.TranslationRequest)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.translation.TranslationRequest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.TranslationRequest)
     MergeFrom(*source);
   }
 }
 
 void TranslationRequest::MergeFrom(const TranslationRequest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:roosha.translation.TranslationRequest)
+// @@protoc_insertion_point(class_specific_merge_from_start:roosha.TranslationRequest)
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
-  }
-  switch (from.tokenOrId_case()) {
-    case kToken: {
-      set_token(from.token());
-      break;
-    }
-    case kId: {
-      set_id(from.id());
-      break;
-    }
-    case TOKENORID_NOT_SET: {
-      break;
-    }
   }
   if (from.source().size() > 0) {
 
@@ -548,14 +382,14 @@ void TranslationRequest::MergeFrom(const TranslationRequest& from) {
 }
 
 void TranslationRequest::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:roosha.translation.TranslationRequest)
+// @@protoc_insertion_point(generalized_copy_from_start:roosha.TranslationRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void TranslationRequest::CopyFrom(const TranslationRequest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:roosha.translation.TranslationRequest)
+// @@protoc_insertion_point(class_specific_copy_from_start:roosha.TranslationRequest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -572,8 +406,6 @@ void TranslationRequest::Swap(TranslationRequest* other) {
 }
 void TranslationRequest::InternalSwap(TranslationRequest* other) {
   source_.Swap(&other->source_);
-  std::swap(tokenOrId_, other->tokenOrId_);
-  std::swap(_oneof_case_[0], other->_oneof_case_[0]);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -589,147 +421,37 @@ void TranslationRequest::InternalSwap(TranslationRequest* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // TranslationRequest
 
-// optional bytes token = 1;
-bool TranslationRequest::has_token() const {
-  return tokenOrId_case() == kToken;
-}
-void TranslationRequest::set_has_token() {
-  _oneof_case_[0] = kToken;
-}
-void TranslationRequest::clear_token() {
-  if (has_token()) {
-    tokenOrId_.token_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-    clear_has_tokenOrId();
-  }
-}
- const ::std::string& TranslationRequest::token() const {
-  // @@protoc_insertion_point(field_get:roosha.translation.TranslationRequest.token)
-  if (has_token()) {
-    return tokenOrId_.token_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  return *&::google::protobuf::internal::GetEmptyStringAlreadyInited();
-}
- void TranslationRequest::set_token(const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:roosha.translation.TranslationRequest.token)
-  if (!has_token()) {
-    clear_tokenOrId();
-    set_has_token();
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  tokenOrId_.token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.translation.TranslationRequest.token)
-}
- void TranslationRequest::set_token(const char* value) {
-  if (!has_token()) {
-    clear_tokenOrId();
-    set_has_token();
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  tokenOrId_.token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.translation.TranslationRequest.token)
-}
- void TranslationRequest::set_token(const void* value, size_t size) {
-  if (!has_token()) {
-    clear_tokenOrId();
-    set_has_token();
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  tokenOrId_.token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.translation.TranslationRequest.token)
-}
- ::std::string* TranslationRequest::mutable_token() {
-  if (!has_token()) {
-    clear_tokenOrId();
-    set_has_token();
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  // @@protoc_insertion_point(field_mutable:roosha.translation.TranslationRequest.token)
-  return tokenOrId_.token_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- ::std::string* TranslationRequest::release_token() {
-  // @@protoc_insertion_point(field_release:roosha.translation.TranslationRequest.token)
-  if (has_token()) {
-    clear_has_tokenOrId();
-    return tokenOrId_.token_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  } else {
-    return NULL;
-  }
-}
- void TranslationRequest::set_allocated_token(::std::string* token) {
-  if (!has_token()) {
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  clear_tokenOrId();
-  if (token != NULL) {
-    set_has_token();
-    tokenOrId_.token_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-        token);
-  }
-  // @@protoc_insertion_point(field_set_allocated:roosha.translation.TranslationRequest.token)
-}
-
-// optional uint64 id = 100;
-bool TranslationRequest::has_id() const {
-  return tokenOrId_case() == kId;
-}
-void TranslationRequest::set_has_id() {
-  _oneof_case_[0] = kId;
-}
-void TranslationRequest::clear_id() {
-  if (has_id()) {
-    tokenOrId_.id_ = GOOGLE_ULONGLONG(0);
-    clear_has_tokenOrId();
-  }
-}
- ::google::protobuf::uint64 TranslationRequest::id() const {
-  // @@protoc_insertion_point(field_get:roosha.translation.TranslationRequest.id)
-  if (has_id()) {
-    return tokenOrId_.id_;
-  }
-  return GOOGLE_ULONGLONG(0);
-}
- void TranslationRequest::set_id(::google::protobuf::uint64 value) {
-  if (!has_id()) {
-    clear_tokenOrId();
-    set_has_id();
-  }
-  tokenOrId_.id_ = value;
-  // @@protoc_insertion_point(field_set:roosha.translation.TranslationRequest.id)
-}
-
-// optional string source = 2;
+// optional string source = 1;
 void TranslationRequest::clear_source() {
   source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
  const ::std::string& TranslationRequest::source() const {
-  // @@protoc_insertion_point(field_get:roosha.translation.TranslationRequest.source)
+  // @@protoc_insertion_point(field_get:roosha.TranslationRequest.source)
   return source_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
  void TranslationRequest::set_source(const ::std::string& value) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.translation.TranslationRequest.source)
+  // @@protoc_insertion_point(field_set:roosha.TranslationRequest.source)
 }
  void TranslationRequest::set_source(const char* value) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.translation.TranslationRequest.source)
+  // @@protoc_insertion_point(field_set_char:roosha.TranslationRequest.source)
 }
  void TranslationRequest::set_source(const char* value, size_t size) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.translation.TranslationRequest.source)
+  // @@protoc_insertion_point(field_set_pointer:roosha.TranslationRequest.source)
 }
  ::std::string* TranslationRequest::mutable_source() {
   
-  // @@protoc_insertion_point(field_mutable:roosha.translation.TranslationRequest.source)
+  // @@protoc_insertion_point(field_mutable:roosha.TranslationRequest.source)
   return source_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
  ::std::string* TranslationRequest::release_source() {
-  // @@protoc_insertion_point(field_release:roosha.translation.TranslationRequest.source)
+  // @@protoc_insertion_point(field_release:roosha.TranslationRequest.source)
   
   return source_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -740,518 +462,9 @@ void TranslationRequest::clear_source() {
     
   }
   source_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), source);
-  // @@protoc_insertion_point(field_set_allocated:roosha.translation.TranslationRequest.source)
+  // @@protoc_insertion_point(field_set_allocated:roosha.TranslationRequest.source)
 }
 
-bool TranslationRequest::has_tokenOrId() const {
-  return tokenOrId_case() != TOKENORID_NOT_SET;
-}
-void TranslationRequest::clear_has_tokenOrId() {
-  _oneof_case_[0] = TOKENORID_NOT_SET;
-}
-TranslationRequest::TokenOrIdCase TranslationRequest::tokenOrId_case() const {
-  return TranslationRequest::TokenOrIdCase(_oneof_case_[0]);
-}
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int UserTranslationsProposal::kTokenFieldNumber;
-const int UserTranslationsProposal::kIdFieldNumber;
-const int UserTranslationsProposal::kProposedTranslationsFieldNumber;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-UserTranslationsProposal::UserTranslationsProposal()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:roosha.translation.UserTranslationsProposal)
-}
-
-void UserTranslationsProposal::InitAsDefaultInstance() {
-  _is_default_instance_ = true;
-  UserTranslationsProposal_default_oneof_instance_->token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  UserTranslationsProposal_default_oneof_instance_->id_ = GOOGLE_ULONGLONG(0);
-  proposedtranslations_ = const_cast< ::roosha::translation::Translations*>(&::roosha::translation::Translations::default_instance());
-}
-
-UserTranslationsProposal::UserTranslationsProposal(const UserTranslationsProposal& from)
-  : ::google::protobuf::Message(),
-    _internal_metadata_(NULL) {
-  SharedCtor();
-  MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:roosha.translation.UserTranslationsProposal)
-}
-
-void UserTranslationsProposal::SharedCtor() {
-    _is_default_instance_ = false;
-  ::google::protobuf::internal::GetEmptyString();
-  _cached_size_ = 0;
-  proposedtranslations_ = NULL;
-  clear_has_tokenOrId();
-}
-
-UserTranslationsProposal::~UserTranslationsProposal() {
-  // @@protoc_insertion_point(destructor:roosha.translation.UserTranslationsProposal)
-  SharedDtor();
-}
-
-void UserTranslationsProposal::SharedDtor() {
-  if (has_tokenOrId()) {
-    clear_tokenOrId();
-  }
-  if (this != default_instance_) {
-    delete proposedtranslations_;
-  }
-}
-
-void UserTranslationsProposal::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* UserTranslationsProposal::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return UserTranslationsProposal_descriptor_;
-}
-
-const UserTranslationsProposal& UserTranslationsProposal::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_roosha_5fservice_2eproto();
-  return *default_instance_;
-}
-
-UserTranslationsProposal* UserTranslationsProposal::default_instance_ = NULL;
-
-UserTranslationsProposal* UserTranslationsProposal::New(::google::protobuf::Arena* arena) const {
-  UserTranslationsProposal* n = new UserTranslationsProposal;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void UserTranslationsProposal::clear_tokenOrId() {
-// @@protoc_insertion_point(one_of_clear_start:roosha.translation.UserTranslationsProposal)
-  switch(tokenOrId_case()) {
-    case kToken: {
-      tokenOrId_.token_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-      break;
-    }
-    case kId: {
-      // No need to clear
-      break;
-    }
-    case TOKENORID_NOT_SET: {
-      break;
-    }
-  }
-  _oneof_case_[0] = TOKENORID_NOT_SET;
-}
-
-
-void UserTranslationsProposal::Clear() {
-// @@protoc_insertion_point(message_clear_start:roosha.translation.UserTranslationsProposal)
-  if (GetArenaNoVirtual() == NULL && proposedtranslations_ != NULL) delete proposedtranslations_;
-  proposedtranslations_ = NULL;
-  clear_tokenOrId();
-}
-
-bool UserTranslationsProposal::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:roosha.translation.UserTranslationsProposal)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(16383);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional bytes token = 1;
-      case 1: {
-        if (tag == 10) {
-          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
-                input, this->mutable_token()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(18)) goto parse_proposedTranslations;
-        break;
-      }
-
-      // optional .roosha.translation.Translations proposedTranslations = 2;
-      case 2: {
-        if (tag == 18) {
-         parse_proposedTranslations:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_proposedtranslations()));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(800)) goto parse_id;
-        break;
-      }
-
-      // optional uint64 id = 100;
-      case 100: {
-        if (tag == 800) {
-         parse_id:
-          clear_tokenOrId();
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
-                 input, &tokenOrId_.id_)));
-          set_has_id();
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectAtEnd()) goto success;
-        break;
-      }
-
-      default: {
-      handle_unusual:
-        if (tag == 0 ||
-            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-          goto success;
-        }
-        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-        break;
-      }
-    }
-  }
-success:
-  // @@protoc_insertion_point(parse_success:roosha.translation.UserTranslationsProposal)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:roosha.translation.UserTranslationsProposal)
-  return false;
-#undef DO_
-}
-
-void UserTranslationsProposal::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:roosha.translation.UserTranslationsProposal)
-  // optional bytes token = 1;
-  if (has_token()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
-      1, this->token(), output);
-  }
-
-  // optional .roosha.translation.Translations proposedTranslations = 2;
-  if (this->has_proposedtranslations()) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      2, *this->proposedtranslations_, output);
-  }
-
-  // optional uint64 id = 100;
-  if (has_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt64(100, this->id(), output);
-  }
-
-  // @@protoc_insertion_point(serialize_end:roosha.translation.UserTranslationsProposal)
-}
-
-::google::protobuf::uint8* UserTranslationsProposal::InternalSerializeWithCachedSizesToArray(
-    bool deterministic, ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:roosha.translation.UserTranslationsProposal)
-  // optional bytes token = 1;
-  if (has_token()) {
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
-        1, this->token(), target);
-  }
-
-  // optional .roosha.translation.Translations proposedTranslations = 2;
-  if (this->has_proposedtranslations()) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      InternalWriteMessageNoVirtualToArray(
-        2, *this->proposedtranslations_, false, target);
-  }
-
-  // optional uint64 id = 100;
-  if (has_id()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(100, this->id(), target);
-  }
-
-  // @@protoc_insertion_point(serialize_to_array_end:roosha.translation.UserTranslationsProposal)
-  return target;
-}
-
-int UserTranslationsProposal::ByteSize() const {
-// @@protoc_insertion_point(message_byte_size_start:roosha.translation.UserTranslationsProposal)
-  int total_size = 0;
-
-  // optional .roosha.translation.Translations proposedTranslations = 2;
-  if (this->has_proposedtranslations()) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->proposedtranslations_);
-  }
-
-  switch (tokenOrId_case()) {
-    // optional bytes token = 1;
-    case kToken: {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::BytesSize(
-          this->token());
-      break;
-    }
-    // optional uint64 id = 100;
-    case kId: {
-      total_size += 2 +
-        ::google::protobuf::internal::WireFormatLite::UInt64Size(
-          this->id());
-      break;
-    }
-    case TOKENORID_NOT_SET: {
-      break;
-    }
-  }
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void UserTranslationsProposal::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:roosha.translation.UserTranslationsProposal)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) {
-    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
-  }
-  const UserTranslationsProposal* source = 
-      ::google::protobuf::internal::DynamicCastToGenerated<const UserTranslationsProposal>(
-          &from);
-  if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:roosha.translation.UserTranslationsProposal)
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.translation.UserTranslationsProposal)
-    MergeFrom(*source);
-  }
-}
-
-void UserTranslationsProposal::MergeFrom(const UserTranslationsProposal& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:roosha.translation.UserTranslationsProposal)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) {
-    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
-  }
-  switch (from.tokenOrId_case()) {
-    case kToken: {
-      set_token(from.token());
-      break;
-    }
-    case kId: {
-      set_id(from.id());
-      break;
-    }
-    case TOKENORID_NOT_SET: {
-      break;
-    }
-  }
-  if (from.has_proposedtranslations()) {
-    mutable_proposedtranslations()->::roosha::translation::Translations::MergeFrom(from.proposedtranslations());
-  }
-}
-
-void UserTranslationsProposal::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:roosha.translation.UserTranslationsProposal)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void UserTranslationsProposal::CopyFrom(const UserTranslationsProposal& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:roosha.translation.UserTranslationsProposal)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool UserTranslationsProposal::IsInitialized() const {
-
-  return true;
-}
-
-void UserTranslationsProposal::Swap(UserTranslationsProposal* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void UserTranslationsProposal::InternalSwap(UserTranslationsProposal* other) {
-  std::swap(proposedtranslations_, other->proposedtranslations_);
-  std::swap(tokenOrId_, other->tokenOrId_);
-  std::swap(_oneof_case_[0], other->_oneof_case_[0]);
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::google::protobuf::Metadata UserTranslationsProposal::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = UserTranslationsProposal_descriptor_;
-  metadata.reflection = UserTranslationsProposal_reflection_;
-  return metadata;
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// UserTranslationsProposal
-
-// optional bytes token = 1;
-bool UserTranslationsProposal::has_token() const {
-  return tokenOrId_case() == kToken;
-}
-void UserTranslationsProposal::set_has_token() {
-  _oneof_case_[0] = kToken;
-}
-void UserTranslationsProposal::clear_token() {
-  if (has_token()) {
-    tokenOrId_.token_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-    clear_has_tokenOrId();
-  }
-}
- const ::std::string& UserTranslationsProposal::token() const {
-  // @@protoc_insertion_point(field_get:roosha.translation.UserTranslationsProposal.token)
-  if (has_token()) {
-    return tokenOrId_.token_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  return *&::google::protobuf::internal::GetEmptyStringAlreadyInited();
-}
- void UserTranslationsProposal::set_token(const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:roosha.translation.UserTranslationsProposal.token)
-  if (!has_token()) {
-    clear_tokenOrId();
-    set_has_token();
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  tokenOrId_.token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.translation.UserTranslationsProposal.token)
-}
- void UserTranslationsProposal::set_token(const char* value) {
-  if (!has_token()) {
-    clear_tokenOrId();
-    set_has_token();
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  tokenOrId_.token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.translation.UserTranslationsProposal.token)
-}
- void UserTranslationsProposal::set_token(const void* value, size_t size) {
-  if (!has_token()) {
-    clear_tokenOrId();
-    set_has_token();
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  tokenOrId_.token_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.translation.UserTranslationsProposal.token)
-}
- ::std::string* UserTranslationsProposal::mutable_token() {
-  if (!has_token()) {
-    clear_tokenOrId();
-    set_has_token();
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  // @@protoc_insertion_point(field_mutable:roosha.translation.UserTranslationsProposal.token)
-  return tokenOrId_.token_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
- ::std::string* UserTranslationsProposal::release_token() {
-  // @@protoc_insertion_point(field_release:roosha.translation.UserTranslationsProposal.token)
-  if (has_token()) {
-    clear_has_tokenOrId();
-    return tokenOrId_.token_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  } else {
-    return NULL;
-  }
-}
- void UserTranslationsProposal::set_allocated_token(::std::string* token) {
-  if (!has_token()) {
-    tokenOrId_.token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  clear_tokenOrId();
-  if (token != NULL) {
-    set_has_token();
-    tokenOrId_.token_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-        token);
-  }
-  // @@protoc_insertion_point(field_set_allocated:roosha.translation.UserTranslationsProposal.token)
-}
-
-// optional uint64 id = 100;
-bool UserTranslationsProposal::has_id() const {
-  return tokenOrId_case() == kId;
-}
-void UserTranslationsProposal::set_has_id() {
-  _oneof_case_[0] = kId;
-}
-void UserTranslationsProposal::clear_id() {
-  if (has_id()) {
-    tokenOrId_.id_ = GOOGLE_ULONGLONG(0);
-    clear_has_tokenOrId();
-  }
-}
- ::google::protobuf::uint64 UserTranslationsProposal::id() const {
-  // @@protoc_insertion_point(field_get:roosha.translation.UserTranslationsProposal.id)
-  if (has_id()) {
-    return tokenOrId_.id_;
-  }
-  return GOOGLE_ULONGLONG(0);
-}
- void UserTranslationsProposal::set_id(::google::protobuf::uint64 value) {
-  if (!has_id()) {
-    clear_tokenOrId();
-    set_has_id();
-  }
-  tokenOrId_.id_ = value;
-  // @@protoc_insertion_point(field_set:roosha.translation.UserTranslationsProposal.id)
-}
-
-// optional .roosha.translation.Translations proposedTranslations = 2;
-bool UserTranslationsProposal::has_proposedtranslations() const {
-  return !_is_default_instance_ && proposedtranslations_ != NULL;
-}
-void UserTranslationsProposal::clear_proposedtranslations() {
-  if (GetArenaNoVirtual() == NULL && proposedtranslations_ != NULL) delete proposedtranslations_;
-  proposedtranslations_ = NULL;
-}
-const ::roosha::translation::Translations& UserTranslationsProposal::proposedtranslations() const {
-  // @@protoc_insertion_point(field_get:roosha.translation.UserTranslationsProposal.proposedTranslations)
-  return proposedtranslations_ != NULL ? *proposedtranslations_ : *default_instance_->proposedtranslations_;
-}
-::roosha::translation::Translations* UserTranslationsProposal::mutable_proposedtranslations() {
-  
-  if (proposedtranslations_ == NULL) {
-    proposedtranslations_ = new ::roosha::translation::Translations;
-  }
-  // @@protoc_insertion_point(field_mutable:roosha.translation.UserTranslationsProposal.proposedTranslations)
-  return proposedtranslations_;
-}
-::roosha::translation::Translations* UserTranslationsProposal::release_proposedtranslations() {
-  // @@protoc_insertion_point(field_release:roosha.translation.UserTranslationsProposal.proposedTranslations)
-  
-  ::roosha::translation::Translations* temp = proposedtranslations_;
-  proposedtranslations_ = NULL;
-  return temp;
-}
-void UserTranslationsProposal::set_allocated_proposedtranslations(::roosha::translation::Translations* proposedtranslations) {
-  delete proposedtranslations_;
-  proposedtranslations_ = proposedtranslations;
-  if (proposedtranslations) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_set_allocated:roosha.translation.UserTranslationsProposal.proposedTranslations)
-}
-
-bool UserTranslationsProposal::has_tokenOrId() const {
-  return tokenOrId_case() != TOKENORID_NOT_SET;
-}
-void UserTranslationsProposal::clear_has_tokenOrId() {
-  _oneof_case_[0] = TOKENORID_NOT_SET;
-}
-UserTranslationsProposal::TokenOrIdCase UserTranslationsProposal::tokenOrId_case() const {
-  return UserTranslationsProposal::TokenOrIdCase(_oneof_case_[0]);
-}
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
@@ -1264,7 +477,7 @@ const int Translations::kTranslationFieldNumber;
 Translations::Translations()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:roosha.translation.Translations)
+  // @@protoc_insertion_point(constructor:roosha.Translations)
 }
 
 void Translations::InitAsDefaultInstance() {
@@ -1276,7 +489,7 @@ Translations::Translations(const Translations& from)
     _internal_metadata_(NULL) {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:roosha.translation.Translations)
+  // @@protoc_insertion_point(copy_constructor:roosha.Translations)
 }
 
 void Translations::SharedCtor() {
@@ -1287,7 +500,7 @@ void Translations::SharedCtor() {
 }
 
 Translations::~Translations() {
-  // @@protoc_insertion_point(destructor:roosha.translation.Translations)
+  // @@protoc_insertion_point(destructor:roosha.Translations)
   SharedDtor();
 }
 
@@ -1323,7 +536,7 @@ Translations* Translations::New(::google::protobuf::Arena* arena) const {
 }
 
 void Translations::Clear() {
-// @@protoc_insertion_point(message_clear_start:roosha.translation.Translations)
+// @@protoc_insertion_point(message_clear_start:roosha.Translations)
   source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   translation_.Clear();
 }
@@ -1332,7 +545,7 @@ bool Translations::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:roosha.translation.Translations)
+  // @@protoc_insertion_point(parse_start:roosha.Translations)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -1346,7 +559,7 @@ bool Translations::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->source().data(), this->source().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "roosha.translation.Translations.source"));
+            "roosha.Translations.source"));
         } else {
           goto handle_unusual;
         }
@@ -1354,7 +567,7 @@ bool Translations::MergePartialFromCodedStream(
         break;
       }
 
-      // repeated .roosha.translation.Translation translation = 2;
+      // repeated .roosha.Translation translation = 2;
       case 2: {
         if (tag == 18) {
          parse_translation:
@@ -1384,63 +597,63 @@ bool Translations::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:roosha.translation.Translations)
+  // @@protoc_insertion_point(parse_success:roosha.Translations)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:roosha.translation.Translations)
+  // @@protoc_insertion_point(parse_failure:roosha.Translations)
   return false;
 #undef DO_
 }
 
 void Translations::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:roosha.translation.Translations)
+  // @@protoc_insertion_point(serialize_start:roosha.Translations)
   // optional string source = 1;
   if (this->source().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->source().data(), this->source().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "roosha.translation.Translations.source");
+      "roosha.Translations.source");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->source(), output);
   }
 
-  // repeated .roosha.translation.Translation translation = 2;
+  // repeated .roosha.Translation translation = 2;
   for (unsigned int i = 0, n = this->translation_size(); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       2, this->translation(i), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:roosha.translation.Translations)
+  // @@protoc_insertion_point(serialize_end:roosha.Translations)
 }
 
 ::google::protobuf::uint8* Translations::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:roosha.translation.Translations)
+  // @@protoc_insertion_point(serialize_to_array_start:roosha.Translations)
   // optional string source = 1;
   if (this->source().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->source().data(), this->source().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "roosha.translation.Translations.source");
+      "roosha.Translations.source");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         1, this->source(), target);
   }
 
-  // repeated .roosha.translation.Translation translation = 2;
+  // repeated .roosha.Translation translation = 2;
   for (unsigned int i = 0, n = this->translation_size(); i < n; i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageNoVirtualToArray(
         2, this->translation(i), false, target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:roosha.translation.Translations)
+  // @@protoc_insertion_point(serialize_to_array_end:roosha.Translations)
   return target;
 }
 
 int Translations::ByteSize() const {
-// @@protoc_insertion_point(message_byte_size_start:roosha.translation.Translations)
+// @@protoc_insertion_point(message_byte_size_start:roosha.Translations)
   int total_size = 0;
 
   // optional string source = 1;
@@ -1450,7 +663,7 @@ int Translations::ByteSize() const {
         this->source());
   }
 
-  // repeated .roosha.translation.Translation translation = 2;
+  // repeated .roosha.Translation translation = 2;
   total_size += 1 * this->translation_size();
   for (int i = 0; i < this->translation_size(); i++) {
     total_size +=
@@ -1465,7 +678,7 @@ int Translations::ByteSize() const {
 }
 
 void Translations::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:roosha.translation.Translations)
+// @@protoc_insertion_point(generalized_merge_from_start:roosha.Translations)
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
@@ -1473,16 +686,16 @@ void Translations::MergeFrom(const ::google::protobuf::Message& from) {
       ::google::protobuf::internal::DynamicCastToGenerated<const Translations>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:roosha.translation.Translations)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:roosha.Translations)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.translation.Translations)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.Translations)
     MergeFrom(*source);
   }
 }
 
 void Translations::MergeFrom(const Translations& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:roosha.translation.Translations)
+// @@protoc_insertion_point(class_specific_merge_from_start:roosha.Translations)
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
@@ -1494,14 +707,14 @@ void Translations::MergeFrom(const Translations& from) {
 }
 
 void Translations::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:roosha.translation.Translations)
+// @@protoc_insertion_point(generalized_copy_from_start:roosha.Translations)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void Translations::CopyFrom(const Translations& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:roosha.translation.Translations)
+// @@protoc_insertion_point(class_specific_copy_from_start:roosha.Translations)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1539,32 +752,32 @@ void Translations::clear_source() {
   source_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
  const ::std::string& Translations::source() const {
-  // @@protoc_insertion_point(field_get:roosha.translation.Translations.source)
+  // @@protoc_insertion_point(field_get:roosha.Translations.source)
   return source_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
  void Translations::set_source(const ::std::string& value) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.translation.Translations.source)
+  // @@protoc_insertion_point(field_set:roosha.Translations.source)
 }
  void Translations::set_source(const char* value) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.translation.Translations.source)
+  // @@protoc_insertion_point(field_set_char:roosha.Translations.source)
 }
  void Translations::set_source(const char* value, size_t size) {
   
   source_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.translation.Translations.source)
+  // @@protoc_insertion_point(field_set_pointer:roosha.Translations.source)
 }
  ::std::string* Translations::mutable_source() {
   
-  // @@protoc_insertion_point(field_mutable:roosha.translation.Translations.source)
+  // @@protoc_insertion_point(field_mutable:roosha.Translations.source)
   return source_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
  ::std::string* Translations::release_source() {
-  // @@protoc_insertion_point(field_release:roosha.translation.Translations.source)
+  // @@protoc_insertion_point(field_release:roosha.Translations.source)
   
   return source_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1575,36 +788,36 @@ void Translations::clear_source() {
     
   }
   source_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), source);
-  // @@protoc_insertion_point(field_set_allocated:roosha.translation.Translations.source)
+  // @@protoc_insertion_point(field_set_allocated:roosha.Translations.source)
 }
 
-// repeated .roosha.translation.Translation translation = 2;
+// repeated .roosha.Translation translation = 2;
 int Translations::translation_size() const {
   return translation_.size();
 }
 void Translations::clear_translation() {
   translation_.Clear();
 }
-const ::roosha::translation::Translation& Translations::translation(int index) const {
-  // @@protoc_insertion_point(field_get:roosha.translation.Translations.translation)
+const ::roosha::Translation& Translations::translation(int index) const {
+  // @@protoc_insertion_point(field_get:roosha.Translations.translation)
   return translation_.Get(index);
 }
-::roosha::translation::Translation* Translations::mutable_translation(int index) {
-  // @@protoc_insertion_point(field_mutable:roosha.translation.Translations.translation)
+::roosha::Translation* Translations::mutable_translation(int index) {
+  // @@protoc_insertion_point(field_mutable:roosha.Translations.translation)
   return translation_.Mutable(index);
 }
-::roosha::translation::Translation* Translations::add_translation() {
-  // @@protoc_insertion_point(field_add:roosha.translation.Translations.translation)
+::roosha::Translation* Translations::add_translation() {
+  // @@protoc_insertion_point(field_add:roosha.Translations.translation)
   return translation_.Add();
 }
-::google::protobuf::RepeatedPtrField< ::roosha::translation::Translation >*
+::google::protobuf::RepeatedPtrField< ::roosha::Translation >*
 Translations::mutable_translation() {
-  // @@protoc_insertion_point(field_mutable_list:roosha.translation.Translations.translation)
+  // @@protoc_insertion_point(field_mutable_list:roosha.Translations.translation)
   return &translation_;
 }
-const ::google::protobuf::RepeatedPtrField< ::roosha::translation::Translation >&
+const ::google::protobuf::RepeatedPtrField< ::roosha::Translation >&
 Translations::translation() const {
-  // @@protoc_insertion_point(field_list:roosha.translation.Translations.translation)
+  // @@protoc_insertion_point(field_list:roosha.Translations.translation)
   return translation_;
 }
 
@@ -1621,7 +834,7 @@ const int Translation::kProviderFieldNumber;
 Translation::Translation()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:roosha.translation.Translation)
+  // @@protoc_insertion_point(constructor:roosha.Translation)
 }
 
 void Translation::InitAsDefaultInstance() {
@@ -1633,7 +846,7 @@ Translation::Translation(const Translation& from)
     _internal_metadata_(NULL) {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:roosha.translation.Translation)
+  // @@protoc_insertion_point(copy_constructor:roosha.Translation)
 }
 
 void Translation::SharedCtor() {
@@ -1644,7 +857,7 @@ void Translation::SharedCtor() {
 }
 
 Translation::~Translation() {
-  // @@protoc_insertion_point(destructor:roosha.translation.Translation)
+  // @@protoc_insertion_point(destructor:roosha.Translation)
   SharedDtor();
 }
 
@@ -1679,7 +892,7 @@ Translation* Translation::New(::google::protobuf::Arena* arena) const {
 }
 
 void Translation::Clear() {
-// @@protoc_insertion_point(message_clear_start:roosha.translation.Translation)
+// @@protoc_insertion_point(message_clear_start:roosha.Translation)
   provider_ = 0;
   target_.Clear();
   example_.Clear();
@@ -1689,7 +902,7 @@ bool Translation::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:roosha.translation.Translation)
+  // @@protoc_insertion_point(parse_start:roosha.Translation)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -1705,7 +918,7 @@ bool Translation::MergePartialFromCodedStream(
             this->target(this->target_size() - 1).data(),
             this->target(this->target_size() - 1).length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "roosha.translation.Translation.target"));
+            "roosha.Translation.target"));
         } else {
           goto handle_unusual;
         }
@@ -1724,7 +937,7 @@ bool Translation::MergePartialFromCodedStream(
             this->example(this->example_size() - 1).data(),
             this->example(this->example_size() - 1).length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "roosha.translation.Translation.example"));
+            "roosha.Translation.example"));
         } else {
           goto handle_unusual;
         }
@@ -1733,7 +946,7 @@ bool Translation::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .roosha.translation.TranslationProvider provider = 3;
+      // optional .roosha.TranslationProvider provider = 3;
       case 3: {
         if (tag == 24) {
          parse_provider:
@@ -1741,7 +954,7 @@ bool Translation::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_provider(static_cast< ::roosha::translation::TranslationProvider >(value));
+          set_provider(static_cast< ::roosha::TranslationProvider >(value));
         } else {
           goto handle_unusual;
         }
@@ -1762,23 +975,23 @@ bool Translation::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:roosha.translation.Translation)
+  // @@protoc_insertion_point(parse_success:roosha.Translation)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:roosha.translation.Translation)
+  // @@protoc_insertion_point(parse_failure:roosha.Translation)
   return false;
 #undef DO_
 }
 
 void Translation::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:roosha.translation.Translation)
+  // @@protoc_insertion_point(serialize_start:roosha.Translation)
   // repeated string target = 1;
   for (int i = 0; i < this->target_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->target(i).data(), this->target(i).length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "roosha.translation.Translation.target");
+      "roosha.Translation.target");
     ::google::protobuf::internal::WireFormatLite::WriteString(
       1, this->target(i), output);
   }
@@ -1788,29 +1001,29 @@ void Translation::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->example(i).data(), this->example(i).length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "roosha.translation.Translation.example");
+      "roosha.Translation.example");
     ::google::protobuf::internal::WireFormatLite::WriteString(
       2, this->example(i), output);
   }
 
-  // optional .roosha.translation.TranslationProvider provider = 3;
+  // optional .roosha.TranslationProvider provider = 3;
   if (this->provider() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->provider(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:roosha.translation.Translation)
+  // @@protoc_insertion_point(serialize_end:roosha.Translation)
 }
 
 ::google::protobuf::uint8* Translation::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:roosha.translation.Translation)
+  // @@protoc_insertion_point(serialize_to_array_start:roosha.Translation)
   // repeated string target = 1;
   for (int i = 0; i < this->target_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->target(i).data(), this->target(i).length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "roosha.translation.Translation.target");
+      "roosha.Translation.target");
     target = ::google::protobuf::internal::WireFormatLite::
       WriteStringToArray(1, this->target(i), target);
   }
@@ -1820,26 +1033,26 @@ void Translation::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->example(i).data(), this->example(i).length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "roosha.translation.Translation.example");
+      "roosha.Translation.example");
     target = ::google::protobuf::internal::WireFormatLite::
       WriteStringToArray(2, this->example(i), target);
   }
 
-  // optional .roosha.translation.TranslationProvider provider = 3;
+  // optional .roosha.TranslationProvider provider = 3;
   if (this->provider() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->provider(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:roosha.translation.Translation)
+  // @@protoc_insertion_point(serialize_to_array_end:roosha.Translation)
   return target;
 }
 
 int Translation::ByteSize() const {
-// @@protoc_insertion_point(message_byte_size_start:roosha.translation.Translation)
+// @@protoc_insertion_point(message_byte_size_start:roosha.Translation)
   int total_size = 0;
 
-  // optional .roosha.translation.TranslationProvider provider = 3;
+  // optional .roosha.TranslationProvider provider = 3;
   if (this->provider() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->provider());
@@ -1866,7 +1079,7 @@ int Translation::ByteSize() const {
 }
 
 void Translation::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:roosha.translation.Translation)
+// @@protoc_insertion_point(generalized_merge_from_start:roosha.Translation)
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
@@ -1874,16 +1087,16 @@ void Translation::MergeFrom(const ::google::protobuf::Message& from) {
       ::google::protobuf::internal::DynamicCastToGenerated<const Translation>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:roosha.translation.Translation)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:roosha.Translation)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.translation.Translation)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:roosha.Translation)
     MergeFrom(*source);
   }
 }
 
 void Translation::MergeFrom(const Translation& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:roosha.translation.Translation)
+// @@protoc_insertion_point(class_specific_merge_from_start:roosha.Translation)
   if (GOOGLE_PREDICT_FALSE(&from == this)) {
     ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
   }
@@ -1895,14 +1108,14 @@ void Translation::MergeFrom(const Translation& from) {
 }
 
 void Translation::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:roosha.translation.Translation)
+// @@protoc_insertion_point(generalized_copy_from_start:roosha.Translation)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void Translation::CopyFrom(const Translation& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:roosha.translation.Translation)
+// @@protoc_insertion_point(class_specific_copy_from_start:roosha.Translation)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1944,50 +1157,50 @@ void Translation::clear_target() {
   target_.Clear();
 }
  const ::std::string& Translation::target(int index) const {
-  // @@protoc_insertion_point(field_get:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_get:roosha.Translation.target)
   return target_.Get(index);
 }
  ::std::string* Translation::mutable_target(int index) {
-  // @@protoc_insertion_point(field_mutable:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_mutable:roosha.Translation.target)
   return target_.Mutable(index);
 }
  void Translation::set_target(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_set:roosha.Translation.target)
   target_.Mutable(index)->assign(value);
 }
  void Translation::set_target(int index, const char* value) {
   target_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_set_char:roosha.Translation.target)
 }
  void Translation::set_target(int index, const char* value, size_t size) {
   target_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_set_pointer:roosha.Translation.target)
 }
  ::std::string* Translation::add_target() {
-  // @@protoc_insertion_point(field_add_mutable:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_add_mutable:roosha.Translation.target)
   return target_.Add();
 }
  void Translation::add_target(const ::std::string& value) {
   target_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_add:roosha.Translation.target)
 }
  void Translation::add_target(const char* value) {
   target_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_add_char:roosha.Translation.target)
 }
  void Translation::add_target(const char* value, size_t size) {
   target_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_add_pointer:roosha.Translation.target)
 }
  const ::google::protobuf::RepeatedPtrField< ::std::string>&
 Translation::target() const {
-  // @@protoc_insertion_point(field_list:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_list:roosha.Translation.target)
   return target_;
 }
  ::google::protobuf::RepeatedPtrField< ::std::string>*
 Translation::mutable_target() {
-  // @@protoc_insertion_point(field_mutable_list:roosha.translation.Translation.target)
+  // @@protoc_insertion_point(field_mutable_list:roosha.Translation.target)
   return &target_;
 }
 
@@ -1999,72 +1212,71 @@ void Translation::clear_example() {
   example_.Clear();
 }
  const ::std::string& Translation::example(int index) const {
-  // @@protoc_insertion_point(field_get:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_get:roosha.Translation.example)
   return example_.Get(index);
 }
  ::std::string* Translation::mutable_example(int index) {
-  // @@protoc_insertion_point(field_mutable:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_mutable:roosha.Translation.example)
   return example_.Mutable(index);
 }
  void Translation::set_example(int index, const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_set:roosha.Translation.example)
   example_.Mutable(index)->assign(value);
 }
  void Translation::set_example(int index, const char* value) {
   example_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_set_char:roosha.Translation.example)
 }
  void Translation::set_example(int index, const char* value, size_t size) {
   example_.Mutable(index)->assign(
     reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_set_pointer:roosha.Translation.example)
 }
  ::std::string* Translation::add_example() {
-  // @@protoc_insertion_point(field_add_mutable:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_add_mutable:roosha.Translation.example)
   return example_.Add();
 }
  void Translation::add_example(const ::std::string& value) {
   example_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_add:roosha.Translation.example)
 }
  void Translation::add_example(const char* value) {
   example_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_add_char:roosha.Translation.example)
 }
  void Translation::add_example(const char* value, size_t size) {
   example_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_add_pointer:roosha.Translation.example)
 }
  const ::google::protobuf::RepeatedPtrField< ::std::string>&
 Translation::example() const {
-  // @@protoc_insertion_point(field_list:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_list:roosha.Translation.example)
   return example_;
 }
  ::google::protobuf::RepeatedPtrField< ::std::string>*
 Translation::mutable_example() {
-  // @@protoc_insertion_point(field_mutable_list:roosha.translation.Translation.example)
+  // @@protoc_insertion_point(field_mutable_list:roosha.Translation.example)
   return &example_;
 }
 
-// optional .roosha.translation.TranslationProvider provider = 3;
+// optional .roosha.TranslationProvider provider = 3;
 void Translation::clear_provider() {
   provider_ = 0;
 }
- ::roosha::translation::TranslationProvider Translation::provider() const {
-  // @@protoc_insertion_point(field_get:roosha.translation.Translation.provider)
-  return static_cast< ::roosha::translation::TranslationProvider >(provider_);
+ ::roosha::TranslationProvider Translation::provider() const {
+  // @@protoc_insertion_point(field_get:roosha.Translation.provider)
+  return static_cast< ::roosha::TranslationProvider >(provider_);
 }
- void Translation::set_provider(::roosha::translation::TranslationProvider value) {
+ void Translation::set_provider(::roosha::TranslationProvider value) {
   
   provider_ = value;
-  // @@protoc_insertion_point(field_set:roosha.translation.Translation.provider)
+  // @@protoc_insertion_point(field_set:roosha.Translation.provider)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace translation
 }  // namespace roosha
 
 // @@protoc_insertion_point(global_scope)

@@ -2,16 +2,14 @@
 #define NETWORKMANAGER_H
 
 #include "Core/translation.h"
-//#include "Network/authentication_manager.h"
+#include "server_response.h"
+
 #include <QObject>
 
 class AuthenticationManager;
 
-enum RPCErrorStatus {
 
-};
-
-class NetworkManager : public QObject { // TODO: rename
+class NetworkManager : public QObject {
     Q_OBJECT
 
 public:
@@ -19,14 +17,17 @@ public:
     ~NetworkManager();
 
     quint32 translate(QString source, quint32 timeoutMills);
-    quint32 proposeUserTranslations(TestTranslations translations, quint32 timeoutMills);
+    /**
+     * NOTE: all translations should have the same 'source' field
+     */
+    quint32 proposeUserTranslations(Translations translations, quint32 timeoutMills);
     quint32 authorize(QString login, QString password, quint32 timeoutMills);
     quint32 registrate(QString login, QString password, quint32 timeoutMills);
 
 signals:
-    void newTranslation( TestTranslations trans);
+    void newTranslation( Translations trans);
 
-    void successTranslate(quint32 id, TestTranslations translations);
+    void successTranslate(quint32 id, Translations translations);
     void failTranslate(quint32 id, RPCErrorStatus status);
 
     void successPropose(quint32 id);
@@ -39,7 +40,9 @@ signals:
     void failRegistrate(quint32 id, RPCErrorStatus status);
 
 private:
-    AuthenticationManager *authenticationManager;
+    QAtomicInteger<quint32> currentId_;
+
+    AuthenticationManager *authenticationManager_;
 };
 
 #endif // NETWORKMANAGER_H

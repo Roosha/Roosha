@@ -17,7 +17,7 @@
  */
 syntax = "proto3";
 
-package roosha.translation;
+package roosha;
 
 import "commons.proto";
 
@@ -30,12 +30,12 @@ option optimize_for = SPEED;
 
 
 service RooshaService {
-  	rpc registrate(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
-	rpc authorize(roosha.commons.Credentials) returns (roosha.commons.AuthenticationToken) {}
+  	rpc registrate(Credentials) returns (AuthenticationToken) {}
+	rpc authorize(Credentials) returns (AuthenticationToken) {}
 
 	// methods declared below should pass authorization token in 'roosha-auth-token' metadata key.
     rpc translate(TranslationRequest) returns (Translations) {}
-    rpc proposeUserTranslations(Translations) returns (roosha.commons.Void) {}
+    rpc proposeUserTranslations(Translations) returns (Void) {}
 }
 
 message TranslationRequest {

@@ -41,61 +41,61 @@ class ServerContext;
 }  // namespace grpc
 
 namespace roosha {
-namespace translation {
 
 class RooshaService GRPC_FINAL {
  public:
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status registrate(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::roosha::commons::AuthenticationToken* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::AuthenticationToken>> Asyncregistrate(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::AuthenticationToken>>(AsyncregistrateRaw(context, request, cq));
+    virtual ::grpc::Status registrate(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::roosha::AuthenticationToken* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::AuthenticationToken>> Asyncregistrate(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::AuthenticationToken>>(AsyncregistrateRaw(context, request, cq));
     }
-    virtual ::grpc::Status authorize(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::roosha::commons::AuthenticationToken* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::AuthenticationToken>> Asyncauthorize(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::AuthenticationToken>>(AsyncauthorizeRaw(context, request, cq));
+    virtual ::grpc::Status authorize(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::roosha::AuthenticationToken* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::AuthenticationToken>> Asyncauthorize(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::AuthenticationToken>>(AsyncauthorizeRaw(context, request, cq));
     }
-    virtual ::grpc::Status translate(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::roosha::translation::Translations* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::translation::Translations>> Asynctranslate(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::translation::Translations>>(AsynctranslateRaw(context, request, cq));
+    // methods declared below should pass authorization token in 'roosha-auth-token' metadata key.
+    virtual ::grpc::Status translate(::grpc::ClientContext* context, const ::roosha::TranslationRequest& request, ::roosha::Translations* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::Translations>> Asynctranslate(::grpc::ClientContext* context, const ::roosha::TranslationRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::Translations>>(AsynctranslateRaw(context, request, cq));
     }
-    virtual ::grpc::Status proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::UserTranslationsProposal& request, ::roosha::commons::Void* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>> AsyncproposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::UserTranslationsProposal& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>>(AsyncproposeUserTranslationsRaw(context, request, cq));
+    virtual ::grpc::Status proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::Translations& request, ::roosha::Void* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::Void>> AsyncproposeUserTranslations(::grpc::ClientContext* context, const ::roosha::Translations& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::roosha::Void>>(AsyncproposeUserTranslationsRaw(context, request, cq));
     }
   private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::AuthenticationToken>* AsyncregistrateRaw(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::AuthenticationToken>* AsyncauthorizeRaw(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::translation::Translations>* AsynctranslateRaw(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::commons::Void>* AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::translation::UserTranslationsProposal& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::AuthenticationToken>* AsyncregistrateRaw(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::AuthenticationToken>* AsyncauthorizeRaw(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::Translations>* AsynctranslateRaw(::grpc::ClientContext* context, const ::roosha::TranslationRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::Void>* AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::Translations& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub GRPC_FINAL : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
-    ::grpc::Status registrate(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::roosha::commons::AuthenticationToken* response) GRPC_OVERRIDE;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>> Asyncregistrate(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>>(AsyncregistrateRaw(context, request, cq));
+    ::grpc::Status registrate(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::roosha::AuthenticationToken* response) GRPC_OVERRIDE;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>> Asyncregistrate(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>>(AsyncregistrateRaw(context, request, cq));
     }
-    ::grpc::Status authorize(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::roosha::commons::AuthenticationToken* response) GRPC_OVERRIDE;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>> Asyncauthorize(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>>(AsyncauthorizeRaw(context, request, cq));
+    ::grpc::Status authorize(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::roosha::AuthenticationToken* response) GRPC_OVERRIDE;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>> Asyncauthorize(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>>(AsyncauthorizeRaw(context, request, cq));
     }
-    ::grpc::Status translate(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::roosha::translation::Translations* response) GRPC_OVERRIDE;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>> Asynctranslate(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>>(AsynctranslateRaw(context, request, cq));
+    ::grpc::Status translate(::grpc::ClientContext* context, const ::roosha::TranslationRequest& request, ::roosha::Translations* response) GRPC_OVERRIDE;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::Translations>> Asynctranslate(::grpc::ClientContext* context, const ::roosha::TranslationRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::Translations>>(AsynctranslateRaw(context, request, cq));
     }
-    ::grpc::Status proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::UserTranslationsProposal& request, ::roosha::commons::Void* response) GRPC_OVERRIDE;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>> AsyncproposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::UserTranslationsProposal& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>>(AsyncproposeUserTranslationsRaw(context, request, cq));
+    ::grpc::Status proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::Translations& request, ::roosha::Void* response) GRPC_OVERRIDE;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::Void>> AsyncproposeUserTranslations(::grpc::ClientContext* context, const ::roosha::Translations& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::roosha::Void>>(AsyncproposeUserTranslationsRaw(context, request, cq));
     }
 
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
-    ::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>* AsyncregistrateRaw(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
-    ::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>* AsyncauthorizeRaw(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
-    ::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>* AsynctranslateRaw(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
-    ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>* AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::translation::UserTranslationsProposal& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
+    ::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>* AsyncregistrateRaw(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
+    ::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>* AsyncauthorizeRaw(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
+    ::grpc::ClientAsyncResponseReader< ::roosha::Translations>* AsynctranslateRaw(::grpc::ClientContext* context, const ::roosha::TranslationRequest& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
+    ::grpc::ClientAsyncResponseReader< ::roosha::Void>* AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::Translations& request, ::grpc::CompletionQueue* cq) GRPC_OVERRIDE;
     const ::grpc::RpcMethod rpcmethod_registrate_;
     const ::grpc::RpcMethod rpcmethod_authorize_;
     const ::grpc::RpcMethod rpcmethod_translate_;
@@ -107,10 +107,11 @@ class RooshaService GRPC_FINAL {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status registrate(::grpc::ServerContext* context, const ::roosha::commons::Credentials* request, ::roosha::commons::AuthenticationToken* response);
-    virtual ::grpc::Status authorize(::grpc::ServerContext* context, const ::roosha::commons::Credentials* request, ::roosha::commons::AuthenticationToken* response);
-    virtual ::grpc::Status translate(::grpc::ServerContext* context, const ::roosha::translation::TranslationRequest* request, ::roosha::translation::Translations* response);
-    virtual ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::translation::UserTranslationsProposal* request, ::roosha::commons::Void* response);
+    virtual ::grpc::Status registrate(::grpc::ServerContext* context, const ::roosha::Credentials* request, ::roosha::AuthenticationToken* response);
+    virtual ::grpc::Status authorize(::grpc::ServerContext* context, const ::roosha::Credentials* request, ::roosha::AuthenticationToken* response);
+    // methods declared below should pass authorization token in 'roosha-auth-token' metadata key.
+    virtual ::grpc::Status translate(::grpc::ServerContext* context, const ::roosha::TranslationRequest* request, ::roosha::Translations* response);
+    virtual ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::Translations* request, ::roosha::Void* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_registrate : public BaseClass {
@@ -124,11 +125,11 @@ class RooshaService GRPC_FINAL {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status registrate(::grpc::ServerContext* context, const ::roosha::commons::Credentials* request, ::roosha::commons::AuthenticationToken* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status registrate(::grpc::ServerContext* context, const ::roosha::Credentials* request, ::roosha::AuthenticationToken* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void Requestregistrate(::grpc::ServerContext* context, ::roosha::commons::Credentials* request, ::grpc::ServerAsyncResponseWriter< ::roosha::commons::AuthenticationToken>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void Requestregistrate(::grpc::ServerContext* context, ::roosha::Credentials* request, ::grpc::ServerAsyncResponseWriter< ::roosha::AuthenticationToken>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -144,11 +145,11 @@ class RooshaService GRPC_FINAL {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status authorize(::grpc::ServerContext* context, const ::roosha::commons::Credentials* request, ::roosha::commons::AuthenticationToken* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status authorize(::grpc::ServerContext* context, const ::roosha::Credentials* request, ::roosha::AuthenticationToken* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void Requestauthorize(::grpc::ServerContext* context, ::roosha::commons::Credentials* request, ::grpc::ServerAsyncResponseWriter< ::roosha::commons::AuthenticationToken>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void Requestauthorize(::grpc::ServerContext* context, ::roosha::Credentials* request, ::grpc::ServerAsyncResponseWriter< ::roosha::AuthenticationToken>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -164,11 +165,11 @@ class RooshaService GRPC_FINAL {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status translate(::grpc::ServerContext* context, const ::roosha::translation::TranslationRequest* request, ::roosha::translation::Translations* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status translate(::grpc::ServerContext* context, const ::roosha::TranslationRequest* request, ::roosha::Translations* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void Requesttranslate(::grpc::ServerContext* context, ::roosha::translation::TranslationRequest* request, ::grpc::ServerAsyncResponseWriter< ::roosha::translation::Translations>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void Requesttranslate(::grpc::ServerContext* context, ::roosha::TranslationRequest* request, ::grpc::ServerAsyncResponseWriter< ::roosha::Translations>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -184,11 +185,11 @@ class RooshaService GRPC_FINAL {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::translation::UserTranslationsProposal* request, ::roosha::commons::Void* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::Translations* request, ::roosha::Void* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestproposeUserTranslations(::grpc::ServerContext* context, ::roosha::translation::UserTranslationsProposal* request, ::grpc::ServerAsyncResponseWriter< ::roosha::commons::Void>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestproposeUserTranslations(::grpc::ServerContext* context, ::roosha::Translations* request, ::grpc::ServerAsyncResponseWriter< ::roosha::Void>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -205,7 +206,7 @@ class RooshaService GRPC_FINAL {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status registrate(::grpc::ServerContext* context, const ::roosha::commons::Credentials* request, ::roosha::commons::AuthenticationToken* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status registrate(::grpc::ServerContext* context, const ::roosha::Credentials* request, ::roosha::AuthenticationToken* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -222,7 +223,7 @@ class RooshaService GRPC_FINAL {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status authorize(::grpc::ServerContext* context, const ::roosha::commons::Credentials* request, ::roosha::commons::AuthenticationToken* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status authorize(::grpc::ServerContext* context, const ::roosha::Credentials* request, ::roosha::AuthenticationToken* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -239,7 +240,7 @@ class RooshaService GRPC_FINAL {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status translate(::grpc::ServerContext* context, const ::roosha::translation::TranslationRequest* request, ::roosha::translation::Translations* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status translate(::grpc::ServerContext* context, const ::roosha::TranslationRequest* request, ::roosha::Translations* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -256,14 +257,13 @@ class RooshaService GRPC_FINAL {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::translation::UserTranslationsProposal* request, ::roosha::commons::Void* response) GRPC_FINAL GRPC_OVERRIDE {
+    ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::Translations* request, ::roosha::Void* response) GRPC_FINAL GRPC_OVERRIDE {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
   };
 };
 
-}  // namespace translation
 }  // namespace roosha
 
 

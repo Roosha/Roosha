@@ -14,13 +14,12 @@
 #include <grpc++/impl/codegen/service_type.h>
 #include <grpc++/impl/codegen/sync_stream.h>
 namespace roosha {
-namespace translation {
 
 static const char* RooshaService_method_names[] = {
-  "/roosha.translation.RooshaService/registrate",
-  "/roosha.translation.RooshaService/authorize",
-  "/roosha.translation.RooshaService/translate",
-  "/roosha.translation.RooshaService/proposeUserTranslations",
+  "/roosha.RooshaService/registrate",
+  "/roosha.RooshaService/authorize",
+  "/roosha.RooshaService/translate",
+  "/roosha.RooshaService/proposeUserTranslations",
 };
 
 std::unique_ptr< RooshaService::Stub> RooshaService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -35,36 +34,36 @@ RooshaService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& chan
   , rpcmethod_proposeUserTranslations_(RooshaService_method_names[3], ::grpc::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::Status RooshaService::Stub::registrate(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::roosha::commons::AuthenticationToken* response) {
+::grpc::Status RooshaService::Stub::registrate(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::roosha::AuthenticationToken* response) {
   return ::grpc::BlockingUnaryCall(channel_.get(), rpcmethod_registrate_, context, request, response);
 }
 
-::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>* RooshaService::Stub::AsyncregistrateRaw(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) {
-  return new ::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>(channel_.get(), cq, rpcmethod_registrate_, context, request);
+::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>* RooshaService::Stub::AsyncregistrateRaw(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>(channel_.get(), cq, rpcmethod_registrate_, context, request);
 }
 
-::grpc::Status RooshaService::Stub::authorize(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::roosha::commons::AuthenticationToken* response) {
+::grpc::Status RooshaService::Stub::authorize(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::roosha::AuthenticationToken* response) {
   return ::grpc::BlockingUnaryCall(channel_.get(), rpcmethod_authorize_, context, request, response);
 }
 
-::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>* RooshaService::Stub::AsyncauthorizeRaw(::grpc::ClientContext* context, const ::roosha::commons::Credentials& request, ::grpc::CompletionQueue* cq) {
-  return new ::grpc::ClientAsyncResponseReader< ::roosha::commons::AuthenticationToken>(channel_.get(), cq, rpcmethod_authorize_, context, request);
+::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>* RooshaService::Stub::AsyncauthorizeRaw(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::roosha::AuthenticationToken>(channel_.get(), cq, rpcmethod_authorize_, context, request);
 }
 
-::grpc::Status RooshaService::Stub::translate(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::roosha::translation::Translations* response) {
+::grpc::Status RooshaService::Stub::translate(::grpc::ClientContext* context, const ::roosha::TranslationRequest& request, ::roosha::Translations* response) {
   return ::grpc::BlockingUnaryCall(channel_.get(), rpcmethod_translate_, context, request, response);
 }
 
-::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>* RooshaService::Stub::AsynctranslateRaw(::grpc::ClientContext* context, const ::roosha::translation::TranslationRequest& request, ::grpc::CompletionQueue* cq) {
-  return new ::grpc::ClientAsyncResponseReader< ::roosha::translation::Translations>(channel_.get(), cq, rpcmethod_translate_, context, request);
+::grpc::ClientAsyncResponseReader< ::roosha::Translations>* RooshaService::Stub::AsynctranslateRaw(::grpc::ClientContext* context, const ::roosha::TranslationRequest& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::roosha::Translations>(channel_.get(), cq, rpcmethod_translate_, context, request);
 }
 
-::grpc::Status RooshaService::Stub::proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::translation::UserTranslationsProposal& request, ::roosha::commons::Void* response) {
+::grpc::Status RooshaService::Stub::proposeUserTranslations(::grpc::ClientContext* context, const ::roosha::Translations& request, ::roosha::Void* response) {
   return ::grpc::BlockingUnaryCall(channel_.get(), rpcmethod_proposeUserTranslations_, context, request, response);
 }
 
-::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>* RooshaService::Stub::AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::translation::UserTranslationsProposal& request, ::grpc::CompletionQueue* cq) {
-  return new ::grpc::ClientAsyncResponseReader< ::roosha::commons::Void>(channel_.get(), cq, rpcmethod_proposeUserTranslations_, context, request);
+::grpc::ClientAsyncResponseReader< ::roosha::Void>* RooshaService::Stub::AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::Translations& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::roosha::Void>(channel_.get(), cq, rpcmethod_proposeUserTranslations_, context, request);
 }
 
 RooshaService::Service::Service() {
@@ -72,50 +71,50 @@ RooshaService::Service::Service() {
   AddMethod(new ::grpc::RpcServiceMethod(
       RooshaService_method_names[0],
       ::grpc::RpcMethod::NORMAL_RPC,
-      new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::commons::Credentials, ::roosha::commons::AuthenticationToken>(
+      new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::Credentials, ::roosha::AuthenticationToken>(
           std::mem_fn(&RooshaService::Service::registrate), this)));
   AddMethod(new ::grpc::RpcServiceMethod(
       RooshaService_method_names[1],
       ::grpc::RpcMethod::NORMAL_RPC,
-      new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::commons::Credentials, ::roosha::commons::AuthenticationToken>(
+      new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::Credentials, ::roosha::AuthenticationToken>(
           std::mem_fn(&RooshaService::Service::authorize), this)));
   AddMethod(new ::grpc::RpcServiceMethod(
       RooshaService_method_names[2],
       ::grpc::RpcMethod::NORMAL_RPC,
-      new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::translation::TranslationRequest, ::roosha::translation::Translations>(
+      new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::TranslationRequest, ::roosha::Translations>(
           std::mem_fn(&RooshaService::Service::translate), this)));
   AddMethod(new ::grpc::RpcServiceMethod(
       RooshaService_method_names[3],
       ::grpc::RpcMethod::NORMAL_RPC,
-      new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::translation::UserTranslationsProposal, ::roosha::commons::Void>(
+      new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::Translations, ::roosha::Void>(
           std::mem_fn(&RooshaService::Service::proposeUserTranslations), this)));
 }
 
 RooshaService::Service::~Service() {
 }
 
-::grpc::Status RooshaService::Service::registrate(::grpc::ServerContext* context, const ::roosha::commons::Credentials* request, ::roosha::commons::AuthenticationToken* response) {
+::grpc::Status RooshaService::Service::registrate(::grpc::ServerContext* context, const ::roosha::Credentials* request, ::roosha::AuthenticationToken* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status RooshaService::Service::authorize(::grpc::ServerContext* context, const ::roosha::commons::Credentials* request, ::roosha::commons::AuthenticationToken* response) {
+::grpc::Status RooshaService::Service::authorize(::grpc::ServerContext* context, const ::roosha::Credentials* request, ::roosha::AuthenticationToken* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status RooshaService::Service::translate(::grpc::ServerContext* context, const ::roosha::translation::TranslationRequest* request, ::roosha::translation::Translations* response) {
+::grpc::Status RooshaService::Service::translate(::grpc::ServerContext* context, const ::roosha::TranslationRequest* request, ::roosha::Translations* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status RooshaService::Service::proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::translation::UserTranslationsProposal* request, ::roosha::commons::Void* response) {
+::grpc::Status RooshaService::Service::proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::Translations* request, ::roosha::Void* response) {
   (void) context;
   (void) request;
   (void) response;
@@ -124,5 +123,4 @@ RooshaService::Service::~Service() {
 
 
 }  // namespace roosha
-}  // namespace translation
 

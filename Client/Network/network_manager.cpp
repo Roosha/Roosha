@@ -1,5 +1,7 @@
 #include "Network/network_manager.h"
 #include "authentication_manager.h"
+#include "server_response.h"
+
 #include <QList>
 #include <QSharedPointer>
 #include <QMessageBox>
@@ -7,36 +9,53 @@
 
 NetworkManager::NetworkManager(QObject *parent) :
     QObject(parent),
-    authenticationManager(new AuthenticationManager(this)) {
+    authenticationManager_(new AuthenticationManager(this)) {
 }
 
 NetworkManager::~NetworkManager() {
 }
 
 quint32 NetworkManager::translate(QString source, quint32 timeoutMills) {
-    // TODO: here must be a real request to server
-    TestTranslations testData;
+    TranslateAsyncCall *call = new TranslateAsyncCall(++currentId_, timeoutMills);
+    call->request_.set_source(source.toStdString());
+    authenticationManager_->translate(call);
+    return call->id_;
+}
 
-    QSharedPointer<Translation> a(new Translation);
-    a->setSource(source);
-    a->setExamples(QStringList({"Fish", source, "Words"}));
-    a->setTarget(QStringList({"I love fosh text", "And I hope, that fish text love me"}));
+quint32 NetworkManager::proposeUserTranslations(Translations translations, quint32 timeoutMills) {
+    ProposeUserTranslationsAsyncCall *call = new ProposeUserTranslationsAsyncCall(++currentId_, timeoutMills);
+    if (translations.size() != 0) {
+        call-> request_.set_source(translations[0]->getSource().toStdString());
+        for (const auto& translation: translations) {
+            roosha::Translation *reqTranslation = call->request_.add_translation();
+            reqTranslation->set_provider(roosha::TranslationProvider::UNKNOWN);
+            for (auto target: translation->getTarget()) {
+                reqTranslation->add_target(target.toStdString());
+            }
+            for (auto example: translation->getExamples()) {
+                reqTranslation->add_example(example.toStdString());
+            }
+        }
+    }
 
-    QSharedPointer<Translation> b(new Translation);
-    b->setSource(source);
-    b->setExamples(QStringList({"Fish", source, "Words"}));
-    b->setTarget(QStringList({"I love fosh text", "And I hope, that fish text love me"}));
+    authenticationManager_->proposeUserTranslation(call);
+    return call->id_;
+}
 
-    QSharedPointer<Translation> c(new Translation);
-    c->setSource(source);
-    c->setExamples(QStringList({"Fish", source, "Words"}));
-    c->setTarget(QStringList({"I love fosh text", "And I hope, that fish text love me"}));
+quint32 NetworkManager::authorize(QString login, QString password, quint32 timeoutMills) {
+    AuthorizeAsyncCall *call = new AuthorizeAsyncCall(++currentId_, timeoutMills);
+    call->request_.set_login(login.toStdString());
+    call->request_.set_passwordhash(password.toStdString()); // pass hash insted of raw password
 
-    testData.push_back(a);
-    testData.push_back(b);
-    testData.push_back(c);
+    authenticationManager_->authorize(call);
+    return call->id_;
+}
 
-    QThread::currentThread()->msleep(500);
+quint32 NetworkManager::registrate(QString login, QString password, quint32 timeoutMills) {
+    RegistrateAsyncCall *call = new RegistrateAsyncCall(++currentId_, timeoutMills);
+    call->request_.set_login(login.toStdString());
+    call->request_.set_passwordhash(password.toStdString()); // pass hash insted of raw password
 
-    emit newTranslation(testData);
+    authenticationManager_->registrate(call);
+    return call->id_;
 }

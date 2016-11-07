@@ -8,22 +8,30 @@
 
 #include "Proto/roosha_service.pb.h"
 #include "Proto/commons.pb.h"
-#include "roosha_service.h"
 
 class RooshaServiceConnector;
+
+enum RPCErrorStatus {
+    UNKNOWN,
+    DEADLINE_EXCEEDED,
+    EXPIRED_TOKEN,
+    AUTHORIZATION_ERROR,
+    REGISTRATION_ERROR
+};
+
 
 /**
  * Base struct for all rpc data. It should be used to hold the all information about call in grpc CompletionQueue.
  */
 struct RpcAsyncCall {
-    // TODO: now rpcService and authManager are not singletones, so we pass them in constructor, but when we make them
-    // singletones, this should be altered.
-    RpcAsyncCall();
+    RpcAsyncCall(quint32 id, quint32 timeoutMillis);
     virtual ~RpcAsyncCall();
 
     virtual void receive(RooshaServiceConnector *connector) = 0;
 
-    quint32 id_;
+    RPCErrorStatus getStatus();
+
+    const quint32 id_;
     grpc::ClientContext context_;
     grpc::Status status_;
 };
@@ -34,8 +42,8 @@ struct RpcAsyncCall {
 struct AuthorizeOrRegistrateAsyncCall : public RpcAsyncCall {
     using RpcAsyncCall::RpcAsyncCall;
 
-    roosha::commons::Credentials request_;
-    roosha::commons::AuthenticationToken response_;
+    roosha::Credentials request_;
+    roosha::AuthenticationToken response_;
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -67,8 +75,8 @@ struct TranslateAsyncCall : public RpcAsyncCall {
 
     void receive(RooshaServiceConnector *connector) override;
 
-    roosha::translation::TranslationRequest request_;
-    roosha::translation::Translations response_;
+    roosha::TranslationRequest request_;
+    roosha::Translations response_;
 };
 
 /**
@@ -79,8 +87,8 @@ struct ProposeUserTranslationsAsyncCall : public RpcAsyncCall {
 
     void receive(RooshaServiceConnector *connector) override;
 
-    roosha::translation::UserTranslationsProposal request_;
-    roosha::commons::Void response_;
+    roosha::Translations request_;
+    roosha::Void response_;
 };
 
 #endif // ASYNCCLIENTCALL_H
