@@ -9,11 +9,11 @@ class AuthorizeAsyncCall;
 class TranslateAsyncCall;
 class RooshaServiceConnector;
 
-class TestNetworkManager;
+class NetworkManager;
 
 class AuthenticationManager {
 public:
-    AuthenticationManager(TestNetworkManager *n);
+    AuthenticationManager(NetworkManager *n);
 
     void translate(TranslateAsyncCall *call);
     void proposeUserTranslation(ProposeUserTranslationsAsyncCall *call);
@@ -22,7 +22,7 @@ public:
 
 private:
     RooshaServiceConnector *connector;
-    TestNetworkManager *netManager;
+    NetworkManager *netManager;
 };
 
 #endif // AUTHENTICATIONMANAGER_H

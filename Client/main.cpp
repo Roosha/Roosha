@@ -84,23 +84,23 @@ void testDBCardBuilder() {
 
 }
 
-TranslationsTestSlotHolder* testTranslationServiceConnection() {
-    TranslationsTestSlotHolder* receiver = new TranslationsTestSlotHolder;
-    std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
-    std::shared_ptr<RooshaRpcService> translationService = networkManager->getTranslationService();
+//TranslationsTestSlotHolder* testTranslationServiceConnection() {
+//    TranslationsTestSlotHolder* receiver = new TranslationsTestSlotHolder;
+//    std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
+//    std::shared_ptr<RooshaRpcService> translationService = networkManager->getTranslationService();
 
-    qRegisterMetaType<TestTranslations>();
-    QObject::connect(translationService.get(), &RooshaRpcService::translationSucceeded,
-                     receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
-    QObject::connect(translationService.get(), &RooshaRpcService::translationFailed,
-                     receiver, &TranslationsTestSlotHolder::translationFailedSlot, Qt::DirectConnection);
+//    qRegisterMetaType<TestTranslations>();
+//    QObject::connect(translationService.get(), &RooshaRpcService::translationSucceeded,
+//                     receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
+//    QObject::connect(translationService.get(), &RooshaRpcService::translationFailed,
+//                     receiver, &TranslationsTestSlotHolder::translationFailedSlot, Qt::DirectConnection);
 
-    QStringList str;
-    str << "hello" << "gobbles" << "exhibit" << "apple" << "jkajhwvnejkw";
-    for (auto cur: str) {
-        quint32 id = translationService->translate(cur, 5000u);
-        std::cout << "Sent request with id: " << id << std::endl;
-    }
+//    QStringList str;
+//    str << "hello" << "gobbles" << "exhibit" << "apple" << "jkajhwvnejkw";
+//    for (auto cur: str) {
+//        quint32 id = translationService->translate(cur, 5000u);
+//        std::cout << "Sent request with id: " << id << std::endl;
+//    }
 
-    return receiver;
-}
+//    return receiver;
+//}

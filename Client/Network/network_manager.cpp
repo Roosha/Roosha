@@ -1,19 +1,19 @@
-#include "Network/networkmanager.h"
+#include "Network/network_manager.h"
 #include "authentication_manager.h"
 #include <QList>
 #include <QSharedPointer>
 #include <QMessageBox>
 #include <QThread>
 
-TestNetworkManager::TestNetworkManager(QObject *parent) :
+NetworkManager::NetworkManager(QObject *parent) :
     QObject(parent),
     authenticationManager(new AuthenticationManager(this)) {
 }
 
-TestNetworkManager::~TestNetworkManager() {
+NetworkManager::~NetworkManager() {
 }
 
-quint32 TestNetworkManager::translate(QString source, quint32 timeoutMills) {
+quint32 NetworkManager::translate(QString source, quint32 timeoutMills) {
     // TODO: here must be a real request to server
     TestTranslations testData;
 

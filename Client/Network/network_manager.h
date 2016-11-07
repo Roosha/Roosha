@@ -11,12 +11,12 @@ enum RPCErrorStatus {
 
 };
 
-class TestNetworkManager : public QObject { // TODO: rename
+class NetworkManager : public QObject { // TODO: rename
     Q_OBJECT
 
 public:
-    TestNetworkManager(QObject * parent = Q_NULLPTR);
-    ~TestNetworkManager();
+    NetworkManager(QObject * parent = Q_NULLPTR);
+    ~NetworkManager();
 
     quint32 translate(QString source, quint32 timeoutMills);
     quint32 proposeUserTranslations(TestTranslations translations, quint32 timeoutMills);
