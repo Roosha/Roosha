@@ -1,17 +1,8 @@
 #include "authentication_manager.h"
+#include "roosha_service_connector.h"
+#include "network_manager.h"
 
-AuthenticationManager::AuthenticationManager() {
-
-}
-
-void AuthenticationManager::handle(GeneralPurposeAsyncCall *call) {
-
-}
-
-void AuthenticationManager::handle(RegistrateAsyncCall *call) {
-
-}
-
-void AuthenticationManager::handle(AuthorizeAsyncCall *call) {
-
+AuthenticationManager::AuthenticationManager(NetworkManager *n) :
+    connector(new RooshaServiceConnector(this)),
+    netManager(n) {
 }

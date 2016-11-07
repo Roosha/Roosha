@@ -1,21 +1,45 @@
 #ifndef NETWORKMANAGER_H
 #define NETWORKMANAGER_H
 
-#include "roosha_service.h"
+#include "Core/translation.h"
+//#include "Network/authentication_manager.h"
+#include <QObject>
 
-#define DEFAULT_ROOSHA_SERVICE_HOST "localhost:1543"
+class AuthenticationManager;
 
-class NetworkManager {
+enum RPCErrorStatus {
+
+};
+
+class TestNetworkManager : public QObject { // TODO: rename
+    Q_OBJECT
+
 public:
-    NetworkManager();
+    TestNetworkManager(QObject * parent = Q_NULLPTR);
+    ~TestNetworkManager();
 
-    std::shared_ptr<RooshaRpcService> getTranslationService();
+    quint32 translate(QString source, quint32 timeoutMills);
+    quint32 proposeUserTranslations(TestTranslations translations, quint32 timeoutMills);
+    quint32 authorize(QString login, QString password, quint32 timeoutMills);
+    quint32 registrate(QString login, QString password, quint32 timeoutMills);
+
+signals:
+    void newTranslation( TestTranslations trans);
+
+    void successTranslate(quint32 id, TestTranslations translations);
+    void failTranslate(quint32 id, RPCErrorStatus status);
+
+    void successPropose(quint32 id);
+    void failPropose(quint32 id, RPCErrorStatus status);
+
+    void successAuthorize(quint32 id);
+    void failAuthorize(quint32 id, RPCErrorStatus status);
+
+    void successRegistrate(quint32 id);
+    void failRegistrate(quint32 id, RPCErrorStatus status);
+
 private:
-
-    static std::shared_ptr<NetworkManager> instance_(NetworkManager());
-
-    grpc::string target_;
-    std::shared_ptr<RooshaRpcService> translationService_;
+    AuthenticationManager *authenticationManager;
 };
 
 #endif // NETWORKMANAGER_H

@@ -8,7 +8,7 @@
 class Bootstrap;
 class ConfigureManager;
 class DBManager;
-class TestNetworkManager;
+class NetworkManager;
 class GUIManager;
 class HotkeyListener;
 
@@ -23,7 +23,7 @@ public:
 
 private:
     ConfigureManager * configureManager;
-    TestNetworkManager * networkManager;
+    NetworkManager * networkManager;
     DBManager * dbManager;
     GUIManager * guiManager;
     HotkeyListener * hkListener;

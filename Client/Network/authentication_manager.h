@@ -1,17 +1,28 @@
 #ifndef AUTHENTICATIONMANAGER_H
 #define AUTHENTICATIONMANAGER_H
 
-class GeneralPurposeAsyncCall;
+//#include "roosha_service_connector.h"
+
+class ProposeUserTranslationsAsyncCall;
 class RegistrateAsyncCall;
 class AuthorizeAsyncCall;
+class TranslateAsyncCall;
+class RooshaServiceConnector;
+
+class TestNetworkManager;
 
 class AuthenticationManager {
 public:
-    AuthenticationManager();
+    AuthenticationManager(TestNetworkManager *n);
 
-    void handle(GeneralPurposeAsyncCall *call);
-    void handle(RegistrateAsyncCall *call);
-    void handle(AuthorizeAsyncCall *call);
+    void translate(TranslateAsyncCall *call);
+    void proposeUserTranslation(ProposeUserTranslationsAsyncCall *call);
+    void authorize(AuthorizeAsyncCall *call);
+    void registrate(RegistrateAsyncCall *call);
+
+private:
+    RooshaServiceConnector *connector;
+    TestNetworkManager *netManager;
 };
 
 #endif // AUTHENTICATIONMANAGER_H

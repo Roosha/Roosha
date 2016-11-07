@@ -3,7 +3,7 @@
 #include "Core/hotkeylistener.h"
 #include "Helpers/configuremanager.h"
 #include "DB/dbmanager.h"
-#include "Network/networkmanager.h"
+#include "Network/network_manager.h"
 #include "GUI/guimanager.h"
 
 Bootstrap::Bootstrap(CentralController *cc) : cc(cc) {
@@ -11,7 +11,7 @@ Bootstrap::Bootstrap(CentralController *cc) : cc(cc) {
 
 void Bootstrap::run() { // TODO: create all stages of initialisation
     ConfigureManager * cm = new ConfigureManager();
-    TestNetworkManager * nm = new TestNetworkManager();
+    NetworkManager * nm = new NetworkManager();
     DBManager * dbm = new DBManager();
     GUIManager * guim = new GUIManager();
     HotkeyListener * hkl = new HotkeyListener();

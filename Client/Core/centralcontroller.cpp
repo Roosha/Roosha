@@ -3,7 +3,7 @@
 #include "Core/centralcontroller.h"
 #include "Helpers/bootstrap.h"
 #include "Core/hotkeylistener.h"
-#include "Network/networkmanager.h"
+#include "Network/network_manager.h"
 #include "GUI/guimanager.h"
 #include <QMessageBox>
 
@@ -20,5 +20,5 @@ void CentralController::start() {
 }
 
 void CentralController::handleNewWord(QString word) {
-    networkManager->requestTranslations(word);
+    networkManager->translate(word);
 }

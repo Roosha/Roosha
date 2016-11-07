@@ -17,18 +17,17 @@ SOURCES += main.cpp \
     Helpers/bootstrap.cpp \
     Helpers/configuremanager.cpp \
     DB/dbmanager.cpp \
-    Network/networkmanager.cpp \
     Core/applicationdaemon.cpp \
     Core/translation.cpp \
     GUI/translationcontroller.cpp \
     Helpers/qmlconvertation.cpp \
-    Network/network_manager.cpp \
     Test/Network/translations_test_slot_holder.cpp \
     Core/changes.cpp \
     Core/cardbuilder.cpp \
-    Network/roosha_service.cpp \
     Network/server_response.cpp \
-    Network/authentication_manager.cpp
+    Network/authentication_manager.cpp \
+    Network/roosha_service_connector.cpp \
+    Network/network_manager.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -50,7 +49,6 @@ HEADERS += \
     Helpers/bootstrap.h \
     Helpers/configuremanager.h \
     DB/dbmanager.h \
-    Network/networkmanager.h \
     Core/applicationdaemon.h \
     Core/translation.h \
     GUI/translationcontroller.h \
@@ -58,11 +56,11 @@ HEADERS += \
     Core/ichange.h \
     Core/changes.h \
     Core/cardbuilder.h \
-    Network/network_manager.h \
     Test/Network/translations_test_slot_holder.h \
-    Network/roosha_service.h \
     Network/server_response.h \
-    Network/authentication_manager.h
+    Network/authentication_manager.h \
+    Network/roosha_service_connector.h \
+    Network/network_manager.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \
