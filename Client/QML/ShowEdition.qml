@@ -20,7 +20,7 @@ Rectangle {
             border.width: 1
 
             TextInput {
-
+                id: src_in
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 width: parent.width; height: parent.height
@@ -37,7 +37,7 @@ Rectangle {
             border.width: 1
 
             TextInput {
-
+                id: tar_in
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 width: parent.width; height: parent.height
@@ -53,6 +53,7 @@ Rectangle {
             border.width: 1
 
             TextInput {
+                id: exmpl_in
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 width: parent.width; height: parent.height
@@ -103,7 +104,7 @@ Rectangle {
                 color: saveButton.down ? '#7fb5b5' : '#c7d0cc'
             }
             onClicked: {
-                controller.saveCard(src.TextInput.text, tar.TextInput.text, exmpl.TextInput.text);
+                controller.saveCard(src_in.text, tar_in.text, exmpl_in.text);
             }
         }
     }
