@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     Network/server_response.cpp \
     Network/authentication_manager.cpp \
     Network/roosha_service_connector.cpp \
-    Network/network_manager.cpp
+    Network/network_manager.cpp \
+    Helpers/protobuf_converter.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -60,7 +61,8 @@ HEADERS += \
     Network/server_response.h \
     Network/authentication_manager.h \
     Network/roosha_service_connector.h \
-    Network/network_manager.h
+    Network/network_manager.h \
+    Helpers/protobuf_converter.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

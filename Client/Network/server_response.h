@@ -9,14 +9,14 @@
 #include "Proto/roosha_service.pb.h"
 #include "Proto/commons.pb.h"
 
+class NetworkManager;
 class RooshaServiceConnector;
 
 enum RPCErrorStatus {
     UNKNOWN,
     DEADLINE_EXCEEDED,
-    EXPIRED_TOKEN,
-    AUTHORIZATION_ERROR,
-    REGISTRATION_ERROR
+    NOT_AUTHENTICATED,
+    ALREADY_IN_AUTHNTICATION_PROCESS,
 };
 
 
@@ -28,8 +28,9 @@ struct RpcAsyncCall {
     virtual ~RpcAsyncCall();
 
     virtual void receive(RooshaServiceConnector *connector) = 0;
-
-    RPCErrorStatus getStatus();
+    virtual void send(RooshaServiceConnector *connector) = 0;
+    virtual void succeed(NetworkManager *netManager) = 0;
+    virtual void fail(NetworkManager *netManager) = 0;
 
     const quint32 id_;
     grpc::ClientContext context_;
@@ -55,6 +56,10 @@ struct AuthorizeAsyncCall : public AuthorizeOrRegistrateAsyncCall {
     using AuthorizeOrRegistrateAsyncCall::AuthorizeOrRegistrateAsyncCall;
 
     void receive(RooshaServiceConnector *connector) override;
+    void send(RooshaServiceConnector *connector) override;
+    void succeed(NetworkManager *netManager) override;
+    void fail(NetworkManager *netManager) override;
+
 };
 
 /**
@@ -64,6 +69,10 @@ struct RegistrateAsyncCall : public AuthorizeOrRegistrateAsyncCall {
     using AuthorizeOrRegistrateAsyncCall::AuthorizeOrRegistrateAsyncCall;
 
     void receive(RooshaServiceConnector *connector) override;
+    void send(RooshaServiceConnector *connector) override;
+    void succeed(NetworkManager *netManager) override;
+    void fail(NetworkManager *netManager) override;
+
 };
 
 
@@ -74,6 +83,10 @@ struct TranslateAsyncCall : public RpcAsyncCall {
     using RpcAsyncCall::RpcAsyncCall;
 
     void receive(RooshaServiceConnector *connector) override;
+    void send(RooshaServiceConnector *connector) override;
+    void succeed(NetworkManager *netManager) override;
+    void fail(NetworkManager *netManager) override;
+
 
     roosha::TranslationRequest request_;
     roosha::Translations response_;
@@ -86,6 +99,10 @@ struct ProposeUserTranslationsAsyncCall : public RpcAsyncCall {
     using RpcAsyncCall::RpcAsyncCall;
 
     void receive(RooshaServiceConnector *connector) override;
+    void send(RooshaServiceConnector *connector) override;
+    void succeed(NetworkManager *netManager) override;
+    void fail(NetworkManager *netManager) override;
+
 
     roosha::Translations request_;
     roosha::Void response_;

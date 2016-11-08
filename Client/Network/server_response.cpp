@@ -5,22 +5,73 @@
 #include "server_response.h"
 #include "authentication_manager.h"
 #include "roosha_service_connector.h"
+#include "Helpers/protobuf_converter.h"
+#include "network_manager.h"
 
+using namespace ProtobufConverter;
 
 void AuthorizeAsyncCall::receive(RooshaServiceConnector *connector) {
     connector->receiveAuthorizeResponse(this);
+}
+
+void AuthorizeAsyncCall::send(RooshaServiceConnector *connector) {
+    connector->authorize(this);
+}
+
+void AuthorizeAsyncCall::succeed(NetworkManager *netManager) {
+    emit netManager->successAuthorize(id_);
+}
+
+void AuthorizeAsyncCall::fail(NetworkManager *netManager) {
+    emit netManager->failAuthorize(id_, errorStatusFromGrpc(status_));
 }
 
 void RegistrateAsyncCall::receive(RooshaServiceConnector *connector) {
     connector->receiveRegistrateResponse(this);
 }
 
+void RegistrateAsyncCall::send(RooshaServiceConnector *connector) {
+    connector->registrate(this);
+}
+
+void RegistrateAsyncCall::succeed(NetworkManager *netManager) {
+    emit netManager->successRegistrate(id_);
+}
+
+void RegistrateAsyncCall::fail(NetworkManager *netManager) {
+    emit netManager->failRegistrate(id_, errorStatusFromGrpc(status_));
+}
+
 void TranslateAsyncCall::receive(RooshaServiceConnector *connector) {
     connector->receiveTranslateResponse(this);
 }
 
+void TranslateAsyncCall::send(RooshaServiceConnector *connector) {
+    connector->translate(this);
+}
+
+void TranslateAsyncCall::succeed(NetworkManager *netManager) {
+    emit netManager->successTranslate(id_, translationsFromProtobuf(response_));
+}
+
+void TranslateAsyncCall::fail(NetworkManager *netManager) {
+    emit netManager->failTranslate(id_, errorStatusFromGrpc(status_));
+}
+
 void ProposeUserTranslationsAsyncCall::receive(RooshaServiceConnector *connector) {
     connector->receiveProposeUserTranslationResponse(this);
+}
+
+void ProposeUserTranslationsAsyncCall::send(RooshaServiceConnector *connector) {
+    connector->proposeUserTranslation(this);
+}
+
+void ProposeUserTranslationsAsyncCall::succeed(NetworkManager *netManager) {
+    emit netManager->successAuthorize(id_);
+}
+
+void ProposeUserTranslationsAsyncCall::fail(NetworkManager *netManager) {
+    emit netManager->failPropose(id_, errorStatusFromGrpc(status_));
 }
 
 RpcAsyncCall::RpcAsyncCall(quint32 id, quint32 timeoutMillis): id_(id) {
@@ -29,27 +80,4 @@ RpcAsyncCall::RpcAsyncCall(quint32 id, quint32 timeoutMillis): id_(id) {
 
 RpcAsyncCall::~RpcAsyncCall() {
 
-}
-
-RPCErrorStatus RpcAsyncCall::getStatus() {
-    switch (status_.error_code()) {
-    case grpc::StatusCode::DEADLINE_EXCEEDED:
-        return DEADLINE_EXCEEDED;
-    case grpc::StatusCode::UNAUTHENTICATED:
-        if (status_.error_message() == "Failed to authorize user, most likely due to incorrect credentials.") {
-            return AUTHORIZATION_ERROR;
-        } else if (status_.error_message() == "Failed to register new user, most likely due to login is already used.") {
-            return REGISTRATION_ERROR;
-        } else if (status_.error_message() == "Specified token is expired, call 'register' or 'authorize' rpc to get new valid token.") {
-            return EXPIRED_TOKEN;
-        } else {
-            goto unknown;
-        }
-    default:
-        goto unknown;
-    }
-
-unknown:
-    qWarning("unexpected grpc status: %d\nerror message: %s", status_.error_code(), status_.error_message().c_str());
-    return UNKNOWN;
 }

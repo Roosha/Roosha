@@ -35,7 +35,6 @@ public class AuthInterceptor implements ServerInterceptor {
         if (token != null) {
             userId = authorizationManager.getUserIdByToken(token);
         }
-
         final Context context = Context.current().withValue(ID_CONTEXT_KEY, userId);
         return Contexts.interceptCall(context, call, headers, next);
     }
