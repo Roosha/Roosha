@@ -5,6 +5,7 @@
 #include <QQueue>
 #include <QMutex>
 
+class AuthenticatedAsyncCall;
 class AuthorizeOrRegistrateAsyncCall;
 class RpcAsyncCall;
 class ProposeUserTranslationsAsyncCall;
@@ -19,15 +20,11 @@ class AuthenticationManager {
 public:
     AuthenticationManager(NetworkManager *n);
 
-    void translate(TranslateAsyncCall *call);
-    void proposeUserTranslation(ProposeUserTranslationsAsyncCall *call);
-    void authorize(AuthorizeAsyncCall *call);
-    void registrate(RegistrateAsyncCall *call);
+    void authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall *call);
+    void sendWithMetadata(AuthenticatedAsyncCall *call);
 
-    void receiveTranslateResponse(TranslateAsyncCall *call);
-    void receiveProposeUserTranslationResponse(ProposeUserTranslationsAsyncCall *call);
-    void receiveAuthorizeResponse(AuthorizeAsyncCall *call);
-    void receiveRegistrateResponse(RegistrateAsyncCall *call);
+    void receiveAuthenticatedCall(AuthenticatedAsyncCall *call);
+    void receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegistrateAsyncCall *call);
 private:
     enum State {
         AUTHENTICATED,
@@ -36,9 +33,6 @@ private:
     };
     static const grpc::string  TOKEN_METADATA_KEY;
     static const quint32 TECHNICAL_REQUEST_ID;
-
-    void authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall *call);
-    void sendWithMetadata(RpcAsyncCall *call);
 
     /**
      * This function should be called only when stateMutex_ is locked.
@@ -53,7 +47,7 @@ private:
     QMutex stateMutex_;
     State state_;
     grpc::string token_;
-    QQueue<RpcAsyncCall*> callsQueue_;
+    QQueue<AuthenticatedAsyncCall*> callsQueue_;
     RooshaServiceConnector *connector_;
     NetworkManager *netManager_;
 };

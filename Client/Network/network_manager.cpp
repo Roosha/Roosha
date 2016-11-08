@@ -21,7 +21,7 @@ NetworkManager::~NetworkManager() {
 quint32 NetworkManager::translate(QString source, quint32 timeoutMills) {
     TranslateAsyncCall *call = new TranslateAsyncCall(++currentId_, timeoutMills);
     call->request_.set_source(source.toStdString());
-    authenticationManager_->translate(call);
+    call->authenticate(authenticationManager_);
     return call->id_;
 }
 
@@ -31,7 +31,7 @@ quint32 NetworkManager::proposeUserTranslations(Translations translations, quint
         call->request_ = translationsToProtobuf(translations);
     }
 
-    authenticationManager_->proposeUserTranslation(call);
+    call->authenticate(authenticationManager_);
     return call->id_;
 }
 
@@ -40,7 +40,7 @@ quint32 NetworkManager::authorize(QString login, QString password, quint32 timeo
     call->request_.set_login(login.toStdString());
     call->request_.set_passwordhash(password.toStdString()); // TODO: pass hash insted of raw password
 
-    authenticationManager_->authorize(call);
+    call->authenticate(authenticationManager_);
     return call->id_;
 }
 
@@ -49,6 +49,6 @@ quint32 NetworkManager::registrate(QString login, QString password, quint32 time
     call->request_.set_login(login.toStdString());
     call->request_.set_passwordhash(password.toStdString()); // TODO: pass hash insted of raw password
 
-    authenticationManager_->registrate(call);
+    call->authenticate(authenticationManager_);
     return call->id_;
 }

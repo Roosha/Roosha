@@ -42,22 +42,9 @@ void RooshaServiceConnector::registrate(RegistrateAsyncCall *call) {
     responseReader->Finish(&call->response_, &call->status_, call);
 }
 
-void RooshaServiceConnector::receiveTranslateResponse(TranslateAsyncCall *call) {
-    authManager_->receiveTranslateResponse(call);
+void RooshaServiceConnector::receiveResponse(RpcAsyncCall *call) {
+    call->verify(authManager_);
 }
-
-void RooshaServiceConnector::receiveProposeUserTranslationResponse(ProposeUserTranslationsAsyncCall *call) {
-    authManager_->receiveProposeUserTranslationResponse(call);
-}
-
-void RooshaServiceConnector::receiveAuthorizeResponse(AuthorizeAsyncCall *call) {
-    authManager_->receiveAuthorizeResponse(call);
-}
-
-void RooshaServiceConnector::receiveRegistrateResponse(RegistrateAsyncCall *call) {
-    authManager_->receiveRegistrateResponse(call);
-}
-
 
 AsyncRpcResponseListener::AsyncRpcResponseListener(RooshaServiceConnector *r) :
     connector_(r) {}

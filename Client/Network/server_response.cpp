@@ -10,10 +10,6 @@
 
 using namespace ProtobufConverter;
 
-void AuthorizeAsyncCall::receive(RooshaServiceConnector *connector) {
-    connector->receiveAuthorizeResponse(this);
-}
-
 void AuthorizeAsyncCall::send(RooshaServiceConnector *connector) {
     connector->authorize(this);
 }
@@ -22,12 +18,8 @@ void AuthorizeAsyncCall::succeed(NetworkManager *netManager) {
     emit netManager->successAuthorize(id_);
 }
 
-void AuthorizeAsyncCall::fail(NetworkManager *netManager) {
-    emit netManager->failAuthorize(id_, errorStatusFromGrpc(status_));
-}
-
-void RegistrateAsyncCall::receive(RooshaServiceConnector *connector) {
-    connector->receiveRegistrateResponse(this);
+void AuthorizeAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
+    emit netManager->failAuthorize(id_, status);
 }
 
 void RegistrateAsyncCall::send(RooshaServiceConnector *connector) {
@@ -38,12 +30,8 @@ void RegistrateAsyncCall::succeed(NetworkManager *netManager) {
     emit netManager->successRegistrate(id_);
 }
 
-void RegistrateAsyncCall::fail(NetworkManager *netManager) {
-    emit netManager->failRegistrate(id_, errorStatusFromGrpc(status_));
-}
-
-void TranslateAsyncCall::receive(RooshaServiceConnector *connector) {
-    connector->receiveTranslateResponse(this);
+void RegistrateAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
+    emit netManager->failRegistrate(id_, status);
 }
 
 void TranslateAsyncCall::send(RooshaServiceConnector *connector) {
@@ -54,12 +42,8 @@ void TranslateAsyncCall::succeed(NetworkManager *netManager) {
     emit netManager->successTranslate(id_, translationsFromProtobuf(response_));
 }
 
-void TranslateAsyncCall::fail(NetworkManager *netManager) {
-    emit netManager->failTranslate(id_, errorStatusFromGrpc(status_));
-}
-
-void ProposeUserTranslationsAsyncCall::receive(RooshaServiceConnector *connector) {
-    connector->receiveProposeUserTranslationResponse(this);
+void TranslateAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
+    netManager->failTranslate(id_, status);
 }
 
 void ProposeUserTranslationsAsyncCall::send(RooshaServiceConnector *connector) {
@@ -70,8 +54,8 @@ void ProposeUserTranslationsAsyncCall::succeed(NetworkManager *netManager) {
     emit netManager->successAuthorize(id_);
 }
 
-void ProposeUserTranslationsAsyncCall::fail(NetworkManager *netManager) {
-    emit netManager->failPropose(id_, errorStatusFromGrpc(status_));
+void ProposeUserTranslationsAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
+    netManager->failPropose(id_, status);
 }
 
 RpcAsyncCall::RpcAsyncCall(quint32 id, quint32 timeoutMillis): id_(id) {
@@ -80,4 +64,28 @@ RpcAsyncCall::RpcAsyncCall(quint32 id, quint32 timeoutMillis): id_(id) {
 
 RpcAsyncCall::~RpcAsyncCall() {
 
+}
+
+void RpcAsyncCall::receive(RooshaServiceConnector *connector) {
+    connector->receiveResponse(this);
+}
+
+void RpcAsyncCall::fail(NetworkManager *netManager) {
+    this->fail(netManager, errorStatusFromGrpc(status_));
+}
+
+void AuthorizeOrRegistrateAsyncCall::authenticate(AuthenticationManager *authManager) {
+    authManager->authorizeOrRegistrate(this);
+}
+
+void AuthorizeOrRegistrateAsyncCall::verify(AuthenticationManager *authManager) {
+    authManager->receiveAuthorizeOrRegistrateResponse(this);
+}
+
+void AuthenticatedAsyncCall::authenticate(AuthenticationManager *authManager) {
+    authManager->sendWithMetadata(this);
+}
+
+void AuthenticatedAsyncCall::verify(AuthenticationManager *authManager) {
+    authManager->receiveAuthenticatedCall(this);
 }

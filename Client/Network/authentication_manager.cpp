@@ -19,97 +19,6 @@ AuthenticationManager::AuthenticationManager(NetworkManager *n) :
     netManager_(n) {
 }
 
-void AuthenticationManager::translate(TranslateAsyncCall *call) {
-    sendWithMetadata(call);
-}
-
-void AuthenticationManager::proposeUserTranslation(ProposeUserTranslationsAsyncCall *call) {
-    sendWithMetadata(call);
-}
-
-void AuthenticationManager::authorize(AuthorizeAsyncCall *call) {
-    authorizeOrRegistrate(call);
-}
-void AuthenticationManager::registrate(RegistrateAsyncCall *call) {
-    authorizeOrRegistrate(call);
-}
-
-void AuthenticationManager::receiveTranslateResponse(TranslateAsyncCall *call) {
-    if (call->status_.ok()) {
-        emit netManager_->successTranslate(call->id_, translationsFromProtobuf(call->response_));
-        return;
-    } else if (call->status_.error_code() != grpc::StatusCode::UNAUTHENTICATED) {
-        emit netManager_->failTranslate(call->id_, errorStatusFromGrpc(call->status_));
-    }
-
-    QMutexLocker lock(&stateMutex_);
-    switch (state_) {
-    case AuthenticationManager::AUTHENTICATED:
-        if (tryToUpdateToken()) {
-            callsQueue_.enqueue(call);
-        } else {
-            emit netManager_->failTranslate(call->id_, RPCErrorStatus::NOT_AUTHENTICATED);
-        }
-        break;
-    case AuthenticationManager::AWAIT_AUTHENTICATION:
-        callsQueue_.enqueue(call);
-        break;
-    case AuthenticationManager::AWAIT_CREDENTIALS:
-        emit netManager_->failTranslate(call->id_, RPCErrorStatus::NOT_AUTHENTICATED);
-        break;
-    }
-}
-
-void AuthenticationManager::receiveProposeUserTranslationResponse(ProposeUserTranslationsAsyncCall *call) {
-    if (call->status_.ok()) {
-        emit netManager_->successPropose(call->id_);
-        return;
-    } else if (call->status_.error_code() != grpc::StatusCode::UNAUTHENTICATED) {
-        emit netManager_->failPropose(call->id_, errorStatusFromGrpc(call->status_));
-    }
-
-    QMutexLocker lock(&stateMutex_);
-    switch (state_) {
-    case AuthenticationManager::AUTHENTICATED:
-        if (tryToUpdateToken()) {
-            callsQueue_.enqueue(call);
-        } else {
-            emit netManager_->failPropose(call->id_, RPCErrorStatus::NOT_AUTHENTICATED);
-        }
-        break;
-    case AuthenticationManager::AWAIT_AUTHENTICATION:
-        callsQueue_.enqueue(call);
-        break;
-    case AuthenticationManager::AWAIT_CREDENTIALS:
-        emit netManager_->failPropose(call->id_, RPCErrorStatus::NOT_AUTHENTICATED);
-        break;
-    }
-}
-
-void AuthenticationManager::receiveAuthorizeResponse(AuthorizeAsyncCall *call) {
-    processAuthorizeOrRegitrateResponse(call);
-
-    if (call->id_ != TECHNICAL_REQUEST_ID) {
-        if (call->status_.ok()) {
-            call->succeed(netManager_);
-        } else {
-            call->fail(netManager_);
-        }
-    }
-}
-
-void AuthenticationManager::receiveRegistrateResponse(RegistrateAsyncCall *call) {
-    processAuthorizeOrRegitrateResponse(call);
-
-    if (call->id_ != TECHNICAL_REQUEST_ID) {
-        if (call->status_.ok()) {
-            call->succeed(netManager_);
-        } else {
-            call->fail(netManager_);
-        }
-    }
-}
-
 void AuthenticationManager::authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall *call) {
     QMutexLocker lock(&stateMutex_);
 
@@ -121,13 +30,13 @@ void AuthenticationManager::authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall
         call->send(connector_);
         break;
     case AWAIT_AUTHENTICATION:
-        emit netManager_->failAuthorize(call->id_, RPCErrorStatus::ALREADY_IN_AUTHNTICATION_PROCESS);
+        call->fail(netManager_, RPCErrorStatus::ALREADY_IN_AUTHNTICATION_PROCESS);
         break;
     }
 }
 
 
-void AuthenticationManager::sendWithMetadata(RpcAsyncCall *call) {
+void AuthenticationManager::sendWithMetadata(AuthenticatedAsyncCall *call) {
     QMutexLocker lock(&stateMutex_);
 
     switch (state_) {
@@ -139,8 +48,46 @@ void AuthenticationManager::sendWithMetadata(RpcAsyncCall *call) {
         callsQueue_.enqueue(call);
         break;
     case AWAIT_CREDENTIALS:
-        emit netManager_->failTranslate(call->id_, RPCErrorStatus::NOT_AUTHENTICATED);
+        call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
         break;
+    }
+}
+
+void AuthenticationManager::receiveAuthenticatedCall(AuthenticatedAsyncCall *call) {
+    if (call->status_.ok()) {
+        call->succeed(netManager_);
+        return;
+    } else if (call->status_.error_code() != grpc::StatusCode::UNAUTHENTICATED) {
+        call->fail(netManager_);
+    }
+
+    QMutexLocker lock(&stateMutex_);
+    switch (state_) {
+    case AuthenticationManager::AUTHENTICATED:
+        if (tryToUpdateToken()) {
+            callsQueue_.enqueue(call);
+        } else {
+            call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
+        }
+        break;
+    case AuthenticationManager::AWAIT_AUTHENTICATION:
+        callsQueue_.enqueue(call);
+        break;
+    case AuthenticationManager::AWAIT_CREDENTIALS:
+        call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
+        break;
+    }
+}
+
+void AuthenticationManager::receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegistrateAsyncCall *call) {
+    processAuthorizeOrRegitrateResponse(call);
+
+    if (call->id_ != TECHNICAL_REQUEST_ID) {
+        if (call->status_.ok()) {
+            call->succeed(netManager_);
+        } else {
+            call->fail(netManager_);
+        }
     }
 }
 

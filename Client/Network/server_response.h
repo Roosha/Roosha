@@ -11,6 +11,7 @@
 
 class NetworkManager;
 class RooshaServiceConnector;
+class AuthenticationManager;
 
 enum RPCErrorStatus {
     UNKNOWN,
@@ -27,10 +28,28 @@ struct RpcAsyncCall {
     RpcAsyncCall(quint32 id, quint32 timeoutMillis);
     virtual ~RpcAsyncCall();
 
-    virtual void receive(RooshaServiceConnector *connector) = 0;
+    /**
+     * These methods provide interface for simple passage of any RpcAsyncCall through network stack.
+     * Each method just passes this call to proper handler on appropriate network stack layer:
+     * This is the cheme of request performance:
+     *
+     * CLIENT              NetworkManager            AuthManager      Connector        Listener           REMOTE SERVER
+     *
+     *        CLIENT CODE               authenticate           send                  GRPC GENERATED CODE
+     *    =====================>    ===================>    ===========>    ====================================>
+     *
+     *        Qt SIGNAL                 succeed/fail           verify          receive       GRPC GENERATED CODE
+     *    <=====================    <===================    <===========    <===========    <====================
+     */
+
+    virtual void authenticate(AuthenticationManager *authManager) = 0;
     virtual void send(RooshaServiceConnector *connector) = 0;
+    void receive(RooshaServiceConnector *connector);
+    virtual void verify(AuthenticationManager *authManager) = 0;
     virtual void succeed(NetworkManager *netManager) = 0;
-    virtual void fail(NetworkManager *netManager) = 0;
+    void fail(NetworkManager *netManager);
+    virtual void fail(NetworkManager* netManager, RPCErrorStatus status) = 0;
+
 
     const quint32 id_;
     grpc::ClientContext context_;
@@ -42,6 +61,9 @@ struct RpcAsyncCall {
  */
 struct AuthorizeOrRegistrateAsyncCall : public RpcAsyncCall {
     using RpcAsyncCall::RpcAsyncCall;
+
+    void authenticate(AuthenticationManager *authManager) override;
+    void verify(AuthenticationManager *authManager) override;
 
     roosha::Credentials request_;
     roosha::AuthenticationToken response_;
@@ -55,11 +77,10 @@ struct AuthorizeOrRegistrateAsyncCall : public RpcAsyncCall {
 struct AuthorizeAsyncCall : public AuthorizeOrRegistrateAsyncCall {
     using AuthorizeOrRegistrateAsyncCall::AuthorizeOrRegistrateAsyncCall;
 
-    void receive(RooshaServiceConnector *connector) override;
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
-    void fail(NetworkManager *netManager) override;
-
+    using RpcAsyncCall::fail;
+    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
 };
 
 /**
@@ -68,24 +89,34 @@ struct AuthorizeAsyncCall : public AuthorizeOrRegistrateAsyncCall {
 struct RegistrateAsyncCall : public AuthorizeOrRegistrateAsyncCall {
     using AuthorizeOrRegistrateAsyncCall::AuthorizeOrRegistrateAsyncCall;
 
-    void receive(RooshaServiceConnector *connector) override;
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
-    void fail(NetworkManager *netManager) override;
-
+    using RpcAsyncCall::fail;
+    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
 };
 
+// ----------------------------------------------------------------------------------------------------
+
+/**
+ * This struct represents any rpc which requires authentication.
+ */
+struct AuthenticatedAsyncCall : public RpcAsyncCall {
+    using RpcAsyncCall::RpcAsyncCall;
+
+    void authenticate(AuthenticationManager *authManager) override;
+    void verify(AuthenticationManager *authManager) override;
+};
 
 /**
  * This struct represents 'translate' rpc.
  */
-struct TranslateAsyncCall : public RpcAsyncCall {
-    using RpcAsyncCall::RpcAsyncCall;
+struct TranslateAsyncCall : public AuthenticatedAsyncCall {
+    using AuthenticatedAsyncCall::AuthenticatedAsyncCall;
 
-    void receive(RooshaServiceConnector *connector) override;
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
-    void fail(NetworkManager *netManager) override;
+    using RpcAsyncCall::fail;
+    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
 
 
     roosha::TranslationRequest request_;
@@ -95,13 +126,13 @@ struct TranslateAsyncCall : public RpcAsyncCall {
 /**
  * This struct represents 'proposeUserTransaltions' rpc.
  */
-struct ProposeUserTranslationsAsyncCall : public RpcAsyncCall {
-    using RpcAsyncCall::RpcAsyncCall;
+struct ProposeUserTranslationsAsyncCall : public AuthenticatedAsyncCall {
+    using AuthenticatedAsyncCall::AuthenticatedAsyncCall;
 
-    void receive(RooshaServiceConnector *connector) override;
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
-    void fail(NetworkManager *netManager) override;
+    using RpcAsyncCall::fail;
+    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
 
 
     roosha::Translations request_;

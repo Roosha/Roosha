@@ -26,10 +26,7 @@ public:
     void authorize(AuthorizeAsyncCall *call);
     void registrate(RegistrateAsyncCall *call);
 
-    void receiveTranslateResponse(TranslateAsyncCall *call);
-    void receiveProposeUserTranslationResponse(ProposeUserTranslationsAsyncCall *call);
-    void receiveAuthorizeResponse(AuthorizeAsyncCall *call);
-    void receiveRegistrateResponse(RegistrateAsyncCall *call);
+    void receiveResponse(RpcAsyncCall *call);
 private:
     friend class AsyncRpcResponseListener;
 
