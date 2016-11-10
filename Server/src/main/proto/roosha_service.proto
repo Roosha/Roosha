@@ -20,8 +20,9 @@ syntax = "proto3";
 package roosha;
 
 import "commons.proto";
+import "changes.proto";
 
-option java_package = "com.github.roosha.proto.translation";
+option java_package = "com.github.roosha.proto";
 option java_outer_classname = "TranslationServiceProto";
 
 option cc_enable_arenas = false;
@@ -30,12 +31,15 @@ option optimize_for = SPEED;
 
 
 service RooshaService {
-  	rpc registrate(Credentials) returns (AuthenticationToken) {}
-	rpc authorize(Credentials) returns (AuthenticationToken) {}
+  	rpc registrate(Credentials) returns (AuthenticationToken);
+	rpc authorize(Credentials) returns (AuthenticationToken);
 
 	// methods declared below should pass authorization token in 'roosha-auth-token' metadata key.
-    rpc translate(TranslationRequest) returns (Translations) {}
-    rpc proposeUserTranslations(Translations) returns (Void) {}
+    rpc translate(TranslationRequest) returns (Translations);
+    rpc proposeUserTranslations(Translations) returns (Void);
+
+	rpc saveChanges(stream Change) returns (Void);
+	rpc loadChanges(Void) returns (stream Change);
 }
 
 message TranslationRequest {

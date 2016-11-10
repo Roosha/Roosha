@@ -19,7 +19,7 @@ syntax = "proto3";
 
 package roosha;
 
-option java_package = "com.github.roosha.proto.commons";
+option java_package = "com.github.roosha.proto";
 option java_outer_classname = "CommonsProto";
 
 option cc_enable_arenas = false;

@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package roosha;
+
+option java_package = "com.github.roosha.proto";
+option java_outer_classname = "ChangesProto";
+
+option cc_enable_arenas = false;
+
+option optimize_for = SPEED;
+
+message Change {
+	enum ChangeType {
+		UNKNOWN = 0;
+		CHANGE_SOURCE = 1;
+		DELETE_CARD = 2;
+		CREATE_CARD = 3;
+		INSERT_ELEM = 4;
+		DELETE_ELEM = 5;
+		EDIT_ELEM = 6;
+	}
+	
+	message StringListChange {
+		enum Field {
+			UNKNOWN = 0;
+			TARGET = 1;
+			EXAMPLE = 2;
+		}
+
+		Field fieldName = 1;
+		uint32 index = 2;
+		/*optional*/ string value = 3;
+	}
+
+	ChangeType type = 1;
+	string cardId = 2; // UUID string representation
+	oneof changeData {
+		string newSource  = 3; // for CHANGE_SOURCE
+		/*nothing*/  // for DELETE_CARD and CREATE_CARD
+		StringListChange stringListChange = 4; // for INSERT_ELEM, DELETE_ELEM, EDIT_ELEM
+	}
+}
+

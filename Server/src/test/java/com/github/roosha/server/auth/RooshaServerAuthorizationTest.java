@@ -18,12 +18,12 @@
 
 package com.github.roosha.server.auth;
 
-import com.github.roosha.proto.commons.CommonsProto.AuthenticationToken;
-import com.github.roosha.proto.commons.CommonsProto.Credentials;
-import com.github.roosha.proto.translation.RooshaServiceGrpc;
-import com.github.roosha.proto.translation.RooshaServiceGrpc.RooshaServiceBlockingStub;
-import com.github.roosha.proto.translation.TranslationServiceProto.TranslationRequest;
-import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
+import com.github.roosha.proto.CommonsProto.AuthenticationToken;
+import com.github.roosha.proto.CommonsProto.Credentials;
+import com.github.roosha.proto.RooshaServiceGrpc;
+import com.github.roosha.proto.RooshaServiceGrpc.RooshaServiceBlockingStub;
+import com.github.roosha.proto.TranslationServiceProto.TranslationRequest;
+import com.github.roosha.proto.TranslationServiceProto.Translations;
 import com.github.roosha.server.ErrorsStatusExceptions;
 import com.github.roosha.server.RooshaServer;
 import com.github.roosha.server.config.Config;

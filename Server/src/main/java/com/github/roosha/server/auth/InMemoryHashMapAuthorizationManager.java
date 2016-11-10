@@ -1,6 +1,6 @@
 package com.github.roosha.server.auth;
 
-import com.github.roosha.proto.commons.CommonsProto.Credentials;
+import com.github.roosha.proto.CommonsProto.Credentials;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;

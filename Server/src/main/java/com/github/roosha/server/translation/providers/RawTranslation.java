@@ -18,7 +18,7 @@
 
 package com.github.roosha.server.translation.providers;
 
-import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
+import com.github.roosha.proto.TranslationServiceProto.Translations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +31,7 @@ public interface RawTranslation {
      * Builder used as the return type to ease composition of several raw translations(from different translation
      * services).
      * <b>Note:</b> this method sets {@link Translations#source_}.
-     * @return
+     * @return this translation in protobuf builder representation
      */
     @Nullable Translations.Builder convertToProtoTranslationsBuilder();
 

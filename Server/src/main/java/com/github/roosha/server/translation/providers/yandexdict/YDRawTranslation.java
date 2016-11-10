@@ -18,9 +18,9 @@
 
 package com.github.roosha.server.translation.providers.yandexdict;
 
-import com.github.roosha.proto.translation.TranslationServiceProto;
-import com.github.roosha.proto.translation.TranslationServiceProto.Translation;
-import com.github.roosha.proto.translation.TranslationServiceProto.Translations;
+import com.github.roosha.proto.TranslationServiceProto;
+import com.github.roosha.proto.TranslationServiceProto.Translation;
+import com.github.roosha.proto.TranslationServiceProto.Translations;
 import com.github.roosha.server.translation.providers.RawTranslation;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -64,7 +64,7 @@ class YDRawTranslation implements RawTranslation {
                            .forEach(target::addTranslation);
     }
 
-    public static @NotNull RawTranslation fromJson(@NotNull String json) {
+    static @NotNull RawTranslation fromJson(@NotNull String json) {
         return new Gson().fromJson(json, YDRawTranslation.class);
     }
 
