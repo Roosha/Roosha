@@ -27,10 +27,9 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     app.setQuitOnLastWindowClosed(false);
     CentralController cc;
-    cc.start();/*
-    auto ptr = testTranslationServiceConnection();
-    delete ptr;
-//    testDBCardBuilder();
+    cc.start();
+//    auto ptr = testTranslationServiceConnection();
+//    delete ptr;
     return  app.exec();
 }
 
