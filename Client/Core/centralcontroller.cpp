@@ -11,9 +11,9 @@ CentralController::CentralController() {
     Bootstrap boot(this);
     boot.run();
 
-    connect(hkListener, SIGNAL(newWord(QString)), this, SLOT(handleNewWord(QString)));
-    connect(networkManager, SIGNAL(newTranslation(TestTranslations)), guiManager,
-            SLOT(showNewTranslationWindow(TestTranslations)));
+    connect(hkListener, &HotkeyListener::newWord, this, &CentralController::handleNewWord);
+    connect(networkManager, &NetworkManager::successTranslate,
+            guiManager, &GUIManager::showNewTranslationWindow);
 }
 
 void CentralController::start() {

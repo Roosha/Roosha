@@ -53,7 +53,6 @@ void AsyncRpcResponseListener::run() {
     void *callLabel;
     bool ok;
     while (connector_->completionQueue_.Next(&callLabel, &ok)) {
-        qDebug() << "received response\n";
         auto call = static_cast<RpcAsyncCall*>(callLabel);
         call->receive(connector_);
     }

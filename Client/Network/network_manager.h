@@ -25,8 +25,6 @@ public:
     quint32 registrate(QString login, QString password, quint32 timeoutMills);
 
 signals:
-    void newTranslation( Translations trans);
-
     void successTranslate(quint32 id, Translations translations);
     void failTranslate(quint32 id, RPCErrorStatus status);
 

@@ -12,14 +12,15 @@ GUIManager::GUIManager() {
     cardCreationController = new CardCreationController(this);
     cardListController = new CardListController(this);
 
-    connect(translationController, SIGNAL(createNewCard(QSharedPointer<Translation>)),
-            cardCreationController, SLOT(showNewEditWindow(QSharedPointer<Translation>)));
-    connect(cardListController, SIGNAL(createNewCard(QSharedPointer<Translation>)),
-         cardCreationController, SLOT(showNewEditWindow(QSharedPointer<Translation>)));
-    connect(cardCreationController, SIGNAL(showCards()), this, SLOT(showMainWin()));
+    connect(translationController, &TranslationController::createNewCard,
+            cardCreationController, &CardCreationController::showNewEditWindow);
+    connect(cardListController, &CardListController::createNewCard,
+            cardCreationController, &CardCreationController::showNewEditWindow);
+    connect(cardCreationController, &CardCreationController::showCards,
+            this, &GUIManager::showMainWin);
 }
 
-void GUIManager::showNewTranslationWindow(Translations trans) {
+void GUIManager::showNewTranslationWindow(quint32 id, Translations trans) {
     translationController->addData(trans);
 }
 

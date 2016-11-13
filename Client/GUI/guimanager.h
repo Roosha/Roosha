@@ -18,7 +18,7 @@ private:
     CardListController* cardListController;
 
 public slots:
-    void showNewTranslationWindow(Translations trans);
+    void showNewTranslationWindow(quint32 id, Translations trans);
     void showMainWin();
 };
 
