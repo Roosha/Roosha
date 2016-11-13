@@ -8,9 +8,9 @@
 class Translation : public QObject {
     Q_OBJECT
 
-    Q_PROPERTY(QString source READ getSource WRITE setSource)
-    Q_PROPERTY(QStringList target READ getTarget WRITE setTarget)
-    Q_PROPERTY(QStringList examples READ getExamples WRITE setExamples)
+    Q_PROPERTY(QString source READ getSource)
+    Q_PROPERTY(QString target READ getTargetString)
+    Q_PROPERTY(QString examples READ getExampleString)
 
 public:
     Translation();
@@ -20,6 +20,9 @@ public:
 
     QStringList getTarget() const;
     void setTarget(const QStringList &value);
+
+    QString getTargetString() const;
+    QString getExampleString() const;
 
     QStringList getExamples() const;
     void setExamples(const QStringList &value);

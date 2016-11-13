@@ -10,16 +10,19 @@
 
 class TranslationController : public QObject {
     Q_OBJECT
-public:
+ public:
     TranslationController(QObject * parent = nullptr);
 
     void addData(Translations translations);
 
     Q_INVOKABLE void closeWindow(quint32 id);
     Q_INVOKABLE void createCard(quint32 id);
-    Q_INVOKABLE void createLater(quint32 id);
+//    Q_INVOKABLE void createLater(quint32 id);
 
-private:
+signals:
+    void createNewCard(QSharedPointer<Translation> trans);
+
+ private:
     quint32 lastId;
 
     QMap<quint32, QQuickWidget* > widgets;

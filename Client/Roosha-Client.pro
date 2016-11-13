@@ -29,6 +29,10 @@ SOURCES += main.cpp \
     Network/roosha_service_connector.cpp \
     Network/network_manager.cpp \
     Helpers/protobuf_converter.cpp
+    Core/world.cpp \
+    Test/Core/changes/worldtest.cpp \
+    GUI/cardcreationcontroller.cpp \
+    GUI/cardlistcontroller.cpp
 
 RESOURCES += \
     QML/qml.qrc
@@ -56,12 +60,19 @@ HEADERS += \
     Helpers/qmlconvertation.h \
     Core/ichange.h \
     Core/changes.h \
+    Network/translation_service.h \
+    Network/async_client_call.h \
     Core/cardbuilder.h \
     Test/Network/translations_test_slot_holder.h \
     Network/server_response.h \
     Network/authentication_manager.h \
     Network/roosha_service_connector.h \
     Network/network_manager.h \
+    Test/Network/translations_test_slot_holder.h \
+    Core/world.h \
+    Test/Core/changes/worldtest.h \
+    GUI/cardcreationcontroller.h \
+    GUI/cardlistcontroller.h
     Helpers/protobuf_converter.h
 
 # protobuf generated files

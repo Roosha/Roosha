@@ -12,11 +12,13 @@ CentralController::CentralController() {
     boot.run();
 
     connect(hkListener, SIGNAL(newWord(QString)), this, SLOT(handleNewWord(QString)));
-    connect(networkManager, SIGNAL(newTranslation(Translations)), guiManager, SLOT(showNewTranslationWindow(Translations)));
+    connect(networkManager, SIGNAL(newTranslation(TestTranslations)), guiManager,
+            SLOT(showNewTranslationWindow(TestTranslations)));
 }
 
 void CentralController::start() {
     hkListener->start();
+    guiManager->showMainWin();
 }
 
 void CentralController::handleNewWord(QString word) {

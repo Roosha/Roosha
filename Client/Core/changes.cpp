@@ -1,59 +1,75 @@
 #include "changes.h"
 #include <QDebug>
+#include "world.h"
+#include <QSharedPointer>
 
 
-ChangeSource::ChangeSource() { }
+ChangeSource::ChangeSource(QUuid cardId, const QString & newSrc) : cardId(cardId), newSource(newSrc) {}
 
-ChangeSource::ChangeSource(const QString & newSrc) : newSource(newSrc) {}
-
-void ChangeSource::apply(DBCard * cardptr) {
+void ChangeSource::apply(World * world) {
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     cardptr->source = newSource;
 }
 
-EditExampleElem::EditExampleElem() { }
+EditElem::EditElem(QUuid cardId, const enum Field & field, const QString & newEl, const qint32 & p) :
+                    cardId(cardId), fieldName(field), newElem(newEl), pos(p) {}
 
-EditExampleElem::EditExampleElem(const QString & newEl, const qint32 & p) : newElem(newEl), pos(p) {}
-
-void EditExampleElem::apply(DBCard * cardptr) {
-    cardptr->examples[pos] = newElem;
+void EditElem::apply(World * world) {
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
+    switch (fieldName) {
+        case TARGET:
+            cardptr->targets[pos] = newElem;
+            break;
+        case EXAMPLE:
+            cardptr->examples[pos] = newElem;
+            break;
+    }
 }
 
-InsertExampleElem::InsertExampleElem() { }
+InsertElem::InsertElem(QUuid cardId, const enum Field & field, const QString & insertingEl, const qint32 & p) :
+                        cardId(cardId), fieldName(field), insertingElem(insertingEl), pos(p) {}
 
-InsertExampleElem::InsertExampleElem(const QString & insertingEl, const qint32 & p) : insertingElem(insertingEl), pos(p) {}
-
-void InsertExampleElem::apply(DBCard * cardptr) {
-    cardptr->examples.insert(pos, insertingElem);
+void InsertElem::apply(World * world) {
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
+    switch (fieldName) {
+        case TARGET:
+            cardptr->targets.insert(pos, insertingElem);
+            break;
+        case EXAMPLE:
+            cardptr->examples.insert(pos, insertingElem);
+            break;
+    }
 }
 
-DeleteExampleElem::DeleteExampleElem() { }
 
-DeleteExampleElem::DeleteExampleElem(const qint32 & p) : pos(p) {}
+DeleteElem::DeleteElem(QUuid cardId, const enum Field & field, const qint32 & p) :
+                        cardId(cardId), fieldName(field), pos(p) {}
 
-void DeleteExampleElem::apply(DBCard * cardptr) {
-    cardptr->examples.erase(cardptr->examples.begin() + pos);
+void DeleteElem::apply(World * world) {
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
+    switch (fieldName) {
+        case TARGET:
+            cardptr->targets.erase(cardptr->targets.begin() + pos);
+            break;
+        case EXAMPLE:
+            cardptr->examples.erase(cardptr->examples.begin() + pos);
+            break;
+    }
 }
 
-EditTargetElem::EditTargetElem() { }
-
-EditTargetElem::EditTargetElem(const QString & newEl, const qint32 & p) : newElem(newEl), pos(p) {}
-
-void EditTargetElem::apply(DBCard * cardptr) {
-    cardptr->targets[pos] = newElem;
+CreateCard::CreateCard(QUuid id) : cardId(id) { }
+QUuid CreateCard::getId() {
+    return cardId;
 }
 
-InsertTargetElem::InsertTargetElem() { }
-
-InsertTargetElem::InsertTargetElem(const QString & insertingEl, const qint32 & p) : insertingElem(insertingEl), pos(p) {}
-
-void InsertTargetElem::apply(DBCard * cardptr) {
-    cardptr->targets.insert(pos, insertingElem);
+void CreateCard::apply(World * world) {
+//    if (cardId.isNull())
+//        cardId = QUuid::createUuid();
+    world->insertCard(cardId, QSharedPointer<DBCard>::create(cardId));
 }
 
-DeleteTargetElem::DeleteTargetElem() { }
+DeleteCard::DeleteCard(QUuid id) : cardId(id) {}
 
-DeleteTargetElem::DeleteTargetElem(const qint32 & p) : pos(p) {}
-
-void DeleteTargetElem::apply(DBCard * cardptr) {
-    cardptr->targets.erase(cardptr->targets.begin() + pos);
+void DeleteCard::apply(World * world) {
+    world->removeCard(cardId);
 }

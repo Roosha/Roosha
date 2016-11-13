@@ -2,14 +2,22 @@
 
 Card::Card() { }
 
-QString Card::getSource() {
+QString Card::getSource() const{
     return source;
 }
 
-QVector<QString> Card::getTargets() {
+QStringList Card::getTargets() const{
     return targets;
 }
 
-QVector<QString> Card::getExamples() {
+QStringList Card::getExamples() const{
     return examples;
+}
+
+QString Card::getExampleString() const {
+    return examples.join("; ");
+}
+
+QString Card::getTargetString() const {
+    return targets.join("; ");
 }
