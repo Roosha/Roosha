@@ -129,8 +129,8 @@ void protobuf_AddDesc_commons_2eproto() {
     "\n\rcommons.proto\022\006roosha\"\006\n\004Void\"2\n\013Crede"
     "ntials\022\r\n\005login\030\001 \001(\t\022\024\n\014passwordHash\030\002 "
     "\001(\t\"$\n\023AuthenticationToken\022\r\n\005token\030\001 \001("
-    "\tB4\n\037com.github.roosha.proto.commonsB\014Co"
-    "mmonsProtoH\001\370\001\000b\006proto3", 183);
+    "\tB,\n\027com.github.roosha.protoB\014CommonsPro"
+    "toH\001\370\001\000b\006proto3", 175);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "commons.proto", &protobuf_RegisterTypes);
   Void::default_instance_ = new Void();

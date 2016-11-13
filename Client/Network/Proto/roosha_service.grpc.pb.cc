@@ -20,6 +20,8 @@ static const char* RooshaService_method_names[] = {
   "/roosha.RooshaService/authorize",
   "/roosha.RooshaService/translate",
   "/roosha.RooshaService/proposeUserTranslations",
+  "/roosha.RooshaService/saveChanges",
+  "/roosha.RooshaService/loadChanges",
 };
 
 std::unique_ptr< RooshaService::Stub> RooshaService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -32,6 +34,8 @@ RooshaService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& chan
   , rpcmethod_authorize_(RooshaService_method_names[1], ::grpc::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_translate_(RooshaService_method_names[2], ::grpc::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_proposeUserTranslations_(RooshaService_method_names[3], ::grpc::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_saveChanges_(RooshaService_method_names[4], ::grpc::RpcMethod::CLIENT_STREAMING, channel)
+  , rpcmethod_loadChanges_(RooshaService_method_names[5], ::grpc::RpcMethod::SERVER_STREAMING, channel)
   {}
 
 ::grpc::Status RooshaService::Stub::registrate(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::roosha::AuthenticationToken* response) {
@@ -66,6 +70,22 @@ RooshaService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& chan
   return new ::grpc::ClientAsyncResponseReader< ::roosha::Void>(channel_.get(), cq, rpcmethod_proposeUserTranslations_, context, request);
 }
 
+::grpc::ClientWriter< ::roosha::Change>* RooshaService::Stub::saveChangesRaw(::grpc::ClientContext* context, ::roosha::Void* response) {
+  return new ::grpc::ClientWriter< ::roosha::Change>(channel_.get(), rpcmethod_saveChanges_, context, response);
+}
+
+::grpc::ClientAsyncWriter< ::roosha::Change>* RooshaService::Stub::AsyncsaveChangesRaw(::grpc::ClientContext* context, ::roosha::Void* response, ::grpc::CompletionQueue* cq, void* tag) {
+  return new ::grpc::ClientAsyncWriter< ::roosha::Change>(channel_.get(), cq, rpcmethod_saveChanges_, context, response, tag);
+}
+
+::grpc::ClientReader< ::roosha::Change>* RooshaService::Stub::loadChangesRaw(::grpc::ClientContext* context, const ::roosha::Void& request) {
+  return new ::grpc::ClientReader< ::roosha::Change>(channel_.get(), rpcmethod_loadChanges_, context, request);
+}
+
+::grpc::ClientAsyncReader< ::roosha::Change>* RooshaService::Stub::AsyncloadChangesRaw(::grpc::ClientContext* context, const ::roosha::Void& request, ::grpc::CompletionQueue* cq, void* tag) {
+  return new ::grpc::ClientAsyncReader< ::roosha::Change>(channel_.get(), cq, rpcmethod_loadChanges_, context, request, tag);
+}
+
 RooshaService::Service::Service() {
   (void)RooshaService_method_names;
   AddMethod(new ::grpc::RpcServiceMethod(
@@ -88,6 +108,16 @@ RooshaService::Service::Service() {
       ::grpc::RpcMethod::NORMAL_RPC,
       new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::Translations, ::roosha::Void>(
           std::mem_fn(&RooshaService::Service::proposeUserTranslations), this)));
+  AddMethod(new ::grpc::RpcServiceMethod(
+      RooshaService_method_names[4],
+      ::grpc::RpcMethod::CLIENT_STREAMING,
+      new ::grpc::ClientStreamingHandler< RooshaService::Service, ::roosha::Change, ::roosha::Void>(
+          std::mem_fn(&RooshaService::Service::saveChanges), this)));
+  AddMethod(new ::grpc::RpcServiceMethod(
+      RooshaService_method_names[5],
+      ::grpc::RpcMethod::SERVER_STREAMING,
+      new ::grpc::ServerStreamingHandler< RooshaService::Service, ::roosha::Void, ::roosha::Change>(
+          std::mem_fn(&RooshaService::Service::loadChanges), this)));
 }
 
 RooshaService::Service::~Service() {
@@ -118,6 +148,20 @@ RooshaService::Service::~Service() {
   (void) context;
   (void) request;
   (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status RooshaService::Service::saveChanges(::grpc::ServerContext* context, ::grpc::ServerReader< ::roosha::Change>* reader, ::roosha::Void* response) {
+  (void) context;
+  (void) reader;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status RooshaService::Service::loadChanges(::grpc::ServerContext* context, const ::roosha::Void* request, ::grpc::ServerWriter< ::roosha::Change>* writer) {
+  (void) context;
+  (void) request;
+  (void) writer;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 

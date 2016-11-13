@@ -29,6 +29,7 @@
 #include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 #include "commons.pb.h"
+#include "changes.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace roosha {

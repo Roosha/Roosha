@@ -131,25 +131,28 @@ void protobuf_AddDesc_roosha_5fservice_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::roosha::protobuf_AddDesc_commons_2eproto();
+  ::roosha::protobuf_AddDesc_changes_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\024roosha_service.proto\022\006roosha\032\rcommons."
-    "proto\"$\n\022TranslationRequest\022\016\n\006source\030\001 "
-    "\001(\t\"H\n\014Translations\022\016\n\006source\030\001 \001(\t\022(\n\013t"
-    "ranslation\030\002 \003(\0132\023.roosha.Translation\"]\n"
-    "\013Translation\022\016\n\006target\030\001 \003(\t\022\017\n\007example\030"
-    "\002 \003(\t\022-\n\010provider\030\003 \001(\0162\033.roosha.Transla"
-    "tionProvider*P\n\023TranslationProvider\022\013\n\007U"
-    "NKNOWN\020\000\022\025\n\021YANDEX_DICTIONARY\020\001\022\025\n\021YANDE"
-    "X_TRANSLATOR\020\0022\224\002\n\rRooshaService\022@\n\nregi"
-    "strate\022\023.roosha.Credentials\032\033.roosha.Aut"
-    "henticationToken\"\000\022\?\n\tauthorize\022\023.roosha"
-    ".Credentials\032\033.roosha.AuthenticationToke"
-    "n\"\000\022\?\n\ttranslate\022\032.roosha.TranslationReq"
-    "uest\032\024.roosha.Translations\"\000\022\?\n\027proposeU"
-    "serTranslations\022\024.roosha.Translations\032\014."
-    "roosha.Void\"\000BC\n#com.github.roosha.proto"
-    ".translationB\027TranslationServiceProtoH\001\370"
-    "\001\000b\006proto3", 690);
+    "proto\032\rchanges.proto\"$\n\022TranslationReque"
+    "st\022\016\n\006source\030\001 \001(\t\"H\n\014Translations\022\016\n\006so"
+    "urce\030\001 \001(\t\022(\n\013translation\030\002 \003(\0132\023.roosha"
+    ".Translation\"]\n\013Translation\022\016\n\006target\030\001 "
+    "\003(\t\022\017\n\007example\030\002 \003(\t\022-\n\010provider\030\003 \001(\0162\033"
+    ".roosha.TranslationProvider*P\n\023Translati"
+    "onProvider\022\013\n\007UNKNOWN\020\000\022\025\n\021YANDEX_DICTIO"
+    "NARY\020\001\022\025\n\021YANDEX_TRANSLATOR\020\0022\352\002\n\rRoosha"
+    "Service\022>\n\nregistrate\022\023.roosha.Credentia"
+    "ls\032\033.roosha.AuthenticationToken\022=\n\tautho"
+    "rize\022\023.roosha.Credentials\032\033.roosha.Authe"
+    "nticationToken\022=\n\ttranslate\022\032.roosha.Tra"
+    "nslationRequest\032\024.roosha.Translations\022=\n"
+    "\027proposeUserTranslations\022\024.roosha.Transl"
+    "ations\032\014.roosha.Void\022-\n\013saveChanges\022\016.ro"
+    "osha.Change\032\014.roosha.Void(\001\022-\n\013loadChang"
+    "es\022\014.roosha.Void\032\016.roosha.Change0\001B7\n\027co"
+    "m.github.roosha.protoB\027TranslationServic"
+    "eProtoH\001\370\001\000b\006proto3", 779);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "roosha_service.proto", &protobuf_RegisterTypes);
   TranslationRequest::default_instance_ = new TranslationRequest();
