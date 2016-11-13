@@ -4,7 +4,7 @@ import QtQuick.Controls 2.0
 
 Rectangle {
     id: root
-    width: 400; height: 200;
+    width: 600; height: 300;
     color: "#fff8c2"
 
     Text {
@@ -19,7 +19,7 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
 
-        text: qsTr("Your Cards List:")
+        text: qsTr("Your Cards:")
     }
 
     ListView {
@@ -75,6 +75,38 @@ Rectangle {
             }
             onClicked: {
                 controller.createCard();
+            }
+        }
+
+        Button {
+            id: pushButton
+
+            text: qsTr("Push")
+            height: parent.height - 6
+            width: 100
+            anchors.right: createButton.left
+            anchors.rightMargin: 10
+            background: Rectangle {
+                color: pushButton.down ? '#7fb5b5' : '#c7d0cc'
+            }
+            onClicked: {
+                controller.pushCards();
+            }
+        }
+
+        Button {
+            id: pullButton
+
+            text: qsTr("Pull")
+            height: parent.height - 6
+            width: 100
+            anchors.right: pushButton.left
+            anchors.rightMargin: 10
+            background: Rectangle {
+                color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
+            }
+            onClicked: {
+                controller.pullCards();
             }
         }
     }

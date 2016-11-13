@@ -12,6 +12,7 @@ class World {
 
     const QMap<QUuid, QSharedPointer<DBCard>>& getCards();
     const QVector<QSharedPointer<IChange>>& getChanges();
+    void setChanges(QVector<QSharedPointer<IChange>> newChanges);
 
     QSharedPointer<DBCard> createCard();
     void deleteCard(QUuid id);
@@ -35,8 +36,8 @@ class World {
     World(const World& world) = delete;
     World& operator=(const World&) = delete;
 
-    QMap<QUuid, QSharedPointer<DBCard>> cards;
-    QVector<QSharedPointer<IChange>> changes;
+    QMap<QUuid, QSharedPointer<DBCard>> cards_;
+    QVector<QSharedPointer<IChange>> changes_;
 
 };
 

@@ -37,7 +37,7 @@ void Translation::setExamples(const QStringList &value)
 QString Translation::getExampleString() const {
     QString str = examples[0];
     for (int i = 1; i < examples.size(); i++) {
-        str += ", ";
+        str += "; ";
         str += examples[i];
     }
     return str;
@@ -47,7 +47,7 @@ QString Translation::getTargetString() const {
 
     QString str = target[0];
     for (int i = 1; i < target.size(); i++) {
-        str += ", ";
+        str += "; ";
         str += target[i];
     }
     return str;

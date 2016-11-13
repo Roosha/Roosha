@@ -1,14 +1,14 @@
 #include "Core/dbcard.h"
 #include <QDebug>
 
-DBCard::DBCard(QUuid newId) : world(World::Instance()),  id(newId) { }
+DBCard::DBCard(QUuid newId) : world_(World::Instance()),  id_(newId) { }
 
 QUuid DBCard::getId() {
-    return id;
+    return id_;
 }
 
 void DBCard::setSource(QString newSource) {
-    world.setSource(id, newSource);
+    world_.setSource(id_, newSource);
 }
 
 void DBCard::setExamples(QStringList newExamples) {
@@ -24,13 +24,13 @@ void DBCard::setTargets(QStringList newTarget) {
 
 //temp
 void DBCard::editElem(const enum Field & fieldName, const QString & newElem, qint32 pos) {
-    world.editElem(id, fieldName, newElem, pos);
+    world_.editElem(id_, fieldName, newElem, pos);
 }
 
 void DBCard::insertElem(const enum Field & fieldName, const QString & insertingElem, qint32 pos) {
-    world.insertElem(id, fieldName, insertingElem, pos);
+    world_.insertElem(id_, fieldName, insertingElem, pos);
 }
 
 void DBCard::deleteElem(const enum Field & fieldName, qint32 pos) {
-    world.deleteElem(id, fieldName, pos);
+    world_.deleteElem(id_, fieldName, pos);
 }

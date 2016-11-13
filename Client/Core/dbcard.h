@@ -10,7 +10,7 @@
 
 class DBCard : public Card {
  public:
-    DBCard(QUuid id);
+    DBCard(QUuid newId);
     QUuid getId();
 
     void setSource(QString newSource);
@@ -25,8 +25,8 @@ class DBCard : public Card {
     friend class EditElem;
     friend class InsertElem;
     friend class DeleteElem;
-    World& world;
-    QUuid id;
+    World& world_;
+    QUuid id_;
 };
 
 #endif // DBCARD_H

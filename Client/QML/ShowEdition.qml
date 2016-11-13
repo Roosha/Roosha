@@ -82,11 +82,13 @@ Rectangle {
 
             text: qsTr("Close")
             height: parent.height - 6
-            width: 100
 
             background: Rectangle {
                 color: closeButton.down ? '#7fb5b5' : '#c7d0cc'
             }
+            width: 100
+            anchors.left: parent.left
+            anchors.leftMargin: 10
 
             onClicked: {
                 controller.closeWindow();
@@ -98,11 +100,15 @@ Rectangle {
 
             text: qsTr("Save Card")
             height: parent.height - 6
-            width: 100
 
             background: Rectangle {
                 color: saveButton.down ? '#7fb5b5' : '#c7d0cc'
             }
+
+            width: 100
+            anchors.right: parent.right
+            anchors.rightMargin: 10
+
             onClicked: {
                 controller.saveCard(src_in.text, tar_in.text, exmpl_in.text);
             }
