@@ -11,6 +11,7 @@ class DBManager;
 class TestNetworkManager;
 class GUIManager;
 class HotkeyListener;
+class SystemTray;
 
 class CentralController : public QObject {
     Q_OBJECT
@@ -27,9 +28,11 @@ private:
     DBManager * dbManager;
     GUIManager * guiManager;
     HotkeyListener * hkListener;
+    SystemTray * systemTray;
 
 public slots:
     void handleNewWord(QString word);
+    void closeApplication();
 };
 
 #endif // CENTRALCONTROLLER_H

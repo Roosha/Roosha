@@ -24,10 +24,11 @@ TranslationsTestSlotHolder* testTranslationServiceConnection();
 
 
 int main(int argc, char *argv[]) {
-    WorldTest testChanges;
-    testChanges.run();
-//    auto ptr = testTranslationServiceConnection();
-//    delete ptr;
+    QApplication app(argc, argv);
+    app.setQuitOnLastWindowClosed(false);
+    CentralController controller;
+    controller.start();
+    return app.exec();
 }
 
 

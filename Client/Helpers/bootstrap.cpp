@@ -5,6 +5,7 @@
 #include "DB/dbmanager.h"
 #include "Network/networkmanager.h"
 #include "GUI/guimanager.h"
+#include "GUI/system_tray.h"
 
 Bootstrap::Bootstrap(CentralController *cc) : cc(cc) {
 }
@@ -15,10 +16,12 @@ void Bootstrap::run() { // TODO: create all stages of initialisation
     DBManager * dbm = new DBManager();
     GUIManager * guim = new GUIManager();
     HotkeyListener * hkl = new HotkeyListener();
+    SystemTray * sysTray = new SystemTray();
 
     cc->configureManager = cm;
     cc->dbManager = dbm;
     cc->guiManager = guim;
     cc->networkManager = nm;
     cc->hkListener = hkl;
+    cc->systemTray = sysTray;
 }
