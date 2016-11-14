@@ -5,6 +5,8 @@
 #include <QQuickWidget>
 #include <QVariant>
 
+#include "Helpers/configuremanager.h"
+
 class AuthenticationController : public QObject {
     Q_OBJECT
 public:
@@ -42,6 +44,8 @@ private:
     QVariantMap credentials_;
 
     AuthenticationState state_;
+
+    ConfigureManager& configurationManager_;
 };
 
 #endif // AUTHENTICATIONCONTROLLER_H

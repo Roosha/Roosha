@@ -8,6 +8,7 @@
 
 class AuthenticationManager;
 
+#define DEFAULT_TIMEOUT_MILLIS 5000
 
 class NetworkManager : public QObject {
     Q_OBJECT
@@ -16,13 +17,13 @@ public:
     NetworkManager(QObject * parent = Q_NULLPTR);
     ~NetworkManager();
 
-    quint32 translate(QString source, quint32 timeoutMills);
+    quint32 translate(QString source, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
     /**
      * NOTE: all translations should have the same 'source' field
      */
-    quint32 proposeUserTranslations(Translations translations, quint32 timeoutMills);
-    quint32 authorize(QString login, QString password, quint32 timeoutMills);
-    quint32 registrate(QString login, QString password, quint32 timeoutMills);
+    quint32 proposeUserTranslations(Translations translations, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
+    quint32 authorize(QString login, QString password, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
+    quint32 registrate(QString login, QString password, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
 
 signals:
     void successTranslate(quint32 id, Translations translations);

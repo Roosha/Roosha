@@ -69,7 +69,7 @@ Rectangle {
 
                 Layout.fillWidth: true
 
-                text: qsTr("Login")
+                text: qsTr("Register")
                 onClicked: {
                     controller.sendRegistrateRequest(login.text, password.text);
                 }

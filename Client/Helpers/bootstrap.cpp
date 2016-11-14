@@ -10,11 +10,13 @@ Bootstrap::Bootstrap(CentralController *cc) : cc(cc) {
 }
 
 void Bootstrap::run() { // TODO: create all stages of initialisation
-    ConfigureManager * cm = new ConfigureManager();
+    ConfigureManager * cm = &ConfigureManager::Instance();
     NetworkManager * nm = new NetworkManager();
     DBManager * dbm = new DBManager();
     GUIManager * guim = new GUIManager();
     HotkeyListener * hkl = new HotkeyListener();
+
+    cm->setNetworkManager(nm);
 
     cc->configureManager = cm;
     cc->dbManager = dbm;

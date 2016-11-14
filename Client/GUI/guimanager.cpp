@@ -40,6 +40,6 @@ void GUIManager::authenticationSuccess(quint32 id) {
     authenticationController->authenticationSuccess(id);
 }
 
-void GUIManager::authenticationFail(quint32 id) {
+void GUIManager::authenticationFail(quint32 id, RPCErrorStatus status) {
     authenticationController->authenticationFail(id);
 }

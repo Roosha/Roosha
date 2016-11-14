@@ -6,11 +6,14 @@
 #include <QtDebug>
 #include <QThread>
 
-#include <QFuture>
-#include <QFutureWatcher>
-#include <QtConcurrent>
+#include "Network/network_manager.h"
 
-AuthenticationController::AuthenticationController(QObject *parent) : QObject (parent) {
+AuthenticationController::AuthenticationController(QObject *parent) :
+    QObject (parent),
+    configurationManager_(ConfigureManager::Instance()) {
+
+    qRegisterMetaType<AuthenticationState>("AuthenticationState");
+
     credentials_ = QVariantMap {
         {"login", "timmy"},
         {"password", "jimmy"}
@@ -18,6 +21,7 @@ AuthenticationController::AuthenticationController(QObject *parent) : QObject (p
 }
 
 void AuthenticationController::showLoginWindow() {
+    setState(AuthenticationController::NotAuthenticated);
     if(registerWidget_) registerWidget_->close();
 
     loginWidget_ = new QQuickWidget();
@@ -34,6 +38,7 @@ void AuthenticationController::showLoginWindow() {
 }
 
 void AuthenticationController::showRegistrateWindow() {
+    setState(AuthenticationController::NotAuthenticated);
     if(loginWidget_) loginWidget_->close();
 
     registerWidget_ = new QQuickWidget();
@@ -49,15 +54,13 @@ void AuthenticationController::showRegistrateWindow() {
 }
 
 void AuthenticationController::sendAuthenticationRequest(QString login, QString password) {
-    //TODO: call real networkManager here
-    qDebug() << "Authentication with login: " << login << " and password: " << password;
     setState(AuthenticationController::InProgress);
+    configurationManager_.getNetworkManager()->authorize(login, password);
 }
 
 void AuthenticationController::sendRegistrateRequest(QString login, QString password) {
-    //TODO: call real networkManager here
-    qDebug() << "Registrate with login: " << login << " and password: " << password;
     setState(AuthenticationController::InProgress);
+    configurationManager_.getNetworkManager()->registrate(login, password);
 }
 
 void AuthenticationController::setState(AuthenticationController::AuthenticationState state) {
@@ -74,5 +77,9 @@ void AuthenticationController::authenticationSuccess(quint32 id) {
 }
 
 void AuthenticationController::authenticationFail(quint32 id) {
-    setState(AuthenticationController::AuthenticationFailure);
+    if(loginWidget_) {
+        setState(AuthenticationController::AuthenticationFailure);
+    } else {
+        showLoginWindow();
+    }
 }

@@ -8,6 +8,8 @@
 #include "GUI/cardlistcontroller.h"
 #include "GUI/authentication_controller.h"
 
+#include "Network/server_response.h"
+
 class GUIManager : public QObject {
     Q_OBJECT
 public:
@@ -25,7 +27,7 @@ public slots:
     void showAuthenticationWindow();
 
     void authenticationSuccess(quint32 id);
-    void authenticationFail(quint32 id);
+    void authenticationFail(quint32 id, RPCErrorStatus status);
 };
 
 #endif // GUIMANAGER_H
