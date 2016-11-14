@@ -26,6 +26,7 @@ buildNumber.properties
 
 ### Intellij IDEA config
 /.idea/
+*.iml
 
 # vim
 *.swp

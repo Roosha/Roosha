@@ -14,11 +14,30 @@ CentralController::CentralController() {
     connect(hkListener, &HotkeyListener::newWord, this, &CentralController::handleNewWord);
     connect(networkManager, &NetworkManager::successTranslate,
             guiManager, &GUIManager::showNewTranslationWindow);
+
+
+    /**
+     * Connecting authentication and registration responces
+     */
+
+    qRegisterMetaType<RPCErrorStatus>("RPCErrorStatus");
+
+    connect(networkManager, &NetworkManager::successAuthorize,
+            guiManager, &GUIManager::authenticationSuccess);
+    connect(networkManager, &NetworkManager::failAuthorize,
+            guiManager, &GUIManager::authenticationFail, Qt::ConnectionType::DirectConnection);
+
+    connect(networkManager, &NetworkManager::successRegistrate,
+            guiManager, &GUIManager::authenticationSuccess);
+    connect(networkManager, &NetworkManager::failRegistrate,
+            guiManager, &GUIManager::authenticationFail, Qt::ConnectionType::DirectConnection);
+
 }
 
 void CentralController::start() {
     hkListener->start();
     guiManager->showMainWin();
+    guiManager->showAuthenticationWindow();
 }
 
 void CentralController::handleNewWord(QString word) {

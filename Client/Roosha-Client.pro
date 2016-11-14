@@ -31,10 +31,12 @@ SOURCES += main.cpp \
     Core/world.cpp \
     Test/Core/changes/worldtest.cpp \
     GUI/cardcreationcontroller.cpp \
-    GUI/cardlistcontroller.cpp
+    GUI/cardlistcontroller.cpp \
+    GUI/authentication_controller.cpp
 
 RESOURCES += \
-    QML/qml.qrc
+    QML/qml.qrc \
+    Img/img.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 #QML_IMPORT_PATH = /home/alex/IDE/Qt/5.6/gcc_64/qml
@@ -68,7 +70,8 @@ HEADERS += \
     Test/Core/changes/worldtest.h \
     GUI/cardcreationcontroller.h \
     GUI/cardlistcontroller.h \
-    Helpers/protobuf_converter.h
+    Helpers/protobuf_converter.h \
+    GUI/authentication_controller.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

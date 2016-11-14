@@ -20,8 +20,10 @@ enum RPCErrorStatus {
     DEADLINE_EXCEEDED,
     NOT_AUTHENTICATED,
     ALREADY_IN_AUTHNTICATION_PROCESS,
+
 };
 
+Q_DECLARE_METATYPE(RPCErrorStatus)
 
 /**
  * Base struct for all rpc data. It should be used to hold the all information about call in grpc CompletionQueue.
