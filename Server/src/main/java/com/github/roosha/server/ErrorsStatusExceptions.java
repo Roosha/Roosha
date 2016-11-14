@@ -30,28 +30,6 @@ import static java.lang.String.format;
 @SuppressWarnings("WeakerAccess")
 public class ErrorsStatusExceptions {
     /**
-     * Translation failure status exception for default translation direction.
-     * @param source the text fail to be translated
-     * @see ErrorsStatusExceptions#noTranslation(String, String)
-     */
-    public static StatusRuntimeException noTranslation(@NotNull String source) {
-        return noTranslation(source, "AUTO");
-    }
-
-    /**
-     * This error should be thrown if no translation found.
-     * <b>Note:</b> this error should be used only if translation failed due to absence in
-     * supported translation providers.
-     * @param source the text fail to be translated
-     * @param direction translation direction
-     */
-    public static StatusRuntimeException noTranslation(@NotNull String source, @NotNull String direction) {
-        return Status.NOT_FOUND.augmentDescription(
-                format("Can not translate '%s' in translation direction '%s'", source, direction)
-        ).asRuntimeException();
-    }
-
-    /**
      * This error should be thrown whenever gotten authorization token is invalid or expired.
      */
     public static StatusRuntimeException expiredAuthToken() {

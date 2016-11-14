@@ -35,5 +35,6 @@ private:
 };
 
 typedef QList<QSharedPointer<Translation> > Translations;
+Q_DECLARE_METATYPE(Translations);
 
 #endif // TRANSLATION_H

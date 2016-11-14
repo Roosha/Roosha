@@ -15,9 +15,9 @@ AuthenticationController::AuthenticationController(QObject *parent) :
     qRegisterMetaType<AuthenticationState>("AuthenticationState");
 
     credentials_ = QVariantMap {
-        {"login", "timmy"},
-        {"password", "jimmy"}
-    };// TODO: get saved credentials from configuration manager
+        {"login", configurationManager_.getLogin()},
+        {"password", configurationManager_.getPasswordHash()}
+    };
 }
 
 void AuthenticationController::showLoginWindow() {
@@ -74,6 +74,8 @@ AuthenticationController::AuthenticationState AuthenticationController::getState
 
 void AuthenticationController::authenticationSuccess(quint32 id) {
     setState(AuthenticationController::AuthenticationSuccess);
+    if(registerWidget_) registerWidget_->close();
+    if(loginWidget_) loginWidget_->close();
 }
 
 void AuthenticationController::authenticationFail(quint32 id) {

@@ -18,11 +18,11 @@ public:
     void setNetworkManager(NetworkManager* manager);
 
     QString getLogin();
-    QString getPassword();
+    QString getPasswordHash();
     QString getToken();
 
     void setLogin(QString login);
-    void setPassword(QString password);
+    void setPasswordHash(QString password);
     void setToken(QString token);
 
 protected:

@@ -71,12 +71,13 @@ public class RooshaRpcService extends RooshaServiceImplBase {
         requireCallerUserId();
 
         final RawTranslation rawTranslation = provider.translate(request.getSource());
-        final Translations.Builder responseBuilder = rawTranslation.convertToProtoTranslationsBuilder();
+        Translations.Builder responseBuilder = rawTranslation.convertToProtoTranslationsBuilder();
         if (responseBuilder != null) {
             rawTranslation.addToProtoTranslationsBuilder(responseBuilder);
             responseBuilder.setSource(request.getSource());
         } else {
-            throw ErrorsStatusExceptions.noTranslation(request.getSource());
+            responseBuilder = Translations.newBuilder(Translations.getDefaultInstance());
+//            throw ErrorsStatusExceptions.noTranslation(request.getSource());
         }
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();

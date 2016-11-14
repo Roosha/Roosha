@@ -18,6 +18,8 @@ void Bootstrap::run() { // TODO: create all stages of initialisation
 
     cm->setNetworkManager(nm);
 
+    qRegisterMetaType<Translations>("Translations");
+
     cc->configureManager = cm;
     cc->dbManager = dbm;
     cc->guiManager = guim;

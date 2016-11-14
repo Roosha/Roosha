@@ -35,18 +35,19 @@ private:
     static const quint32 TECHNICAL_REQUEST_ID;
 
     /**
-     * This function should be called only when stateMutex_ is locked.
-     * @note authorizationRequest is sent with id == TECHNICAL_REQUEST_ID,
-     * so result of this request should not be emited outside NetworkManager
-     * @return {@code true} if authorization request sent(and current state is AWAIT_AUTHENTICATION) and {@code false}
-     * if no authorization request sent and current status is AWAIT_CREDENTIALS.
+     * Try to get credentials from ConfigurationManager.
+     * If got, send new 'authorize' request with TEQNICAL_REQUEST_ID and toggle state_ to AWAIT_AUTHENTICATION.
+     * Otherwise, toggle to state_ to AWAIT_CREDENTIALS.
+     *
+     * NOTE: this function should be called if and only if stateMutex_ is already locked by this thread.
+     *
+     * @return whether 'authorize' requerst sent or not.
      */
     bool tryToUpdateToken();
     void processAuthorizeOrRegitrateResponse(AuthorizeOrRegistrateAsyncCall *call);
 
     QMutex stateMutex_;
     State state_;
-    grpc::string token_;
     QQueue<AuthenticatedAsyncCall*> callsQueue_;
     RooshaServiceConnector *connector_;
     NetworkManager *netManager_;

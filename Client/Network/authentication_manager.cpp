@@ -4,6 +4,7 @@
 #include <grpc++/grpc++.h>
 
 #include "Helpers/protobuf_converter.h"
+#include "Helpers/configuremanager.h"
 #include "authentication_manager.h"
 #include "roosha_service_connector.h"
 #include "network_manager.h"
@@ -26,7 +27,7 @@ void AuthenticationManager::authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall
     case AWAIT_CREDENTIALS:
     case AUTHENTICATED:
         state_ = AWAIT_AUTHENTICATION;
-        token_ = "";
+        ConfigureManager::Instance().setToken("");
         call->send(connector_);
         break;
     case AWAIT_AUTHENTICATION:
@@ -41,7 +42,7 @@ void AuthenticationManager::sendWithMetadata(AuthenticatedAsyncCall *call) {
 
     switch (state_) {
     case AUTHENTICATED:
-        call->context_.AddMetadata(TOKEN_METADATA_KEY, token_);
+        call->context_.AddMetadata(TOKEN_METADATA_KEY, ConfigureManager::Instance().getToken().toStdString());
         call->send(connector_);
         break;
     case AWAIT_AUTHENTICATION:
@@ -61,6 +62,7 @@ void AuthenticationManager::receiveAuthenticatedCall(AuthenticatedAsyncCall *cal
         call->fail(netManager_);
     }
 
+    // -----------------Authentication error-------------
     QMutexLocker lock(&stateMutex_);
     switch (state_) {
     case AuthenticationManager::AUTHENTICATED:
@@ -92,9 +94,19 @@ void AuthenticationManager::receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegi
 }
 
 bool AuthenticationManager::tryToUpdateToken() {
-    token_ = "";
-    // TODO: look for credentials and send authorization request.
-    return false;
+    ConfigureManager::Instance().setToken("");
+    std::string login = ConfigureManager::Instance().getLogin().toStdString();
+    std::string passwordHash = ConfigureManager::Instance().getPasswordHash().toStdString();
+
+    if (login != "") {
+        AuthorizeOrRegistrateAsyncCall *call = new AuthorizeAsyncCall(TECHNICAL_REQUEST_ID, DEFAULT_TIMEOUT_MILLIS);
+        state_ = AWAIT_AUTHENTICATION;
+        call->send(connector_);
+        return true;
+    } else {
+        state_ = AWAIT_CREDENTIALS;
+        return false;
+    }
 }
 
 void AuthenticationManager::processAuthorizeOrRegitrateResponse(AuthorizeOrRegistrateAsyncCall *call) {
@@ -106,13 +118,16 @@ void AuthenticationManager::processAuthorizeOrRegitrateResponse(AuthorizeOrRegis
 
     if (call->status_.ok()) {
         state_ = AUTHENTICATED;
-        token_ = call->response_.token();
+        ConfigureManager::Instance().setLogin(QString::fromStdString(call->request_.login()));
+        ConfigureManager::Instance().setPasswordHash(QString::fromStdString(call->request_.passwordhash()));
+        ConfigureManager::Instance().setToken(QString::fromStdString(call->response_.token()));
+
         for (auto curCall: callsQueue_) {
             curCall->send(connector_);
         }
     } else {
         state_ = AWAIT_CREDENTIALS;
-        token_ = "";
+        ConfigureManager::Instance().setToken("");
         for (auto curCall: callsQueue_) {
             curCall->fail(netManager_);
         }

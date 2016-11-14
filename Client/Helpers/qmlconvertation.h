@@ -4,18 +4,21 @@
 #include <QVariant>
 #include <QMap>
 
-class QmlConvertation
-{
+#include <iostream>
+
+class QmlConvertation {
 public:
     QmlConvertation();
 
     template<class T>
     static QVariant prepareToQml(QList<QSharedPointer<T> > data) {
+        std::cout << "prepareToQml called" << std::endl;
         QList<QObject *> raw;
         raw.reserve(data.size());
         for(auto pointer : data) {
             raw.push_back(pointer.data());
         }
+        std::cout << "prepareToQml finished" << std::endl;
         return QVariant::fromValue(raw);
     }
 

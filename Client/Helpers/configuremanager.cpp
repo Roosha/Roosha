@@ -19,7 +19,7 @@ QString ConfigureManager::getLogin() {
     return settings_.value("auth/login", "").toString();
 }
 
-QString ConfigureManager::getPassword() {
+QString ConfigureManager::getPasswordHash() {
     return settings_.value("auth/password", "").toString();
 }
 
@@ -31,7 +31,7 @@ void ConfigureManager::setLogin(QString login) {
     settings_.setValue("auth/login", QVariant::fromValue(login));
 }
 
-void ConfigureManager::setPassword(QString password) {
+void ConfigureManager::setPasswordHash(QString password) {
     settings_.setValue("auth/password", QVariant::fromValue(password));
 }
 
