@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/img">
         <file>64.png</file>
+        <file>32.png</file>
     </qresource>
 </RCC>

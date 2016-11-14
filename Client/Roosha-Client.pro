@@ -30,6 +30,8 @@ SOURCES += main.cpp \
     Helpers/protobuf_converter.cpp \
     Core/world.cpp \
     Test/Core/changes/worldtest.cpp \
+    GUI/system_tray.cpp \
+    Test/Core/changes/worldtest.cpp \
     GUI/cardcreationcontroller.cpp \
     GUI/cardlistcontroller.cpp \
     GUI/authentication_controller.cpp
@@ -71,7 +73,9 @@ HEADERS += \
     GUI/cardcreationcontroller.h \
     GUI/cardlistcontroller.h \
     Helpers/protobuf_converter.h \
-    GUI/authentication_controller.h
+    GUI/authentication_controller.h \
+    Test/Core/changes/worldtest.h \
+    GUI/system_tray.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

@@ -5,7 +5,10 @@
 #include "Core/hotkeylistener.h"
 #include "Network/network_manager.h"
 #include "GUI/guimanager.h"
+#include "GUI/system_tray.h"
+
 #include <QMessageBox>
+#include <QApplication>
 
 CentralController::CentralController() {
     Bootstrap boot(this);
@@ -32,6 +35,8 @@ CentralController::CentralController() {
     connect(networkManager, &NetworkManager::failRegistrate,
             guiManager, &GUIManager::authenticationFail, Qt::ConnectionType::DirectConnection);
 
+    connect(systemTray, &SystemTray::newWord, this, &CentralController::handleNewWord);
+    connect(systemTray, &SystemTray::closeApplication, this, &CentralController::closeApplication);
 }
 
 void CentralController::start() {
@@ -42,4 +47,8 @@ void CentralController::start() {
 
 void CentralController::handleNewWord(QString word) {
     networkManager->translate(word, 5000);
+}
+
+void CentralController::closeApplication() {
+    QApplication::quit();
 }
