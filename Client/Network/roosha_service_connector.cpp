@@ -1,8 +1,12 @@
 #include <QtDebug>
+#include <QtConcurrent>
 
 #include "roosha_service_connector.h"
 #include "server_response.h"
 #include "Proto/roosha_service.grpc.pb.h"
+#include "Helpers/protobuf_converter.h"
+
+using ProtobufConverter::changeFromProtobuf;
 
 RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
     responseListener_(new AsyncRpcResponseListener(this)),
@@ -40,6 +44,32 @@ void RooshaServiceConnector::authorize(AuthorizeAsyncCall *call) {
 void RooshaServiceConnector::registrate(RegistrateAsyncCall *call) {
     auto responseReader = stub_->Asyncregistrate(&call->context_, call->request_, &completionQueue_);
     responseReader->Finish(&call->response_, &call->status_, call);
+}
+
+void RooshaServiceConnector::saveChanges(SaveChangesAsyncCall *call) {
+    QtConcurrent::run([call, this] {
+        auto writer = stub_->saveChanges(&call->context_, &call->response_);
+        for (const auto& change : call->request_) {
+            if (writer->Write(change)) {
+                break;
+            }
+        }
+        writer->WritesDone();
+        call->status_ = writer->Finish();
+        call->verify(authManager_);
+    });
+}
+
+void RooshaServiceConnector::loadChanges(LoadChangesAsyncCall *call) {
+    QtConcurrent::run([call, this] {
+        auto reader = stub_->loadChanges(&call->context_, call->request_);
+        roosha::Change receivedChange;
+        while (reader->Read(&receivedChange)) {
+            call->response_.append(changeFromProtobuf(receivedChange));
+        }
+        call->status_ = reader->Finish();
+        call->verify(authManager_);
+    });
 }
 
 void RooshaServiceConnector::receiveResponse(RpcAsyncCall *call) {

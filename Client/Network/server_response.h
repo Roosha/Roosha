@@ -3,9 +3,11 @@
 #include <memory>
 
 #include <QSharedPointer>
+#include <QList>
 
 #include <grpc++/grpc++.h>
 
+#include <Core/ichange.h>
 #include "Proto/roosha_service.pb.h"
 #include "Proto/commons.pb.h"
 
@@ -137,6 +139,32 @@ struct ProposeUserTranslationsAsyncCall : public AuthenticatedAsyncCall {
 
     roosha::Translations request_;
     roosha::Void response_;
+};
+
+struct SaveChangesAsyncCall : public AuthenticatedAsyncCall {
+    using AuthenticatedAsyncCall::AuthenticatedAsyncCall;
+
+    void send(RooshaServiceConnector *connector) override;
+    void succeed(NetworkManager *netManager) override;
+    using RpcAsyncCall::fail;
+    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
+
+
+    QList<roosha::Change> request_;
+    roosha::Void response_;
+};
+
+struct LoadChangesAsyncCall : public AuthenticatedAsyncCall {
+    using AuthenticatedAsyncCall::AuthenticatedAsyncCall;
+
+    void send(RooshaServiceConnector *connector) override;
+    void succeed(NetworkManager *netManager) override;
+    using RpcAsyncCall::fail;
+    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
+
+
+    roosha::Void request_;
+    QList<QSharedPointer<IChange>> response_;
 };
 
 #endif // ASYNCCLIENTCALL_H

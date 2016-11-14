@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick widgets core quickwidgets quickcontrols2
+QT += qml quick widgets core quickwidgets quickcontrols2 concurrent
 CONFIG += c++11
 
 QMAKE_CXX = g++

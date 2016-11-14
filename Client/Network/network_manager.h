@@ -3,6 +3,7 @@
 
 #include "Core/translation.h"
 #include "server_response.h"
+#include "Core/ichange.h"
 
 #include <QObject>
 
@@ -23,6 +24,8 @@ public:
     quint32 proposeUserTranslations(Translations translations, quint32 timeoutMills);
     quint32 authorize(QString login, QString password, quint32 timeoutMills);
     quint32 registrate(QString login, QString password, quint32 timeoutMills);
+    quint32 saveChanges(QList<QSharedPointer<IChange>> changes, quint32 timeoutMillis);
+    quint32 loadChanges(quint32 timeoutMillis);
 
 signals:
     void successTranslate(quint32 id, Translations translations);
@@ -37,9 +40,14 @@ signals:
     void successRegistrate(quint32 id);
     void failRegistrate(quint32 id, RPCErrorStatus status);
 
+    void successSaveChanges(quint32 id);
+    void failSaveChanges(quint32 id, RPCErrorStatus status);
+
+    void successLoadChanges(quint32 id, QList<QSharedPointer<IChange>> changes);
+    void failLoadChanges(quint32 id, RPCErrorStatus status);
+
 private:
     QAtomicInteger<quint32> currentId_;
-
     AuthenticationManager *authenticationManager_;
 };
 

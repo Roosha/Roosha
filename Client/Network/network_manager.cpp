@@ -52,3 +52,20 @@ quint32 NetworkManager::registrate(QString login, QString password, quint32 time
     call->authenticate(authenticationManager_);
     return call->id_;
 }
+
+quint32 NetworkManager::saveChanges(QList<QSharedPointer<IChange>> changes, quint32 timeoutMillis) {
+    SaveChangesAsyncCall *call = new SaveChangesAsyncCall(++currentId_, timeoutMillis);
+    for (auto change : changes) {
+        call->request_.append(change->toProtobuf());
+    }
+
+    call->authenticate(authenticationManager_);
+    return call->id_;
+}
+
+quint32 NetworkManager::loadChanges(quint32 timeoutMillis) {
+    LoadChangesAsyncCall *call = new LoadChangesAsyncCall(++currentId_, timeoutMillis);
+
+    call->authenticate(authenticationManager_);
+    return call->id_;
+}

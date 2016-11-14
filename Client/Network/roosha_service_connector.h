@@ -5,6 +5,8 @@
 
 #include <grpc++/grpc++.h>
 
+#include <memory>
+
 #include "authentication_manager.h"
 #include "Proto/roosha_service.grpc.pb.h"
 
@@ -12,6 +14,8 @@ class TranslateAsyncCall;
 class ProposeUserTranslationsAsyncCall;
 class AuthorizeAsyncCall;
 class RegistrateAsyncCall;
+class SaveChangesAsyncCall;
+class LoadChangesAsyncCall;
 
 class AsyncRpcResponseListener;
 
@@ -25,6 +29,8 @@ public:
     void proposeUserTranslation(ProposeUserTranslationsAsyncCall *call);
     void authorize(AuthorizeAsyncCall *call);
     void registrate(RegistrateAsyncCall *call);
+    void saveChanges(SaveChangesAsyncCall *call);
+    void loadChanges(LoadChangesAsyncCall *call);
 
     void receiveResponse(RpcAsyncCall *call);
 private:

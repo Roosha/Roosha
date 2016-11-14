@@ -89,3 +89,28 @@ void AuthenticatedAsyncCall::authenticate(AuthenticationManager *authManager) {
 void AuthenticatedAsyncCall::verify(AuthenticationManager *authManager) {
     authManager->receiveAuthenticatedCall(this);
 }
+
+void SaveChangesAsyncCall::send(RooshaServiceConnector *connector) {
+    //TODO: implement
+}
+
+void SaveChangesAsyncCall::succeed(NetworkManager *netManager) {
+    netManager->successSaveChanges(id_);
+}
+
+void SaveChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
+    netManager->failSaveChanges(id_, status);
+}
+
+
+void LoadChangesAsyncCall::send(RooshaServiceConnector *connector) {
+    // TODO: implement
+}
+
+void LoadChangesAsyncCall::succeed(NetworkManager *netManager) {
+    netManager->successLoadChanges(id_, response_);
+}
+
+void LoadChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
+    netManager->failLoadChanges(id_, status);
+}
