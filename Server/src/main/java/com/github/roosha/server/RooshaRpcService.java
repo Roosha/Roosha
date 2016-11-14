@@ -77,7 +77,6 @@ public class RooshaRpcService extends RooshaServiceImplBase {
             responseBuilder.setSource(request.getSource());
         } else {
             responseBuilder = Translations.newBuilder(Translations.getDefaultInstance());
-//            throw ErrorsStatusExceptions.noTranslation(request.getSource());
         }
         responseObserver.onNext(responseBuilder.build());
         responseObserver.onCompleted();
@@ -150,9 +149,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
         final long userId = requireCallerUserId();
 
         final List<Change> world = worldStorage.getWorld(userId);
-        if (world == null) {
-            responseObserver.onNext(Change.getDefaultInstance());
-        } else {
+        if (world != null) {
             world.forEach(responseObserver::onNext);
         }
         responseObserver.onCompleted();

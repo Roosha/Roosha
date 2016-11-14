@@ -37,11 +37,12 @@ CentralController::CentralController() {
 
     connect(systemTray, &SystemTray::newWord, this, &CentralController::handleNewWord);
     connect(systemTray, &SystemTray::closeApplication, this, &CentralController::closeApplication);
+    connect(systemTray, &SystemTray::showMainWidnow, guiManager, &GUIManager::showMainWin);
 }
 
 void CentralController::start() {
     hkListener->start();
-    guiManager->showMainWin();
+//    guiManager->showMainWin();
     guiManager->showAuthenticationWindow();
 }
 
