@@ -19,6 +19,7 @@ class NetworkManager;
 class AuthenticationManager {
 public:
     AuthenticationManager(NetworkManager *n);
+    ~AuthenticationManager();
 
     void authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall *call);
     void sendWithMetadata(AuthenticatedAsyncCall *call);
@@ -31,8 +32,13 @@ private:
         AWAIT_AUTHENTICATION,
         AWAIT_CREDENTIALS,
     };
+
+
     static const grpc::string  TOKEN_METADATA_KEY;
     static const quint32 TECHNICAL_REQUEST_ID;
+
+
+    void setState(State state);
 
     /**
      * Try to get credentials from ConfigurationManager.
@@ -44,6 +50,7 @@ private:
      * @return whether 'authorize' requerst sent or not.
      */
     bool tryToUpdateToken();
+
     void processAuthorizeOrRegitrateResponse(AuthorizeOrRegistrateAsyncCall *call);
 
     QMutex stateMutex_;
