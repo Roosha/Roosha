@@ -21,6 +21,7 @@ public:
     virtual roosha::Change toProtobuf() const = 0;
 };
 
-typedef QVector<QSharedPointer<IChange>> ChangeList;
+typedef QSharedPointer<IChange> ChangePtr;
+typedef QVector<ChangePtr> ChangeList;
 
 #endif // IDIFF_H

@@ -61,128 +61,138 @@ RPCErrorStatus ProtobufConverter::errorStatusFromGrpc(const grpc::Status &rawSta
     }
 }
 
-roosha::Change createChange(roosha::Change::ChangeType type, QUuid cardId) {
-    roosha::Change result;
-    result.set_cardid(cardId.toString().toStdString());
-    result.set_type(type);
-    return result;
-}
+#ifndef DECLARE_CARD_CHANGE_RESULT
+#define DECLARE_CARD_CHANGE_RESULT \
+    roosha::Change result; \
+    result.mutable_cardchange()->set_cardid(change.getCardId().toString().toStdString());
+#else
+#error DECLARE_CARD_CHANGE_RESULT macro already defined
+#endif
 
-roosha::Change::StringListChange::Field __fieldToProtobuf(Field field) {
+
+inline roosha::CardChange::Field __toProtoField(Field field) {
     switch (field) {
     case EXAMPLE:
-        return roosha::Change_StringListChange_Field_EXAMPLE;
+        return roosha::CardChange::Field::CardChange_Field_EXAMPLE;
     case TARGET:
-        return roosha::Change_StringListChange_Field_TARGET;
+        return roosha::CardChange::Field::CardChange_Field_TARGET;
 
     }
 }
 
+roosha::Change ProtobufConverter::changeToProtobuf(const DeleteCard &change) {
+    DECLARE_CARD_CHANGE_RESULT;
+    result.mutable_cardchange()->mutable_deletecard();
+    return result;
+}
+
 roosha::Change ProtobufConverter::changeToProtobuf(const ChangeSource &change) {
-    roosha::Change result = createChange(roosha::Change_ChangeType_CHANGE_SOURCE, change.getCardId());
-    result.set_newsource(change.getNewSource().toStdString());
-
-    return result;
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const EditElem &change) {
-    roosha::Change result = createChange(roosha::Change_ChangeType_EDIT_ELEM, change.getCardId());
-
-    roosha::Change::StringListChange *stringListChange = result.mutable_stringlistchange();
-    stringListChange->set_fieldname(__fieldToProtobuf(change.getFieldName()));
-    stringListChange->set_index(change.getPos());
-    stringListChange->set_value(change.getNewElem().toStdString());
-
-    return result;
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const InsertElem &change) {
-    roosha::Change result = createChange(roosha::Change_ChangeType_INSERT_ELEM, change.getCardId());
-
-    roosha::Change::StringListChange *stringListChange = result.mutable_stringlistchange();
-    stringListChange->set_fieldname(__fieldToProtobuf(change.getFieldName()));
-    stringListChange->set_index(change.getPos());
-    stringListChange->set_value(change.getInsertingElem().toStdString());
-
-    return result;
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const DeleteElem &change) {
-    roosha::Change result = createChange(roosha::Change_ChangeType_DELETE_ELEM, change.getCardId());
-
-    roosha::Change::StringListChange *stringListChange = result.mutable_stringlistchange();
-    stringListChange->set_fieldname(__fieldToProtobuf(change.getFieldName()));
-    stringListChange->set_index(change.getPos());
-
+    DECLARE_CARD_CHANGE_RESULT;
+    result.mutable_cardchange()->mutable_changesource()->set_newsource(change.getNewSource().toStdString());
     return result;
 }
 
 roosha::Change ProtobufConverter::changeToProtobuf(const CreateCard &change) {
-    return createChange(roosha::Change_ChangeType_CREATE_CARD, change.getCardId());
+    DECLARE_CARD_CHANGE_RESULT;
+    result.mutable_cardchange()->mutable_createcard();
+    return result;
 }
 
-roosha::Change ProtobufConverter::changeToProtobuf(const DeleteCard &change) {
-    return createChange(roosha::Change_ChangeType_DELETE_CARD, change.getCardId());
+roosha::Change ProtobufConverter::changeToProtobuf(const EditElem &change) {
+    DECLARE_CARD_CHANGE_RESULT;
+    auto editElem = result.mutable_cardchange()->mutable_editelem();
+    editElem->set_field(__toProtoField(change.getFieldName()));
+    editElem->set_position(change.getPos());
+    editElem->set_value(change.getNewElem().toStdString());
+    return result;
 }
 
-Field __fieldFromProtobuf(roosha::Change_StringListChange_Field rawChange) {
-    switch (rawChange) {
-    case roosha::Change_StringListChange_Field_UNKNOWN:
-        qWarning() << "unknown field type";
-        break;
-    case roosha::Change_StringListChange_Field_TARGET:
-        return Field::TARGET;
-    case roosha::Change_StringListChange_Field_EXAMPLE:
+roosha::Change ProtobufConverter::changeToProtobuf(const InsertElem &change) {
+    DECLARE_CARD_CHANGE_RESULT;
+    auto insertElem = result.mutable_cardchange()->mutable_insertelem();
+    insertElem->set_field(__toProtoField(change.getFieldName()));
+    insertElem->set_index(change.getPos());
+    insertElem->set_value(change.getInsertingElem().toStdString());
+    return result;
+}
+
+
+roosha::Change ProtobufConverter::changeToProtobuf(const DeleteElem &change) {
+    DECLARE_CARD_CHANGE_RESULT;
+    auto deleteElem = result.mutable_cardchange()->mutable_deleteelem();
+    deleteElem->set_field(__toProtoField(change.getFieldName()));
+    deleteElem->set_index(change.getPos());
+    return result;
+}
+
+
+#ifdef DECLARE_CARD_CHANGE_RESULT
+#undef DECLARE_CARD_CHANGE_RESULT
+#else
+#error DECLARE_CARD_CHANGE_RESULT macro is not defined
+#endif
+
+
+Field __fielfFromProto(roosha::CardChange::Field rawField) {
+    switch (rawField) {
+    case roosha::CardChange::Field::CardChange_Field_EXAMPLE:
         return Field::EXAMPLE;
-
-    case roosha::Change_StringListChange_Field_Change_StringListChange_Field_INT_MIN_SENTINEL_DO_NOT_USE_:
-    case roosha::Change_StringListChange_Field_Change_StringListChange_Field_INT_MAX_SENTINEL_DO_NOT_USE_:
-        qWarning() << "unexpected protobuf internal field type: " << rawChange;
-        break;
+    case roosha::CardChange::Field::CardChange_Field_TARGET:
+        return Field::TARGET;
+    case roosha::CardChange::Field::CardChange_Field_UNKNOWN:
+    case roosha::CardChange::Field::CardChange_Field_CardChange_Field_INT_MAX_SENTINEL_DO_NOT_USE_:
+    case roosha::CardChange::Field::CardChange_Field_CardChange_Field_INT_MIN_SENTINEL_DO_NOT_USE_:
+        qFatal("__fielfFromProto: unexpected raw field.L %d", rawField);
     }
 }
 
-QSharedPointer<IChange> ProtobufConverter::changeFromProtobuf(const roosha::Change &rawChange) {
-    QUuid cardId(QString::fromStdString(rawChange.cardid()));
+ChangePtr __cardChangeFromProto(const roosha::CardChange& rawChange) {
+    QUuid cardId = QUuid(QString::fromStdString(rawChange.cardid()));
 
-    // I used pointer because I don't how standart accessor behaves when field isn't initialized.
-    const roosha::Change::StringListChange* strListChange =
-        const_cast<roosha::Change&>(rawChange).mutable_stringlistchange();
-
-    switch (rawChange.type()) {
-    case roosha::Change_ChangeType_UNKNOWN:
-        qWarning() << "unknown change type";
-        break;
-    case roosha::Change_ChangeType_CHANGE_SOURCE:
-        return QSharedPointer<ChangeSource>::create(cardId, QString::fromStdString(rawChange.newsource()));
-    case roosha::Change_ChangeType_DELETE_CARD:
-        return QSharedPointer<DeleteCard>::create(cardId);
-    case roosha::Change_ChangeType_CREATE_CARD:
+    switch(rawChange.change_case()) {
+    case roosha::CardChange::kCreateCard:
         return QSharedPointer<CreateCard>::create(cardId);
-    case roosha::Change_ChangeType_INSERT_ELEM:
+    case roosha::CardChange::kDeleteCard:
+        return QSharedPointer<DeleteCard>::create(cardId);
+    case roosha::CardChange::kChangeSource:
+        return QSharedPointer<ChangeSource>::create(
+                   cardId,
+                   QString::fromStdString(rawChange.changesource().newsource())
+               );
+    case roosha::CardChange::kInsertElem:
         return QSharedPointer<InsertElem>::create(
                    cardId,
-                   __fieldFromProtobuf(strListChange->fieldname()),
-                   QString::fromStdString(strListChange->value()),
-                   strListChange->index()
+                   __fielfFromProto(rawChange.insertelem().field()),
+                   QString::fromStdString(rawChange.insertelem().value()),
+                   rawChange.insertelem().index()
                );
-    case roosha::Change_ChangeType_DELETE_ELEM:
+    case roosha::CardChange::kDeleteElem:
         return QSharedPointer<DeleteElem>::create(
                    cardId,
-                   __fieldFromProtobuf(strListChange->fieldname()),
-                   strListChange->index()
+                   __fielfFromProto(rawChange.deleteelem().field()),
+                   rawChange.deleteelem().index()
                );
-    case roosha::Change_ChangeType_EDIT_ELEM:
+    case roosha::CardChange::kEditElem:
         return QSharedPointer<EditElem>::create(
                    cardId,
-                   __fieldFromProtobuf(strListChange->fieldname()),
-                   QString::fromStdString(strListChange->value()),
-                   strListChange->index()
+                   __fielfFromProto(rawChange.editelem().field()),
+                   QString::fromStdString(rawChange.editelem().value()),
+                   rawChange.editelem().position()
                );
-    case roosha::Change_ChangeType_Change_ChangeType_INT_MIN_SENTINEL_DO_NOT_USE_:
-    case roosha::Change_ChangeType_Change_ChangeType_INT_MAX_SENTINEL_DO_NOT_USE_:
-        qWarning() << "unexpected protobuf internal change type: " << rawChange.type();
-        break;
+    case roosha::CardChange::CHANGE_NOT_SET:
+        qWarning("__cardChangeFromProto: empty card change passed. Return nullptr");
+        return ChangePtr(nullptr);
+
+    }
+}
+
+ChangePtr ProtobufConverter::changeFromProtobuf(const roosha::Change &rawChange) {
+    switch (rawChange.change_case()) {
+    case roosha::Change::kCardChange:
+        return __cardChangeFromProto(rawChange.cardchange());
+    case roosha::Change::CHANGE_NOT_SET:
+        qWarning("ProtobufConverter::changeFromProtobuf: empty Change passed. Return nullptr");
+        return ChangePtr(nullptr);
 
     }
 }

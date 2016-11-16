@@ -37,187 +37,38 @@ void protobuf_AddDesc_changes_2eproto();
 void protobuf_AssignDesc_changes_2eproto();
 void protobuf_ShutdownFile_changes_2eproto();
 
+class CardChange;
+class CardChange_ChangeSource;
+class CardChange_CreateCard;
+class CardChange_DeleteCard;
+class CardChange_DeleteElem;
+class CardChange_EditElem;
+class CardChange_InsertElem;
 class Change;
-class Change_StringListChange;
 
-enum Change_StringListChange_Field {
-  Change_StringListChange_Field_UNKNOWN = 0,
-  Change_StringListChange_Field_TARGET = 1,
-  Change_StringListChange_Field_EXAMPLE = 2,
-  Change_StringListChange_Field_Change_StringListChange_Field_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  Change_StringListChange_Field_Change_StringListChange_Field_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+enum CardChange_Field {
+  CardChange_Field_UNKNOWN = 0,
+  CardChange_Field_TARGET = 1,
+  CardChange_Field_EXAMPLE = 2,
+  CardChange_Field_CardChange_Field_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  CardChange_Field_CardChange_Field_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
-bool Change_StringListChange_Field_IsValid(int value);
-const Change_StringListChange_Field Change_StringListChange_Field_Field_MIN = Change_StringListChange_Field_UNKNOWN;
-const Change_StringListChange_Field Change_StringListChange_Field_Field_MAX = Change_StringListChange_Field_EXAMPLE;
-const int Change_StringListChange_Field_Field_ARRAYSIZE = Change_StringListChange_Field_Field_MAX + 1;
+bool CardChange_Field_IsValid(int value);
+const CardChange_Field CardChange_Field_Field_MIN = CardChange_Field_UNKNOWN;
+const CardChange_Field CardChange_Field_Field_MAX = CardChange_Field_EXAMPLE;
+const int CardChange_Field_Field_ARRAYSIZE = CardChange_Field_Field_MAX + 1;
 
-const ::google::protobuf::EnumDescriptor* Change_StringListChange_Field_descriptor();
-inline const ::std::string& Change_StringListChange_Field_Name(Change_StringListChange_Field value) {
+const ::google::protobuf::EnumDescriptor* CardChange_Field_descriptor();
+inline const ::std::string& CardChange_Field_Name(CardChange_Field value) {
   return ::google::protobuf::internal::NameOfEnum(
-    Change_StringListChange_Field_descriptor(), value);
+    CardChange_Field_descriptor(), value);
 }
-inline bool Change_StringListChange_Field_Parse(
-    const ::std::string& name, Change_StringListChange_Field* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<Change_StringListChange_Field>(
-    Change_StringListChange_Field_descriptor(), name, value);
-}
-enum Change_ChangeType {
-  Change_ChangeType_UNKNOWN = 0,
-  Change_ChangeType_CHANGE_SOURCE = 1,
-  Change_ChangeType_DELETE_CARD = 2,
-  Change_ChangeType_CREATE_CARD = 3,
-  Change_ChangeType_INSERT_ELEM = 4,
-  Change_ChangeType_DELETE_ELEM = 5,
-  Change_ChangeType_EDIT_ELEM = 6,
-  Change_ChangeType_Change_ChangeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  Change_ChangeType_Change_ChangeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool Change_ChangeType_IsValid(int value);
-const Change_ChangeType Change_ChangeType_ChangeType_MIN = Change_ChangeType_UNKNOWN;
-const Change_ChangeType Change_ChangeType_ChangeType_MAX = Change_ChangeType_EDIT_ELEM;
-const int Change_ChangeType_ChangeType_ARRAYSIZE = Change_ChangeType_ChangeType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* Change_ChangeType_descriptor();
-inline const ::std::string& Change_ChangeType_Name(Change_ChangeType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    Change_ChangeType_descriptor(), value);
-}
-inline bool Change_ChangeType_Parse(
-    const ::std::string& name, Change_ChangeType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<Change_ChangeType>(
-    Change_ChangeType_descriptor(), name, value);
+inline bool CardChange_Field_Parse(
+    const ::std::string& name, CardChange_Field* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<CardChange_Field>(
+    CardChange_Field_descriptor(), name, value);
 }
 // ===================================================================
-
-class Change_StringListChange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.Change.StringListChange) */ {
- public:
-  Change_StringListChange();
-  virtual ~Change_StringListChange();
-
-  Change_StringListChange(const Change_StringListChange& from);
-
-  inline Change_StringListChange& operator=(const Change_StringListChange& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const Change_StringListChange& default_instance();
-
-  void Swap(Change_StringListChange* other);
-
-  // implements Message ----------------------------------------------
-
-  inline Change_StringListChange* New() const { return New(NULL); }
-
-  Change_StringListChange* New(::google::protobuf::Arena* arena) const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const Change_StringListChange& from);
-  void MergeFrom(const Change_StringListChange& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
-    return InternalSerializeWithCachedSizesToArray(false, output);
-  }
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  void InternalSwap(Change_StringListChange* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return _internal_metadata_.arena();
-  }
-  inline void* MaybeArenaPtr() const {
-    return _internal_metadata_.raw_arena_ptr();
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  typedef Change_StringListChange_Field Field;
-  static const Field UNKNOWN =
-    Change_StringListChange_Field_UNKNOWN;
-  static const Field TARGET =
-    Change_StringListChange_Field_TARGET;
-  static const Field EXAMPLE =
-    Change_StringListChange_Field_EXAMPLE;
-  static inline bool Field_IsValid(int value) {
-    return Change_StringListChange_Field_IsValid(value);
-  }
-  static const Field Field_MIN =
-    Change_StringListChange_Field_Field_MIN;
-  static const Field Field_MAX =
-    Change_StringListChange_Field_Field_MAX;
-  static const int Field_ARRAYSIZE =
-    Change_StringListChange_Field_Field_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  Field_descriptor() {
-    return Change_StringListChange_Field_descriptor();
-  }
-  static inline const ::std::string& Field_Name(Field value) {
-    return Change_StringListChange_Field_Name(value);
-  }
-  static inline bool Field_Parse(const ::std::string& name,
-      Field* value) {
-    return Change_StringListChange_Field_Parse(name, value);
-  }
-
-  // accessors -------------------------------------------------------
-
-  // optional .roosha.Change.StringListChange.Field fieldName = 1;
-  void clear_fieldname();
-  static const int kFieldNameFieldNumber = 1;
-  ::roosha::Change_StringListChange_Field fieldname() const;
-  void set_fieldname(::roosha::Change_StringListChange_Field value);
-
-  // optional uint32 index = 2;
-  void clear_index();
-  static const int kIndexFieldNumber = 2;
-  ::google::protobuf::uint32 index() const;
-  void set_index(::google::protobuf::uint32 value);
-
-  // optional string value = 3;
-  void clear_value();
-  static const int kValueFieldNumber = 3;
-  const ::std::string& value() const;
-  void set_value(const ::std::string& value);
-  void set_value(const char* value);
-  void set_value(const char* value, size_t size);
-  ::std::string* mutable_value();
-  ::std::string* release_value();
-  void set_allocated_value(::std::string* value);
-
-  // @@protoc_insertion_point(class_scope:roosha.Change.StringListChange)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  bool _is_default_instance_;
-  int fieldname_;
-  ::google::protobuf::uint32 index_;
-  ::google::protobuf::internal::ArenaStringPtr value_;
-  mutable int _cached_size_;
-  friend void  protobuf_AddDesc_changes_2eproto();
-  friend void protobuf_AssignDesc_changes_2eproto();
-  friend void protobuf_ShutdownFile_changes_2eproto();
-
-  void InitAsDefaultInstance();
-  static Change_StringListChange* default_instance_;
-};
-// -------------------------------------------------------------------
 
 class Change : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.Change) */ {
  public:
@@ -234,10 +85,9 @@ class Change : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   static const ::google::protobuf::Descriptor* descriptor();
   static const Change& default_instance();
 
-  enum ChangeDataCase {
-    kNewSource = 3,
-    kStringListChange = 4,
-    CHANGEDATA_NOT_SET = 0,
+  enum ChangeCase {
+    kCardChange = 1,
+    CHANGE_NOT_SET = 0,
   };
 
   void Swap(Change* other);
@@ -283,105 +133,32 @@ class Change : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
 
   // nested types ----------------------------------------------------
 
-  typedef Change_StringListChange StringListChange;
-
-  typedef Change_ChangeType ChangeType;
-  static const ChangeType UNKNOWN =
-    Change_ChangeType_UNKNOWN;
-  static const ChangeType CHANGE_SOURCE =
-    Change_ChangeType_CHANGE_SOURCE;
-  static const ChangeType DELETE_CARD =
-    Change_ChangeType_DELETE_CARD;
-  static const ChangeType CREATE_CARD =
-    Change_ChangeType_CREATE_CARD;
-  static const ChangeType INSERT_ELEM =
-    Change_ChangeType_INSERT_ELEM;
-  static const ChangeType DELETE_ELEM =
-    Change_ChangeType_DELETE_ELEM;
-  static const ChangeType EDIT_ELEM =
-    Change_ChangeType_EDIT_ELEM;
-  static inline bool ChangeType_IsValid(int value) {
-    return Change_ChangeType_IsValid(value);
-  }
-  static const ChangeType ChangeType_MIN =
-    Change_ChangeType_ChangeType_MIN;
-  static const ChangeType ChangeType_MAX =
-    Change_ChangeType_ChangeType_MAX;
-  static const int ChangeType_ARRAYSIZE =
-    Change_ChangeType_ChangeType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  ChangeType_descriptor() {
-    return Change_ChangeType_descriptor();
-  }
-  static inline const ::std::string& ChangeType_Name(ChangeType value) {
-    return Change_ChangeType_Name(value);
-  }
-  static inline bool ChangeType_Parse(const ::std::string& name,
-      ChangeType* value) {
-    return Change_ChangeType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // optional .roosha.Change.ChangeType type = 1;
-  void clear_type();
-  static const int kTypeFieldNumber = 1;
-  ::roosha::Change_ChangeType type() const;
-  void set_type(::roosha::Change_ChangeType value);
+  // optional .roosha.CardChange cardChange = 1;
+  bool has_cardchange() const;
+  void clear_cardchange();
+  static const int kCardChangeFieldNumber = 1;
+  const ::roosha::CardChange& cardchange() const;
+  ::roosha::CardChange* mutable_cardchange();
+  ::roosha::CardChange* release_cardchange();
+  void set_allocated_cardchange(::roosha::CardChange* cardchange);
 
-  // optional string cardId = 2;
-  void clear_cardid();
-  static const int kCardIdFieldNumber = 2;
-  const ::std::string& cardid() const;
-  void set_cardid(const ::std::string& value);
-  void set_cardid(const char* value);
-  void set_cardid(const char* value, size_t size);
-  ::std::string* mutable_cardid();
-  ::std::string* release_cardid();
-  void set_allocated_cardid(::std::string* cardid);
-
-  // optional string newSource = 3;
-  private:
-  bool has_newsource() const;
-  public:
-  void clear_newsource();
-  static const int kNewSourceFieldNumber = 3;
-  const ::std::string& newsource() const;
-  void set_newsource(const ::std::string& value);
-  void set_newsource(const char* value);
-  void set_newsource(const char* value, size_t size);
-  ::std::string* mutable_newsource();
-  ::std::string* release_newsource();
-  void set_allocated_newsource(::std::string* newsource);
-
-  // optional .roosha.Change.StringListChange stringListChange = 4;
-  bool has_stringlistchange() const;
-  void clear_stringlistchange();
-  static const int kStringListChangeFieldNumber = 4;
-  const ::roosha::Change_StringListChange& stringlistchange() const;
-  ::roosha::Change_StringListChange* mutable_stringlistchange();
-  ::roosha::Change_StringListChange* release_stringlistchange();
-  void set_allocated_stringlistchange(::roosha::Change_StringListChange* stringlistchange);
-
-  ChangeDataCase changeData_case() const;
+  ChangeCase change_case() const;
   // @@protoc_insertion_point(class_scope:roosha.Change)
  private:
-  inline void set_has_newsource();
-  inline void set_has_stringlistchange();
+  inline void set_has_cardchange();
 
-  inline bool has_changeData() const;
-  void clear_changeData();
-  inline void clear_has_changeData();
+  inline bool has_change() const;
+  void clear_change();
+  inline void clear_has_change();
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
-  ::google::protobuf::internal::ArenaStringPtr cardid_;
-  int type_;
-  union ChangeDataUnion {
-    ChangeDataUnion() {}
-    ::google::protobuf::internal::ArenaStringPtr newsource_;
-    ::roosha::Change_StringListChange* stringlistchange_;
-  } changeData_;
+  union ChangeUnion {
+    ChangeUnion() {}
+    ::roosha::CardChange* cardchange_;
+  } change_;
   mutable int _cached_size_;
   ::google::protobuf::uint32 _oneof_case_[1];
 
@@ -392,287 +169,1405 @@ class Change : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   void InitAsDefaultInstance();
   static Change* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class CardChange_CreateCard : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.CardChange.CreateCard) */ {
+ public:
+  CardChange_CreateCard();
+  virtual ~CardChange_CreateCard();
+
+  CardChange_CreateCard(const CardChange_CreateCard& from);
+
+  inline CardChange_CreateCard& operator=(const CardChange_CreateCard& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CardChange_CreateCard& default_instance();
+
+  void Swap(CardChange_CreateCard* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CardChange_CreateCard* New() const { return New(NULL); }
+
+  CardChange_CreateCard* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CardChange_CreateCard& from);
+  void MergeFrom(const CardChange_CreateCard& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CardChange_CreateCard* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:roosha.CardChange.CreateCard)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_changes_2eproto();
+  friend void protobuf_AssignDesc_changes_2eproto();
+  friend void protobuf_ShutdownFile_changes_2eproto();
+
+  void InitAsDefaultInstance();
+  static CardChange_CreateCard* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class CardChange_DeleteCard : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.CardChange.DeleteCard) */ {
+ public:
+  CardChange_DeleteCard();
+  virtual ~CardChange_DeleteCard();
+
+  CardChange_DeleteCard(const CardChange_DeleteCard& from);
+
+  inline CardChange_DeleteCard& operator=(const CardChange_DeleteCard& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CardChange_DeleteCard& default_instance();
+
+  void Swap(CardChange_DeleteCard* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CardChange_DeleteCard* New() const { return New(NULL); }
+
+  CardChange_DeleteCard* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CardChange_DeleteCard& from);
+  void MergeFrom(const CardChange_DeleteCard& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CardChange_DeleteCard* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:roosha.CardChange.DeleteCard)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_changes_2eproto();
+  friend void protobuf_AssignDesc_changes_2eproto();
+  friend void protobuf_ShutdownFile_changes_2eproto();
+
+  void InitAsDefaultInstance();
+  static CardChange_DeleteCard* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class CardChange_ChangeSource : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.CardChange.ChangeSource) */ {
+ public:
+  CardChange_ChangeSource();
+  virtual ~CardChange_ChangeSource();
+
+  CardChange_ChangeSource(const CardChange_ChangeSource& from);
+
+  inline CardChange_ChangeSource& operator=(const CardChange_ChangeSource& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CardChange_ChangeSource& default_instance();
+
+  void Swap(CardChange_ChangeSource* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CardChange_ChangeSource* New() const { return New(NULL); }
+
+  CardChange_ChangeSource* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CardChange_ChangeSource& from);
+  void MergeFrom(const CardChange_ChangeSource& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CardChange_ChangeSource* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional string newSource = 1;
+  void clear_newsource();
+  static const int kNewSourceFieldNumber = 1;
+  const ::std::string& newsource() const;
+  void set_newsource(const ::std::string& value);
+  void set_newsource(const char* value);
+  void set_newsource(const char* value, size_t size);
+  ::std::string* mutable_newsource();
+  ::std::string* release_newsource();
+  void set_allocated_newsource(::std::string* newsource);
+
+  // @@protoc_insertion_point(class_scope:roosha.CardChange.ChangeSource)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr newsource_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_changes_2eproto();
+  friend void protobuf_AssignDesc_changes_2eproto();
+  friend void protobuf_ShutdownFile_changes_2eproto();
+
+  void InitAsDefaultInstance();
+  static CardChange_ChangeSource* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class CardChange_InsertElem : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.CardChange.InsertElem) */ {
+ public:
+  CardChange_InsertElem();
+  virtual ~CardChange_InsertElem();
+
+  CardChange_InsertElem(const CardChange_InsertElem& from);
+
+  inline CardChange_InsertElem& operator=(const CardChange_InsertElem& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CardChange_InsertElem& default_instance();
+
+  void Swap(CardChange_InsertElem* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CardChange_InsertElem* New() const { return New(NULL); }
+
+  CardChange_InsertElem* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CardChange_InsertElem& from);
+  void MergeFrom(const CardChange_InsertElem& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CardChange_InsertElem* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .roosha.CardChange.Field field = 1;
+  void clear_field();
+  static const int kFieldFieldNumber = 1;
+  ::roosha::CardChange_Field field() const;
+  void set_field(::roosha::CardChange_Field value);
+
+  // optional uint32 index = 2;
+  void clear_index();
+  static const int kIndexFieldNumber = 2;
+  ::google::protobuf::uint32 index() const;
+  void set_index(::google::protobuf::uint32 value);
+
+  // optional string value = 3;
+  void clear_value();
+  static const int kValueFieldNumber = 3;
+  const ::std::string& value() const;
+  void set_value(const ::std::string& value);
+  void set_value(const char* value);
+  void set_value(const char* value, size_t size);
+  ::std::string* mutable_value();
+  ::std::string* release_value();
+  void set_allocated_value(::std::string* value);
+
+  // @@protoc_insertion_point(class_scope:roosha.CardChange.InsertElem)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  int field_;
+  ::google::protobuf::uint32 index_;
+  ::google::protobuf::internal::ArenaStringPtr value_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_changes_2eproto();
+  friend void protobuf_AssignDesc_changes_2eproto();
+  friend void protobuf_ShutdownFile_changes_2eproto();
+
+  void InitAsDefaultInstance();
+  static CardChange_InsertElem* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class CardChange_DeleteElem : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.CardChange.DeleteElem) */ {
+ public:
+  CardChange_DeleteElem();
+  virtual ~CardChange_DeleteElem();
+
+  CardChange_DeleteElem(const CardChange_DeleteElem& from);
+
+  inline CardChange_DeleteElem& operator=(const CardChange_DeleteElem& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CardChange_DeleteElem& default_instance();
+
+  void Swap(CardChange_DeleteElem* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CardChange_DeleteElem* New() const { return New(NULL); }
+
+  CardChange_DeleteElem* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CardChange_DeleteElem& from);
+  void MergeFrom(const CardChange_DeleteElem& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CardChange_DeleteElem* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .roosha.CardChange.Field field = 1;
+  void clear_field();
+  static const int kFieldFieldNumber = 1;
+  ::roosha::CardChange_Field field() const;
+  void set_field(::roosha::CardChange_Field value);
+
+  // optional uint32 index = 2;
+  void clear_index();
+  static const int kIndexFieldNumber = 2;
+  ::google::protobuf::uint32 index() const;
+  void set_index(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:roosha.CardChange.DeleteElem)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  int field_;
+  ::google::protobuf::uint32 index_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_changes_2eproto();
+  friend void protobuf_AssignDesc_changes_2eproto();
+  friend void protobuf_ShutdownFile_changes_2eproto();
+
+  void InitAsDefaultInstance();
+  static CardChange_DeleteElem* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class CardChange_EditElem : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.CardChange.EditElem) */ {
+ public:
+  CardChange_EditElem();
+  virtual ~CardChange_EditElem();
+
+  CardChange_EditElem(const CardChange_EditElem& from);
+
+  inline CardChange_EditElem& operator=(const CardChange_EditElem& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CardChange_EditElem& default_instance();
+
+  void Swap(CardChange_EditElem* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CardChange_EditElem* New() const { return New(NULL); }
+
+  CardChange_EditElem* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CardChange_EditElem& from);
+  void MergeFrom(const CardChange_EditElem& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CardChange_EditElem* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .roosha.CardChange.Field field = 1;
+  void clear_field();
+  static const int kFieldFieldNumber = 1;
+  ::roosha::CardChange_Field field() const;
+  void set_field(::roosha::CardChange_Field value);
+
+  // optional uint32 position = 2;
+  void clear_position();
+  static const int kPositionFieldNumber = 2;
+  ::google::protobuf::uint32 position() const;
+  void set_position(::google::protobuf::uint32 value);
+
+  // optional string value = 3;
+  void clear_value();
+  static const int kValueFieldNumber = 3;
+  const ::std::string& value() const;
+  void set_value(const ::std::string& value);
+  void set_value(const char* value);
+  void set_value(const char* value, size_t size);
+  ::std::string* mutable_value();
+  ::std::string* release_value();
+  void set_allocated_value(::std::string* value);
+
+  // @@protoc_insertion_point(class_scope:roosha.CardChange.EditElem)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  int field_;
+  ::google::protobuf::uint32 position_;
+  ::google::protobuf::internal::ArenaStringPtr value_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_changes_2eproto();
+  friend void protobuf_AssignDesc_changes_2eproto();
+  friend void protobuf_ShutdownFile_changes_2eproto();
+
+  void InitAsDefaultInstance();
+  static CardChange_EditElem* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class CardChange : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.CardChange) */ {
+ public:
+  CardChange();
+  virtual ~CardChange();
+
+  CardChange(const CardChange& from);
+
+  inline CardChange& operator=(const CardChange& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CardChange& default_instance();
+
+  enum ChangeCase {
+    kCreateCard = 2,
+    kDeleteCard = 3,
+    kChangeSource = 4,
+    kInsertElem = 5,
+    kDeleteElem = 6,
+    kEditElem = 7,
+    CHANGE_NOT_SET = 0,
+  };
+
+  void Swap(CardChange* other);
+
+  // implements Message ----------------------------------------------
+
+  inline CardChange* New() const { return New(NULL); }
+
+  CardChange* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CardChange& from);
+  void MergeFrom(const CardChange& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const {
+    return InternalSerializeWithCachedSizesToArray(false, output);
+  }
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(CardChange* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  typedef CardChange_CreateCard CreateCard;
+  typedef CardChange_DeleteCard DeleteCard;
+  typedef CardChange_ChangeSource ChangeSource;
+  typedef CardChange_InsertElem InsertElem;
+  typedef CardChange_DeleteElem DeleteElem;
+  typedef CardChange_EditElem EditElem;
+
+  typedef CardChange_Field Field;
+  static const Field UNKNOWN =
+    CardChange_Field_UNKNOWN;
+  static const Field TARGET =
+    CardChange_Field_TARGET;
+  static const Field EXAMPLE =
+    CardChange_Field_EXAMPLE;
+  static inline bool Field_IsValid(int value) {
+    return CardChange_Field_IsValid(value);
+  }
+  static const Field Field_MIN =
+    CardChange_Field_Field_MIN;
+  static const Field Field_MAX =
+    CardChange_Field_Field_MAX;
+  static const int Field_ARRAYSIZE =
+    CardChange_Field_Field_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  Field_descriptor() {
+    return CardChange_Field_descriptor();
+  }
+  static inline const ::std::string& Field_Name(Field value) {
+    return CardChange_Field_Name(value);
+  }
+  static inline bool Field_Parse(const ::std::string& name,
+      Field* value) {
+    return CardChange_Field_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  // optional string cardId = 1;
+  void clear_cardid();
+  static const int kCardIdFieldNumber = 1;
+  const ::std::string& cardid() const;
+  void set_cardid(const ::std::string& value);
+  void set_cardid(const char* value);
+  void set_cardid(const char* value, size_t size);
+  ::std::string* mutable_cardid();
+  ::std::string* release_cardid();
+  void set_allocated_cardid(::std::string* cardid);
+
+  // optional .roosha.CardChange.CreateCard createCard = 2;
+  bool has_createcard() const;
+  void clear_createcard();
+  static const int kCreateCardFieldNumber = 2;
+  const ::roosha::CardChange_CreateCard& createcard() const;
+  ::roosha::CardChange_CreateCard* mutable_createcard();
+  ::roosha::CardChange_CreateCard* release_createcard();
+  void set_allocated_createcard(::roosha::CardChange_CreateCard* createcard);
+
+  // optional .roosha.CardChange.DeleteCard deleteCard = 3;
+  bool has_deletecard() const;
+  void clear_deletecard();
+  static const int kDeleteCardFieldNumber = 3;
+  const ::roosha::CardChange_DeleteCard& deletecard() const;
+  ::roosha::CardChange_DeleteCard* mutable_deletecard();
+  ::roosha::CardChange_DeleteCard* release_deletecard();
+  void set_allocated_deletecard(::roosha::CardChange_DeleteCard* deletecard);
+
+  // optional .roosha.CardChange.ChangeSource changeSource = 4;
+  bool has_changesource() const;
+  void clear_changesource();
+  static const int kChangeSourceFieldNumber = 4;
+  const ::roosha::CardChange_ChangeSource& changesource() const;
+  ::roosha::CardChange_ChangeSource* mutable_changesource();
+  ::roosha::CardChange_ChangeSource* release_changesource();
+  void set_allocated_changesource(::roosha::CardChange_ChangeSource* changesource);
+
+  // optional .roosha.CardChange.InsertElem insertElem = 5;
+  bool has_insertelem() const;
+  void clear_insertelem();
+  static const int kInsertElemFieldNumber = 5;
+  const ::roosha::CardChange_InsertElem& insertelem() const;
+  ::roosha::CardChange_InsertElem* mutable_insertelem();
+  ::roosha::CardChange_InsertElem* release_insertelem();
+  void set_allocated_insertelem(::roosha::CardChange_InsertElem* insertelem);
+
+  // optional .roosha.CardChange.DeleteElem deleteElem = 6;
+  bool has_deleteelem() const;
+  void clear_deleteelem();
+  static const int kDeleteElemFieldNumber = 6;
+  const ::roosha::CardChange_DeleteElem& deleteelem() const;
+  ::roosha::CardChange_DeleteElem* mutable_deleteelem();
+  ::roosha::CardChange_DeleteElem* release_deleteelem();
+  void set_allocated_deleteelem(::roosha::CardChange_DeleteElem* deleteelem);
+
+  // optional .roosha.CardChange.EditElem editElem = 7;
+  bool has_editelem() const;
+  void clear_editelem();
+  static const int kEditElemFieldNumber = 7;
+  const ::roosha::CardChange_EditElem& editelem() const;
+  ::roosha::CardChange_EditElem* mutable_editelem();
+  ::roosha::CardChange_EditElem* release_editelem();
+  void set_allocated_editelem(::roosha::CardChange_EditElem* editelem);
+
+  ChangeCase change_case() const;
+  // @@protoc_insertion_point(class_scope:roosha.CardChange)
+ private:
+  inline void set_has_createcard();
+  inline void set_has_deletecard();
+  inline void set_has_changesource();
+  inline void set_has_insertelem();
+  inline void set_has_deleteelem();
+  inline void set_has_editelem();
+
+  inline bool has_change() const;
+  void clear_change();
+  inline void clear_has_change();
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr cardid_;
+  union ChangeUnion {
+    ChangeUnion() {}
+    ::roosha::CardChange_CreateCard* createcard_;
+    ::roosha::CardChange_DeleteCard* deletecard_;
+    ::roosha::CardChange_ChangeSource* changesource_;
+    ::roosha::CardChange_InsertElem* insertelem_;
+    ::roosha::CardChange_DeleteElem* deleteelem_;
+    ::roosha::CardChange_EditElem* editelem_;
+  } change_;
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 _oneof_case_[1];
+
+  friend void  protobuf_AddDesc_changes_2eproto();
+  friend void protobuf_AssignDesc_changes_2eproto();
+  friend void protobuf_ShutdownFile_changes_2eproto();
+
+  void InitAsDefaultInstance();
+  static CardChange* default_instance_;
+};
 // ===================================================================
 
 
 // ===================================================================
 
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
-// Change_StringListChange
+// Change
 
-// optional .roosha.Change.StringListChange.Field fieldName = 1;
-inline void Change_StringListChange::clear_fieldname() {
-  fieldname_ = 0;
+// optional .roosha.CardChange cardChange = 1;
+inline bool Change::has_cardchange() const {
+  return change_case() == kCardChange;
 }
-inline ::roosha::Change_StringListChange_Field Change_StringListChange::fieldname() const {
-  // @@protoc_insertion_point(field_get:roosha.Change.StringListChange.fieldName)
-  return static_cast< ::roosha::Change_StringListChange_Field >(fieldname_);
+inline void Change::set_has_cardchange() {
+  _oneof_case_[0] = kCardChange;
 }
-inline void Change_StringListChange::set_fieldname(::roosha::Change_StringListChange_Field value) {
+inline void Change::clear_cardchange() {
+  if (has_cardchange()) {
+    delete change_.cardchange_;
+    clear_has_change();
+  }
+}
+inline  const ::roosha::CardChange& Change::cardchange() const {
+  // @@protoc_insertion_point(field_get:roosha.Change.cardChange)
+  return has_cardchange()
+      ? *change_.cardchange_
+      : ::roosha::CardChange::default_instance();
+}
+inline ::roosha::CardChange* Change::mutable_cardchange() {
+  if (!has_cardchange()) {
+    clear_change();
+    set_has_cardchange();
+    change_.cardchange_ = new ::roosha::CardChange;
+  }
+  // @@protoc_insertion_point(field_mutable:roosha.Change.cardChange)
+  return change_.cardchange_;
+}
+inline ::roosha::CardChange* Change::release_cardchange() {
+  // @@protoc_insertion_point(field_release:roosha.Change.cardChange)
+  if (has_cardchange()) {
+    clear_has_change();
+    ::roosha::CardChange* temp = change_.cardchange_;
+    change_.cardchange_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void Change::set_allocated_cardchange(::roosha::CardChange* cardchange) {
+  clear_change();
+  if (cardchange) {
+    set_has_cardchange();
+    change_.cardchange_ = cardchange;
+  }
+  // @@protoc_insertion_point(field_set_allocated:roosha.Change.cardChange)
+}
+
+inline bool Change::has_change() const {
+  return change_case() != CHANGE_NOT_SET;
+}
+inline void Change::clear_has_change() {
+  _oneof_case_[0] = CHANGE_NOT_SET;
+}
+inline Change::ChangeCase Change::change_case() const {
+  return Change::ChangeCase(_oneof_case_[0]);
+}
+// -------------------------------------------------------------------
+
+// CardChange_CreateCard
+
+// -------------------------------------------------------------------
+
+// CardChange_DeleteCard
+
+// -------------------------------------------------------------------
+
+// CardChange_ChangeSource
+
+// optional string newSource = 1;
+inline void CardChange_ChangeSource::clear_newsource() {
+  newsource_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& CardChange_ChangeSource::newsource() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.ChangeSource.newSource)
+  return newsource_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CardChange_ChangeSource::set_newsource(const ::std::string& value) {
   
-  fieldname_ = value;
-  // @@protoc_insertion_point(field_set:roosha.Change.StringListChange.fieldName)
+  newsource_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:roosha.CardChange.ChangeSource.newSource)
+}
+inline void CardChange_ChangeSource::set_newsource(const char* value) {
+  
+  newsource_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:roosha.CardChange.ChangeSource.newSource)
+}
+inline void CardChange_ChangeSource::set_newsource(const char* value, size_t size) {
+  
+  newsource_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:roosha.CardChange.ChangeSource.newSource)
+}
+inline ::std::string* CardChange_ChangeSource::mutable_newsource() {
+  
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.ChangeSource.newSource)
+  return newsource_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CardChange_ChangeSource::release_newsource() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.ChangeSource.newSource)
+  
+  return newsource_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CardChange_ChangeSource::set_allocated_newsource(::std::string* newsource) {
+  if (newsource != NULL) {
+    
+  } else {
+    
+  }
+  newsource_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), newsource);
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.ChangeSource.newSource)
+}
+
+// -------------------------------------------------------------------
+
+// CardChange_InsertElem
+
+// optional .roosha.CardChange.Field field = 1;
+inline void CardChange_InsertElem::clear_field() {
+  field_ = 0;
+}
+inline ::roosha::CardChange_Field CardChange_InsertElem::field() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.InsertElem.field)
+  return static_cast< ::roosha::CardChange_Field >(field_);
+}
+inline void CardChange_InsertElem::set_field(::roosha::CardChange_Field value) {
+  
+  field_ = value;
+  // @@protoc_insertion_point(field_set:roosha.CardChange.InsertElem.field)
 }
 
 // optional uint32 index = 2;
-inline void Change_StringListChange::clear_index() {
+inline void CardChange_InsertElem::clear_index() {
   index_ = 0u;
 }
-inline ::google::protobuf::uint32 Change_StringListChange::index() const {
-  // @@protoc_insertion_point(field_get:roosha.Change.StringListChange.index)
+inline ::google::protobuf::uint32 CardChange_InsertElem::index() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.InsertElem.index)
   return index_;
 }
-inline void Change_StringListChange::set_index(::google::protobuf::uint32 value) {
+inline void CardChange_InsertElem::set_index(::google::protobuf::uint32 value) {
   
   index_ = value;
-  // @@protoc_insertion_point(field_set:roosha.Change.StringListChange.index)
+  // @@protoc_insertion_point(field_set:roosha.CardChange.InsertElem.index)
 }
 
 // optional string value = 3;
-inline void Change_StringListChange::clear_value() {
+inline void CardChange_InsertElem::clear_value() {
   value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Change_StringListChange::value() const {
-  // @@protoc_insertion_point(field_get:roosha.Change.StringListChange.value)
+inline const ::std::string& CardChange_InsertElem::value() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.InsertElem.value)
   return value_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Change_StringListChange::set_value(const ::std::string& value) {
+inline void CardChange_InsertElem::set_value(const ::std::string& value) {
   
   value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.Change.StringListChange.value)
+  // @@protoc_insertion_point(field_set:roosha.CardChange.InsertElem.value)
 }
-inline void Change_StringListChange::set_value(const char* value) {
+inline void CardChange_InsertElem::set_value(const char* value) {
   
   value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.Change.StringListChange.value)
+  // @@protoc_insertion_point(field_set_char:roosha.CardChange.InsertElem.value)
 }
-inline void Change_StringListChange::set_value(const char* value, size_t size) {
+inline void CardChange_InsertElem::set_value(const char* value, size_t size) {
   
   value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.Change.StringListChange.value)
+  // @@protoc_insertion_point(field_set_pointer:roosha.CardChange.InsertElem.value)
 }
-inline ::std::string* Change_StringListChange::mutable_value() {
+inline ::std::string* CardChange_InsertElem::mutable_value() {
   
-  // @@protoc_insertion_point(field_mutable:roosha.Change.StringListChange.value)
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.InsertElem.value)
   return value_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Change_StringListChange::release_value() {
-  // @@protoc_insertion_point(field_release:roosha.Change.StringListChange.value)
+inline ::std::string* CardChange_InsertElem::release_value() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.InsertElem.value)
   
   return value_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Change_StringListChange::set_allocated_value(::std::string* value) {
+inline void CardChange_InsertElem::set_allocated_value(::std::string* value) {
   if (value != NULL) {
     
   } else {
     
   }
   value_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set_allocated:roosha.Change.StringListChange.value)
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.InsertElem.value)
 }
 
 // -------------------------------------------------------------------
 
-// Change
+// CardChange_DeleteElem
 
-// optional .roosha.Change.ChangeType type = 1;
-inline void Change::clear_type() {
-  type_ = 0;
+// optional .roosha.CardChange.Field field = 1;
+inline void CardChange_DeleteElem::clear_field() {
+  field_ = 0;
 }
-inline ::roosha::Change_ChangeType Change::type() const {
-  // @@protoc_insertion_point(field_get:roosha.Change.type)
-  return static_cast< ::roosha::Change_ChangeType >(type_);
+inline ::roosha::CardChange_Field CardChange_DeleteElem::field() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.DeleteElem.field)
+  return static_cast< ::roosha::CardChange_Field >(field_);
 }
-inline void Change::set_type(::roosha::Change_ChangeType value) {
+inline void CardChange_DeleteElem::set_field(::roosha::CardChange_Field value) {
   
-  type_ = value;
-  // @@protoc_insertion_point(field_set:roosha.Change.type)
+  field_ = value;
+  // @@protoc_insertion_point(field_set:roosha.CardChange.DeleteElem.field)
 }
 
-// optional string cardId = 2;
-inline void Change::clear_cardid() {
+// optional uint32 index = 2;
+inline void CardChange_DeleteElem::clear_index() {
+  index_ = 0u;
+}
+inline ::google::protobuf::uint32 CardChange_DeleteElem::index() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.DeleteElem.index)
+  return index_;
+}
+inline void CardChange_DeleteElem::set_index(::google::protobuf::uint32 value) {
+  
+  index_ = value;
+  // @@protoc_insertion_point(field_set:roosha.CardChange.DeleteElem.index)
+}
+
+// -------------------------------------------------------------------
+
+// CardChange_EditElem
+
+// optional .roosha.CardChange.Field field = 1;
+inline void CardChange_EditElem::clear_field() {
+  field_ = 0;
+}
+inline ::roosha::CardChange_Field CardChange_EditElem::field() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.EditElem.field)
+  return static_cast< ::roosha::CardChange_Field >(field_);
+}
+inline void CardChange_EditElem::set_field(::roosha::CardChange_Field value) {
+  
+  field_ = value;
+  // @@protoc_insertion_point(field_set:roosha.CardChange.EditElem.field)
+}
+
+// optional uint32 position = 2;
+inline void CardChange_EditElem::clear_position() {
+  position_ = 0u;
+}
+inline ::google::protobuf::uint32 CardChange_EditElem::position() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.EditElem.position)
+  return position_;
+}
+inline void CardChange_EditElem::set_position(::google::protobuf::uint32 value) {
+  
+  position_ = value;
+  // @@protoc_insertion_point(field_set:roosha.CardChange.EditElem.position)
+}
+
+// optional string value = 3;
+inline void CardChange_EditElem::clear_value() {
+  value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& CardChange_EditElem::value() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.EditElem.value)
+  return value_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CardChange_EditElem::set_value(const ::std::string& value) {
+  
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:roosha.CardChange.EditElem.value)
+}
+inline void CardChange_EditElem::set_value(const char* value) {
+  
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:roosha.CardChange.EditElem.value)
+}
+inline void CardChange_EditElem::set_value(const char* value, size_t size) {
+  
+  value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:roosha.CardChange.EditElem.value)
+}
+inline ::std::string* CardChange_EditElem::mutable_value() {
+  
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.EditElem.value)
+  return value_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* CardChange_EditElem::release_value() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.EditElem.value)
+  
+  return value_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void CardChange_EditElem::set_allocated_value(::std::string* value) {
+  if (value != NULL) {
+    
+  } else {
+    
+  }
+  value_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.EditElem.value)
+}
+
+// -------------------------------------------------------------------
+
+// CardChange
+
+// optional string cardId = 1;
+inline void CardChange::clear_cardid() {
   cardid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline const ::std::string& Change::cardid() const {
-  // @@protoc_insertion_point(field_get:roosha.Change.cardId)
+inline const ::std::string& CardChange::cardid() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.cardId)
   return cardid_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Change::set_cardid(const ::std::string& value) {
+inline void CardChange::set_cardid(const ::std::string& value) {
   
   cardid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.Change.cardId)
+  // @@protoc_insertion_point(field_set:roosha.CardChange.cardId)
 }
-inline void Change::set_cardid(const char* value) {
+inline void CardChange::set_cardid(const char* value) {
   
   cardid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.Change.cardId)
+  // @@protoc_insertion_point(field_set_char:roosha.CardChange.cardId)
 }
-inline void Change::set_cardid(const char* value, size_t size) {
+inline void CardChange::set_cardid(const char* value, size_t size) {
   
   cardid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.Change.cardId)
+  // @@protoc_insertion_point(field_set_pointer:roosha.CardChange.cardId)
 }
-inline ::std::string* Change::mutable_cardid() {
+inline ::std::string* CardChange::mutable_cardid() {
   
-  // @@protoc_insertion_point(field_mutable:roosha.Change.cardId)
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.cardId)
   return cardid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline ::std::string* Change::release_cardid() {
-  // @@protoc_insertion_point(field_release:roosha.Change.cardId)
+inline ::std::string* CardChange::release_cardid() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.cardId)
   
   return cardid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Change::set_allocated_cardid(::std::string* cardid) {
+inline void CardChange::set_allocated_cardid(::std::string* cardid) {
   if (cardid != NULL) {
     
   } else {
     
   }
   cardid_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), cardid);
-  // @@protoc_insertion_point(field_set_allocated:roosha.Change.cardId)
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.cardId)
 }
 
-// optional string newSource = 3;
-inline bool Change::has_newsource() const {
-  return changeData_case() == kNewSource;
+// optional .roosha.CardChange.CreateCard createCard = 2;
+inline bool CardChange::has_createcard() const {
+  return change_case() == kCreateCard;
 }
-inline void Change::set_has_newsource() {
-  _oneof_case_[0] = kNewSource;
+inline void CardChange::set_has_createcard() {
+  _oneof_case_[0] = kCreateCard;
 }
-inline void Change::clear_newsource() {
-  if (has_newsource()) {
-    changeData_.newsource_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-    clear_has_changeData();
+inline void CardChange::clear_createcard() {
+  if (has_createcard()) {
+    delete change_.createcard_;
+    clear_has_change();
   }
 }
-inline const ::std::string& Change::newsource() const {
-  // @@protoc_insertion_point(field_get:roosha.Change.newSource)
-  if (has_newsource()) {
-    return changeData_.newsource_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+inline  const ::roosha::CardChange_CreateCard& CardChange::createcard() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.createCard)
+  return has_createcard()
+      ? *change_.createcard_
+      : ::roosha::CardChange_CreateCard::default_instance();
+}
+inline ::roosha::CardChange_CreateCard* CardChange::mutable_createcard() {
+  if (!has_createcard()) {
+    clear_change();
+    set_has_createcard();
+    change_.createcard_ = new ::roosha::CardChange_CreateCard;
   }
-  return *&::google::protobuf::internal::GetEmptyStringAlreadyInited();
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.createCard)
+  return change_.createcard_;
 }
-inline void Change::set_newsource(const ::std::string& value) {
-  // @@protoc_insertion_point(field_set:roosha.Change.newSource)
-  if (!has_newsource()) {
-    clear_changeData();
-    set_has_newsource();
-    changeData_.newsource_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  changeData_.newsource_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:roosha.Change.newSource)
-}
-inline void Change::set_newsource(const char* value) {
-  if (!has_newsource()) {
-    clear_changeData();
-    set_has_newsource();
-    changeData_.newsource_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  changeData_.newsource_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:roosha.Change.newSource)
-}
-inline void Change::set_newsource(const char* value, size_t size) {
-  if (!has_newsource()) {
-    clear_changeData();
-    set_has_newsource();
-    changeData_.newsource_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  changeData_.newsource_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(
-      reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:roosha.Change.newSource)
-}
-inline ::std::string* Change::mutable_newsource() {
-  if (!has_newsource()) {
-    clear_changeData();
-    set_has_newsource();
-    changeData_.newsource_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  // @@protoc_insertion_point(field_mutable:roosha.Change.newSource)
-  return changeData_.newsource_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* Change::release_newsource() {
-  // @@protoc_insertion_point(field_release:roosha.Change.newSource)
-  if (has_newsource()) {
-    clear_has_changeData();
-    return changeData_.newsource_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  } else {
-    return NULL;
-  }
-}
-inline void Change::set_allocated_newsource(::std::string* newsource) {
-  if (!has_newsource()) {
-    changeData_.newsource_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  clear_changeData();
-  if (newsource != NULL) {
-    set_has_newsource();
-    changeData_.newsource_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-        newsource);
-  }
-  // @@protoc_insertion_point(field_set_allocated:roosha.Change.newSource)
-}
-
-// optional .roosha.Change.StringListChange stringListChange = 4;
-inline bool Change::has_stringlistchange() const {
-  return changeData_case() == kStringListChange;
-}
-inline void Change::set_has_stringlistchange() {
-  _oneof_case_[0] = kStringListChange;
-}
-inline void Change::clear_stringlistchange() {
-  if (has_stringlistchange()) {
-    delete changeData_.stringlistchange_;
-    clear_has_changeData();
-  }
-}
-inline  const ::roosha::Change_StringListChange& Change::stringlistchange() const {
-  // @@protoc_insertion_point(field_get:roosha.Change.stringListChange)
-  return has_stringlistchange()
-      ? *changeData_.stringlistchange_
-      : ::roosha::Change_StringListChange::default_instance();
-}
-inline ::roosha::Change_StringListChange* Change::mutable_stringlistchange() {
-  if (!has_stringlistchange()) {
-    clear_changeData();
-    set_has_stringlistchange();
-    changeData_.stringlistchange_ = new ::roosha::Change_StringListChange;
-  }
-  // @@protoc_insertion_point(field_mutable:roosha.Change.stringListChange)
-  return changeData_.stringlistchange_;
-}
-inline ::roosha::Change_StringListChange* Change::release_stringlistchange() {
-  // @@protoc_insertion_point(field_release:roosha.Change.stringListChange)
-  if (has_stringlistchange()) {
-    clear_has_changeData();
-    ::roosha::Change_StringListChange* temp = changeData_.stringlistchange_;
-    changeData_.stringlistchange_ = NULL;
+inline ::roosha::CardChange_CreateCard* CardChange::release_createcard() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.createCard)
+  if (has_createcard()) {
+    clear_has_change();
+    ::roosha::CardChange_CreateCard* temp = change_.createcard_;
+    change_.createcard_ = NULL;
     return temp;
   } else {
     return NULL;
   }
 }
-inline void Change::set_allocated_stringlistchange(::roosha::Change_StringListChange* stringlistchange) {
-  clear_changeData();
-  if (stringlistchange) {
-    set_has_stringlistchange();
-    changeData_.stringlistchange_ = stringlistchange;
+inline void CardChange::set_allocated_createcard(::roosha::CardChange_CreateCard* createcard) {
+  clear_change();
+  if (createcard) {
+    set_has_createcard();
+    change_.createcard_ = createcard;
   }
-  // @@protoc_insertion_point(field_set_allocated:roosha.Change.stringListChange)
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.createCard)
 }
 
-inline bool Change::has_changeData() const {
-  return changeData_case() != CHANGEDATA_NOT_SET;
+// optional .roosha.CardChange.DeleteCard deleteCard = 3;
+inline bool CardChange::has_deletecard() const {
+  return change_case() == kDeleteCard;
 }
-inline void Change::clear_has_changeData() {
-  _oneof_case_[0] = CHANGEDATA_NOT_SET;
+inline void CardChange::set_has_deletecard() {
+  _oneof_case_[0] = kDeleteCard;
 }
-inline Change::ChangeDataCase Change::changeData_case() const {
-  return Change::ChangeDataCase(_oneof_case_[0]);
+inline void CardChange::clear_deletecard() {
+  if (has_deletecard()) {
+    delete change_.deletecard_;
+    clear_has_change();
+  }
+}
+inline  const ::roosha::CardChange_DeleteCard& CardChange::deletecard() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.deleteCard)
+  return has_deletecard()
+      ? *change_.deletecard_
+      : ::roosha::CardChange_DeleteCard::default_instance();
+}
+inline ::roosha::CardChange_DeleteCard* CardChange::mutable_deletecard() {
+  if (!has_deletecard()) {
+    clear_change();
+    set_has_deletecard();
+    change_.deletecard_ = new ::roosha::CardChange_DeleteCard;
+  }
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.deleteCard)
+  return change_.deletecard_;
+}
+inline ::roosha::CardChange_DeleteCard* CardChange::release_deletecard() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.deleteCard)
+  if (has_deletecard()) {
+    clear_has_change();
+    ::roosha::CardChange_DeleteCard* temp = change_.deletecard_;
+    change_.deletecard_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void CardChange::set_allocated_deletecard(::roosha::CardChange_DeleteCard* deletecard) {
+  clear_change();
+  if (deletecard) {
+    set_has_deletecard();
+    change_.deletecard_ = deletecard;
+  }
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.deleteCard)
+}
+
+// optional .roosha.CardChange.ChangeSource changeSource = 4;
+inline bool CardChange::has_changesource() const {
+  return change_case() == kChangeSource;
+}
+inline void CardChange::set_has_changesource() {
+  _oneof_case_[0] = kChangeSource;
+}
+inline void CardChange::clear_changesource() {
+  if (has_changesource()) {
+    delete change_.changesource_;
+    clear_has_change();
+  }
+}
+inline  const ::roosha::CardChange_ChangeSource& CardChange::changesource() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.changeSource)
+  return has_changesource()
+      ? *change_.changesource_
+      : ::roosha::CardChange_ChangeSource::default_instance();
+}
+inline ::roosha::CardChange_ChangeSource* CardChange::mutable_changesource() {
+  if (!has_changesource()) {
+    clear_change();
+    set_has_changesource();
+    change_.changesource_ = new ::roosha::CardChange_ChangeSource;
+  }
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.changeSource)
+  return change_.changesource_;
+}
+inline ::roosha::CardChange_ChangeSource* CardChange::release_changesource() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.changeSource)
+  if (has_changesource()) {
+    clear_has_change();
+    ::roosha::CardChange_ChangeSource* temp = change_.changesource_;
+    change_.changesource_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void CardChange::set_allocated_changesource(::roosha::CardChange_ChangeSource* changesource) {
+  clear_change();
+  if (changesource) {
+    set_has_changesource();
+    change_.changesource_ = changesource;
+  }
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.changeSource)
+}
+
+// optional .roosha.CardChange.InsertElem insertElem = 5;
+inline bool CardChange::has_insertelem() const {
+  return change_case() == kInsertElem;
+}
+inline void CardChange::set_has_insertelem() {
+  _oneof_case_[0] = kInsertElem;
+}
+inline void CardChange::clear_insertelem() {
+  if (has_insertelem()) {
+    delete change_.insertelem_;
+    clear_has_change();
+  }
+}
+inline  const ::roosha::CardChange_InsertElem& CardChange::insertelem() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.insertElem)
+  return has_insertelem()
+      ? *change_.insertelem_
+      : ::roosha::CardChange_InsertElem::default_instance();
+}
+inline ::roosha::CardChange_InsertElem* CardChange::mutable_insertelem() {
+  if (!has_insertelem()) {
+    clear_change();
+    set_has_insertelem();
+    change_.insertelem_ = new ::roosha::CardChange_InsertElem;
+  }
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.insertElem)
+  return change_.insertelem_;
+}
+inline ::roosha::CardChange_InsertElem* CardChange::release_insertelem() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.insertElem)
+  if (has_insertelem()) {
+    clear_has_change();
+    ::roosha::CardChange_InsertElem* temp = change_.insertelem_;
+    change_.insertelem_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void CardChange::set_allocated_insertelem(::roosha::CardChange_InsertElem* insertelem) {
+  clear_change();
+  if (insertelem) {
+    set_has_insertelem();
+    change_.insertelem_ = insertelem;
+  }
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.insertElem)
+}
+
+// optional .roosha.CardChange.DeleteElem deleteElem = 6;
+inline bool CardChange::has_deleteelem() const {
+  return change_case() == kDeleteElem;
+}
+inline void CardChange::set_has_deleteelem() {
+  _oneof_case_[0] = kDeleteElem;
+}
+inline void CardChange::clear_deleteelem() {
+  if (has_deleteelem()) {
+    delete change_.deleteelem_;
+    clear_has_change();
+  }
+}
+inline  const ::roosha::CardChange_DeleteElem& CardChange::deleteelem() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.deleteElem)
+  return has_deleteelem()
+      ? *change_.deleteelem_
+      : ::roosha::CardChange_DeleteElem::default_instance();
+}
+inline ::roosha::CardChange_DeleteElem* CardChange::mutable_deleteelem() {
+  if (!has_deleteelem()) {
+    clear_change();
+    set_has_deleteelem();
+    change_.deleteelem_ = new ::roosha::CardChange_DeleteElem;
+  }
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.deleteElem)
+  return change_.deleteelem_;
+}
+inline ::roosha::CardChange_DeleteElem* CardChange::release_deleteelem() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.deleteElem)
+  if (has_deleteelem()) {
+    clear_has_change();
+    ::roosha::CardChange_DeleteElem* temp = change_.deleteelem_;
+    change_.deleteelem_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void CardChange::set_allocated_deleteelem(::roosha::CardChange_DeleteElem* deleteelem) {
+  clear_change();
+  if (deleteelem) {
+    set_has_deleteelem();
+    change_.deleteelem_ = deleteelem;
+  }
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.deleteElem)
+}
+
+// optional .roosha.CardChange.EditElem editElem = 7;
+inline bool CardChange::has_editelem() const {
+  return change_case() == kEditElem;
+}
+inline void CardChange::set_has_editelem() {
+  _oneof_case_[0] = kEditElem;
+}
+inline void CardChange::clear_editelem() {
+  if (has_editelem()) {
+    delete change_.editelem_;
+    clear_has_change();
+  }
+}
+inline  const ::roosha::CardChange_EditElem& CardChange::editelem() const {
+  // @@protoc_insertion_point(field_get:roosha.CardChange.editElem)
+  return has_editelem()
+      ? *change_.editelem_
+      : ::roosha::CardChange_EditElem::default_instance();
+}
+inline ::roosha::CardChange_EditElem* CardChange::mutable_editelem() {
+  if (!has_editelem()) {
+    clear_change();
+    set_has_editelem();
+    change_.editelem_ = new ::roosha::CardChange_EditElem;
+  }
+  // @@protoc_insertion_point(field_mutable:roosha.CardChange.editElem)
+  return change_.editelem_;
+}
+inline ::roosha::CardChange_EditElem* CardChange::release_editelem() {
+  // @@protoc_insertion_point(field_release:roosha.CardChange.editElem)
+  if (has_editelem()) {
+    clear_has_change();
+    ::roosha::CardChange_EditElem* temp = change_.editelem_;
+    change_.editelem_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void CardChange::set_allocated_editelem(::roosha::CardChange_EditElem* editelem) {
+  clear_change();
+  if (editelem) {
+    set_has_editelem();
+    change_.editelem_ = editelem;
+  }
+  // @@protoc_insertion_point(field_set_allocated:roosha.CardChange.editElem)
+}
+
+inline bool CardChange::has_change() const {
+  return change_case() != CHANGE_NOT_SET;
+}
+inline void CardChange::clear_has_change() {
+  _oneof_case_[0] = CHANGE_NOT_SET;
+}
+inline CardChange::ChangeCase CardChange::change_case() const {
+  return CardChange::ChangeCase(_oneof_case_[0]);
 }
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 
@@ -684,15 +1579,10 @@ inline Change::ChangeDataCase Change::changeData_case() const {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::roosha::Change_StringListChange_Field> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::roosha::CardChange_Field> : ::google::protobuf::internal::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::roosha::Change_StringListChange_Field>() {
-  return ::roosha::Change_StringListChange_Field_descriptor();
-}
-template <> struct is_proto_enum< ::roosha::Change_ChangeType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::roosha::Change_ChangeType>() {
-  return ::roosha::Change_ChangeType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::roosha::CardChange_Field>() {
+  return ::roosha::CardChange_Field_descriptor();
 }
 
 }  // namespace protobuf

@@ -10,34 +10,51 @@ option cc_enable_arenas = false;
 option optimize_for = SPEED;
 
 message Change {
-	enum ChangeType {
-		UNKNOWN = 0;
-		CHANGE_SOURCE = 1;
-		DELETE_CARD = 2;
-		CREATE_CARD = 3;
-		INSERT_ELEM = 4;
-		DELETE_ELEM = 5;
-		EDIT_ELEM = 6;
-	}
-	
-	message StringListChange {
-		enum Field {
-			UNKNOWN = 0;
-			TARGET = 1;
-			EXAMPLE = 2;
-		}
-
-		Field fieldName = 1;
-		uint32 index = 2;
-		/*optional*/ string value = 3;
-	}
-
-	ChangeType type = 1;
-	string cardId = 2; // UUID string representation
-	oneof changeData {
-		string newSource  = 3; // for CHANGE_SOURCE
-		/*nothing*/  // for DELETE_CARD and CREATE_CARD
-		StringListChange stringListChange = 4; // for INSERT_ELEM, DELETE_ELEM, EDIT_ELEM
+	oneof change {
+		CardChange cardChange = 1;	
 	}
 }
 
+message CardChange {
+	string cardId = 1;
+
+	oneof change {
+		CreateCard createCard = 2;
+		DeleteCard deleteCard = 3;
+
+		ChangeSource changeSource = 4;
+		InsertElem insertElem = 5;
+		DeleteElem deleteElem = 6;
+		EditElem editElem = 7;
+	}
+
+	message CreateCard {}
+	message DeleteCard {}
+
+	enum Field {
+		UNKNOWN = 0;
+		TARGET = 1;
+		EXAMPLE = 2;
+	}
+
+	message ChangeSource {
+		string newSource = 1;
+	}
+
+	message InsertElem {
+		Field field = 1;
+		uint32 index = 2;
+		string value = 3;	
+	}
+
+	message DeleteElem {
+		Field field = 1;
+		uint32 index = 2;
+	}
+
+	message EditElem {
+		Field field = 1;
+		uint32 position = 2; // element should be inserted onto this position.
+		string value = 3;
+	}
+}
