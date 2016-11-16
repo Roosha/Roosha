@@ -10,6 +10,8 @@
 
 AuthenticationController::AuthenticationController(QObject *parent) :
     QObject (parent),
+    loginWidget_(nullptr),
+    registerWidget_(nullptr),
     configurationManager_(ConfigureManager::Instance()) {
 
     qRegisterMetaType<AuthenticationState>("AuthenticationState");

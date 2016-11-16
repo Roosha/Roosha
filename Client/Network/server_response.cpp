@@ -25,11 +25,13 @@ void AuthorizeAsyncCall::send(RooshaServiceConnector *connector) {
 void AuthorizeAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("AuthorizeAsyncCall::succeed");
     emit netManager->successAuthorize(id_);
+    delete this;
 }
 
 void AuthorizeAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("AuthorizeAsyncCall::fail");
     emit netManager->failAuthorize(id_, status);
+    delete this;
 }
 
 void RegistrateAsyncCall::send(RooshaServiceConnector *connector) {
@@ -40,11 +42,13 @@ void RegistrateAsyncCall::send(RooshaServiceConnector *connector) {
 void RegistrateAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("RegistrateAsyncCall::succeed");
     emit netManager->successRegistrate(id_);
+    delete this;
 }
 
 void RegistrateAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("RegistrateAsyncCall::fail");
     emit netManager->failRegistrate(id_, status);
+    delete this;
 }
 
 void TranslateAsyncCall::send(RooshaServiceConnector *connector) {
@@ -55,11 +59,13 @@ void TranslateAsyncCall::send(RooshaServiceConnector *connector) {
 void TranslateAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("TranslateAsyncCall::succeed");
     emit netManager->successTranslate(id_, translationsFromProtobuf(response_));
+    delete this;
 }
 
 void TranslateAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("TranslateAsyncCall::fail");
     netManager->failTranslate(id_, status);
+    delete this;
 }
 
 void ProposeUserTranslationsAsyncCall::send(RooshaServiceConnector *connector) {
@@ -70,11 +76,13 @@ void ProposeUserTranslationsAsyncCall::send(RooshaServiceConnector *connector) {
 void ProposeUserTranslationsAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("ProposeUserTranslationsAsyncCall::succeed");
     emit netManager->successAuthorize(id_);
+    delete this;
 }
 
 void ProposeUserTranslationsAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("ProposeUserTranslationsAsyncCall::fail")
     netManager->failPropose(id_, status);
+    delete this;
 }
 
 RpcAsyncCall::RpcAsyncCall(quint32 id, quint32 timeoutMillis): id_(id) {
@@ -94,6 +102,7 @@ void RpcAsyncCall::receive(RooshaServiceConnector *connector) {
 void RpcAsyncCall::fail(NetworkManager *netManager) {
     DEBUG("default RpcAsyncCall::fail")
     this->fail(netManager, errorStatusFromGrpc(status_));
+    // DO NOT DELETE THIS HERE!
 }
 
 void AuthorizeOrRegistrateAsyncCall::authenticate(AuthenticationManager *authManager) {
@@ -124,11 +133,13 @@ void SaveChangesAsyncCall::send(RooshaServiceConnector *connector) {
 void SaveChangesAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("SaveChangesAsyncCall::succeed")
     netManager->successSaveChanges(id_);
+    delete this;
 }
 
 void SaveChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("SaveChangesAsyncCall::fail")
     netManager->failSaveChanges(id_, status);
+    delete this;
 }
 
 
@@ -140,11 +151,13 @@ void LoadChangesAsyncCall::send(RooshaServiceConnector *connector) {
 void LoadChangesAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("LoadChangesAsyncCall::succeed")
     netManager->successLoadChanges(id_, response_);
+    delete this;
 }
 
 void LoadChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("LoadChangesAsyncCall::fail")
     netManager->failLoadChanges(id_, status);
+    delete this;
 }
 
 #ifdef DEBUG

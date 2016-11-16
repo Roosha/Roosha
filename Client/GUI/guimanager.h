@@ -13,7 +13,7 @@
 class GUIManager : public QObject {
     Q_OBJECT
 public:
-    GUIManager();
+    GUIManager(QObject *parent = Q_NULLPTR);
 
 private:
     TranslationController* translationController;

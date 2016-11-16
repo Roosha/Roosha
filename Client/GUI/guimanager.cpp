@@ -5,7 +5,7 @@
 #include "GUI/cardcreationcontroller.h"
 #include "GUI/authentication_controller.h"
 
-GUIManager::GUIManager() {
+GUIManager::GUIManager(QObject *parent): QObject(parent) {
 
     qmlRegisterType<Translation>("Translan", 1, 0, "Translation");
     qmlRegisterType<AuthenticationController>("roosha.controllers", 1, 0, "AuthController");

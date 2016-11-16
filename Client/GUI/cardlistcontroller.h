@@ -29,7 +29,7 @@ public slots:
     void applyPulledChanges(quint32 requestId, ChangeList pulledChanges);
 
 private:
-    QQuickWidget*  widget;
+    QQuickWidget*  widget_;
     //Translations data;
 };
 

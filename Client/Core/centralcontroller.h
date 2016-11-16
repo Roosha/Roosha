@@ -25,7 +25,6 @@ public:
 private:
     ConfigureManager * configureManager;
     NetworkManager * networkManager;
-    DBManager * dbManager;
     GUIManager * guiManager;
     HotkeyListener * hkListener;
     SystemTray * systemTray;

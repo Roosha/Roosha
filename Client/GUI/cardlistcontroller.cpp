@@ -12,7 +12,7 @@
 #include <QDebug>
 
 
-CardListController::CardListController(QObject *parent) : QObject(parent), world_(World::Instance()) {
+CardListController::CardListController(QObject *parent) : QObject(parent), widget_(nullptr), world_(World::Instance()) {
     auto netManager = ConfigureManager::Instance().getNetworkManager();
 
     qRegisterMetaType<ChangeList>("ChangeList");
@@ -26,7 +26,7 @@ CardListController::CardListController(QObject *parent) : QObject(parent), world
 
 void CardListController::showCardListWindow() {
 
-    if (widget) widget->close();
+    if (widget_) widget_->close();
     QQuickWidget * ListWidget = new QQuickWidget();
 
     ListWidget->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
@@ -37,7 +37,7 @@ void CardListController::showCardListWindow() {
 
     ListWidget->show();
 
-    widget = ListWidget;
+    widget_ = ListWidget;
 }
 
 void CardListController::applyPulledChanges(quint32 requestId, ChangeList pulledChanges) {
@@ -48,7 +48,7 @@ void CardListController::applyPulledChanges(quint32 requestId, ChangeList pulled
 }
 
 void CardListController::closeWindow() {
-    widget->close();
+    widget_->close();
 }
 
 void CardListController::createCard() {

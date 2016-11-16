@@ -50,8 +50,20 @@ struct RpcAsyncCall {
     virtual void send(RooshaServiceConnector *connector) = 0;
     void receive(RooshaServiceConnector *connector);
     virtual void verify(AuthenticationManager *authManager) = 0;
+
+    /**
+     * NOTE: this method will destroy this RpcAsyncCall instance, so do not deal with this object anymore after call.
+     */
     virtual void succeed(NetworkManager *netManager) = 0;
+
+    /**
+     * NOTE: this method will destroy this RpcAsyncCall instance, so do not deal with this object anymore after call.
+     */
     void fail(NetworkManager *netManager);
+
+    /**
+     * NOTE: this method will destroy this RpcAsyncCall instance, so do not deal with this object anymore after call.
+     */
     virtual void fail(NetworkManager* netManager, RPCErrorStatus status) = 0;
 
 

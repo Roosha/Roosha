@@ -16,7 +16,6 @@ SOURCES += main.cpp \
     GUI/guimanager.cpp \
     Helpers/bootstrap.cpp \
     Helpers/configuremanager.cpp \
-    DB/dbmanager.cpp \
     Core/applicationdaemon.cpp \
     Core/translation.cpp \
     GUI/translationcontroller.cpp \
@@ -55,7 +54,6 @@ HEADERS += \
     GUI/guimanager.h \
     Helpers/bootstrap.h \
     Helpers/configuremanager.h \
-    DB/dbmanager.h \
     Core/applicationdaemon.h \
     Core/translation.h \
     GUI/translationcontroller.h \

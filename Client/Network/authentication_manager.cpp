@@ -119,6 +119,8 @@ void AuthenticationManager::receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegi
         } else {
             call->fail(netManager_);
         }
+    } else {
+        delete call;
     }
 }
 
