@@ -166,7 +166,7 @@ struct LoadChangesAsyncCall : public AuthenticatedAsyncCall {
 
 
     roosha::Void request_;
-    QList<QSharedPointer<IChange>> response_;
+    ChangeList response_;
 };
 
 #endif // ASYNCCLIENTCALL_H

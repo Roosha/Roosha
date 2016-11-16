@@ -10,7 +10,7 @@
 
 #ifndef DEBUG_CALL
 #define DEBUG_CALL(methodName)\
-    qDebug("AuthenticationManager::%s: called", (methodName));
+    qDebug("NetworkManager::%s: called", (methodName));
 #else
 #error DEBUG_CALL macro is already defined
 #endif
@@ -67,7 +67,7 @@ quint32 NetworkManager::registrate(QString login, QString password, quint32 time
     return call->id_;
 }
 
-quint32 NetworkManager::saveChanges(QList<QSharedPointer<IChange>> changes, quint32 timeoutMillis) {
+quint32 NetworkManager::saveChanges(ChangeList changes, quint32 timeoutMillis) {
     DEBUG_CALL("saveChanges")
     SaveChangesAsyncCall *call = new SaveChangesAsyncCall(++currentId_, timeoutMillis);
     for (auto change : changes) {

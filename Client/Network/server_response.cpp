@@ -118,7 +118,7 @@ void AuthenticatedAsyncCall::verify(AuthenticationManager *authManager) {
 
 void SaveChangesAsyncCall::send(RooshaServiceConnector *connector) {
     DEBUG("SaveChangesAsyncCall::send")
-    //TODO: implement
+    connector->saveChanges(this);
 }
 
 void SaveChangesAsyncCall::succeed(NetworkManager *netManager) {
@@ -134,7 +134,7 @@ void SaveChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus statu
 
 void LoadChangesAsyncCall::send(RooshaServiceConnector *connector) {
     DEBUG("LoadChangesAsyncCall::send")
-    // TODO: implement
+    connector->loadChanges(this);
 }
 
 void LoadChangesAsyncCall::succeed(NetworkManager *netManager) {

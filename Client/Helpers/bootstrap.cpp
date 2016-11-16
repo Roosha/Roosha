@@ -12,13 +12,19 @@ Bootstrap::Bootstrap(CentralController *cc) : cc(cc) {
 
 void Bootstrap::run() { // TODO: create all stages of initialisation
     ConfigureManager * cm = &ConfigureManager::Instance();
+    /**
+    * NOTE: {@link CardListController} uses {@link ConfigureManager::getNetworkManager} in constructor,
+    * so {@link GUIManager} should be created after network manager is set in confifure manager.
+    */
     NetworkManager * nm = new NetworkManager();
+    cm->setNetworkManager(nm);
+
+
     DBManager * dbm = new DBManager();
     GUIManager * guim = new GUIManager();
     HotkeyListener * hkl = new HotkeyListener();
     SystemTray * sysTray = new SystemTray();
 
-    cm->setNetworkManager(nm);
 
     qRegisterMetaType<Translations>("Translations");
 

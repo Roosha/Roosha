@@ -139,6 +139,9 @@ public class RooshaRpcService extends RooshaServiceImplBase {
             @Override
             public void onCompleted() {
                 worldStorage.setWorld(userId, world);
+
+                responseObserver.onNext(Void.getDefaultInstance());
+                responseObserver.onCompleted();
             }
         };
     }

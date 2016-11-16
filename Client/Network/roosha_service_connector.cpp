@@ -64,7 +64,7 @@ void RooshaServiceConnector::saveChanges(SaveChangesAsyncCall *call) {
         qDebug("Start client-stream request writer for call %d", call->id_);
         auto writer = stub_->saveChanges(&call->context_, &call->response_);
         for (const auto& change : call->request_) {
-            if (writer->Write(change)) {
+            if (!writer->Write(change)) {
                 qDebug("Request %d stream writer: stream broken", call->id_);
                 break;
             }
@@ -88,7 +88,7 @@ void RooshaServiceConnector::loadChanges(LoadChangesAsyncCall *call) {
             call->response_.append(changeFromProtobuf(receivedChange));
         }
         call->status_ = reader->Finish();
-        qDebug("Request %d stream reader: finish reading");
+        qDebug("Request %d stream reader: finish reading", call->id_);
         call->verify(authManager_);
     });
 }

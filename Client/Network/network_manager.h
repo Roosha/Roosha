@@ -25,7 +25,7 @@ public:
     quint32 proposeUserTranslations(Translations translations, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
     quint32 authorize(QString login, QString password, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
     quint32 registrate(QString login, QString password, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
-    quint32 saveChanges(QList<QSharedPointer<IChange>> changes, quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
+    quint32 saveChanges(ChangeList changes, quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
     quint32 loadChanges(quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
 
 signals:
@@ -44,7 +44,7 @@ signals:
     void successSaveChanges(quint32 id);
     void failSaveChanges(quint32 id, RPCErrorStatus status);
 
-    void successLoadChanges(quint32 id, QList<QSharedPointer<IChange>> changes);
+    void successLoadChanges(quint32 id, ChangeList changes);
     void failLoadChanges(quint32 id, RPCErrorStatus status);
 
 private:

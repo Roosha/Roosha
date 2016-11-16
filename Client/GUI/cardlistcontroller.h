@@ -26,7 +26,7 @@ signals:
 
 public slots:
     void showCardListWindow();
-    void applyPulledChanges(QVector<QSharedPointer<IChange>> pulledChanges);
+    void applyPulledChanges(quint32 requestId, ChangeList pulledChanges);
 
 private:
     QQuickWidget*  widget;

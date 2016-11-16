@@ -7,12 +7,12 @@
 #include <QSharedPointer>
 
 class World {
- public:
+public:
     static World& Instance();
 
     const QMap<QUuid, QSharedPointer<DBCard>>& getCards();
-    const QVector<QSharedPointer<IChange>>& getChanges();
-    void setChanges(QVector<QSharedPointer<IChange>> newChanges);
+    const ChangeList& getChanges();
+    void setChanges(ChangeList newChanges);
 
     QSharedPointer<DBCard> createCard();
     void deleteCard(QUuid id);
@@ -30,14 +30,14 @@ class World {
 
     void insertCard(QUuid key, QSharedPointer<DBCard> card);
     void removeCard(QUuid key);
- private:
+private:
     World();
     ~World();
     World(const World& world) = delete;
     World& operator=(const World&) = delete;
 
     QMap<QUuid, QSharedPointer<DBCard>> cards_;
-    QVector<QSharedPointer<IChange>> changes_;
+    ChangeList changes_;
 
 };
 
