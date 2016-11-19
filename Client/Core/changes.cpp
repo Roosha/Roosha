@@ -134,8 +134,6 @@ QUuid CreateCard::getId() {
 }
 
 void CreateCard::apply(World * world) {
-//    if (cardId.isNull())
-//        cardId = QUuid::createUuid();
     world->insertCard(cardId, QSharedPointer<DBCard>::create(cardId));
 }
 

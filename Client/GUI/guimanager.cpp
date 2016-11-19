@@ -20,7 +20,7 @@ GUIManager::GUIManager(QObject *parent): QObject(parent) {
     connect(cardListController, &CardListController::createNewCard,
             cardCreationController, &CardCreationController::showNewEditWindow);
     connect(cardCreationController, &CardCreationController::showCards,
-            this, &GUIManager::showMainWin);
+            this, &GUIManager::showMainWindow);
 }
 
 void GUIManager::showNewTranslationWindow(quint32 id, Translations trans) {
@@ -28,7 +28,7 @@ void GUIManager::showNewTranslationWindow(quint32 id, Translations trans) {
 }
 
 
-void GUIManager::showMainWin() {
+void GUIManager::showMainWindow() {
     cardListController->showCardListWindow();
 }
 

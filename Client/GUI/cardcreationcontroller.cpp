@@ -34,7 +34,7 @@ void CardCreationController::closeWindow() {
 void CardCreationController::saveCard(QString src, QString tarStr, QString exStr) {
     QSharedPointer<DBCard> card = world.createCard();
     QStringList targets = tarStr.split("; ", QString::SkipEmptyParts);
-    QStringList examples = exStr.split("; ", QString::SkipEmptyParts);
+    QStringList examples = exStr.split(";\n", QString::SkipEmptyParts);
     card->setSource(src);
     for (int i = 0; i < targets.size(); i++) {
         card->insertElem(TARGET, targets[i], i);
@@ -42,7 +42,6 @@ void CardCreationController::saveCard(QString src, QString tarStr, QString exStr
     for (int i = 0; i < examples.size(); i++) {
         card->insertElem(EXAMPLE, examples[i], i);
     }
-    qDebug() << src << "\n" << "\n" << tarStr << "\n" << exStr << "\n";
 
     emit(showCards());
     widget->close();

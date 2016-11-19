@@ -1,34 +1,48 @@
 import QtQuick 2.0
 
-Rectangle {
+import QtQuick.Layouts 1.0
+
+
+ColumnLayout {
     width: parent.width
-    height: 60
-    border.color: "black"
-    border.width: 1
 
     Text {
         id: src
+
+        Layout.fillWidth: true
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
+        width: parent.width
         text: source
     }
 
     Text {
         id: tar
+
+        Layout.fillWidth: true
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
+        width: parent.width
         text: target
+        wrapMode: Text.WordWrap
         anchors.top: src.bottom
     }
 
     Text {
         id: exmpl
+
+        Layout.fillWidth: true
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
+        width: parent.width
         text: examples
+
+        wrapMode: Text.WordWrap
         anchors.top: tar.bottom
+    }
+    Rectangle {
+        width: parent.width
+        height: 1
+        color: "black"
     }
 }

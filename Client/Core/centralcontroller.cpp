@@ -37,7 +37,7 @@ CentralController::CentralController() {
 
     connect(systemTray, &SystemTray::newWord, this, &CentralController::handleNewWord);
     connect(systemTray, &SystemTray::closeApplication, this, &CentralController::closeApplication);
-    connect(systemTray, &SystemTray::showMainWidnow, guiManager, &GUIManager::showMainWin);
+    connect(systemTray, &SystemTray::showMainWidnow, guiManager, &GUIManager::showMainWindow);
 }
 
 void CentralController::start() {

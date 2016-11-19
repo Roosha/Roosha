@@ -6,7 +6,8 @@ Rectangle {
     id: root
     width: 400; height: 200;
     color: "#fff8c2"
-
+    border.color: "black"
+    border.width: 1
     Text {
         id: sourceElement
 
@@ -22,15 +23,30 @@ Rectangle {
         text: trans[0].source
     }
 
-    ListView {
-        width: parent.width
-        height: parent.height * 2 / 3
+    Rectangle {
         anchors.top: sourceElement.bottom
+        width: parent.width
 
-        clip: true
+        border.color: "black"
+        border.width: 1
+        height: parent.height * 2 / 3
+        color: "#aaf9af"
 
-        model: trans
-        delegate: TranslationView {}
+        ListView {
+
+            width: parent.width
+            height: parent.height
+            opacity: 1
+            boundsBehavior: Flickable.DragAndOvershootBounds
+            orientation: ListView.Vertical
+            keyNavigationWraps: true
+            //keyNavigationEnabled: true
+            clip:true
+            focus: true
+            highlight: Rectangle { color: "#72f678" }
+            model: trans
+            delegate: TranslationView {}
+        }
     }
 
     Row {

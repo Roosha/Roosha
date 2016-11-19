@@ -5,7 +5,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <Helpers/qmlconvertation.h>
-
+#include <QtDebug>
 TranslationController::TranslationController(QObject *parent) : QObject(parent), lastId(0) {
 }
 
@@ -39,7 +39,7 @@ void TranslationController::closeWindow(quint32 id) {
 
 void TranslationController::createCard(quint32 id) {
     emit createNewCard(data[id][0]);
-    // TODO: send signal
+    //TODO: selecting translation for creation card
 }
 
 //void TranslationController::createLater(quint32 id)

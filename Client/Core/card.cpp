@@ -15,9 +15,9 @@ QStringList Card::getExamples() const{
 }
 
 QString Card::getExampleString() const {
-    return examples.join("\n ");
+    return examples.join(";\n");
 }
 
 QString Card::getTargetString() const {
-    return targets.join("\n ");
+    return targets.join("; ");
 }

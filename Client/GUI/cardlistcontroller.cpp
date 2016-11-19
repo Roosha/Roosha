@@ -12,7 +12,7 @@
 #include <QDebug>
 
 
-CardListController::CardListController(QObject *parent) : QObject(parent), widget_(nullptr), world_(World::Instance()) {
+CardListController::CardListController(QObject *parent) : QObject(parent), widget_(Q_NULLPTR), world_(World::Instance()) {
     auto netManager = ConfigureManager::Instance().getNetworkManager();
 
     qRegisterMetaType<ChangeList>("ChangeList");
@@ -26,29 +26,34 @@ CardListController::CardListController(QObject *parent) : QObject(parent), widge
 
 void CardListController::showCardListWindow() {
 
-    if (widget_) {
+    if (widget_) {        
         widget_->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
         widget_->repaint();
-    }    else {
+    } else {
         QQuickWidget * listWidget = new QQuickWidget();
 
         listWidget->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
         listWidget->rootContext()->setContextProperty("controller", this);
-
+        listWidget->setAttribute(Qt::WA_DeleteOnClose);
         listWidget->setSource(QUrl(QStringLiteral("qrc:/list/CardList.qml")));
         listWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
         listWidget->show();
 
         widget_ = listWidget;
+        connect(widget_, &QQuickWidget::destroyed, this, &CardListController::onWidgetClose);
     }
 }
 
 void CardListController::applyPulledChanges(quint32 requestId, ChangeList pulledChanges) {
     qDebug("CardListController::applyPulledChanges: pull request %d succeeded", requestId);
-    //something useful
+
     world_.setChanges(pulledChanges);
     showCardListWindow();
+}
+
+void CardListController::onWidgetClose() {
+    widget_ = Q_NULLPTR;
 }
 
 void CardListController::closeWindow() {
@@ -74,3 +79,4 @@ void CardListController::deleteCard(QUuid id) {
     world_.deleteCard(id);
     showCardListWindow();
 }
+

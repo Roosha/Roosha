@@ -29,7 +29,7 @@ void Translation::setExamples(const QStringList &value) {
 }
 
 QString Translation::getExampleString() const {
-    return examples.join("; ");;
+    return examples.join(";\n");;
 }
 
 QString Translation::getTargetString() const {

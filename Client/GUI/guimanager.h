@@ -23,7 +23,7 @@ private:
 
 public slots:
     void showNewTranslationWindow(quint32 id, Translations trans);
-    void showMainWin();
+    void showMainWindow();
     void showAuthenticationWindow();
 
     void authenticationSuccess(quint32 id);

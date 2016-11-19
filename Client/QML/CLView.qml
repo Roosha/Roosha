@@ -2,45 +2,73 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 1.4
 
+Rectangle {
+    width: parent.width / 3
+    height: parent.height
+    border.color: "black"
+    border.width: 1
+    color: "#aaf9af"
 
-ColumnLayout {
-    id : card
+    ColumnLayout {
+    id: card
     width: parent.width
 
-    Label { text: id }
-    Label {
-        text: qsTr("source: ")
-        width: 50
-    }
+        //Label { text: id
+        RowLayout {
 
-    Text {
-        id: src
-        Layout.fillWidth: true
-        text: source
-        wrapMode: Text.WordWrap
-    }
+            id: src
+            width: parent.width
+            Label {
+                text: qsTr("source: ")
+                width: 50
+            }
 
-    Label {
-        text: qsTr("target: ")
-        width: 50
-    }
+            Text {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: parent.width
+                text: source
+            }
+        }
+        RowLayout {
+            id: tar
+            width: parent.width
+            Label {
+                text: qsTr("target: ")
+                width: 50
+            }
 
-    Text {
-        id: tar
-        Layout.fillWidth: true
-        text: target
-        wrapMode: Text.WordWrap
-    }
+            Text {
 
-    Label {
-        text: qsTr("examples: ")
-        width: 50
-    }
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: parent.width
+                text: target
+                wrapMode: Text.WordWrap
+                anchors.top: src.bottom
+            }
+        }
 
-    Text {
-        id: exmpl
-        Layout.fillWidth: true
-        text: examples
-        wrapMode: Text.WordWrap
+        RowLayout {
+            id: exmpl
+            width: parent.width
+            Label {
+                text: qsTr("examples: ")
+                width: 50
+            }
+
+            Text {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: parent.width
+                text: examples
+
+                wrapMode: Text.WordWrap
+                anchors.top: tar.bottom
+            }
+        }
     }
 }
