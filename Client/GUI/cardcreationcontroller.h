@@ -11,7 +11,7 @@
 
 class CardCreationController : public QObject {
     Q_OBJECT
- public:
+public:
     CardCreationController(QObject * parent = nullptr);
     World& world;
 
@@ -20,12 +20,12 @@ class CardCreationController : public QObject {
 signals:
     void showCards();
 
- public slots:
+public slots:
     void showNewEditWindow(QSharedPointer<Translation> trans);
 
- private:
+private:
     QQuickWidget*  widget;
-    //TestTranslations data;
+    //Translations data;
 };
 
 #endif // CARDCREATIONCONTROLLER_H

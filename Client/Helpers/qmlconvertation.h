@@ -4,8 +4,9 @@
 #include <QVariant>
 #include <QMap>
 
-class QmlConvertation
-{
+#include <iostream>
+
+class QmlConvertation {
 public:
     QmlConvertation();
 

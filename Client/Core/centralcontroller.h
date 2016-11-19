@@ -8,9 +8,10 @@
 class Bootstrap;
 class ConfigureManager;
 class DBManager;
-class TestNetworkManager;
+class NetworkManager;
 class GUIManager;
 class HotkeyListener;
+class SystemTray;
 
 class CentralController : public QObject {
     Q_OBJECT
@@ -23,13 +24,14 @@ public:
 
 private:
     ConfigureManager * configureManager;
-    TestNetworkManager * networkManager;
-    DBManager * dbManager;
+    NetworkManager * networkManager;
     GUIManager * guiManager;
     HotkeyListener * hkListener;
+    SystemTray * systemTray;
 
 public slots:
     void handleNewWord(QString word);
+    void closeApplication();
 };
 
 #endif // CENTRALCONTROLLER_H

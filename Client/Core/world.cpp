@@ -17,13 +17,14 @@ const QMap<QUuid, QSharedPointer<DBCard>> & World::getCards() {
     return cards_;
 }
 
-const QVector<QSharedPointer<IChange>> & World::getChanges() {
+const ChangeList & World::getChanges() {
     return changes_;
 }
 
-void World::setChanges(QVector<QSharedPointer<IChange> > newChanges) {
+void World::setChanges(ChangeList newChanges) {
     cards_.clear();
     changes_ = newChanges;
+    applyChanges();
 }
 
 QSharedPointer<DBCard> World::createCard() {
@@ -80,6 +81,6 @@ void World::insertCard(QUuid key, QSharedPointer<DBCard> card) {
     cards_.insert(key, card);
 }
 
-void World::removeCard(QUuid key){
+void World::removeCard(QUuid key) {
     cards_.remove(key);
 }

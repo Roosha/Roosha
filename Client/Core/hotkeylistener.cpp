@@ -17,7 +17,7 @@ void HotkeyListener::run() {
 
 //    QEventLoop l;
 
-      connect(qhk, SIGNAL(activated()), this, SLOT(newUserAction()));
+    connect(qhk, &QHotkey::activated, this, &HotkeyListener::newUserAction);
 
 //    l.exec();
 }

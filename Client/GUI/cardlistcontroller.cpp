@@ -1,6 +1,9 @@
 #include "cardlistcontroller.h"
 #include "Core/world.h"
 #include "Core/translation.h"
+#include "Helpers/configuremanager.h"
+#include "Network/network_manager.h"
+
 #include <QQuickWidget>
 #include <QQmlContext>
 #include <QApplication>
@@ -9,7 +12,15 @@
 #include <QDebug>
 
 
-CardListController::CardListController(QObject *parent) : QObject(parent), world_(World::Instance()) { }
+CardListController::CardListController(QObject *parent) : QObject(parent), widget_(nullptr), world_(World::Instance()) {
+    auto netManager = ConfigureManager::Instance().getNetworkManager();
+
+    qRegisterMetaType<ChangeList>("ChangeList");
+    connect(netManager, &NetworkManager::successLoadChanges,
+            this, &CardListController::applyPulledChanges,
+            Qt::QueuedConnection);
+    // TODO: add translation error handler
+}
 
 
 
@@ -33,7 +44,9 @@ void CardListController::showCardListWindow() {
     }
 }
 
-void CardListController::applyPulledChanges(QVector<QSharedPointer<IChange>> pulledChanges) {
+void CardListController::applyPulledChanges(quint32 requestId, ChangeList pulledChanges) {
+    qDebug("CardListController::applyPulledChanges: pull request %d succeeded", requestId);
+    //something useful
     world_.setChanges(pulledChanges);
     showCardListWindow();
 }
@@ -48,10 +61,12 @@ void CardListController::createCard() {
 }
 
 void CardListController::pullCards() {
+    ConfigureManager::Instance().getNetworkManager()->loadChanges();
     qDebug() << "pull";
 }
 
 void CardListController::pushCards() {
+    ConfigureManager::Instance().getNetworkManager()->saveChanges(world_.getChanges());
     qDebug() << "push";
 }
 

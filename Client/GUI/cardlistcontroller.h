@@ -12,7 +12,7 @@
 
 class CardListController : public QObject {
     Q_OBJECT
- public:
+public:
     CardListController(QObject * parent = nullptr);
     World& world_;
 
@@ -25,13 +25,13 @@ class CardListController : public QObject {
 signals:
     void createNewCard(QSharedPointer<Translation> data);
 
- public slots:
+public slots:
     void showCardListWindow();
-    void applyPulledChanges(QVector<QSharedPointer<IChange>> pulledChanges);
+    void applyPulledChanges(quint32 requestId, ChangeList pulledChanges);
 
- private:
+private:
     QQuickWidget*  widget_;
-    //TestTranslations data;
+    //Translations data;
 };
 
 #endif // CARDLISTCONTROLLER_H

@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package roosha;
+
+option java_package = "com.github.roosha.proto";
+option java_outer_classname = "ChangesProto";
+
+option cc_enable_arenas = false;
+
+option optimize_for = SPEED;
+
+message Change {
+	oneof change {
+		CardChange cardChange = 1;	
+	}
+}
+
+message CardChange {
+	string cardId = 1;
+
+	oneof change {
+		CreateCard createCard = 2;
+		DeleteCard deleteCard = 3;
+
+		ChangeSource changeSource = 4;
+		InsertElem insertElem = 5;
+		DeleteElem deleteElem = 6;
+		EditElem editElem = 7;
+	}
+
+	message CreateCard {}
+	message DeleteCard {}
+
+	enum Field {
+		UNKNOWN = 0;
+		TARGET = 1;
+		EXAMPLE = 2;
+	}
+
+	message ChangeSource {
+		string newSource = 1;
+	}
+
+	message InsertElem {
+		Field field = 1;
+		uint32 index = 2;
+		string value = 3;	
+	}
+
+	message DeleteElem {
+		Field field = 1;
+		uint32 index = 2;
+	}
+
+	message EditElem {
+		Field field = 1;
+		uint32 position = 2; // element should be inserted onto this position.
+		string value = 3;
+	}
+}

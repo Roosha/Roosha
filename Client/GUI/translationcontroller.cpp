@@ -9,7 +9,7 @@
 TranslationController::TranslationController(QObject *parent) : QObject(parent), lastId(0) {
 }
 
-void TranslationController::addData(TestTranslations translations) {
+void TranslationController::addData(Translations translations) {
     lastId += 1;
 
     data.insert(lastId, translations);
