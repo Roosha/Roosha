@@ -72,10 +72,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
         final RawTranslation rawTranslation = provider.translate(request.getSource());
         Translations.Builder responseBuilder = rawTranslation.convertToProtoTranslationsBuilder();
-        if (responseBuilder != null) {
-            rawTranslation.addToProtoTranslationsBuilder(responseBuilder);
-            responseBuilder.setSource(request.getSource());
-        } else {
+        if (responseBuilder == null) {
             responseBuilder = Translations.newBuilder(Translations.getDefaultInstance());
         }
         responseObserver.onNext(responseBuilder.build());
