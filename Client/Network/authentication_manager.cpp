@@ -1,7 +1,10 @@
 #include <QSharedPointer>
 #include <QMutexLocker>
+#include <QCryptographicHash>
 
 #include <grpc++/grpc++.h>
+
+#include <string>
 
 #include "Helpers/protobuf_converter.h"
 #include "Helpers/configuremanager.h"
@@ -39,6 +42,10 @@ AuthenticationManager::AuthenticationManager(NetworkManager *n) :
 
 AuthenticationManager::~AuthenticationManager() {
     qDebug("AuthenticationManager destroyed");
+}
+
+std::string AuthenticationManager::hashPassword(QString password) {
+    return QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Sha3_256).toHex().toStdString();
 }
 
 void AuthenticationManager::authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall *call) {

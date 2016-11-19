@@ -1,9 +1,12 @@
 #ifndef AUTHENTICATIONMANAGER_H
 #define AUTHENTICATIONMANAGER_H
 
-#include <grpc++/grpc++.h>
 #include <QQueue>
 #include <QMutex>
+
+#include <string>
+
+#include <grpc++/grpc++.h>
 
 class AuthenticatedAsyncCall;
 class AuthorizeOrRegistrateAsyncCall;
@@ -20,6 +23,8 @@ class AuthenticationManager {
 public:
     AuthenticationManager(NetworkManager *n);
     ~AuthenticationManager();
+
+    static std::string hashPassword(QString password);
 
     void authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall *call);
     void sendWithMetadata(AuthenticatedAsyncCall *call);

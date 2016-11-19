@@ -18,7 +18,7 @@ AuthenticationController::AuthenticationController(QObject *parent) :
 
     credentials_ = QVariantMap {
         {"login", configurationManager_.getLogin()},
-        {"password", configurationManager_.getPasswordHash()}
+        {"password", ""}
     };
 }
 

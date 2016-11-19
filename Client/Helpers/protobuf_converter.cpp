@@ -25,7 +25,6 @@ roosha::Translations ProtobufConverter::translationsToProtobuf(const Translation
 }
 
 Translations ProtobufConverter::translationsFromProtobuf(const roosha::Translations& rawTranslations) {
-    std::cout << "translationsFromProtobuf called" << std::endl;
     Translations result;
     for (int i = 0; i < rawTranslations.translation_size(); i++) {
         auto raw_translation = rawTranslations.translation(i);
@@ -46,7 +45,6 @@ Translations ProtobufConverter::translationsFromProtobuf(const roosha::Translati
 
         result.append(QSharedPointer<Translation>(translation));
     }
-    std::cout << "translationsFromProtobuf finished" << std::endl;
     return result;
 }
 

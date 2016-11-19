@@ -51,7 +51,7 @@ quint32 NetworkManager::authorize(QString login, QString password, quint32 timeo
     DEBUG_CALL("authorize")
     AuthorizeAsyncCall *call = new AuthorizeAsyncCall(++currentId_, timeoutMills);
     call->request_.set_login(login.toStdString());
-    call->request_.set_passwordhash(password.toStdString()); // TODO: pass hash insted of raw password
+    call->request_.set_passwordhash(AuthenticationManager::hashPassword(password));
 
     call->authenticate(authenticationManager_);
     return call->id_;
@@ -61,7 +61,7 @@ quint32 NetworkManager::registrate(QString login, QString password, quint32 time
     DEBUG_CALL("registrate")
     RegistrateAsyncCall *call = new RegistrateAsyncCall(++currentId_, timeoutMills);
     call->request_.set_login(login.toStdString());
-    call->request_.set_passwordhash(password.toStdString()); // TODO: pass hash insted of raw password
+    call->request_.set_passwordhash(AuthenticationManager::hashPassword(password));
 
     call->authenticate(authenticationManager_);
     return call->id_;

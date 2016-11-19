@@ -29,8 +29,6 @@ void TranslationController::addData(Translations translations) {
     translationWidget->setFixedSize(translationWidget->size());
 
     widgets.insert(lastId, translationWidget);
-
-    std::cout << "addData finished" << std::endl;
 }
 
 void TranslationController::closeWindow(quint32 id) {
