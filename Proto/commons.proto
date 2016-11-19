@@ -17,9 +17,9 @@
  */
 syntax = "proto3";
 
-package roosha.commons;
+package roosha;
 
-option java_package = "com.github.roosha.proto.commons";
+option java_package = "com.github.roosha.proto";
 option java_outer_classname = "CommonsProto";
 
 option cc_enable_arenas = false;
@@ -27,3 +27,12 @@ option cc_enable_arenas = false;
 option optimize_for = SPEED;
 
 message Void{}
+
+message Credentials {
+	string login = 1;
+	string passwordHash = 2; // SHA3-256
+}
+
+message AuthenticationToken {
+	string token = 1;
+}

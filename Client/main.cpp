@@ -1,6 +1,5 @@
 #include "Network/network_manager.h"
-#include "Network/translation_service.h"
-#include "Network/Proto/translation_service.pb.h"
+#include "Network/Proto/roosha_service.pb.h"
 #include "Test/Network/translations_test_slot_holder.h"
 #include "Core/dbcard.h"
 #include "Core/card.h"
@@ -19,36 +18,35 @@
 #include <thread>
 #include <memory>
 
-using roosha::translation::Translations;
 TranslationsTestSlotHolder* testTranslationServiceConnection();
 
 
 int main(int argc, char *argv[]) {
-    WorldTest testChanges;
-    testChanges.run();
-//    auto ptr = testTranslationServiceConnection();
-//    delete ptr;
+    QApplication app(argc, argv);
+    app.setQuitOnLastWindowClosed(false);
+    CentralController controller;
+    controller.start();
+    return app.exec();
 }
 
 
 
 TranslationsTestSlotHolder* testTranslationServiceConnection() {
     TranslationsTestSlotHolder* receiver = new TranslationsTestSlotHolder;
-    std::shared_ptr<NetworkManager> networkManager(new NetworkManager);
-    std::shared_ptr<TranslationService> translationService = networkManager->getTranslationService();
+    NetworkManager networkManager;
 
-    qRegisterMetaType<TestTranslations>();
-    QObject::connect(translationService.get(), &TranslationService::translationSucceeded,
+    QObject::connect(&networkManager, &NetworkManager::successTranslate,
                      receiver, &TranslationsTestSlotHolder::translationSucceededSlot, Qt::DirectConnection);
-    QObject::connect(translationService.get(), &TranslationService::translationFailed,
+    QObject::connect(&networkManager, &NetworkManager::failTranslate,
                      receiver, &TranslationsTestSlotHolder::translationFailedSlot, Qt::DirectConnection);
 
     QStringList str;
     str << "hello" << "gobbles" << "exhibit" << "apple" << "jkajhwvnejkw";
     for (auto cur: str) {
-        quint32 id = translationService->translate(cur, 5000u);
+        quint32 id = networkManager.translate(cur, 5000u);
         std::cout << "Sent request with id: " << id << std::endl;
     }
 
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000000));
     return receiver;
 }

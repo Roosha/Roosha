@@ -1,4 +1,4 @@
-build-Roosha-Client-Desktop*
+build-Roosha*
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
 *.class
@@ -26,4 +26,7 @@ buildNumber.properties
 
 ### Intellij IDEA config
 /.idea/
+*.iml
 
+# vim
+*.swp

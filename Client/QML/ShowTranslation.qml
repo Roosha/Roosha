@@ -48,7 +48,7 @@ Rectangle {
         Button {
             id: closeButton
 
-            text: "Close"
+            text: qsTr("Close")
             height: parent.height - 6
             width: 100
 
@@ -64,26 +64,29 @@ Rectangle {
         Button {
             id: createButton
 
-            text: "Create Card"
+            text: qsTr("Create Card")
             height: parent.height - 6
             width: 100
 
             background: Rectangle {
                 color: createButton.down ? '#7fb5b5' : '#c7d0cc'
             }
-        }
-
-        Button {
-            id: createLaterButton
-
-            text: "Create later"
-            height: parent.height - 6
-            width: 100
-
-            background: Rectangle {
-                color: createLaterButton.down ? '#7fb5b5' : '#c7d0cc'
+            onClicked: {
+                controller.createCard(identificator);
             }
         }
+
+//        Button {
+//            id: createLaterButton
+
+//            text: "Create later"
+//            height: parent.height - 6
+//            width: 100
+
+//            background: Rectangle {
+//                color: createLaterButton.down ? '#7fb5b5' : '#c7d0cc'
+//            }
+//        }
 
     }
 

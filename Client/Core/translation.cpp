@@ -4,32 +4,34 @@ Translation::Translation() {
 
 }
 
-QString Translation::getSource() const
-{
+QString Translation::getSource() const {
     return source;
 }
 
-void Translation::setSource(const QString &value)
-{
+void Translation::setSource(const QString &value) {
     source = value;
 }
 
-QStringList Translation::getTarget() const
-{
+QStringList Translation::getTarget() const {
     return target;
 }
 
-void Translation::setTarget(const QStringList &value)
-{
+void Translation::setTarget(const QStringList &value) {
     target = value;
 }
 
-QStringList Translation::getExamples() const
-{
+QStringList Translation::getExamples() const {
     return examples;
 }
 
-void Translation::setExamples(const QStringList &value)
-{
+void Translation::setExamples(const QStringList &value) {
     examples = value;
+}
+
+QString Translation::getExampleString() const {
+    return examples.join("; ");;
+}
+
+QString Translation::getTargetString() const {
+    return target.join("; ");
 }

@@ -7,13 +7,14 @@
 #include <QSharedPointer>
 
 class World {
- public:
+public:
     static World& Instance();
 
-    QMap<QUuid, QSharedPointer<DBCard>>& getCards();
-    QVector<QSharedPointer<IChange>>& getChanges();
+    const QMap<QUuid, QSharedPointer<DBCard>>& getCards();
+    const ChangeList& getChanges();
+    void setChanges(ChangeList newChanges);
 
-    QUuid createCard();
+    QSharedPointer<DBCard> createCard();
     void deleteCard(QUuid id);
 
     void setSource(QUuid cardId, QString newSource);
@@ -26,14 +27,17 @@ class World {
     void saveToDB();
     void applyChanges();
 
- private:
+
+    void insertCard(QUuid key, QSharedPointer<DBCard> card);
+    void removeCard(QUuid key);
+private:
     World();
     ~World();
     World(const World& world) = delete;
     World& operator=(const World&) = delete;
 
-    QMap<QUuid, QSharedPointer<DBCard>> cards;
-    QVector<QSharedPointer<IChange>> changes;
+    QMap<QUuid, QSharedPointer<DBCard>> cards_;
+    ChangeList changes_;
 
 };
 

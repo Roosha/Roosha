@@ -7,4 +7,16 @@
         <file>ShowTranslation.qml</file>
         <file>TranslationView.qml</file>
     </qresource>
+    <qresource prefix="/edition">
+        <file>ShowEdition.qml</file>
+        <file>EditView.qml</file>
+    </qresource>
+    <qresource prefix="/list">
+        <file>CardList.qml</file>
+        <file>CLView.qml</file>
+    </qresource>
+    <qresource prefix="/authentication">
+        <file>loginView.qml</file>
+        <file>registerView.qml</file>
+    </qresource>
 </RCC>
