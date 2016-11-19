@@ -87,15 +87,5 @@ Rectangle {
 //                color: createLaterButton.down ? '#7fb5b5' : '#c7d0cc'
 //            }
 //        }
-
     }
-
-
-//    Button {
-//        text: "YPdsfdsfdsf"
-//        onClicked: {
-//            console.log(identificator)
-//        }
-//    }
-
 }

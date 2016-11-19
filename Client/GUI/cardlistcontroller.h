@@ -20,6 +20,7 @@ class CardListController : public QObject {
     Q_INVOKABLE void pullCards();
     Q_INVOKABLE void pushCards();
     Q_INVOKABLE void createCard();
+    Q_INVOKABLE void deleteCard(QUuid id);
 
 signals:
     void createNewCard(QSharedPointer<Translation> data);
@@ -29,7 +30,7 @@ signals:
     void applyPulledChanges(QVector<QSharedPointer<IChange>> pulledChanges);
 
  private:
-    QQuickWidget*  widget;
+    QQuickWidget*  widget_;
     //TestTranslations data;
 };
 

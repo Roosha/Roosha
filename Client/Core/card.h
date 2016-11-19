@@ -11,6 +11,7 @@ class Card : public QObject {
     Q_PROPERTY(QString source READ getSource)
     Q_PROPERTY(QString target READ getTargetString)
     Q_PROPERTY(QString examples READ getExampleString)
+
  public:
     Card();
 

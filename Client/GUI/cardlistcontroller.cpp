@@ -15,28 +15,31 @@ CardListController::CardListController(QObject *parent) : QObject(parent), world
 
 void CardListController::showCardListWindow() {
 
-    if (widget) widget->close();
-    QQuickWidget * ListWidget = new QQuickWidget();
+    if (widget_) {
+        widget_->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
+        widget_->repaint();
+    }    else {
+        QQuickWidget * listWidget = new QQuickWidget();
 
-    ListWidget->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
-    ListWidget->rootContext()->setContextProperty("controller", this);
+        listWidget->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
+        listWidget->rootContext()->setContextProperty("controller", this);
 
-    ListWidget->setSource(QUrl(QStringLiteral("qrc:/list/CardList.qml")));
-    ListWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+        listWidget->setSource(QUrl(QStringLiteral("qrc:/list/CardList.qml")));
+        listWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
-    ListWidget->show();
+        listWidget->show();
 
-    widget = ListWidget;
+        widget_ = listWidget;
+    }
 }
 
 void CardListController::applyPulledChanges(QVector<QSharedPointer<IChange>> pulledChanges) {
-    //something useful
     world_.setChanges(pulledChanges);
     showCardListWindow();
 }
 
 void CardListController::closeWindow() {
-    widget->close();
+    widget_->close();
 }
 
 void CardListController::createCard() {
@@ -50,4 +53,9 @@ void CardListController::pullCards() {
 
 void CardListController::pushCards() {
     qDebug() << "push";
+}
+
+void CardListController::deleteCard(QUuid id) {
+    world_.deleteCard(id);
+    showCardListWindow();
 }

@@ -1,34 +1,46 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.0
+import QtQuick.Controls 1.4
 
-Rectangle {
+
+ColumnLayout {
+    id : card
     width: parent.width
-    height: 60
-    border.color: "black"
-    border.width: 1
+
+    Label { text: id }
+    Label {
+        text: qsTr("source: ")
+        width: 50
+    }
 
     Text {
         id: src
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
+        Layout.fillWidth: true
         text: source
+        wrapMode: Text.WordWrap
+    }
+
+    Label {
+        text: qsTr("target: ")
+        width: 50
     }
 
     Text {
         id: tar
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
+        Layout.fillWidth: true
         text: target
-        anchors.top: src.bottom
+        wrapMode: Text.WordWrap
+    }
+
+    Label {
+        text: qsTr("examples: ")
+        width: 50
     }
 
     Text {
         id: exmpl
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
+        Layout.fillWidth: true
         text: examples
-        anchors.top: tar.bottom
+        wrapMode: Text.WordWrap
     }
 }

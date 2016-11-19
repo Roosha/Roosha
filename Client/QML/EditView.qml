@@ -1,55 +1,95 @@
 import QtQuick 2.7
+import QtQuick.Layouts 1.0
+import QtQuick.Controls 1.4
 
-Rectangle {
-    width: parent.width
-    height: parent.height
 
-    Rectangle {
+ColumnLayout {
+    width: parent.width - 20
+    height: parent.height * 5 / 6 - 10
+    anchors.bottom: parent.bottom - parent.height / 6
+    anchors.horizontalCenter: parent.horizontalCenter
+
+    function getSource() {
+        return src_in.text;
+    }
+
+    function getTarget() {
+        return tar_in.text;
+    }
+
+
+    function getExample() {
+        return exmpl_in.text;
+    }
+
+
+
+    ColumnLayout {
         id: src
         width: parent.width
         height: 40
-        border.color: "black"
-        border.width: 1
+        spacing: 5
 
-        TextInput {
+        Label {
+            text: qsTr("source: ")
+            width: parent.width / 5
 
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            width: parent.width; height: parent.height
-            text: trans.source
         }
 
-
+        TextField {
+            Layout.fillWidth: true
+            id: src_in
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            text: trans.source
+        }
+        Layout.fillHeight: true
     }
-    Rectangle {
+
+    ColumnLayout {
         id: tar
         width: parent.width
         height: 40
-        border.color: "black"
-        border.width: 1
+        spacing: 5
 
-        TextInput {
+        Label {
+            text: qsTr("target: ")
+            width: parent.width / 5
 
+        }
+
+        TextField {
+            id: tar_in
+            Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             width: parent.width; height: parent.height
             text: trans.target
         }
-        anchors.top: src.bottom
+        Layout.fillHeight: true
     }
-    Rectangle {
+
+    ColumnLayout {
         id: exmpl
         width: parent.width
-        height: 40
-        border.color: "black"
-        border.width: 1
+        height: 80
+        spacing: 5
 
-        TextInput {
+        Label {
+            text: qsTr("example: ")
+            width: parent.width / 5
+
+        }
+
+        TextArea {
+            id: exmpl_in
+            Layout.fillWidth: true
+            Layout.fillHeight: true
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             width: parent.width; height: parent.height
             text: trans.examples
         }
-        anchors.top: tar.bottom
+        Layout.fillHeight: true
     }
 }

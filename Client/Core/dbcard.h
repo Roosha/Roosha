@@ -9,6 +9,7 @@
 #include "world.h"
 
 class DBCard : public Card {
+    Q_PROPERTY(QUuid id READ getId)
  public:
     DBCard(QUuid newId);
     QUuid getId();
