@@ -36,6 +36,11 @@ void AuthenticationController::showLoginWindow() {
 
     loginWidget_->setFixedSize(loginWidget_->size());
 
+    loginWidget_->setAttribute(Qt::WA_DeleteOnClose);
+    connect(loginWidget_, &QQuickWidget::destroyed, [&]() {
+        loginWidget_ = Q_NULLPTR;
+    });
+
     loginWidget_->show();
 }
 
@@ -51,6 +56,11 @@ void AuthenticationController::showRegistrateWindow() {
     registerWidget_->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
     registerWidget_->setFixedSize(registerWidget_->size());
+
+    registerWidget_->setAttribute(Qt::WA_DeleteOnClose);
+    connect(registerWidget_, &QQuickWidget::destroyed, [&]() {
+        registerWidget_ = Q_NULLPTR;
+    });
 
     registerWidget_->show();
 }

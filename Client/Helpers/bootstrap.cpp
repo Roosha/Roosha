@@ -19,10 +19,10 @@ void Bootstrap::run() { // TODO: create all stages of initialisation
     cm->setNetworkManager(nm);
 
 
-    GUIManager * guim = new GUIManager();
-    HotkeyListener * hkl = new HotkeyListener();
-    SystemTray * sysTray = new SystemTray();
+    GUIManager * guim = new GUIManager(cc_);
+    HotkeyListener * hkl = new HotkeyListener(cc_);
 
+    QSharedPointer<SystemTray> sysTray(new SystemTray(), &QObject::deleteLater);
 
     qRegisterMetaType<Translations>("Translations");
 

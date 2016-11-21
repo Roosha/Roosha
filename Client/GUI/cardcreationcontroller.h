@@ -24,8 +24,7 @@ public slots:
     void showNewEditWindow(QSharedPointer<Translation> trans);
 
 private:
-    QQuickWidget*  widget;
-    //Translations data;
+    QQuickWidget*  widget_;
 };
 
 #endif // CARDCREATIONCONTROLLER_H

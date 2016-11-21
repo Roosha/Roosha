@@ -24,6 +24,8 @@ void TranslationController::addData(Translations translations) {
     translationWidget->setWindowFlags(Qt::FramelessWindowHint);
     translationWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
+    translationWidget->setAttribute(Qt::WA_DeleteOnClose);
+
     translationWidget->show();
     translationWidget->move(QApplication::desktop()->screenGeometry().width() - translationWidget->width() - 50, 50);
     translationWidget->setFixedSize(translationWidget->size());
@@ -39,7 +41,6 @@ void TranslationController::closeWindow(quint32 id) {
 
 void TranslationController::createCard(quint32 id) {
     emit createNewCard(data[id][0]);
-    // TODO: send signal
 }
 
 //void TranslationController::createLater(quint32 id)

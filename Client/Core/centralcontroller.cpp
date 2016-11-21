@@ -35,9 +35,9 @@ CentralController::CentralController() {
     connect(networkManager, &NetworkManager::failRegistrate,
             guiManager, &GUIManager::authenticationFail, Qt::ConnectionType::DirectConnection);
 
-    connect(systemTray, &SystemTray::newWord, this, &CentralController::handleNewWord);
-    connect(systemTray, &SystemTray::closeApplication, this, &CentralController::closeApplication);
-    connect(systemTray, &SystemTray::showMainWidnow, guiManager, &GUIManager::showMainWin);
+    connect(systemTray.data(), &SystemTray::newWord, this, &CentralController::handleNewWord);
+    connect(systemTray.data(), &SystemTray::closeApplication, this, &CentralController::closeApplication);
+    connect(systemTray.data(), &SystemTray::showMainWidnow, guiManager, &GUIManager::showMainWin);
 }
 
 void CentralController::start() {
