@@ -24,11 +24,13 @@ import com.github.roosha.proto.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.TranslationServiceProto.Translations;
 import com.github.roosha.server.auth.AuthManager;
 import com.github.roosha.server.db.WorldStorage;
+import com.github.roosha.server.translation.TranslationsCacheManager;
 import com.github.roosha.server.translation.providers.RawTranslation;
 import com.github.roosha.server.translation.providers.TranslationProvider;
 import io.grpc.Context;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -43,6 +45,7 @@ import static com.github.roosha.server.util.Assertions.assertNotNull;
 
 @Component
 public class RooshaRpcService extends RooshaServiceImplBase {
+    private final TranslationsCacheManager cacheManager;
     private final TranslationProvider provider;
     private final AuthManager authManager;
     private final Context.Key<Long> USER_ID_CONTEXT_KEY;
@@ -50,15 +53,18 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
     @Autowired
     public RooshaRpcService(
+            TranslationsCacheManager cacheManager,
             TranslationProvider provider,
             AuthManager authManager,
             @Qualifier("authorizedUserIdContextKey") Context.Key<Long> USER_ID_CONTEXT_KEY,
             WorldStorage worldStorage) {
+        assertNotNull(cacheManager, "cache manager should not be null");
         assertNotNull(provider, "provider should not be null");
         assertNotNull(authManager, "authorization manager should not be null");
         assertNotNull(USER_ID_CONTEXT_KEY, "userId context key should not be null");
         assertNotNull(worldStorage, "world worldStorage should not be null");
 
+        this.cacheManager = cacheManager;
         this.provider = provider;
         this.authManager = authManager;
         this.USER_ID_CONTEXT_KEY = USER_ID_CONTEXT_KEY;
@@ -69,13 +75,13 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     @Override
     public void translate(TranslationRequest request, StreamObserver<Translations> responseObserver) {
         requireCallerUserId();
-
-        final RawTranslation rawTranslation = provider.translate(request.getSource());
-        Translations.Builder responseBuilder = rawTranslation.convertToProtoTranslationsBuilder();
-        if (responseBuilder == null) {
-            responseBuilder = Translations.newBuilder(Translations.getDefaultInstance());
+        Translations response = cacheManager.translate(request.getSource());
+        if (response == null) {
+            response = translate(request.getSource());
+            cacheManager.save(response);
         }
-        responseObserver.onNext(responseBuilder.build());
+
+        responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
 
@@ -83,6 +89,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     public void proposeUserTranslations(Translations request, StreamObserver<Void> responseObserver) {
         requireCallerUserId();
 
+        cacheManager.save(request);
         responseObserver.onNext(Void.getDefaultInstance());
         responseObserver.onCompleted();
     }
@@ -158,5 +165,14 @@ public class RooshaRpcService extends RooshaServiceImplBase {
         }
 
         return userId;
+    }
+
+    private @NotNull Translations translate(@NotNull String source) {
+        final RawTranslation rawTranslation = provider.translate(source);
+        Translations.Builder responseBuilder = rawTranslation.convertToProtoTranslationsBuilder();
+        if (responseBuilder == null) {
+            responseBuilder = Translations.newBuilder(Translations.getDefaultInstance());
+        }
+        return responseBuilder.build();
     }
 }

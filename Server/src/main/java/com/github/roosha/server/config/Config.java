@@ -32,6 +32,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @ComponentScan(basePackageClasses = {RooshaServerImpl.class})
 public class Config {
     private final int AUTH_REDIS_DB = 0;
+    private final int TRANSLATIONS_CACHE_REDIS_DB = 1;
 
     @Bean
     public Context.Key<Long> authorizedUserIdContextKey() {
@@ -58,5 +59,11 @@ public class Config {
     public JedisPool authRedisPool() {
         val config = new JedisPoolConfig();
         return new JedisPool(config, "localhost", 6379, 1000, null, AUTH_REDIS_DB);
+    }
+
+    @Bean(destroyMethod = "destroy")
+    public JedisPool translationsCachePool() {
+        val config = new JedisPoolConfig();
+        return new JedisPool(config, "localhost", 6379, 1000, null, TRANSLATIONS_CACHE_REDIS_DB);
     }
 }
