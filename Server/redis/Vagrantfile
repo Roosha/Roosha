@@ -1,0 +1,12 @@
+VAGRANT_API_VERSION = '2'
+
+Vagrant.configure(VAGRANT_API_VERSION) do |conf|
+    conf.vm.box = 'ubuntu/trusty64'
+    conf.vm.network :forwarded_port, guest: 6379, host: 6379
+
+    conf.vm.provider 'virtualbox' do |vb|
+        vb.memory = 128
+    end
+
+    conf.vm.provision :shell, :path => 'init.sh'
+end
