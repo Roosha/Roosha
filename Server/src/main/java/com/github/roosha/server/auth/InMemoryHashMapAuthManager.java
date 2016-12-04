@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Component
-public class InMemoryHashMapAuthorizationManager implements AuthorizationManager {
+public class InMemoryHashMapAuthManager implements AuthManager {
     private long firstFreeId = 1;
     private final ConcurrentMap<String, Long> authorizedUsers = new ConcurrentHashMap<>();
     private final ConcurrentMap<CaseSensitiveString, IdAndPasswordHash> registeredUsers = new ConcurrentHashMap<>();
@@ -18,12 +18,6 @@ public class InMemoryHashMapAuthorizationManager implements AuthorizationManager
     @Override
     public long getUserIdByToken(@NotNull String token) {
         return authorizedUsers.getOrDefault(token, -1L);
-    }
-
-    @Override
-    public long getUserIdByLogin(@NotNull String login) {
-        final IdAndPasswordHash idAndPasswordHash = registeredUsers.getOrDefault(new CaseSensitiveString(login), null);
-        return idAndPasswordHash != null ? idAndPasswordHash.id : -1L;
     }
 
     @Override

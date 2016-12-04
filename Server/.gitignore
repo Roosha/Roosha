@@ -26,4 +26,7 @@ buildNumber.properties
 ### Intellij IDEA config
 /.idea/
 
+###Vagrant
+.vagrant
+
 

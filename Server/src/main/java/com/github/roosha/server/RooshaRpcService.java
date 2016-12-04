@@ -22,7 +22,7 @@ import com.github.roosha.proto.ChangesProto.Change;
 import com.github.roosha.proto.RooshaServiceGrpc.RooshaServiceImplBase;
 import com.github.roosha.proto.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.TranslationServiceProto.Translations;
-import com.github.roosha.server.auth.AuthorizationManager;
+import com.github.roosha.server.auth.AuthManager;
 import com.github.roosha.server.db.WorldStorage;
 import com.github.roosha.server.translation.providers.RawTranslation;
 import com.github.roosha.server.translation.providers.TranslationProvider;
@@ -44,14 +44,14 @@ import static com.github.roosha.server.util.Assertions.assertNotNull;
 @Component
 public class RooshaRpcService extends RooshaServiceImplBase {
     private final TranslationProvider provider;
-    private final AuthorizationManager authManager;
+    private final AuthManager authManager;
     private final Context.Key<Long> USER_ID_CONTEXT_KEY;
     private final WorldStorage worldStorage;
 
     @Autowired
     public RooshaRpcService(
             TranslationProvider provider,
-            AuthorizationManager authManager,
+            AuthManager authManager,
             @Qualifier("authorizedUserIdContextKey") Context.Key<Long> USER_ID_CONTEXT_KEY,
             WorldStorage worldStorage) {
         assertNotNull(provider, "provider should not be null");
@@ -72,10 +72,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
         final RawTranslation rawTranslation = provider.translate(request.getSource());
         Translations.Builder responseBuilder = rawTranslation.convertToProtoTranslationsBuilder();
-        if (responseBuilder != null) {
-            rawTranslation.addToProtoTranslationsBuilder(responseBuilder);
-            responseBuilder.setSource(request.getSource());
-        } else {
+        if (responseBuilder == null) {
             responseBuilder = Translations.newBuilder(Translations.getDefaultInstance());
         }
         responseObserver.onNext(responseBuilder.build());
@@ -92,31 +89,23 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
     @Override
     public void registrate(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
-        try {
-            final String authToken = authManager.register(request);
-            if (authToken != null) {
-                responseObserver.onNext(AuthenticationToken.newBuilder().setToken(authToken).build());
-                responseObserver.onCompleted();
-            } else {
-                throw ErrorsStatusExceptions.registrationFailure();
-            }
-        } catch (Throwable t) {
-            responseObserver.onError(t);
+        final String authToken = authManager.register(request);
+        if (authToken != null) {
+            responseObserver.onNext(AuthenticationToken.newBuilder().setToken(authToken).build());
+            responseObserver.onCompleted();
+        } else {
+            throw ErrorsStatusExceptions.registrationFailure();
         }
     }
 
     @Override
     public void authorize(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
-        try {
-            final String authToken = authManager.authorize(request);
-            if (authToken != null) {
-                responseObserver.onNext(AuthenticationToken.newBuilder().setToken(authToken).build());
-                responseObserver.onCompleted();
-            } else {
-                throw ErrorsStatusExceptions.authorizationFailure();
-            }
-        } catch (Throwable t) {
-            responseObserver.onError(t);
+        final String authToken = authManager.authorize(request);
+        if (authToken != null) {
+            responseObserver.onNext(AuthenticationToken.newBuilder().setToken(authToken).build());
+            responseObserver.onCompleted();
+        } else {
+            throw ErrorsStatusExceptions.authorizationFailure();
         }
     }
 
