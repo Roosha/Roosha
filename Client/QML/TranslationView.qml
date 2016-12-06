@@ -45,4 +45,9 @@ ColumnLayout {
         height: 1
         color: "black"
     }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: translationList.currentIndex = index
+    }
 }

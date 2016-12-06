@@ -48,6 +48,9 @@ Rectangle {
             placeholderText: "Password"
             font.pixelSize: 20
             echoMode: TextInput.Password
+            onAccepted: {
+                controller.sendRegistrateRequest(login.text, password.text);
+            }
         }
 
         RowLayout {
