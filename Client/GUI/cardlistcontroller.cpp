@@ -26,7 +26,7 @@ CardListController::CardListController(QObject *parent) : QObject(parent), widge
 
 void CardListController::showCardListWindow() {
 
-    if (widget_) widget_->close();
+    if (widget_) closeWindow();
     widget_ = new QQuickWidget();
 
     widget_->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
@@ -36,9 +36,6 @@ void CardListController::showCardListWindow() {
     widget_->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
     widget_->setAttribute(Qt::WA_DeleteOnClose);
-    connect(widget_, &QQuickWidget::destroyed, [&]() {
-        widget_ = Q_NULLPTR;
-    });
 
     widget_->show();
 
@@ -53,6 +50,7 @@ void CardListController::applyPulledChanges(quint32 requestId, ChangeList pulled
 
 void CardListController::closeWindow() {
     widget_->close();
+    widget_ = Q_NULLPTR;
 }
 
 void CardListController::createCard() {
