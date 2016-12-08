@@ -24,15 +24,13 @@ void CardCreationController::showNewEditWindow(QSharedPointer<Translation> trans
     widget_->setSource(QUrl(QStringLiteral("qrc:/edition/ShowEdition.qml")));
 
     widget_->setAttribute(Qt::WA_DeleteOnClose);
-    connect(widget_, &QQuickWidget::destroyed, [&]() {
-        widget_ = Q_NULLPTR;
-    });
 
     widget_->show();
 }
 
 void CardCreationController::closeWindow() {
     widget_->close();
+    widget_ = Q_NULLPTR;
 }
 
 void CardCreationController::saveCard(QString src, QString tarStr, QString exStr) {
@@ -49,5 +47,5 @@ void CardCreationController::saveCard(QString src, QString tarStr, QString exStr
     qDebug() << src << "\n" << "\n" << tarStr << "\n" << exStr << "\n";
 
     emit(showCards());
-    widget_->close();
+    closeWindow();
 }
