@@ -2,52 +2,58 @@ import QtQuick 2.0
 
 import QtQuick.Layouts 1.0
 
-
-ColumnLayout {
+Rectangle {
+    color: "transparent"
     width: parent.width
+    height: textLay.height
 
-    Text {
-        id: src
-
-        Layout.fillWidth: true
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+    ColumnLayout {
+        id: textLay
         width: parent.width
-        text: source
+
+        Text {
+            id: tar
+
+            Layout.fillWidth: true
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            font.pixelSize: 20
+            font.family: "Helvetica"
+
+            text: target == "" ? "no target" : target
+            wrapMode: Text.WordWrap
+        }
+
+        Text {
+            id: exmpl
+
+            Layout.fillWidth: true
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            font.pixelSize: 12
+            font.family: "Helvetica"
+
+            text: examples
+            wrapMode: Text.WordWrap
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: translationList.currentIndex = index
+            onDoubleClicked: {
+                controller.createCard(self, index)
+            }
+        }
     }
 
-    Text {
-        id: tar
-
-        Layout.fillWidth: true
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width
-        text: target
-        wrapMode: Text.WordWrap
-        anchors.top: src.bottom
-    }
-
-    Text {
-        id: exmpl
-
-        Layout.fillWidth: true
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width
-        text: examples
-
-        wrapMode: Text.WordWrap
-        anchors.top: tar.bottom
-    }
-    Rectangle {
+    Rectangle{
         width: parent.width
         height: 1
         color: "black"
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        onClicked: translationList.currentIndex = index
+        anchors.bottom: parent.bottom
     }
 }
