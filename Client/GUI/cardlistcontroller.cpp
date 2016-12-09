@@ -61,7 +61,7 @@ void CardListController::closeWindow() {
 }
 
 void CardListController::createCard() {
-    QSharedPointer<Translation> emptyData;
+    QSharedPointer<Translation> emptyData(new Translation());
     emit createNewCard(emptyData);
 }
 

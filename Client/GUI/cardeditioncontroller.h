@@ -27,6 +27,7 @@ public slots:
 
 private:
     QQuickWidget*  widget;
+    QSharedPointer<Translation> data;
 };
 
 #endif // CARDCREATIONCONTROLLER_H

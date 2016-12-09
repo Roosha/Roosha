@@ -17,8 +17,9 @@ void CardEditionController::showNewCardEditWindow(QSharedPointer<Translation> tr
 
 
     QQuickWidget * editionWidget = new QQuickWidget();
+    data = trans;
 
-    editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(trans.data()));
+    editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(data.data()));
     editionWidget->rootContext()->setContextProperty("controller", this);
     editionWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     editionWidget->setSource(QUrl(QStringLiteral("qrc:/edition/ShowEdition.qml")));

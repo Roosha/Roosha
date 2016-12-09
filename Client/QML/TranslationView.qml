@@ -57,8 +57,4 @@ Rectangle {
         anchors.bottom: parent.bottom
     }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: translationList.currentIndex = index
-    }
 }
