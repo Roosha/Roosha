@@ -50,6 +50,7 @@ Rectangle {
             text: credentials.password
             font.pixelSize: 20
             echoMode: TextInput.Password
+            focus: true
 
             onAccepted: {
                 controller.sendAuthenticationRequest(login.text, password.text);

@@ -1,69 +1,122 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.3
 
 
 Rectangle {
     id: root
     width: 400; height: 200;
-    color: "#fff8c2"
-    border.color: "black"
-    border.width: 1
+    color: "#fffddf"
 
     property bool closeByTimer: true
 
-    Text {
-        id: sourceElement
+    MouseArea{
+        anchors.fill: parent
+        hoverEnabled: true
+        propagateComposedEvents: true
+        onPositionChanged: {
+            root.closeByTimer = false;
+        }
 
-        width: parent.width
-        anchors.top: parent.top
-        height: parent.height / 6
+        ColumnLayout{
+            anchors.fill: parent
+            spacing: 2
 
-        font.bold: true
-        font.pixelSize: 20
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+            Rectangle {
+                Layout.minimumHeight: 30
+                Layout.fillWidth: true
+                color: "transparent"
 
-        text: trans[0].source
-    }
+                Text {
+                    id: sourceElement
 
-    Rectangle {
-        anchors.top: sourceElement.bottom
-        width: parent.width
+                    anchors.fill: parent
 
-        border.color: "black"
-        border.width: 1
-        height: parent.height * 2 / 3
-        color: "#aaf9af"
+                    font.bold: true
+                    font.pixelSize: 22
+                    font.family: "Helvetica"
 
-        ListView {
-            id: translationList
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
 
-            width: parent.width
-            height: parent.height
-
-            boundsBehavior: Flickable.StopAtBounds
-            maximumFlickVelocity: 500
-            orientation: ListView.Vertical
-
-            clip:true
-            focus: true
-
-            highlight: Component{
-                id: hightlightComponent
-                Rectangle {
-                    width: translationList.currentItem.width
-                    height: translationList.currentItem.height
-                    y: translationList.currentItem.y-5
-                    color: "#ffff88"
+                    text: trans[0].source
                 }
             }
-            highlightFollowsCurrentItem: false
 
-            model: trans
-            delegate: TranslationView {}
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
+                ListView {
+                    id: translationList
+
+                    anchors.fill: parent
+
+                    boundsBehavior: Flickable.StopAtBounds
+                    maximumFlickVelocity: 500
+                    orientation: ListView.Vertical
+
+                    clip: true
+                    focus: true
+
+                    highlight: Component{
+                        id: hightlightComponent
+                        Rectangle {
+                            width: translationList.currentItem.width
+                            height: translationList.currentItem.height
+                            y: translationList.currentItem.y
+                            color: "#ebfad8"
+                        }
+                    }
+                    highlightFollowsCurrentItem: false
+
+                    model: trans
+                    delegate: TranslationView {}
+                }
+            }
+
+            Rectangle {
+                Layout.fillWidth: true
+                Layout.minimumHeight: 20
+                color: "transparent"
+
+                Row {
+                    anchors.fill: parent
+                    spacing: 5
+                    anchors.leftMargin: 2
+
+                    Button {
+                        id: closeButton
+
+                        width: 70
+                        height: parent.height-2
+
+
+                        font.family: "Helvetica"
+                        text: qsTr("⮾Close")
+
+                        onClicked: {
+                            controller.closeWindow(self);
+                        }
+                    }
+                    Button {
+                        id: createButton
+
+                        width: 70
+                        height: parent.height-2
+
+
+                        font.family: "Helvetica"
+                        text: qsTr("🗋Create")
+
+                        onClicked: {
+                            controller.createCard(self, translationList.currentIndex);
+                        }
+                    }
+                }
+            }
         }
     }
-
 
 
     Timer {
@@ -73,71 +126,6 @@ Rectangle {
             if(root.closeByTimer) {
                 controller.closeWindow(self);
             }
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        propagateComposedEvents: true
-        onPositionChanged: {
-            root.closeByTimer = false;
-        }
-
-        Row {
-            width: parent.width
-            height: parent.height / 6
-            anchors.bottom: parent.bottom
-
-            leftPadding: 5
-            rightPadding: 5
-            topPadding: 3
-            bottomPadding: 3
-
-            spacing: 4
-
-            Button {
-                id: closeButton
-
-                text: qsTr("Close")
-                height: parent.height - 6
-                width: 100
-
-                background: Rectangle {
-                    color: closeButton.down ? '#7fb5b5' : '#c7d0cc'
-                }
-
-                onClicked: {
-                    controller.closeWindow(self);
-                }
-            }
-
-            Button {
-                id: createButton
-
-                text: qsTr("Create Card")
-                height: parent.height - 6
-                width: 100
-
-                background: Rectangle {
-                    color: createButton.down ? '#7fb5b5' : '#c7d0cc'
-                }
-                onClicked: {
-                    controller.createCard(self, translationList.currentIndex);
-                }
-            }
-
-    //        Button {
-    //            id: createLaterButton
-
-    //            text: "Create later"
-    //            height: parent.height - 6
-    //            width: 100
-
-    //            background: Rectangle {
-    //                color: createLaterButton.down ? '#7fb5b5' : '#c7d0cc'
-    //            }
-    //        }
         }
     }
 }

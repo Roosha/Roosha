@@ -6,7 +6,6 @@
 #include <QDesktopWidget>
 #include <Helpers/qmlconvertation.h>
 #include <QtDebug>
-#include <QUuid>
 TranslationController::TranslationController(QObject *parent) : QObject(parent) {
 }
 
