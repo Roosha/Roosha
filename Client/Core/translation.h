@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QList>
 #include <QSharedPointer>
+#include <QUuid>
 
 class Translation : public QObject {
     Q_OBJECT
@@ -11,6 +12,7 @@ class Translation : public QObject {
     Q_PROPERTY(QString source READ getSource)
     Q_PROPERTY(QString target READ getTargetString)
     Q_PROPERTY(QString examples READ getExampleString)
+    Q_PROPERTY(QUuid id READ getId)
 
 public:
     Translation();
@@ -23,6 +25,8 @@ public:
 
     QString getTargetString() const;
     QString getExampleString() const;
+
+    QUuid getId() const;
 
     QStringList getExamples() const;
     void setExamples(const QStringList &value);

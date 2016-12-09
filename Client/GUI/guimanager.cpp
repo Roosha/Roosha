@@ -2,7 +2,7 @@
 #include <QMessageBox>
 #include <QQuickWidget>
 #include "GUI/translationcontroller.h"
-#include "GUI/cardcreationcontroller.h"
+#include "GUI/cardeditioncontroller.h"
 #include "GUI/authentication_controller.h"
 
 GUIManager::GUIManager(QObject *parent): QObject(parent) {
@@ -11,16 +11,18 @@ GUIManager::GUIManager(QObject *parent): QObject(parent) {
     qmlRegisterType<AuthenticationController>("roosha.controllers", 1, 0, "AuthController");
 
     translationController = new TranslationController(this);
-    cardCreationController = new CardCreationController(this);
+    cardEditionController = new CardEditionController(this);
     cardListController = new CardListController(this);
     authenticationController = new AuthenticationController(this);
 
     connect(translationController, &TranslationController::createNewCard,
-            cardCreationController, &CardCreationController::showNewEditWindow);
+            cardEditionController, &CardEditionController::showNewCardEditWindow);
     connect(cardListController, &CardListController::createNewCard,
-            cardCreationController, &CardCreationController::showNewEditWindow);
-    connect(cardCreationController, &CardCreationController::showCards,
+            cardEditionController, &CardEditionController::showNewCardEditWindow);
+    connect(cardEditionController, &CardEditionController::showCards,
             this, &GUIManager::showMainWindow);
+    connect(cardListController, &CardListController::editThisCard,
+            cardEditionController, &CardEditionController::showCardEditWindow);
 }
 
 void GUIManager::showNewTranslationWindow(quint32 id, Translations trans) {

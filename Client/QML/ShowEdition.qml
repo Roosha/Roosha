@@ -57,7 +57,7 @@ Rectangle {
             anchors.rightMargin: 10
 
             onClicked: {
-                controller.saveCard(edit.getSource(), edit.getTarget(), edit.getExample());
+                controller.saveCard(edit.getSource(), edit.getTarget(), edit.getExample(), edit.getId());
             }
         }
     }

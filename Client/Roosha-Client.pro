@@ -30,9 +30,9 @@ SOURCES += main.cpp \
     Core/world.cpp \
     GUI/system_tray.cpp \
     Test/Core/changes/worldtest.cpp \
-    GUI/cardcreationcontroller.cpp \
     GUI/cardlistcontroller.cpp \
-    GUI/authentication_controller.cpp
+    GUI/authentication_controller.cpp \
+    GUI/cardeditioncontroller.cpp
 
 RESOURCES += \
     QML/qml.qrc \
@@ -67,11 +67,11 @@ HEADERS += \
     Test/Network/translations_test_slot_holder.h \
     Core/world.h \
     Test/Core/changes/worldtest.h \
-    GUI/cardcreationcontroller.h \
     GUI/cardlistcontroller.h \
     Helpers/protobuf_converter.h \
     GUI/authentication_controller.h \
-    GUI/system_tray.h
+    GUI/system_tray.h \
+    GUI/cardeditioncontroller.h
 
 # protobuf generated files
 SOURCES += Network/Proto/commons.pb.cc \

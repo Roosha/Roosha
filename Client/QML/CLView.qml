@@ -1,6 +1,6 @@
-import QtQuick 2.0
+import QtQuick 2.7
 import QtQuick.Layouts 1.0
-import QtQuick.Controls 1.4
+import QtQuick.Controls 2.0
 
 Rectangle {
     width: parent.width / 3
@@ -13,7 +13,7 @@ Rectangle {
     id: card
     width: parent.width
 
-        //Label { text: id
+//        Label { text: id }
         RowLayout {
 
             id: src
@@ -69,6 +69,38 @@ Rectangle {
                 wrapMode: Text.WordWrap
                 anchors.top: tar.bottom
             }
+        }
+        RowLayout {
+            Button {
+                id: deleteButton
+
+                text: qsTr("Delete")
+                height: parent.height - 6
+                width: 100
+                background: Rectangle {
+                    color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
+                }
+
+                onClicked: {
+                    controller.deleteCard(id);
+                }
+            }
+
+            Button {
+                id: editButton
+
+                text: qsTr("Edit")
+                height: parent.height - 6
+                width: 100
+                background: Rectangle {
+                    color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
+                }
+
+                onClicked: {
+                    controller.editCard(id);
+                }
+            }
+
         }
     }
 }

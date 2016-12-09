@@ -1,7 +1,11 @@
 #include "translation.h"
+#include <QUuid>
 
 Translation::Translation() {
 
+}
+QUuid Translation::getId() const {
+    return QUuid();
 }
 
 QString Translation::getSource() const {

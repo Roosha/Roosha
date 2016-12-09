@@ -12,7 +12,7 @@
 #include <QDebug>
 
 
-CardListController::CardListController(QObject *parent) : QObject(parent), widget_(Q_NULLPTR), world_(World::Instance()) {
+CardListController::CardListController(QObject *parent) : QObject(parent), world_(World::Instance()), widget_(Q_NULLPTR) {
     auto netManager = ConfigureManager::Instance().getNetworkManager();
 
     qRegisterMetaType<ChangeList>("ChangeList");
@@ -80,3 +80,6 @@ void CardListController::deleteCard(QUuid id) {
     showCardListWindow();
 }
 
+void CardListController::editCard(QUuid id) {
+    emit editThisCard(id);
+}

@@ -6,7 +6,7 @@ Rectangle {
     id: root
     width: 600; height: 300;
     color: "#fff8c2"
-    border.color: black
+    border.color: "black"
     border.width: 1
     Text {
         id: mainWin

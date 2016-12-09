@@ -11,7 +11,7 @@ ChangeSource::ChangeSource(QUuid cardId, const QString & newSrc) : cardId(cardId
 
 void ChangeSource::apply(World * world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
-    cardptr->source = newSource;
+    cardptr->source_ = newSource;
 }
 
 roosha::Change ChangeSource::toProtobuf() const {
@@ -33,10 +33,10 @@ void EditElem::apply(World * world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     switch (fieldName) {
     case TARGET:
-        cardptr->targets[pos] = newElem;
+        cardptr->targets_[pos] = newElem;
         break;
     case EXAMPLE:
-        cardptr->examples[pos] = newElem;
+        cardptr->examples_[pos] = newElem;
         break;
     }
 }
@@ -68,10 +68,10 @@ void InsertElem::apply(World * world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     switch (fieldName) {
     case TARGET:
-        cardptr->targets.insert(pos, insertingElem);
+        cardptr->targets_.insert(pos, insertingElem);
         break;
     case EXAMPLE:
-        cardptr->examples.insert(pos, insertingElem);
+        cardptr->examples_.insert(pos, insertingElem);
         break;
     }
 }
@@ -104,10 +104,10 @@ void DeleteElem::apply(World * world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     switch (fieldName) {
     case TARGET:
-        cardptr->targets.erase(cardptr->targets.begin() + pos);
+        cardptr->targets_.erase(cardptr->targets_.begin() + pos);
         break;
     case EXAMPLE:
-        cardptr->examples.erase(cardptr->examples.begin() + pos);
+        cardptr->examples_.erase(cardptr->examples_.begin() + pos);
         break;
     }
 }
@@ -129,7 +129,8 @@ qint32 DeleteElem::getPos() const {
 }
 
 CreateCard::CreateCard(QUuid id) : cardId(id) { }
-QUuid CreateCard::getId() {
+
+QUuid CreateCard::getCardId() const {
     return cardId;
 }
 
@@ -139,10 +140,6 @@ void CreateCard::apply(World * world) {
 
 roosha::Change CreateCard::toProtobuf() const {
     return changeToProtobuf(*this);
-}
-
-QUuid CreateCard::getCardId() const {
-    return cardId;
 }
 
 DeleteCard::DeleteCard(QUuid id) : cardId(id) {}

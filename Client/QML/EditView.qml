@@ -21,7 +21,9 @@ ColumnLayout {
     function getExample() {
         return exmpl_in.text;
     }
-
+    function getId() {
+        return trans.id;
+    }
 
 
     ColumnLayout {
