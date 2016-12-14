@@ -13,6 +13,13 @@
 #error DEBUG_CALL macro is already defined
 #endif // DEBUG_CALL
 
+#ifndef QT_DEBUG
+#define ROOSHA_SERVER_ADDRESS "146.185.178.193:1543"
+#else
+#define ROOSHA_SERVER_ADDRESS "localhost:1543"
+#endif // QT_DEBUG
+
+
 using ProtobufConverter::changeFromProtobuf;
 
 RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
@@ -20,7 +27,7 @@ RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
     authManager_(m) {
     qDebug("Create RooshaServiceConnector");
 
-    auto channel = grpc::CreateChannel("localhost:1543", grpc::InsecureChannelCredentials());
+    auto channel = grpc::CreateChannel(ROOSHA_SERVER_ADDRESS, grpc::InsecureChannelCredentials());
     stub_ = roosha::RooshaService::NewStub(channel);
 
     QObject::connect(responseListener_, &AsyncRpcResponseListener::finished,
