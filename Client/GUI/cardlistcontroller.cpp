@@ -12,7 +12,7 @@
 #include <QDebug>
 
 
-CardListController::CardListController(QObject *parent) : QObject(parent), widget_(nullptr), world_(World::Instance()) {
+CardListController::CardListController(QObject *parent) : QObject(parent), world_(World::Instance()), widget_(Q_NULLPTR) {
     auto netManager = ConfigureManager::Instance().getNetworkManager();
 
     qRegisterMetaType<ChangeList>("ChangeList");
@@ -43,9 +43,13 @@ void CardListController::showCardListWindow() {
 
 void CardListController::applyPulledChanges(quint32 requestId, ChangeList pulledChanges) {
     qDebug("CardListController::applyPulledChanges: pull request %d succeeded", requestId);
-    //something useful
+
     world_.setChanges(pulledChanges);
     showCardListWindow();
+}
+
+void CardListController::onWidgetClose() {
+    widget_ = Q_NULLPTR;
 }
 
 void CardListController::closeWindow() {
@@ -54,7 +58,7 @@ void CardListController::closeWindow() {
 }
 
 void CardListController::createCard() {
-    QSharedPointer<Translation> emptyData;
+    QSharedPointer<Translation> emptyData(new Translation());
     emit createNewCard(emptyData);
 }
 
@@ -66,4 +70,13 @@ void CardListController::pullCards() {
 void CardListController::pushCards() {
     ConfigureManager::Instance().getNetworkManager()->saveChanges(world_.getChanges());
     qDebug() << "push";
+}
+
+void CardListController::deleteCard(QUuid id) {
+    world_.deleteCard(id);
+    showCardListWindow();
+}
+
+void CardListController::editCard(QUuid id) {
+    emit editThisCard(id);
 }

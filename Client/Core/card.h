@@ -8,12 +8,15 @@
 class Card : public QObject {
     Q_OBJECT
 
+    Q_PROPERTY(QUuid id READ getId)
     Q_PROPERTY(QString source READ getSource)
     Q_PROPERTY(QString target READ getTargetString)
     Q_PROPERTY(QString examples READ getExampleString)
+
  public:
     Card();
 
+    QUuid getId();
     QString getSource() const;
     QStringList getTargets() const;
     QStringList getExamples() const;
@@ -22,9 +25,11 @@ class Card : public QObject {
     QString getExampleString() const;
 
  protected:
-    QString source;
-    QStringList targets;
-    QStringList examples;
+
+    QUuid id_;
+    QString source_;
+    QStringList targets_;
+    QStringList examples_;
 };
 
 #endif // CARD_H

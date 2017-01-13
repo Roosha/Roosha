@@ -1,28 +1,22 @@
 #include "Core/dbcard.h"
 #include <QDebug>
 
-DBCard::DBCard(QUuid newId) : world_(World::Instance()),  id_(newId) { }
+DBCard::DBCard(QUuid newId) : world_(World::Instance()) {
+    setId(newId);
+}
 
-QUuid DBCard::getId() {
-    return id_;
+void DBCard::setId(QUuid newId) {
+    id_ = newId;
 }
 
 void DBCard::setSource(QString newSource) {
     world_.setSource(id_, newSource);
 }
 
-void DBCard::setExamples(QStringList newExamples) {
-//TODO: create elemenary changes instead calling simplified world methods:
-//      compare newExample and current example and generate changes
+void DBCard::setField(const enum Field & fieldName, QStringList newField) {
+    world_.setField(id_, fieldName, newField);
 }
 
-void DBCard::setTargets(QStringList newTarget) {
-//TODO: create elemenary changes instead calling simplified world methods:
-//      compare newTarget and current target and generate changes
-}
-
-
-//temp
 void DBCard::editElem(const enum Field & fieldName, const QString & newElem, qint32 pos) {
     world_.editElem(id_, fieldName, newElem, pos);
 }

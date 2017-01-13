@@ -7,62 +7,9 @@ Rectangle {
     width: 400; height: 200;
     color: "#fff8c2"
 
-
-    Rectangle {
-        width: parent.width
-        height: parent.height
-
-        Rectangle {
-            id: src
-            width: parent.width
-            height: 40
-            border.color: "black"
-            border.width: 1
-
-            TextInput {
-                id: src_in
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                width: parent.width; height: parent.height
-                text: trans.source
-            }
-
-
-        }
-        Rectangle {
-            id: tar
-            width: parent.width
-            height: 40
-            border.color: "black"
-            border.width: 1
-
-            TextInput {
-                id: tar_in
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                width: parent.width; height: parent.height
-                text: trans.target
-            }
-            anchors.top: src.bottom
-        }
-        Rectangle {
-            id: exmpl
-            width: parent.width
-            height: 40
-            border.color: "black"
-            border.width: 1
-
-            TextInput {
-                id: exmpl_in
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                width: parent.width; height: parent.height
-                text: trans.examples
-            }
-            anchors.top: tar.bottom
-        }
+    EditView {
+        id: edit
     }
-
 
 
     Row {
@@ -110,7 +57,7 @@ Rectangle {
             anchors.rightMargin: 10
 
             onClicked: {
-                controller.saveCard(src_in.text, tar_in.text, exmpl_in.text);
+                controller.saveCard(edit.getSource(), edit.getTarget(), edit.getExample(), edit.getId());
             }
         }
     }

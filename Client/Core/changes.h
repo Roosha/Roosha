@@ -83,7 +83,6 @@ public:
     void apply(World * world) override;
     roosha::Change toProtobuf() const override;
 
-    QUuid getId();
     QUuid getCardId() const;
 
 private:

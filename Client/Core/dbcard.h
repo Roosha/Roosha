@@ -9,13 +9,13 @@
 #include "world.h"
 
 class DBCard : public Card {
+    Q_PROPERTY(QUuid id READ getId)
  public:
     DBCard(QUuid newId);
     QUuid getId();
-
+    void setId(QUuid newId);
     void setSource(QString newSource);
-    void setExamples(QStringList newExamples);
-    void setTargets(QStringList newTarget);
+    void setField(const enum Field & fieldName, QStringList newField);
     void editElem(const enum Field & fieldName, const QString & newElem, qint32 pos);
     void deleteElem(const enum Field & fieldName, qint32  pos);
     void insertElem(const enum Field & fieldName, const QString  &insertingElem, qint32 pos);
@@ -26,7 +26,6 @@ class DBCard : public Card {
     friend class InsertElem;
     friend class DeleteElem;
     World& world_;
-    QUuid id_;
 };
 
 #endif // DBCARD_H

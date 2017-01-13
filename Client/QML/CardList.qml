@@ -6,7 +6,8 @@ Rectangle {
     id: root
     width: 600; height: 300;
     color: "#fff8c2"
-
+    border.color: "black"
+    border.width: 1
     Text {
         id: mainWin
 
@@ -21,16 +22,26 @@ Rectangle {
 
         text: qsTr("Your Cards:")
     }
-
-    ListView {
-        width: parent.width
-        height: parent.height * 2 / 3
+    Rectangle {
         anchors.top: mainWin.bottom
+        width: parent.width
 
-        clip: true
+        border.color: "black"
+        border.width: 1
+        height: parent.height * 2 / 3
+        color: "#faee93"
 
-        model: cards
-        delegate: CLView {}
+        GridView {
+            width: parent.width
+            height: parent.height
+            cellHeight: parent.height
+            cellWidth: width / 3
+            clip: true
+
+            model: cards
+            delegate: CLView {}
+        }
+
     }
 
     Row {

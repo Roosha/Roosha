@@ -1,34 +1,106 @@
-import QtQuick 2.0
+import QtQuick 2.7
+import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.0
 
 Rectangle {
-    width: parent.width
-    height: 60
+    width: parent.width / 3
+    height: parent.height
     border.color: "black"
     border.width: 1
+    color: "#aaf9af"
 
-    Text {
-        id: src
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
-        text: source
-    }
+    ColumnLayout {
+    id: card
+    width: parent.width
 
-    Text {
-        id: tar
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
-        text: target
-        anchors.top: src.bottom
-    }
+//        Label { text: id }
+        RowLayout {
 
-    Text {
-        id: exmpl
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
-        text: examples
-        anchors.top: tar.bottom
+            id: src
+            width: parent.width
+            Label {
+                text: qsTr("source: ")
+                width: 50
+            }
+
+            Text {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: parent.width
+                text: source
+            }
+        }
+        RowLayout {
+            id: tar
+            width: parent.width
+            Label {
+                text: qsTr("target: ")
+                width: 50
+            }
+
+            Text {
+
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: parent.width
+                text: target
+                wrapMode: Text.WordWrap
+                anchors.top: src.bottom
+            }
+        }
+
+        RowLayout {
+            id: exmpl
+            width: parent.width
+            Label {
+                text: qsTr("examples: ")
+                width: 50
+            }
+
+            Text {
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                width: parent.width
+                text: examples
+
+                wrapMode: Text.WordWrap
+                anchors.top: tar.bottom
+            }
+        }
+        RowLayout {
+            Button {
+                id: deleteButton
+
+                text: qsTr("Delete")
+                height: parent.height - 6
+                width: 100
+                background: Rectangle {
+                    color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
+                }
+
+                onClicked: {
+                    controller.deleteCard(id);
+                }
+            }
+
+            Button {
+                id: editButton
+
+                text: qsTr("Edit")
+                height: parent.height - 6
+                width: 100
+                background: Rectangle {
+                    color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
+                }
+
+                onClicked: {
+                    controller.editCard(id);
+                }
+            }
+
+        }
     }
 }

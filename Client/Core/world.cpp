@@ -3,7 +3,9 @@
 #include "dbcard.h"
 #include "changes.h"
 #include <QUuid>
-
+#include <QtDebug>
+#include <algorithm>
+#include <QList>
 World::World() { }
 
 World::~World() { }
@@ -31,7 +33,7 @@ QSharedPointer<DBCard> World::createCard() {
     QSharedPointer<CreateCard> change = QSharedPointer<CreateCard>::create(QUuid::createUuid());
     this->changes_.append(change);
     change->apply(this);
-    return cards_.value(change->getId());
+    return cards_.value(change->getCardId());
 }
 
 void World::deleteCard(QUuid id) {
@@ -83,4 +85,84 @@ void World::insertCard(QUuid key, QSharedPointer<DBCard> card) {
 
 void World::removeCard(QUuid key) {
     cards_.remove(key);
+}
+
+void World::setField(QUuid cardId, const enum Field & fieldName, QStringList newField) {
+    QStringList field;
+    switch (fieldName) {
+    case TARGET:
+        field = cards_.value(cardId)->getTargets();
+        break;
+    case EXAMPLE:
+        field = cards_.value(cardId)->getExamples();
+        break;
+    }
+    qint32 srcSize = field.size();
+    qint32 dstSize = newField.size();
+    QVector< QVector<qint32> > numActions(srcSize + 1);
+    QVector< QVector<Action> > actions(srcSize + 1);
+    for (qint32 i = 0; i <= srcSize; i++) {
+        numActions[i].resize(dstSize + 1);
+        actions[i].resize(dstSize + 1);
+        actions[i][0] = DELETE;
+        numActions[i][0] = i;
+    }
+    for (qint32 i = 1; i <= dstSize; i++) {
+        numActions[0][i] = i;
+        actions[0][i] = INSERT;
+    }
+    for (qint32 i = 1; i <= srcSize; i++) {
+        for (qint32 j = 1; j <= dstSize; j++) {
+            qint32 cost = field[i - 1] == newField[j - 1] ? 0 : 1;
+            if (numActions[i][j - 1] < numActions[i - 1][j] && numActions[i][j - 1] < numActions[i - 1][j - 1] + cost) {
+                numActions[i][j] = numActions[i][j - 1] + 1;
+                actions[i][j] = INSERT;
+            } else if(numActions[i - 1][j] < numActions[i - 1][j - 1] + cost) {
+                numActions[i][j] = numActions[i - 1][j] + 1;
+                actions[i][j] = DELETE;
+            } else {
+                numActions[i][j] = numActions[i - 1][j - 1] + cost;
+                actions[i][j] = cost == 0? NOTHING : EDIT;
+            }
+        }
+    }
+    QList<Action> seqActionsReversed;
+    qint32 i = srcSize;
+    qint32 j = dstSize;
+    while(i > 0 || j > 0) {
+        Action action = actions[i][j];
+        seqActionsReversed.append(action);
+        switch (action) {
+        case DELETE:
+            i--;
+            break;
+        case INSERT:
+            j--;
+            break;
+        default:
+            i--;
+            j--;
+        }
+    }
+    QList<Action>::const_reverse_iterator rit = seqActionsReversed.rbegin();
+    qint32 curNew = 0;
+    while (rit != seqActionsReversed.rend()) {
+        Action action = *rit;
+        switch (action) {
+        case DELETE:
+            this->deleteElem(cardId, fieldName, curNew);
+            break;
+        case INSERT:
+            this->insertElem(cardId, fieldName, newField[curNew], curNew);
+            curNew++;
+            break;
+        case EDIT:
+            this->editElem(cardId, fieldName, newField[curNew], curNew);
+            curNew++;
+            break;
+        case NOTHING:
+            curNew++;
+        }
+        rit++;
+    }
 }

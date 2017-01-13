@@ -1,4 +1,4 @@
-import QtQuick 2.1
+import QtQuick 2.7
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 import roosha.controllers 1.0
@@ -50,6 +50,11 @@ Rectangle {
             text: credentials.password
             font.pixelSize: 20
             echoMode: TextInput.Password
+            focus: true
+
+            onAccepted: {
+                controller.sendAuthenticationRequest(login.text, password.text);
+            }
         }
 
         RowLayout {

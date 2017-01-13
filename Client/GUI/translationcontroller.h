@@ -15,18 +15,17 @@ public:
 
     void addData(Translations translations);
 
-    Q_INVOKABLE void closeWindow(quint32 id);
-    Q_INVOKABLE void createCard(quint32 id);
+    Q_INVOKABLE void closeWindow(QQuickWidget * widget);
+    Q_INVOKABLE void createCard(QQuickWidget * widget, int index);
 //    Q_INVOKABLE void createLater(quint32 id);
 
 signals:
     void createNewCard(QSharedPointer<Translation> trans);
 
 private:
-    quint32 lastId;
+    void replaceWindows();
 
-    QMap<quint32, QQuickWidget* > widgets;
-    QMap<quint32, Translations> data;
+    QMap<QQuickWidget*, Translations> data;
 };
 
 #endif // TRANSLATIONCONTROLLER_H

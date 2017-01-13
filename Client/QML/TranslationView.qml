@@ -1,34 +1,60 @@
 import QtQuick 2.0
 
+import QtQuick.Layouts 1.0
+
 Rectangle {
+    color: "transparent"
     width: parent.width
-    height: 60
-    border.color: "black"
-    border.width: 1
+    height: textLay.height
 
-    Text {
-        id: src
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
-        text: source
+    ColumnLayout {
+        id: textLay
+        width: parent.width
+
+        Text {
+            id: tar
+
+            Layout.fillWidth: true
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            font.pixelSize: 20
+            font.family: "Helvetica"
+
+            text: target == "" ? "no target" : target
+            wrapMode: Text.WordWrap
+        }
+
+        Text {
+            id: exmpl
+
+            Layout.fillWidth: true
+
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+
+            font.pixelSize: 12
+            font.family: "Helvetica"
+
+            text: examples
+            wrapMode: Text.WordWrap
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: translationList.currentIndex = index
+            onDoubleClicked: {
+                controller.createCard(self, index)
+            }
+        }
     }
 
-    Text {
-        id: tar
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
-        text: target
-        anchors.top: src.bottom
+    Rectangle{
+        width: parent.width
+        height: 1
+        color: "black"
+        anchors.bottom: parent.bottom
     }
 
-    Text {
-        id: exmpl
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        width: parent.width; height: parent.height / 3
-        text: examples
-        anchors.top: tar.bottom
-    }
 }

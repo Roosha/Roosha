@@ -8,23 +8,26 @@
 #include "Core/translation.h"
 #include "Core/world.h"
 #include "Core/dbcard.h"
+#include <QUuid>
 
-class CardCreationController : public QObject {
+class CardEditionController : public QObject {
     Q_OBJECT
 public:
-    CardCreationController(QObject * parent = nullptr);
+    CardEditionController(QObject * parent = nullptr);
     World& world;
 
     Q_INVOKABLE void closeWindow();
-    Q_INVOKABLE void saveCard(QString src, QString tarStr, QString exStr);
+    Q_INVOKABLE void saveCard(QString src, QString tarStr, QString exStr, QUuid id);
 signals:
     void showCards();
 
 public slots:
-    void showNewEditWindow(QSharedPointer<Translation> trans);
+    void showNewCardEditWindow(QSharedPointer<Translation> trans);
+    void showCardEditWindow(QUuid id);
 
 private:
-    QQuickWidget*  widget_;
+    QQuickWidget*  widget;
+    QSharedPointer<Translation> data;
 };
 
 #endif // CARDCREATIONCONTROLLER_H

@@ -6,7 +6,7 @@
 WorldTest::WorldTest() { }
 
 void WorldTest::printCard(QSharedPointer<DBCard> card) {
-    qInfo() << "id: " << card->getId();
+//    qInfo() << "id: " << card->getId();
     qInfo() << "src: " << card->getSource();
     qInfo() << "ex: ";
     for (auto ex: card->getExamples()) {
@@ -38,7 +38,7 @@ void WorldTest::run() {
     card->editElem(EXAMPLE, "ex4", 0);
     card->insertElem(TARGET, "tar", 0);
     card = world.createCard();
-    QUuid id_to_del = card->getId();
+//    QUuid id_to_del = card->getId();
     card->setSource("src");
     card->insertElem(EXAMPLE,"ex", 0);
     card->deleteElem(EXAMPLE, 0);
@@ -54,7 +54,7 @@ void WorldTest::run() {
     card->insertElem(TARGET, "tr", 0);
     printCards(&world);
     qInfo() << "after remove \n";
-    world.deleteCard(id_to_del);
+//    world.deleteCard(id_to_del);
     printCards(&world);
     world.applyChanges();
     qInfo() << "after reapplying in world\n";

@@ -6,6 +6,13 @@
 #include "card.h"
 #include <QSharedPointer>
 
+enum Action {
+    DELETE,
+    INSERT,
+    EDIT,
+    NOTHING
+};
+
 class World {
 public:
     static World& Instance();
@@ -18,8 +25,7 @@ public:
     void deleteCard(QUuid id);
 
     void setSource(QUuid cardId, QString newSource);
-    void setExamples(QUuid cardId, QStringList newExamples);
-    void setTarget(QUuid cardId, QStringList newTarget);
+    void setField(QUuid cardId, const enum Field & fieldName, QStringList newField);
     void editElem(QUuid cardId, const enum Field & fieldName, const QString & newElem, qint32 pos);
     void deleteElem(QUuid cardId, const enum Field & fieldName, qint32  pos);
     void insertElem(QUuid cardId, const enum Field & fieldName, const QString  &insertingElem, qint32 pos);
