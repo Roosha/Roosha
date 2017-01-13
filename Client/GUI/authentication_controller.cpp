@@ -24,7 +24,7 @@ AuthenticationController::AuthenticationController(QObject *parent) :
 
 void AuthenticationController::showLoginWindow() {
     setState(AuthenticationController::NotAuthenticated);
-    if(registerWidget_) registerWidget_->close();
+    if(registerWidget_) closeRegistrateWindow();
 
     loginWidget_ = new QQuickWidget();
 
@@ -36,12 +36,14 @@ void AuthenticationController::showLoginWindow() {
 
     loginWidget_->setFixedSize(loginWidget_->size());
 
+    loginWidget_->setAttribute(Qt::WA_DeleteOnClose);
+
     loginWidget_->show();
 }
 
 void AuthenticationController::showRegistrateWindow() {
     setState(AuthenticationController::NotAuthenticated);
-    if(loginWidget_) loginWidget_->close();
+    if(loginWidget_) closeLoginWindow();
 
     registerWidget_ = new QQuickWidget();
 
@@ -51,6 +53,8 @@ void AuthenticationController::showRegistrateWindow() {
     registerWidget_->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
     registerWidget_->setFixedSize(registerWidget_->size());
+
+    registerWidget_->setAttribute(Qt::WA_DeleteOnClose);
 
     registerWidget_->show();
 }
@@ -65,6 +69,16 @@ void AuthenticationController::sendRegistrateRequest(QString login, QString pass
     configurationManager_.getNetworkManager()->registrate(login, password);
 }
 
+void AuthenticationController::closeLoginWindow() {
+    loginWidget_->close();
+    loginWidget_ = Q_NULLPTR;
+}
+
+void AuthenticationController::closeRegistrateWindow() {
+    registerWidget_->close();
+    registerWidget_ = Q_NULLPTR;
+}
+
 void AuthenticationController::setState(AuthenticationController::AuthenticationState state) {
     state_ = state;
     emit stateChanged(state_);
@@ -76,8 +90,8 @@ AuthenticationController::AuthenticationState AuthenticationController::getState
 
 void AuthenticationController::authenticationSuccess(quint32 id) {
     setState(AuthenticationController::AuthenticationSuccess);
-    if(registerWidget_) registerWidget_->close();
-    if(loginWidget_) loginWidget_->close();
+    if(registerWidget_) closeRegistrateWindow();
+    if(loginWidget_) closeLoginWindow();
 }
 
 void AuthenticationController::authenticationFail(quint32 id) {

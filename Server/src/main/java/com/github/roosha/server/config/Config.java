@@ -21,13 +21,20 @@ package com.github.roosha.server.config;
 import com.github.roosha.server.RooshaServerImpl;
 import io.grpc.Context;
 import io.grpc.Metadata;
+import lombok.val;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
 @ComponentScan(basePackageClasses = {RooshaServerImpl.class})
 public class Config {
+    private final int AUTH_REDIS_DB = 0;
+    private final int TRANSLATIONS_CACHE_REDIS_DB = 1;
+    private final int WORLD_STORAGE_DB = 2;
+
     @Bean
     public Context.Key<Long> authorizedUserIdContextKey() {
         return Context.key("user-id");
@@ -47,5 +54,23 @@ public class Config {
     @Bean
     public Integer serverPort() {
         return 1543;
+    }
+
+    @Bean(destroyMethod = "destroy")
+    public JedisPool authRedisPool() {
+        val config = new JedisPoolConfig();
+        return new JedisPool(config, "localhost", 6379, 1000, null, AUTH_REDIS_DB);
+    }
+
+    @Bean(destroyMethod = "destroy")
+    public JedisPool translationsCachePool() {
+        val config = new JedisPoolConfig();
+        return new JedisPool(config, "localhost", 6379, 1000, null, TRANSLATIONS_CACHE_REDIS_DB);
+    }
+
+    @Bean(destroyMethod = "destroy")
+    public JedisPool worldStoragePool() {
+        val config = new JedisPoolConfig();
+        return new JedisPool(config, "localhost", 6379, 1000, null, WORLD_STORAGE_DB);
     }
 }

@@ -27,7 +27,7 @@ private:
     NetworkManager * networkManager;
     GUIManager * guiManager;
     HotkeyListener * hkListener;
-    SystemTray * systemTray;
+    QSharedPointer<SystemTray> systemTray;
 
 public slots:
     void handleNewWord(QString word);

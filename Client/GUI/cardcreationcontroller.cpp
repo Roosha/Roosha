@@ -16,19 +16,21 @@ CardCreationController::CardCreationController(QObject *parent) : QObject(parent
 void CardCreationController::showNewEditWindow(QSharedPointer<Translation> trans) {
 
 
-    QQuickWidget * editionWidget = new QQuickWidget();
+    widget_ = new QQuickWidget();
 
-    editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(trans.data()));
-    editionWidget->rootContext()->setContextProperty("controller", this);
+    widget_->rootContext()->setContextProperty("trans", QVariant::fromValue(trans.data()));
+    widget_->rootContext()->setContextProperty("controller", this);
 
-    editionWidget->setSource(QUrl(QStringLiteral("qrc:/edition/ShowEdition.qml")));
-    editionWidget->show();
+    widget_->setSource(QUrl(QStringLiteral("qrc:/edition/ShowEdition.qml")));
 
-    widget = editionWidget;
+    widget_->setAttribute(Qt::WA_DeleteOnClose);
+
+    widget_->show();
 }
 
 void CardCreationController::closeWindow() {
-    widget->close();
+    widget_->close();
+    widget_ = Q_NULLPTR;
 }
 
 void CardCreationController::saveCard(QString src, QString tarStr, QString exStr) {
@@ -45,5 +47,5 @@ void CardCreationController::saveCard(QString src, QString tarStr, QString exStr
     qDebug() << src << "\n" << "\n" << tarStr << "\n" << exStr << "\n";
 
     emit(showCards());
-    widget->close();
+    closeWindow();
 }

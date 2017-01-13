@@ -17,6 +17,9 @@ public:
     Q_INVOKABLE void sendAuthenticationRequest(QString login, QString password);
     Q_INVOKABLE void sendRegistrateRequest(QString login, QString password);
 
+    void closeLoginWindow();
+    void closeRegistrateWindow();
+
     enum AuthenticationState {
         NotAuthenticated,
         InProgress,

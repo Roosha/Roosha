@@ -34,6 +34,7 @@ import io.grpc.stub.MetadataUtils;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,7 @@ public class RooshaServerAuthorizationTest {
         server.stop();
     }
 
+    @Ignore
     @Test
     public void invalidTokenPassCausesExpiredTokenException() {
         for (String source : new String[]{"source", "exhibit", "apple", "noise"}) {
@@ -97,6 +99,7 @@ public class RooshaServerAuthorizationTest {
         }
     }
 
+    @Ignore
     @Test
     public void registrationGeneratedValidToken() {
         for (String login : new String[]{"gylo", "anykuzya", "adkosm", "sandello"}) {
@@ -116,6 +119,7 @@ public class RooshaServerAuthorizationTest {
         }
     }
 
+    @Ignore
     @Test
     public void reregistrationAttemptCausesRegistrationException() {
         final Credentials initialRegistrationRequest =
@@ -147,6 +151,7 @@ public class RooshaServerAuthorizationTest {
         }
     }
 
+    @Ignore
     @Test
     public void authorizationOfUnregisteredUserCausesAuthorizationException() {
         final Credentials validCredentials =

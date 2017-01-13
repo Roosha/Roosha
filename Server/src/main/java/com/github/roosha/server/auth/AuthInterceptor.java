@@ -11,19 +11,19 @@ import static com.github.roosha.server.util.Assertions.assertNotNull;
 public class AuthInterceptor implements ServerInterceptor {
     private final Context.Key<Long> ID_CONTEXT_KEY;
     private final Metadata.Key<String> TOKEN_METADATA_KEY;
-    private final AuthorizationManager authorizationManager;
+    private final AuthManager authManager;
 
     @Autowired
     private AuthInterceptor(
             @Qualifier("authorizedUserIdContextKey") Context.Key<Long> ID_CONTEXT_KEY,
-            AuthorizationManager authorizationManager,
+            AuthManager authManager,
             @Qualifier("authTokenMetadataKey") Metadata.Key<String> TOKEN_METADATA_KEY) {
         assertNotNull(ID_CONTEXT_KEY, "id context key must be not null");
-        assertNotNull(authorizationManager, "authorization manager must be not null");
+        assertNotNull(authManager, "authorization manager must be not null");
         assertNotNull(TOKEN_METADATA_KEY, "token metadata key must be not null");
 
         this.ID_CONTEXT_KEY = ID_CONTEXT_KEY;
-        this.authorizationManager = authorizationManager;
+        this.authManager = authManager;
         this.TOKEN_METADATA_KEY = TOKEN_METADATA_KEY;
     }
 
@@ -33,7 +33,7 @@ public class AuthInterceptor implements ServerInterceptor {
         final String token = headers.get(TOKEN_METADATA_KEY);
         long userId = -1;
         if (token != null) {
-            userId = authorizationManager.getUserIdByToken(token);
+            userId = authManager.getUserIdByToken(token);
         }
         final Context context = Context.current().withValue(ID_CONTEXT_KEY, userId);
         return Contexts.interceptCall(context, call, headers, next);
