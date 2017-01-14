@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 @Component
 public class HashMapWorldStorage implements WorldStorage {
     private final Map<Long, List<Change>> worlds = new HashMap<>();

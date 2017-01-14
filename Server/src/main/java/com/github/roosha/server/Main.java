@@ -19,14 +19,20 @@
 package com.github.roosha.server;
 
 import com.github.roosha.server.config.Config;
+import lombok.val;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import static com.github.roosha.server.util.LogbackUtil.configureLogback;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        final AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext(Config.class);
-        final RooshaServer server = (RooshaServer) context.getBean("insecureRooshaServer");
+        configureLogback();
+
+        val context = new AnnotationConfigApplicationContext(Config.class);
+        val server = (RooshaServer) context.getBean("insecureRooshaServer");
         server.start();
         server.blockAndWait();
     }
+
+
 }

@@ -55,6 +55,7 @@ public class RooshaServerImpl implements RooshaServer {
 
     @Override
     public void start() throws IOException {
+        // TODO: get certificate files via dependency injection
         final File privateKeyFile = new File(getClass().getResource("/security/server.pkcs8.key").getFile());
         final File certFile = new File(getClass().getResource("/security/server.crt").getFile());
 

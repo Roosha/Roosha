@@ -21,6 +21,8 @@ package com.github.roosha.server.translation.providers.yandexdict;
 import com.github.roosha.server.translation.providers.RawTranslation;
 import com.github.roosha.server.translation.providers.TranslationProvider;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -37,11 +39,13 @@ import static java.lang.String.format;
 
 @Component
 public class YandexDictionaryProvider implements TranslationProvider {
-    private final String API_KEY;
+    private static final Logger log = LoggerFactory.getLogger(YandexDictionaryProvider.class);
 
-    private final String LOOKUP_FORMAT_STRING =
+    private static final String LOOKUP_FORMAT_STRING =
             "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=%s&text=%s&lang=%s";
-    private final String DEFAULT_LANG = "en-ru";
+    private static final String DEFAULT_LANG = "en-ru";
+
+    private final String API_KEY;
 
     @Autowired
     public YandexDictionaryProvider(@Qualifier("yandexDictionaryApiKey") String API_KEY) {
@@ -59,6 +63,7 @@ public class YandexDictionaryProvider implements TranslationProvider {
             final String response = responseScanner.hasNext() ? responseScanner.next() : "";
             return YDRawTranslation.fromJson(response);
         } catch (IOException e) {
+            log.warn("Failed to translate via YandexDict", e);
             throw new RuntimeException(e);
         }
     }
@@ -69,6 +74,7 @@ public class YandexDictionaryProvider implements TranslationProvider {
             final String languge = lang.length == 0 ? DEFAULT_LANG : lang[0];
             return format(LOOKUP_FORMAT_STRING, API_KEY, source, languge);
         } catch (UnsupportedEncodingException e) {
+            log.error("Failed to encode http request", e);
             throw new RuntimeException(e);
         }
     }

@@ -3,6 +3,8 @@ package com.github.roosha.server.db;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -18,6 +20,8 @@ import static com.github.roosha.proto.ChangesProto.Change;
 @Component
 @Primary
 public class RedisWorldStorage implements WorldStorage {
+    private static final Logger log = LoggerFactory.getLogger(RedisWorldStorage.class);
+
     private final JedisPool pool;
 
     @Autowired
@@ -36,7 +40,7 @@ public class RedisWorldStorage implements WorldStorage {
             }
             return result;
         } catch (Throwable t) {
-            t.printStackTrace();
+            log.warn("Exception while extracting world from redis", t);
             return null;
         }
     }
@@ -51,7 +55,7 @@ public class RedisWorldStorage implements WorldStorage {
                 world.forEach(change -> jedis.rpush(key, change.toByteArray()));
             }
         } catch(Throwable t) {
-            t.printStackTrace();
+            log.warn("Exception while putting world.", t);
         }
     }
 

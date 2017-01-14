@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+@Deprecated
 @Component
 public class InMemoryHashMapAuthManager implements AuthManager {
     private long firstFreeId = 1;

@@ -30,7 +30,10 @@ import com.github.roosha.server.translation.providers.TranslationProvider;
 import io.grpc.Context;
 import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
+import lombok.val;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -45,6 +48,9 @@ import static com.github.roosha.server.util.Assertions.assertNotNull;
 
 @Component
 public class RooshaRpcService extends RooshaServiceImplBase {
+    private static final String RPC_COMPLETION_LOG_FMT_STRING = "{} RPC completed.\nRequest:{}\nResponse{}";
+    private static final Logger log = LoggerFactory.getLogger(RooshaRpcService.class);
+
     private final TranslationsCacheManager cacheManager;
     private final TranslationProvider provider;
     private final AuthManager authManager;
@@ -83,6 +89,8 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+
+        log.debug(RPC_COMPLETION_LOG_FMT_STRING, "translate", request, response);
     }
 
     @Override
@@ -90,27 +98,38 @@ public class RooshaRpcService extends RooshaServiceImplBase {
         requireCallerUserId();
 
         cacheManager.save(request);
-        responseObserver.onNext(Void.getDefaultInstance());
+
+        val response = Void.getDefaultInstance();
+        responseObserver.onNext(response);
         responseObserver.onCompleted();
+
+        log.debug(RPC_COMPLETION_LOG_FMT_STRING, "proposeUserTranslations", request, response);
     }
 
     @Override
     public void registrate(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
         final String authToken = authManager.register(request);
         if (authToken != null) {
-            responseObserver.onNext(AuthenticationToken.newBuilder().setToken(authToken).build());
+            val response = AuthenticationToken.newBuilder().setToken(authToken).build();
+            responseObserver.onNext(response);
             responseObserver.onCompleted();
+
+            log.debug(RPC_COMPLETION_LOG_FMT_STRING, "registrate", request, response);
         } else {
             throw ErrorsStatusExceptions.registrationFailure();
         }
+
     }
 
     @Override
     public void authorize(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
         final String authToken = authManager.authorize(request);
         if (authToken != null) {
-            responseObserver.onNext(AuthenticationToken.newBuilder().setToken(authToken).build());
+            val response = AuthenticationToken.newBuilder().setToken(authToken).build();
+            responseObserver.onNext(response);
             responseObserver.onCompleted();
+
+            log.debug(RPC_COMPLETION_LOG_FMT_STRING, "authorize", request, response);
         } else {
             throw ErrorsStatusExceptions.authorizationFailure();
         }

@@ -4,6 +4,8 @@ import com.github.roosha.proto.CommonsProto.Credentials;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
@@ -18,8 +20,10 @@ import static com.github.roosha.server.util.Assertions.assertNotNull;
 @Component
 @Primary
 public class RedisAuthManager implements AuthManager {
-    private final String LAST_USED_ID = "lastUsedId";
-    private final int TOKEN_EXPIRATION_SECONDS = 30 * 24 * 60 * 60;
+    private static final Logger log = LoggerFactory.getLogger(AuthManager.class);
+
+    private static final String LAST_USED_ID = "lastUsedId";
+    private static final int TOKEN_EXPIRATION_SECONDS = 30 * 24 * 60 * 60;
 
     private final JedisPool authPool;
 
@@ -30,6 +34,8 @@ public class RedisAuthManager implements AuthManager {
 
         try (val jedis = authPool.getResource()) {
             jedis.setnx(LAST_USED_ID, "0");
+        } catch (Throwable t) {
+            log.warn("Exception while initializing last user field.", t);
         }
     }
 
@@ -39,7 +45,7 @@ public class RedisAuthManager implements AuthManager {
             val value = jedis.get(tokenToIdKey(token));
             return value == null ? -1 : Long.parseLong(value);
         } catch (Throwable t) {
-            t.printStackTrace();
+            log.warn("Exception in attempt to extract user id by token.", t);
             return -1;
         }
     }
@@ -56,7 +62,7 @@ public class RedisAuthManager implements AuthManager {
             return passwordHash == null || !passwordHash.equals(userCredentials.getPasswordHash()) ?
                     null : generateToken(jedis, id);
         } catch (Throwable t) {
-            t.printStackTrace();
+            log.warn("Exception while checking user credentials.", t);
             return null;
         }
     }
@@ -73,7 +79,7 @@ public class RedisAuthManager implements AuthManager {
             jedis.set(idToPasswordKey(id), userCredentials.getPasswordHash());
             return generateToken(jedis, id);
         } catch (Throwable t) {
-            t.printStackTrace();
+            log.warn("Exception while registering user.", t);
             return null;
         }
     }
