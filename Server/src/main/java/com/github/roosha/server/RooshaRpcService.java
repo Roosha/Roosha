@@ -80,7 +80,6 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
     @Override
     public void translate(TranslationRequest request, StreamObserver<Translations> responseObserver) {
-        requireCallerUserId();
         Translations response = cacheManager.translate(request.getSource());
         if (response == null) {
             response = translate(request.getSource());
