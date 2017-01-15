@@ -68,6 +68,10 @@ void TranslateAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status)
     delete this;
 }
 
+bool TranslateAsyncCall::isAuthenticationRequired() {
+    return false;
+}
+
 void ProposeUserTranslationsAsyncCall::send(RooshaServiceConnector *connector) {
     DEBUG("ProposeUserTranslationsAsyncCall::send")
     connector->proposeUserTranslation(this);
@@ -123,6 +127,10 @@ void AuthenticatedAsyncCall::authenticate(AuthenticationManager *authManager) {
 void AuthenticatedAsyncCall::verify(AuthenticationManager *authManager) {
     DEBUG("AuthenticatedAsyncCall::verify")
     authManager->receiveAuthenticatedCall(this);
+}
+
+bool AuthenticatedAsyncCall::isAuthenticationRequired() {
+    return true;
 }
 
 void SaveChangesAsyncCall::send(RooshaServiceConnector *connector) {

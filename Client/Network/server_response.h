@@ -121,6 +121,8 @@ struct AuthenticatedAsyncCall : public RpcAsyncCall {
 
     void authenticate(AuthenticationManager *authManager) override;
     void verify(AuthenticationManager *authManager) override;
+
+    virtual bool isAuthenticationRequired();
 };
 
 /**
@@ -134,6 +136,7 @@ struct TranslateAsyncCall : public AuthenticatedAsyncCall {
     using RpcAsyncCall::fail;
     void fail(NetworkManager* netManager, RPCErrorStatus status) override;
 
+    bool isAuthenticationRequired() override;
 
     roosha::TranslationRequest request_;
     roosha::Translations response_;

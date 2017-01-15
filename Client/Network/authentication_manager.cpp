@@ -70,18 +70,19 @@ void AuthenticationManager::sendWithMetadata(AuthenticatedAsyncCall *call) {
     DEBUG_CALL("sendWithMetadata")
     QMutexLocker lock(&stateMutex_);
 
-    switch (state_) {
-    case AUTHENTICATED:
+    if (state_ == AUTHENTICATED) {
         call->context_.AddMetadata(TOKEN_METADATA_KEY, ConfigureManager::Instance().getToken().toStdString());
+    }
+
+    if (state_ == AUTHENTICATED || !call->isAuthenticationRequired()) {
         call->send(connector_);
-        break;
-    case AWAIT_AUTHENTICATION:
+    } else if (state_ == AWAIT_AUTHENTICATION) {
         DEBUG_QUEUE_PUT("AuthenticationManager::sendWithMetadata")
         callsQueue_.enqueue(call);
-        break;
-    case AWAIT_CREDENTIALS:
+    } else if (state_ == AWAIT_CREDENTIALS) {
         call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
-        break;
+    } else {
+        qWarning("Unexpected AuthenticationManager::state_ value: %d", state_);
     }
 }
 
