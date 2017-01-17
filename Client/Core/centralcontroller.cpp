@@ -28,12 +28,12 @@ CentralController::CentralController() {
     connect(networkManager, &NetworkManager::successAuthorize,
             guiManager, &GUIManager::authenticationSuccess);
     connect(networkManager, &NetworkManager::failAuthorize,
-            guiManager, &GUIManager::authenticationFail, Qt::ConnectionType::DirectConnection);
+            guiManager, &GUIManager::authenticationFail, Qt::ConnectionType::QueuedConnection);
 
     connect(networkManager, &NetworkManager::successRegistrate,
             guiManager, &GUIManager::authenticationSuccess);
     connect(networkManager, &NetworkManager::failRegistrate,
-            guiManager, &GUIManager::authenticationFail, Qt::ConnectionType::DirectConnection);
+            guiManager, &GUIManager::authenticationFail, Qt::ConnectionType::QueuedConnection);
 
     connect(systemTray.data(), &SystemTray::newWord, this, &CentralController::handleNewWord);
     connect(systemTray.data(), &SystemTray::closeApplication, this, &CentralController::closeApplication);
