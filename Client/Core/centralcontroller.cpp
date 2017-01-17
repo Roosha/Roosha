@@ -7,7 +7,6 @@
 #include "GUI/guimanager.h"
 #include "GUI/system_tray.h"
 
-#include <QMessageBox>
 #include <QApplication>
 
 CentralController::CentralController() {

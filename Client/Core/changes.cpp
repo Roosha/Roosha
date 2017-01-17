@@ -1,15 +1,13 @@
 #include "changes.h"
-#include "world.h"
 #include "Helpers/protobuf_converter.h"
 
 #include <QDebug>
-#include <QSharedPointer>
 
 using ProtobufConverter::changeToProtobuf;
 
-ChangeSource::ChangeSource(QUuid cardId, const QString & newSrc) : cardId(cardId), newSource(newSrc) {}
+ChangeSource::ChangeSource(QUuid cardId, const QString &newSrc) : cardId(cardId), newSource(newSrc) {}
 
-void ChangeSource::apply(World * world) {
+void ChangeSource::apply(World *world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     cardptr->source_ = newSource;
 }
@@ -26,18 +24,16 @@ QString ChangeSource::getNewSource() const {
     return newSource;
 }
 
-EditElem::EditElem(QUuid cardId, const enum Field & field, const QString & newEl, const qint32 & p) :
-    cardId(cardId), fieldName(field), newElem(newEl), pos(p) {}
+EditElem::EditElem(QUuid cardId, const enum Field &field, const QString &newEl, const qint32 &p) :
+        cardId(cardId), fieldName(field), newElem(newEl), pos(p) {}
 
-void EditElem::apply(World * world) {
+void EditElem::apply(World *world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     switch (fieldName) {
-    case TARGET:
-        cardptr->targets_[pos] = newElem;
-        break;
-    case EXAMPLE:
-        cardptr->examples_[pos] = newElem;
-        break;
+        case TARGET:cardptr->targets_[pos] = newElem;
+            break;
+        case EXAMPLE:cardptr->examples_[pos] = newElem;
+            break;
     }
 }
 
@@ -61,18 +57,16 @@ qint32 EditElem::getPos() const {
     return pos;
 }
 
-InsertElem::InsertElem(QUuid cardId, const enum Field & field, const QString & insertingEl, const qint32 & p) :
-    cardId(cardId), fieldName(field), insertingElem(insertingEl), pos(p) {}
+InsertElem::InsertElem(QUuid cardId, const enum Field &field, const QString &insertingEl, const qint32 &p) :
+        cardId(cardId), fieldName(field), insertingElem(insertingEl), pos(p) {}
 
-void InsertElem::apply(World * world) {
+void InsertElem::apply(World *world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     switch (fieldName) {
-    case TARGET:
-        cardptr->targets_.insert(pos, insertingElem);
-        break;
-    case EXAMPLE:
-        cardptr->examples_.insert(pos, insertingElem);
-        break;
+        case TARGET:cardptr->targets_.insert(pos, insertingElem);
+            break;
+        case EXAMPLE:cardptr->examples_.insert(pos, insertingElem);
+            break;
     }
 }
 
@@ -96,19 +90,16 @@ qint32 InsertElem::getPos() const {
     return pos;
 }
 
+DeleteElem::DeleteElem(QUuid cardId, const enum Field &field, const qint32 &p) :
+        cardId(cardId), fieldName(field), pos(p) {}
 
-DeleteElem::DeleteElem(QUuid cardId, const enum Field & field, const qint32 & p) :
-    cardId(cardId), fieldName(field), pos(p) {}
-
-void DeleteElem::apply(World * world) {
+void DeleteElem::apply(World *world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     switch (fieldName) {
-    case TARGET:
-        cardptr->targets_.erase(cardptr->targets_.begin() + pos);
-        break;
-    case EXAMPLE:
-        cardptr->examples_.erase(cardptr->examples_.begin() + pos);
-        break;
+        case TARGET:cardptr->targets_.erase(cardptr->targets_.begin() + pos);
+            break;
+        case EXAMPLE:cardptr->examples_.erase(cardptr->examples_.begin() + pos);
+            break;
     }
 }
 
@@ -128,13 +119,13 @@ qint32 DeleteElem::getPos() const {
     return pos;
 }
 
-CreateCard::CreateCard(QUuid id) : cardId(id) { }
+CreateCard::CreateCard(QUuid id) : cardId(id) {}
 
 QUuid CreateCard::getCardId() const {
     return cardId;
 }
 
-void CreateCard::apply(World * world) {
+void CreateCard::apply(World *world) {
     world->insertCard(cardId, QSharedPointer<DBCard>::create(cardId));
 }
 
@@ -144,7 +135,7 @@ roosha::Change CreateCard::toProtobuf() const {
 
 DeleteCard::DeleteCard(QUuid id) : cardId(id) {}
 
-void DeleteCard::apply(World * world) {
+void DeleteCard::apply(World *world) {
     world->removeCard(cardId);
 }
 

@@ -89,7 +89,7 @@ void ProposeUserTranslationsAsyncCall::fail(NetworkManager *netManager, RPCError
     delete this;
 }
 
-RpcAsyncCall::RpcAsyncCall(quint32 id, quint32 timeoutMillis): id_(id) {
+RpcAsyncCall::RpcAsyncCall(quint32 id, quint32 timeoutMillis) : id_(id) {
     qDebug("Create RPC call with id: %d", id_);
     context_.set_deadline(std::chrono::system_clock::now() + std::chrono::milliseconds(timeoutMillis));
 }
@@ -149,7 +149,6 @@ void SaveChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus statu
     netManager->failSaveChanges(id_, status);
     delete this;
 }
-
 
 void LoadChangesAsyncCall::send(RooshaServiceConnector *connector) {
     DEBUG("LoadChangesAsyncCall::send")

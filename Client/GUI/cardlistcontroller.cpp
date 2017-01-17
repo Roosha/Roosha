@@ -1,18 +1,14 @@
 #include "cardlistcontroller.h"
-#include "Core/world.h"
-#include "Core/translation.h"
 #include "Helpers/configuremanager.h"
 #include "Network/network_manager.h"
 
-#include <QQuickWidget>
 #include <QQmlContext>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <Helpers/qmlconvertation.h>
 #include <QDebug>
 
-
-CardListController::CardListController(QObject *parent) : QObject(parent), world_(World::Instance()), widget_(Q_NULLPTR) {
+CardListController::CardListController(QObject *parent)
+        : QObject(parent), world_(World::Instance()), widget_(Q_NULLPTR) {
     auto netManager = ConfigureManager::Instance().getNetworkManager();
 
     qRegisterMetaType<ChangeList>("ChangeList");
@@ -21,8 +17,6 @@ CardListController::CardListController(QObject *parent) : QObject(parent), world
             Qt::QueuedConnection);
     // TODO: add translation error handler
 }
-
-
 
 void CardListController::showCardListWindow() {
 

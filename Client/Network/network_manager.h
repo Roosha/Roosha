@@ -12,10 +12,10 @@ class AuthenticationManager;
 #define DEFAULT_TIMEOUT_MILLIS 5000
 
 class NetworkManager : public QObject {
-    Q_OBJECT
+ Q_OBJECT
 
-public:
-    NetworkManager(QObject * parent = Q_NULLPTR);
+ public:
+    NetworkManager(QObject *parent = Q_NULLPTR);
     ~NetworkManager();
 
     quint32 translate(QString source, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
@@ -28,7 +28,7 @@ public:
     quint32 saveChanges(ChangeList changes, quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
     quint32 loadChanges(quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
 
-signals:
+ signals:
     void successTranslate(quint32 id, Translations translations);
     void failTranslate(quint32 id, RPCErrorStatus status);
 
@@ -47,7 +47,7 @@ signals:
     void successLoadChanges(quint32 id, ChangeList changes);
     void failLoadChanges(quint32 id, RPCErrorStatus status);
 
-private:
+ private:
     QAtomicInteger<quint32> currentId_;
     AuthenticationManager *authenticationManager_;
 };

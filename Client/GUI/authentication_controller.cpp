@@ -1,30 +1,26 @@
 #include "authentication_controller.h"
-#include <QQuickWidget>
 #include <QQmlContext>
-#include <QVariant>
-#include <QMap>
 #include <QtDebug>
-#include <QThread>
 
 #include "Network/network_manager.h"
 
 AuthenticationController::AuthenticationController(QObject *parent) :
-    QObject (parent),
-    loginWidget_(nullptr),
-    registerWidget_(nullptr),
-    configurationManager_(ConfigureManager::Instance()) {
+        QObject(parent),
+        loginWidget_(nullptr),
+        registerWidget_(nullptr),
+        configurationManager_(ConfigureManager::Instance()) {
 
     qRegisterMetaType<AuthenticationState>("AuthenticationState");
 
     credentials_ = QVariantMap {
-        {"login", configurationManager_.getLogin()},
-        {"password", ""}
+            {"login", configurationManager_.getLogin()},
+            {"password", ""}
     };
 }
 
 void AuthenticationController::showLoginWindow() {
     setState(AuthenticationController::NotAuthenticated);
-    if(registerWidget_) closeRegistrateWindow();
+    if (registerWidget_) closeRegistrateWindow();
 
     loginWidget_ = new QQuickWidget();
 
@@ -43,7 +39,7 @@ void AuthenticationController::showLoginWindow() {
 
 void AuthenticationController::showRegistrateWindow() {
     setState(AuthenticationController::NotAuthenticated);
-    if(loginWidget_) closeLoginWindow();
+    if (loginWidget_) closeLoginWindow();
 
     registerWidget_ = new QQuickWidget();
 
@@ -90,12 +86,12 @@ AuthenticationController::AuthenticationState AuthenticationController::getState
 
 void AuthenticationController::authenticationSuccess(quint32 id) {
     setState(AuthenticationController::AuthenticationSuccess);
-    if(registerWidget_) closeRegistrateWindow();
-    if(loginWidget_) closeLoginWindow();
+    if (registerWidget_) closeRegistrateWindow();
+    if (loginWidget_) closeLoginWindow();
 }
 
 void AuthenticationController::authenticationFail(quint32 id) {
-    if(loginWidget_) {
+    if (loginWidget_) {
         setState(AuthenticationController::AuthenticationFailure);
     } else {
         showLoginWindow();

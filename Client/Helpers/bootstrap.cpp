@@ -10,17 +10,16 @@ Bootstrap::Bootstrap(CentralController *cc) : cc_(cc) {
 }
 
 void Bootstrap::run() { // TODO: create all stages of initialisation
-    ConfigureManager * cm = &ConfigureManager::Instance();
+    ConfigureManager *cm = &ConfigureManager::Instance();
     /**
     * NOTE: {@link CardListController} uses {@link ConfigureManager::getNetworkManager} in constructor,
     * so {@link GUIManager} should be created after network manager is set in confifure manager.
     */
-    NetworkManager * nm = new NetworkManager(cc_);
+    NetworkManager *nm = new NetworkManager(cc_);
     cm->setNetworkManager(nm);
 
-
-    GUIManager * guim = new GUIManager(cc_);
-    HotkeyListener * hkl = new HotkeyListener(cc_);
+    GUIManager *guim = new GUIManager(cc_);
+    HotkeyListener *hkl = new HotkeyListener(cc_);
 
     QSharedPointer<SystemTray> sysTray(new SystemTray(), &QObject::deleteLater);
 

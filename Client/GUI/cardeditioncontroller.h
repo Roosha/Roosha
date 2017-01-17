@@ -11,22 +11,22 @@
 #include <QUuid>
 
 class CardEditionController : public QObject {
-    Q_OBJECT
-public:
-    CardEditionController(QObject * parent = nullptr);
-    World& world;
+ Q_OBJECT
+ public:
+    CardEditionController(QObject *parent = nullptr);
+    World &world;
 
     Q_INVOKABLE void closeWindow();
     Q_INVOKABLE void saveCard(QString src, QString tarStr, QString exStr, QUuid id);
-signals:
+ signals:
     void showCards();
 
-public slots:
+ public slots:
     void showNewCardEditWindow(QSharedPointer<Translation> trans);
     void showCardEditWindow(QUuid id);
 
-private:
-    QQuickWidget*  widget;
+ private:
+    QQuickWidget *widget;
     QSharedPointer<Translation> data;
 };
 

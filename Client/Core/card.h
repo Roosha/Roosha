@@ -6,17 +6,17 @@
 #include <QObject>
 
 class Card : public QObject {
-    Q_OBJECT
-
+ Q_OBJECT
+    //@formatter:off
     Q_PROPERTY(QUuid id READ getId)
     Q_PROPERTY(QString source READ getSource)
     Q_PROPERTY(QString target READ getTargetString)
     Q_PROPERTY(QString examples READ getExampleString)
-
+    //@formatter:on
  public:
     Card();
 
-    QUuid getId();
+    QUuid getId() const;
     QString getSource() const;
     QStringList getTargets() const;
     QStringList getExamples() const;

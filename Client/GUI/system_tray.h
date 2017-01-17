@@ -5,23 +5,23 @@
 #include <QWidget>
 
 class SystemTray : public QWidget {
-    Q_OBJECT
-public:
+ Q_OBJECT
+ public:
     SystemTray(QWidget *parent = Q_NULLPTR);
 
-public slots:
-    void close();
-    void translate();
-    void show();
+ public slots:
+    void onCloseButtonClicked();
+    void onTranslateButtonClicked();
+    void onShowButtonClicked();
 
-    void noConnection();
+    void showNoConnectionNotification();
 
-signals:
+ signals:
     void closeApplication();
     void newWord(QString word);
     void showMainWidnow();
 
-private:
+ private:
     void createMenu();
 
     QAction *showAction;

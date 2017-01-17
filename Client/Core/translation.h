@@ -7,14 +7,15 @@
 #include <QUuid>
 
 class Translation : public QObject {
-    Q_OBJECT
-
+ Q_OBJECT
+    //@formatter:off
     Q_PROPERTY(QString source READ getSource)
     Q_PROPERTY(QString target READ getTargetString)
     Q_PROPERTY(QString examples READ getExampleString)
     Q_PROPERTY(QUuid id READ getId)
+    //@formatter:on
 
-public:
+ public:
     Translation();
 
     QString getSource() const;
@@ -31,7 +32,7 @@ public:
     QStringList getExamples() const;
     void setExamples(const QStringList &value);
 
-private:
+ private:
 
     QString source;
     QStringList target;

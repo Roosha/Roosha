@@ -4,7 +4,7 @@
 #include "Core/changes.h"
 #include <QtDebug>
 
-BuilderAndChangesTest::BuilderAndChangesTest() { }
+BuilderAndChangesTest::BuilderAndChangesTest() {}
 void BuilderAndChangesTest::printCard(DBCard card) {
     qInfo() << "id: " << card.getId();
     qInfo() << "src: " << card.getSource();
@@ -22,8 +22,8 @@ void BuilderAndChangesTest::run() {
     CardBuilder builder;
     builder.setSource("src1");
 
-    builder.insert(EXAMPLE,"ex1", 0).insert(EXAMPLE,"ex2", 0).del(EXAMPLE, 1)
-            .insert(EXAMPLE,"ex3", 0).edit(EXAMPLE, "ex4", 0) //ex4 ex2
+    builder.insert(EXAMPLE, "ex1", 0).insert(EXAMPLE, "ex2", 0).del(EXAMPLE, 1)
+            .insert(EXAMPLE, "ex3", 0).edit(EXAMPLE, "ex4", 0) //ex4 ex2
             .insert(TARGET, "tar1", 0).insert(TARGET, "tar0", 0).insert(TARGET, "tar2", 1); //tar0 tar2 tar1
     DBCard card = builder.build();
 

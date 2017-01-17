@@ -15,9 +15,9 @@ enum Field {
 };
 
 class IChange {
-public:
+ public:
     ~IChange() {}
-    virtual void apply(World * world) = 0;
+    virtual void apply(World *world) = 0;
     virtual roosha::Change toProtobuf() const = 0;
 };
 

@@ -6,7 +6,7 @@ class WorldTest {
  public:
     WorldTest();
     void run();
-    void printCards(World * world);
+    void printCards(World *world);
     void printCard(QSharedPointer<DBCard> card);
 };
 

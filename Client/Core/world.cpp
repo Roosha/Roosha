@@ -1,25 +1,20 @@
 #include "world.h"
-#include "card.h"
-#include "dbcard.h"
-#include "changes.h"
-#include <QUuid>
 #include <QtDebug>
-#include <algorithm>
-#include <QList>
-World::World() { }
 
-World::~World() { }
+World::World() {}
 
-World& World::Instance() {
+World::~World() {}
+
+World &World::Instance() {
     static World world;
     return world;
 }
 
-const QMap<QUuid, QSharedPointer<DBCard>> & World::getCards() {
+const QMap<QUuid, QSharedPointer<DBCard>> &World::getCards() {
     return cards_;
 }
 
-const ChangeList & World::getChanges() {
+const ChangeList &World::getChanges() {
     return changes_;
 }
 
@@ -48,19 +43,19 @@ void World::setSource(QUuid cardId, QString newSource) {
     change->apply(this);
 }
 
-void World::editElem(QUuid cardId, const enum Field & fieldName, const QString & newElem, qint32 pos) {
+void World::editElem(QUuid cardId, const enum Field &fieldName, const QString &newElem, qint32 pos) {
     QSharedPointer<EditElem> change = QSharedPointer<EditElem>::create(cardId, fieldName, newElem, pos);
     changes_.append(change);
     change->apply(this);
 }
 
-void World::insertElem(QUuid cardId, const enum Field & fieldName, const QString & insertingElem, qint32 pos) {
+void World::insertElem(QUuid cardId, const enum Field &fieldName, const QString &insertingElem, qint32 pos) {
     QSharedPointer<InsertElem> change = QSharedPointer<InsertElem>::create(cardId, fieldName, insertingElem, pos);
     changes_.append(change);
     change->apply(this);
 }
 
-void World::deleteElem(QUuid cardId, const enum Field & fieldName, qint32 pos) {
+void World::deleteElem(QUuid cardId, const enum Field &fieldName, qint32 pos) {
     QSharedPointer<DeleteElem> change = QSharedPointer<DeleteElem>::create(cardId, fieldName, pos);
     changes_.append(change);
     change->apply(this);
@@ -77,8 +72,6 @@ void World::applyChanges() {
     }
 }
 
-
-
 void World::insertCard(QUuid key, QSharedPointer<DBCard> card) {
     cards_.insert(key, card);
 }
@@ -87,20 +80,18 @@ void World::removeCard(QUuid key) {
     cards_.remove(key);
 }
 
-void World::setField(QUuid cardId, const enum Field & fieldName, QStringList newField) {
+void World::setField(QUuid cardId, const enum Field &fieldName, QStringList newField) {
     QStringList field;
     switch (fieldName) {
-    case TARGET:
-        field = cards_.value(cardId)->getTargets();
-        break;
-    case EXAMPLE:
-        field = cards_.value(cardId)->getExamples();
-        break;
+        case TARGET:field = cards_.value(cardId)->getTargets();
+            break;
+        case EXAMPLE:field = cards_.value(cardId)->getExamples();
+            break;
     }
     qint32 srcSize = field.size();
     qint32 dstSize = newField.size();
-    QVector< QVector<qint32> > numActions(srcSize + 1);
-    QVector< QVector<Action> > actions(srcSize + 1);
+    QVector<QVector<qint32> > numActions(srcSize + 1);
+    QVector<QVector<Action> > actions(srcSize + 1);
     for (qint32 i = 0; i <= srcSize; i++) {
         numActions[i].resize(dstSize + 1);
         actions[i].resize(dstSize + 1);
@@ -117,31 +108,28 @@ void World::setField(QUuid cardId, const enum Field & fieldName, QStringList new
             if (numActions[i][j - 1] < numActions[i - 1][j] && numActions[i][j - 1] < numActions[i - 1][j - 1] + cost) {
                 numActions[i][j] = numActions[i][j - 1] + 1;
                 actions[i][j] = INSERT;
-            } else if(numActions[i - 1][j] < numActions[i - 1][j - 1] + cost) {
+            } else if (numActions[i - 1][j] < numActions[i - 1][j - 1] + cost) {
                 numActions[i][j] = numActions[i - 1][j] + 1;
                 actions[i][j] = DELETE;
             } else {
                 numActions[i][j] = numActions[i - 1][j - 1] + cost;
-                actions[i][j] = cost == 0? NOTHING : EDIT;
+                actions[i][j] = cost == 0 ? NOTHING : EDIT;
             }
         }
     }
     QList<Action> seqActionsReversed;
     qint32 i = srcSize;
     qint32 j = dstSize;
-    while(i > 0 || j > 0) {
+    while (i > 0 || j > 0) {
         Action action = actions[i][j];
         seqActionsReversed.append(action);
         switch (action) {
-        case DELETE:
-            i--;
-            break;
-        case INSERT:
-            j--;
-            break;
-        default:
-            i--;
-            j--;
+            case DELETE:i--;
+                break;
+            case INSERT:j--;
+                break;
+            default:i--;
+                j--;
         }
     }
     QList<Action>::const_reverse_iterator rit = seqActionsReversed.rbegin();
@@ -149,19 +137,15 @@ void World::setField(QUuid cardId, const enum Field & fieldName, QStringList new
     while (rit != seqActionsReversed.rend()) {
         Action action = *rit;
         switch (action) {
-        case DELETE:
-            this->deleteElem(cardId, fieldName, curNew);
-            break;
-        case INSERT:
-            this->insertElem(cardId, fieldName, newField[curNew], curNew);
-            curNew++;
-            break;
-        case EDIT:
-            this->editElem(cardId, fieldName, newField[curNew], curNew);
-            curNew++;
-            break;
-        case NOTHING:
-            curNew++;
+            case DELETE:this->deleteElem(cardId, fieldName, curNew);
+                break;
+            case INSERT:this->insertElem(cardId, fieldName, newField[curNew], curNew);
+                curNew++;
+                break;
+            case EDIT:this->editElem(cardId, fieldName, newField[curNew], curNew);
+                curNew++;
+                break;
+            case NOTHING:curNew++;
         }
         rit++;
     }

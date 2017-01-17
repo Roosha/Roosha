@@ -4,13 +4,13 @@
 class CentralController;
 
 class Bootstrap {
-public:
-    Bootstrap(CentralController * cc_);
+ public:
+    Bootstrap(CentralController *cc_);
 
     void run();
 
-private:
-    CentralController * cc_;
+ private:
+    CentralController *cc_;
 };
 
 #endif // BOOTSTRAP_H

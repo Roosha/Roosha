@@ -1,5 +1,4 @@
 #include "translation.h"
-#include <QUuid>
 
 Translation::Translation() {
 

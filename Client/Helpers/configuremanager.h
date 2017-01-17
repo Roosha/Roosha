@@ -7,15 +7,15 @@
 class NetworkManager;
 
 class ConfigureManager {
-public:
+ public:
 
-    static ConfigureManager& Instance() {
+    static ConfigureManager &Instance() {
         static ConfigureManager self_;
         return self_;
     }
 
-    NetworkManager* getNetworkManager();
-    void setNetworkManager(NetworkManager* manager);
+    NetworkManager *getNetworkManager();
+    void setNetworkManager(NetworkManager *manager);
 
     QString getLogin();
     QString getPasswordHash();
@@ -25,14 +25,13 @@ public:
     void setPasswordHash(QString password);
     void setToken(QString token);
 
-protected:
+ protected:
     ConfigureManager();
     ~ConfigureManager();
-    ConfigureManager(const ConfigureManager& manager) = delete;
-    ConfigureManager& operator=(const ConfigureManager&) = delete;
+    ConfigureManager(const ConfigureManager &manager) = delete;
+    ConfigureManager &operator=(const ConfigureManager &) = delete;
 
-
-    NetworkManager* networkManager_;
+    NetworkManager *networkManager_;
     QSettings settings_;
 };
 

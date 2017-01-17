@@ -24,12 +24,12 @@ void HotkeyListener::run() {
 
 void HotkeyListener::newUserAction() {
     QString userText;
-    if(QApplication::clipboard()->supportsSelection()) {
+    if (QApplication::clipboard()->supportsSelection()) {
         userText = QApplication::clipboard()->text(QClipboard::Selection);
     } else {
         userText = getTextUsingClipboardSwap();
     }
-    if(!userText.isEmpty()) {
+    if (!userText.isEmpty()) {
         emit newWord(userText);
     }
 }

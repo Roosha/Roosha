@@ -1,10 +1,7 @@
 #include "Network/network_manager.h"
 #include "authentication_manager.h"
-#include "server_response.h"
 #include "Helpers/protobuf_converter.h"
 
-#include <QList>
-#include <QSharedPointer>
 #include <QMessageBox>
 #include <QThread>
 
@@ -18,8 +15,8 @@
 using ProtobufConverter::translationsToProtobuf;
 
 NetworkManager::NetworkManager(QObject *parent) :
-    QObject(parent),
-    authenticationManager_(new AuthenticationManager(this)) {
+        QObject(parent),
+        authenticationManager_(new AuthenticationManager(this)) {
 
     qDebug("NetworkManager created");
 }

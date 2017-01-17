@@ -6,21 +6,21 @@
 #include <QHotkey>
 
 class HotkeyListener : public QThread {
-    Q_OBJECT
+ Q_OBJECT
 
  public:
-    HotkeyListener(QObject * parent = Q_NULLPTR);
+    HotkeyListener(QObject *parent = Q_NULLPTR);
     ~HotkeyListener();
 
     void run() Q_DECL_OVERRIDE;
-public slots:
+ public slots:
     void newUserAction();
 
-signals:
+ signals:
     void newWord(QString word);
 
-private:
-    QHotkey * qhk;
+ private:
+    QHotkey *qhk;
 
     QString getTextUsingClipboardSwap();
 };

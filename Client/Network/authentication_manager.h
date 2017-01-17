@@ -20,7 +20,7 @@ class RooshaServiceConnector;
 class NetworkManager;
 
 class AuthenticationManager {
-public:
+ public:
     AuthenticationManager(NetworkManager *n);
     ~AuthenticationManager();
 
@@ -31,17 +31,15 @@ public:
 
     void receiveAuthenticatedCall(AuthenticatedAsyncCall *call);
     void receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegistrateAsyncCall *call);
-private:
+ private:
     enum State {
         AUTHENTICATED,
         AWAIT_AUTHENTICATION,
         AWAIT_CREDENTIALS,
     };
 
-
-    static const grpc::string  TOKEN_METADATA_KEY;
+    static const grpc::string TOKEN_METADATA_KEY;
     static const quint32 TECHNICAL_REQUEST_ID;
-
 
     void setState(State state);
 
@@ -60,7 +58,7 @@ private:
 
     QMutex stateMutex_;
     State state_;
-    QQueue<AuthenticatedAsyncCall*> callsQueue_;
+    QQueue<AuthenticatedAsyncCall *> callsQueue_;
     RooshaServiceConnector *connector_;
     NetworkManager *netManager_;
 };

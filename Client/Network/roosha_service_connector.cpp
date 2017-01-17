@@ -3,7 +3,6 @@
 
 #include "roosha_service_connector.h"
 #include "server_response.h"
-#include "Proto/roosha_service.grpc.pb.h"
 #include "Helpers/protobuf_converter.h"
 
 #ifndef DEBUG_CALL
@@ -19,12 +18,11 @@
 #define ROOSHA_SERVER_ADDRESS "localhost:1543"
 #endif // QT_DEBUG
 
-
 using ProtobufConverter::changeFromProtobuf;
 
 RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
-    responseListener_(new AsyncRpcResponseListener(this)),
-    authManager_(m) {
+        responseListener_(new AsyncRpcResponseListener(this)),
+        authManager_(m) {
     qDebug("Create RooshaServiceConnector");
 
     auto channel = grpc::CreateChannel(ROOSHA_SERVER_ADDRESS, grpc::InsecureChannelCredentials());
@@ -70,7 +68,7 @@ void RooshaServiceConnector::saveChanges(SaveChangesAsyncCall *call) {
     QtConcurrent::run([call, this] {
         qDebug("Start client-stream request writer for call %d", call->id_);
         auto writer = stub_->saveChanges(&call->context_, &call->response_);
-        for (const auto& change : call->request_) {
+        for (const auto &change : call->request_) {
             if (!writer->Write(change)) {
                 qDebug("Request %d stream writer: stream broken", call->id_);
                 break;
@@ -106,7 +104,7 @@ void RooshaServiceConnector::receiveResponse(RpcAsyncCall *call) {
 }
 
 AsyncRpcResponseListener::AsyncRpcResponseListener(RooshaServiceConnector *r) :
-    connector_(r) {
+        connector_(r) {
 
     qDebug("Create AsyncRpcResponseListener");
 }
@@ -116,7 +114,7 @@ void AsyncRpcResponseListener::run() {
     void *callLabel;
     bool ok;
     while (connector_->completionQueue_.Next(&callLabel, &ok)) {
-        auto call = static_cast<RpcAsyncCall*>(callLabel);
+        auto call = static_cast<RpcAsyncCall *>(callLabel);
         qDebug("AsyncRpcResponseListener::run: receive response for call %d", call->id_);
         call->receive(connector_);
     }

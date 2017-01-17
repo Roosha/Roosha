@@ -1,11 +1,6 @@
 #include "GUI/guimanager.h"
-#include <QMessageBox>
-#include <QQuickWidget>
-#include "GUI/translationcontroller.h"
-#include "GUI/cardeditioncontroller.h"
-#include "GUI/authentication_controller.h"
 
-GUIManager::GUIManager(QObject *parent): QObject(parent) {
+GUIManager::GUIManager(QObject *parent) : QObject(parent) {
 
     qmlRegisterType<Translation>("Translan", 1, 0, "Translation");
     qmlRegisterType<AuthenticationController>("roosha.controllers", 1, 0, "AuthController");
@@ -28,7 +23,6 @@ GUIManager::GUIManager(QObject *parent): QObject(parent) {
 void GUIManager::showNewTranslationWindow(quint32 id, Translations trans) {
     translationController->addData(trans);
 }
-
 
 void GUIManager::showMainWindow() {
     cardListController->showCardListWindow();

@@ -11,17 +11,17 @@
 #include "Network/server_response.h"
 
 class GUIManager : public QObject {
-    Q_OBJECT
-public:
+ Q_OBJECT
+ public:
     GUIManager(QObject *parent = Q_NULLPTR);
 
-private:
-    TranslationController* translationController;
-    CardEditionController* cardEditionController;
-    CardListController* cardListController;
-    AuthenticationController* authenticationController;
+ private:
+    TranslationController *translationController;
+    CardEditionController *cardEditionController;
+    CardListController *cardListController;
+    AuthenticationController *authenticationController;
 
-public slots:
+ public slots:
     void showNewTranslationWindow(quint32 id, Translations trans);
     void showMainWindow();
     void showAuthenticationWindow();

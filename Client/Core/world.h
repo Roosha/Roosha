@@ -14,33 +14,32 @@ enum Action {
 };
 
 class World {
-public:
-    static World& Instance();
+ public:
+    static World &Instance();
 
-    const QMap<QUuid, QSharedPointer<DBCard>>& getCards();
-    const ChangeList& getChanges();
+    const QMap<QUuid, QSharedPointer<DBCard>> &getCards();
+    const ChangeList &getChanges();
     void setChanges(ChangeList newChanges);
 
     QSharedPointer<DBCard> createCard();
     void deleteCard(QUuid id);
 
     void setSource(QUuid cardId, QString newSource);
-    void setField(QUuid cardId, const enum Field & fieldName, QStringList newField);
-    void editElem(QUuid cardId, const enum Field & fieldName, const QString & newElem, qint32 pos);
-    void deleteElem(QUuid cardId, const enum Field & fieldName, qint32  pos);
-    void insertElem(QUuid cardId, const enum Field & fieldName, const QString  &insertingElem, qint32 pos);
+    void setField(QUuid cardId, const enum Field &fieldName, QStringList newField);
+    void editElem(QUuid cardId, const enum Field &fieldName, const QString &newElem, qint32 pos);
+    void deleteElem(QUuid cardId, const enum Field &fieldName, qint32 pos);
+    void insertElem(QUuid cardId, const enum Field &fieldName, const QString &insertingElem, qint32 pos);
 
     void saveToDB();
     void applyChanges();
 
-
     void insertCard(QUuid key, QSharedPointer<DBCard> card);
     void removeCard(QUuid key);
-private:
+ private:
     World();
     ~World();
-    World(const World& world) = delete;
-    World& operator=(const World&) = delete;
+    World(const World &world) = delete;
+    World &operator=(const World &) = delete;
 
     QMap<QUuid, QSharedPointer<DBCard>> cards_;
     ChangeList changes_;

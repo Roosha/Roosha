@@ -11,10 +11,10 @@
 #include "Core/ichange.h"
 
 class CardListController : public QObject {
-    Q_OBJECT
-public:
-    CardListController(QObject * parent = nullptr);
-    World& world_;
+ Q_OBJECT
+ public:
+    CardListController(QObject *parent = nullptr);
+    World &world_;
 
     Q_INVOKABLE void closeWindow();
     Q_INVOKABLE void pullCards();
@@ -23,16 +23,16 @@ public:
     Q_INVOKABLE void deleteCard(QUuid id);
     Q_INVOKABLE void editCard(QUuid id);
 
-signals:
+ signals:
     void createNewCard(QSharedPointer<Translation> data);
     void editThisCard(QUuid id);
 
-public slots:
+ public slots:
     void showCardListWindow();
     void applyPulledChanges(quint32 requestId, ChangeList pulledChanges);
     void onWidgetClose();
-private:
-    QQuickWidget*  widget_;
+ private:
+    QQuickWidget *widget_;
     //Translations data;
 };
 

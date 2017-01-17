@@ -1,20 +1,19 @@
 #include "translationcontroller.h"
 
-#include <QQuickWidget>
 #include <QQmlContext>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <Helpers/qmlconvertation.h>
-#include <QtDebug>
 TranslationController::TranslationController(QObject *parent) : QObject(parent) {
 }
 
 void TranslationController::addData(Translations translations) {
-    QQuickWidget * translationWidget = new QQuickWidget();
+    QQuickWidget *translationWidget = new QQuickWidget();
 
     data.insert(translationWidget, translations);
 
-    translationWidget->rootContext()->setContextProperty("trans", QmlConvertation::prepareToQml(data.value(translationWidget)));
+    translationWidget->rootContext()->setContextProperty("trans",
+                                                         QmlConvertation::prepareToQml(data.value(translationWidget)));
     translationWidget->rootContext()->setContextProperty("controller", this);
     translationWidget->rootContext()->setContextProperty("self", translationWidget);
 
@@ -30,13 +29,13 @@ void TranslationController::addData(Translations translations) {
     translationWidget->setFixedSize(translationWidget->size());
 }
 
-void TranslationController::closeWindow(QQuickWidget * widget) {
+void TranslationController::closeWindow(QQuickWidget *widget) {
     widget->close();
     data.remove(widget);
     replaceWindows();
 }
 
-void TranslationController::createCard(QQuickWidget * widget, int index) {
+void TranslationController::createCard(QQuickWidget *widget, int index) {
     emit createNewCard(data[widget][index]);
 }
 
@@ -45,7 +44,7 @@ void TranslationController::replaceWindows() {
     int spacing = 20;
 
     int number = 0;
-    for(auto widget : data.keys()) {
+    for (auto widget : data.keys()) {
         int yPos = absTopMargin + (widget->height() + spacing) * (number++);
         int xPos = QApplication::desktop()->screenGeometry().width() - widget->width() - 50;
         widget->move(xPos, yPos);

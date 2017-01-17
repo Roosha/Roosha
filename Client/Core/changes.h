@@ -7,25 +7,25 @@
 #include "dbcard.h"
 
 class ChangeSource : public IChange {
-public:
-    ChangeSource(QUuid id, const QString & newSrc);
+ public:
+    ChangeSource(QUuid id, const QString &newSrc);
 
-    void apply(World * world) override;
+    void apply(World *world) override;
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
     QString getNewSource() const;
 
-private:
+ private:
     const QUuid cardId;
     const QString newSource;
 };
 
 class EditElem : public IChange {
-public:
-    EditElem(QUuid cardId, const enum Field & field, const QString & newEl, const qint32 & p);
+ public:
+    EditElem(QUuid cardId, const enum Field &field, const QString &newEl, const qint32 &p);
 
-    void apply(World * world) override;
+    void apply(World *world) override;
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
@@ -33,7 +33,7 @@ public:
     QString getNewElem() const;
     qint32 getPos() const;
 
-private:
+ private:
     const QUuid cardId;
     const enum Field fieldName;
     const QString newElem;
@@ -41,10 +41,10 @@ private:
 };
 
 class InsertElem : public IChange {
-public:
-    InsertElem(QUuid id, const enum Field & field, const QString & insertingEl, const qint32 & p);
+ public:
+    InsertElem(QUuid id, const enum Field &field, const QString &insertingEl, const qint32 &p);
 
-    void apply(World * world) override;
+    void apply(World *world) override;
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
@@ -52,7 +52,7 @@ public:
     QString getInsertingElem() const;
     qint32 getPos() const;
 
-private:
+ private:
     const QUuid cardId;
     const enum Field fieldName;
     const QString insertingElem;
@@ -60,45 +60,45 @@ private:
 };
 
 class DeleteElem : public IChange {
-public:
-    DeleteElem(QUuid id, const enum Field & field, const qint32 & p);
+ public:
+    DeleteElem(QUuid id, const enum Field &field, const qint32 &p);
 
-    void apply(World * world) override;
+    void apply(World *world) override;
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
     Field getFieldName() const;
     qint32 getPos() const;
 
-private:
+ private:
     const QUuid cardId;
     const enum Field fieldName;
     const qint32 pos;
 };
 
 class CreateCard : public IChange {
-public:
+ public:
     CreateCard(QUuid id);
 
-    void apply(World * world) override;
+    void apply(World *world) override;
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
 
-private:
+ private:
     const QUuid cardId;
 };
 
 class DeleteCard : public IChange {
-public:
+ public:
     DeleteCard(QUuid id);
 
-    void apply(World * world) override;
+    void apply(World *world) override;
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
 
-private:
+ private:
     const QUuid cardId;
 };
 

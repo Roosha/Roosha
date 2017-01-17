@@ -1,5 +1,4 @@
 #include "Helpers/configuremanager.h"
-#include <QVariant>
 
 ConfigureManager::ConfigureManager() {
 }

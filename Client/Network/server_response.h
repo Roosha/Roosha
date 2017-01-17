@@ -64,8 +64,7 @@ struct RpcAsyncCall {
     /**
      * NOTE: this method will destroy this RpcAsyncCall instance, so do not deal with this object anymore after call.
      */
-    virtual void fail(NetworkManager* netManager, RPCErrorStatus status) = 0;
-
+    virtual void fail(NetworkManager *netManager, RPCErrorStatus status) = 0;
 
     const quint32 id_;
     grpc::ClientContext context_;
@@ -96,7 +95,7 @@ struct AuthorizeAsyncCall : public AuthorizeOrRegistrateAsyncCall {
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
     using RpcAsyncCall::fail;
-    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
+    void fail(NetworkManager *netManager, RPCErrorStatus status) override;
 };
 
 /**
@@ -108,7 +107,7 @@ struct RegistrateAsyncCall : public AuthorizeOrRegistrateAsyncCall {
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
     using RpcAsyncCall::fail;
-    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
+    void fail(NetworkManager *netManager, RPCErrorStatus status) override;
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -134,7 +133,7 @@ struct TranslateAsyncCall : public AuthenticatedAsyncCall {
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
     using RpcAsyncCall::fail;
-    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
+    void fail(NetworkManager *netManager, RPCErrorStatus status) override;
 
     bool isAuthenticationRequired() override;
 
@@ -151,8 +150,7 @@ struct ProposeUserTranslationsAsyncCall : public AuthenticatedAsyncCall {
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
     using RpcAsyncCall::fail;
-    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
-
+    void fail(NetworkManager *netManager, RPCErrorStatus status) override;
 
     roosha::Translations request_;
     roosha::Void response_;
@@ -164,8 +162,7 @@ struct SaveChangesAsyncCall : public AuthenticatedAsyncCall {
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
     using RpcAsyncCall::fail;
-    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
-
+    void fail(NetworkManager *netManager, RPCErrorStatus status) override;
 
     QList<roosha::Change> request_;
     roosha::Void response_;
@@ -177,8 +174,7 @@ struct LoadChangesAsyncCall : public AuthenticatedAsyncCall {
     void send(RooshaServiceConnector *connector) override;
     void succeed(NetworkManager *netManager) override;
     using RpcAsyncCall::fail;
-    void fail(NetworkManager* netManager, RPCErrorStatus status) override;
-
+    void fail(NetworkManager *netManager, RPCErrorStatus status) override;
 
     roosha::Void request_;
     ChangeList response_;

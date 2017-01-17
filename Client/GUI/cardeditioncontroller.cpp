@@ -1,22 +1,13 @@
 #include "cardeditioncontroller.h"
-#include "Core/dbcard.h"
-#include "Core/world.h"
-#include <QQuickWidget>
 #include <QQmlContext>
 #include <QApplication>
-#include <QDesktopWidget>
-#include <Helpers/qmlconvertation.h>
-#include <QVariant>
-#include <QtDebug>
 
-CardEditionController::CardEditionController(QObject *parent) : QObject(parent), world(World::Instance())  {
+CardEditionController::CardEditionController(QObject *parent) : QObject(parent), world(World::Instance()) {
 }
-
 
 void CardEditionController::showNewCardEditWindow(QSharedPointer<Translation> trans) {
 
-
-    QQuickWidget * editionWidget = new QQuickWidget();
+    QQuickWidget *editionWidget = new QQuickWidget();
     data = trans;
 
     editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(data.data()));
@@ -29,7 +20,7 @@ void CardEditionController::showNewCardEditWindow(QSharedPointer<Translation> tr
 }
 
 void CardEditionController::showCardEditWindow(QUuid id) {
-    QQuickWidget * editionWidget = new QQuickWidget();
+    QQuickWidget *editionWidget = new QQuickWidget();
     QSharedPointer<DBCard> card = world.getCards().value(id);
     editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(card.data()));
     editionWidget->rootContext()->setContextProperty("controller", this);

@@ -14,22 +14,22 @@ class HotkeyListener;
 class SystemTray;
 
 class CentralController : public QObject {
-    Q_OBJECT
+ Q_OBJECT
 
     friend class ::Bootstrap;
-public:
+ public:
     CentralController();
 
     void start();
 
-private:
-    ConfigureManager * configureManager;
-    NetworkManager * networkManager;
-    GUIManager * guiManager;
-    HotkeyListener * hkListener;
+ private:
+    ConfigureManager *configureManager;
+    NetworkManager *networkManager;
+    GUIManager *guiManager;
+    HotkeyListener *hkListener;
     QSharedPointer<SystemTray> systemTray;
 
-public slots:
+ public slots:
     void handleNewWord(QString word);
     void closeApplication();
 };

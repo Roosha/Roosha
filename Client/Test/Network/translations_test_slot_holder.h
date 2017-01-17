@@ -9,13 +9,12 @@
 #include "Core/translation.h"
 #include "Network/server_response.h"
 
-
 class TranslationsTestSlotHolder : public QObject {
-    Q_OBJECT
+ Q_OBJECT
 
-public:
+ public:
     TranslationsTestSlotHolder();
-public slots:
+ public slots:
     void translationSucceededSlot(quint32 id, Translations translations);
     void translationFailedSlot(quint32 id, RPCErrorStatus status);
 };

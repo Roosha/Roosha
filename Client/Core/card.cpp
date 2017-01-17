@@ -1,20 +1,20 @@
 #include "Core/card.h"
 
-Card::Card() { }
+Card::Card() {}
 
-QString Card::getSource() const{
+QString Card::getSource() const {
     return source_;
 }
 
-QUuid Card::getId() {
+QUuid Card::getId() const {
     return id_;
 }
 
-QStringList Card::getTargets() const{
+QStringList Card::getTargets() const {
     return targets_;
 }
 
-QStringList Card::getExamples() const{
+QStringList Card::getExamples() const {
     return examples_;
 }
 

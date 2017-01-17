@@ -9,23 +9,23 @@
 #include "Core/translation.h"
 
 class TranslationController : public QObject {
-    Q_OBJECT
-public:
-    TranslationController(QObject * parent = nullptr);
+ Q_OBJECT
+ public:
+    TranslationController(QObject *parent = nullptr);
 
     void addData(Translations translations);
 
-    Q_INVOKABLE void closeWindow(QQuickWidget * widget);
-    Q_INVOKABLE void createCard(QQuickWidget * widget, int index);
+    Q_INVOKABLE void closeWindow(QQuickWidget *widget);
+    Q_INVOKABLE void createCard(QQuickWidget *widget, int index);
 //    Q_INVOKABLE void createLater(quint32 id);
 
-signals:
+ signals:
     void createNewCard(QSharedPointer<Translation> trans);
 
-private:
+ private:
     void replaceWindows();
 
-    QMap<QQuickWidget*, Translations> data;
+    QMap<QQuickWidget *, Translations> data;
 };
 
 #endif // TRANSLATIONCONTROLLER_H

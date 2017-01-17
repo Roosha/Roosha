@@ -1,7 +1,6 @@
 #include "system_tray.h"
 #include <QAction>
 #include <QMenu>
-#include <QIcon>
 #include <QApplication>
 #include <QClipboard>
 
@@ -11,27 +10,27 @@ SystemTray::SystemTray(QWidget *parent) : QWidget(parent) {
     trayIcon->show();
 }
 
-void SystemTray::close() {
+void SystemTray::onCloseButtonClicked() {
     emit closeApplication();
 }
 
-void SystemTray::translate() {
+void SystemTray::onTranslateButtonClicked() {
     // TODO: this funciton is absolutely the same as function newUserAction in hklistener
     // Maybe it is a good idea to create a special helper
     QString userText;
-    if(QApplication::clipboard()->supportsSelection()) {
+    if (QApplication::clipboard()->supportsSelection()) {
         userText = QApplication::clipboard()->text(QClipboard::Selection);
     }
-    if(!userText.isEmpty()) {
+    if (!userText.isEmpty()) {
         emit newWord(userText);
     }
 }
 
-void SystemTray::show() {
+void SystemTray::onShowButtonClicked() {
     emit showMainWidnow();
 }
 
-void SystemTray::noConnection() {
+void SystemTray::showNoConnectionNotification() {
 #ifdef Q_OS_WIN
     // TODO: make normal OSD in linux
     trayIcon->showMessage(
@@ -44,14 +43,13 @@ void SystemTray::noConnection() {
 
 void SystemTray::createMenu() {
     translateAction = new QAction(tr("Translate"), this);
-    connect(translateAction, &QAction::triggered, this, &SystemTray::translate);
+    connect(translateAction, &QAction::triggered, this, &SystemTray::onTranslateButtonClicked);
 
     showAction = new QAction(tr("Show main window"), this);
-    connect(showAction, &QAction::triggered, this, &SystemTray::show);
+    connect(showAction, &QAction::triggered, this, &SystemTray::onShowButtonClicked);
 
     closeAction = new QAction(tr("Close application"), this);
-    connect(closeAction, &QAction::triggered, this, &SystemTray::close);
-
+    connect(closeAction, &QAction::triggered, this, &SystemTray::onCloseButtonClicked);
 
     trayMenu = new QMenu(this);
     trayMenu->addAction(translateAction);

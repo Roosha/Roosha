@@ -7,14 +7,14 @@
 #include <iostream>
 
 class QmlConvertation {
-public:
+ public:
     QmlConvertation();
 
     template<class T>
     static QVariant prepareToQml(QList<QSharedPointer<T> > data) {
         QList<QObject *> raw;
         raw.reserve(data.size());
-        for(auto pointer : data) {
+        for (auto pointer : data) {
             raw.push_back(pointer.data());
         }
         return QVariant::fromValue(raw);
