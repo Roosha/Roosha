@@ -16,7 +16,6 @@ SOURCES += main.cpp \
     GUI/guimanager.cpp \
     Helpers/bootstrap.cpp \
     Helpers/configuremanager.cpp \
-    Core/applicationdaemon.cpp \
     Core/translation.cpp \
     GUI/translationcontroller.cpp \
     Helpers/qmlconvertation.cpp \
@@ -54,7 +53,6 @@ HEADERS += \
     GUI/guimanager.h \
     Helpers/bootstrap.h \
     Helpers/configuremanager.h \
-    Core/applicationdaemon.h \
     Core/translation.h \
     GUI/translationcontroller.h \
     Helpers/qmlconvertation.h \

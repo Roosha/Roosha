@@ -1,3 +1,6 @@
+.idea/
+cmake-build-debug/
+
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
