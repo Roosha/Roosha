@@ -16,11 +16,17 @@ class RooshaServiceConnector;
 class AuthenticationManager;
 
 enum RPCErrorStatus {
-    UNKNOWN,
+    /// RPC exceeded specified timeout. There is no guarantee neither that RPC finished successfully nor it was aborted.
     DEADLINE_EXCEEDED,
+    /// RPC failed due to missing or bad credentials
     NOT_AUTHENTICATED,
+    /// This error status emerges if and only if RPC is either 'authorize' or 'registrate' and it's preceded by another
+    /// one which has not completed yet.
     ALREADY_IN_AUTHNTICATION_PROCESS,
-
+    /// Failed to connect to server.
+    NO_CONNECTION,
+    /// Any other error.
+    UNKNOWN,
 };
 
 Q_DECLARE_METATYPE(RPCErrorStatus)

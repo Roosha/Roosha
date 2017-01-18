@@ -19,6 +19,7 @@
 #endif // QT_DEBUG
 
 using ProtobufConverter::changeFromProtobuf;
+using ProtobufConverter::grpcStatusCodeToCString;
 
 RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
         responseListener_(new AsyncRpcResponseListener(this)),
@@ -115,7 +116,10 @@ void AsyncRpcResponseListener::run() {
     bool ok;
     while (connector_->completionQueue_.Next(&callLabel, &ok)) {
         auto call = static_cast<RpcAsyncCall *>(callLabel);
-        qDebug("AsyncRpcResponseListener::run: receive response for call %d", call->id_);
+        qDebug("AsyncRpcResponseListener::run: receive response for call %d. Status: %s, Message'%s'",
+               call->id_,
+               grpcStatusCodeToCString(call->status_.error_code()),
+               call->status_.error_message().c_str());
         call->receive(connector_);
     }
 }
