@@ -87,6 +87,7 @@ void AuthenticationManager::receiveAuthenticatedCall(AuthenticatedAsyncCall *cal
         return;
     } else if (call->status_.error_code() != grpc::StatusCode::UNAUTHENTICATED) {
         call->fail(netManager_);
+        return;
     }
 
     // -----------------Authentication error-------------
