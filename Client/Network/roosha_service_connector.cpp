@@ -2,7 +2,7 @@
 #include <QtConcurrent>
 
 #include "roosha_service_connector.h"
-#include "server_response.h"
+#include "network_manager.h"
 #include "Helpers/protobuf_converter.h"
 
 #ifndef DEBUG_CALL
@@ -20,8 +20,10 @@
 
 using ProtobufConverter::changeFromProtobuf;
 using ProtobufConverter::grpcStatusCodeToCString;
+using namespace InternalNetworkConstants;
 
 RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
+        isConnectedToServer_(true),
         responseListener_(new AsyncRpcResponseListener(this)),
         authManager_(m) {
     qDebug("Create RooshaServiceConnector");
@@ -34,6 +36,8 @@ RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
 
     responseListener_->setParent(this);
     responseListener_->start();
+
+    knock();
 }
 
 RooshaServiceConnector::~RooshaServiceConnector() {
@@ -101,12 +105,46 @@ void RooshaServiceConnector::loadChanges(LoadChangesAsyncCall *call) {
 
 void RooshaServiceConnector::receiveResponse(RpcAsyncCall *call) {
     qDebug("RooshaServiceConnector::receiveResponse: receive response for call %d", call->id_);
+    processStatus(call->status_);
     call->verify(authManager_);
+}
+
+void RooshaServiceConnector::knock() {
+    qDebug("RooshaServiceConnector::knock called");
+
+    auto call = new KnockAsyncCall(PING_REQUEST_ID, PING_INTERVAL_MILLIS);
+    auto responseReader = stub_->Asyncknock(&call->context_, call->request_, &completionQueue_);
+    responseReader->Finish(&call->response_, &call->status_, call);
+}
+
+void RooshaServiceConnector::receivePingResponse(KnockAsyncCall *call) {
+    DEBUG_CALL("RooshaServiceConnector::receivePingResponse");
+    processStatus(call->status_, true);
+    delete call;
+}
+
+void RooshaServiceConnector::processStatus(grpc::Status status, bool forPingCall) {
+    if (status.ok()) {
+        if (!isConnectedToServer_.fetchAndStoreAcquire(true)) {
+            qDebug("============emit connectionRestored()");
+            emit connectionRestored();
+        }
+    } else {
+        if (isConnectedToServer_.fetchAndStoreAcquire(false)) {
+            qDebug("============emit connectionBroken(\"%s\")", status.error_message().c_str());
+            emit connectionBroken(QString::fromStdString(status.error_message()));
+            if (!forPingCall) {
+                knock();
+            }
+        }
+        if (forPingCall) {
+            QTimer::singleShot(InternalNetworkConstants::PING_INTERVAL_MILLIS, this, &RooshaServiceConnector::knock);
+        }
+    }
 }
 
 AsyncRpcResponseListener::AsyncRpcResponseListener(RooshaServiceConnector *r) :
         connector_(r) {
-
     qDebug("Create AsyncRpcResponseListener");
 }
 

@@ -38,8 +38,7 @@ class AuthenticationManager {
         AWAIT_CREDENTIALS,
     };
 
-    static const grpc::string TOKEN_METADATA_KEY;
-    static const quint32 TECHNICAL_REQUEST_ID;
+
 
     void setState(State state);
 

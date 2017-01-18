@@ -79,7 +79,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     }
 
     @Override
-    public void ping(Void request, StreamObserver<Void> responseObserver) {
+    public void knock(Void request, StreamObserver<Void> responseObserver) {
         responseObserver.onNext(Void.getDefaultInstance());
         responseObserver.onCompleted();
     }

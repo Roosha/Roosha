@@ -25,9 +25,8 @@
 #endif
 
 using namespace ProtobufConverter;
-
-const grpc::string AuthenticationManager::TOKEN_METADATA_KEY = "roosha-auth-token";
-const quint32 AuthenticationManager::TECHNICAL_REQUEST_ID = 0u;
+using InternalNetworkConstants::TOKEN_METADATA_KEY;
+using InternalNetworkConstants::TECHNICAL_AUTHENTICATION_RPC_ID;
 
 AuthenticationManager::AuthenticationManager(NetworkManager *n) :
         state_(AWAIT_CREDENTIALS),
@@ -112,10 +111,11 @@ void AuthenticationManager::receiveAuthenticatedCall(AuthenticatedAsyncCall *cal
 }
 
 void AuthenticationManager::receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegistrateAsyncCall *call) {
+    //TODO: handle network failures.
     DEBUG_CALL("receiveAuthorizeOrRegistrateResponse")
     processAuthorizeOrRegitrateResponse(call);
 
-    if (call->id_ != TECHNICAL_REQUEST_ID) {
+    if (call->id_ != TECHNICAL_AUTHENTICATION_RPC_ID) {
         if (call->status_.ok()) {
             call->succeed(netManager_);
         } else {
@@ -128,12 +128,12 @@ void AuthenticationManager::receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegi
 
 void AuthenticationManager::setState(AuthenticationManager::State state) {
     switch (state) {
-        case AuthenticationManager::AUTHENTICATED:qDebug("AuthenticationManager: toggle state to AUTHENTICATED");
+        case AuthenticationManager::AUTHENTICATED : qDebug("AuthenticationManager: toggle state to AUTHENTICATED");
             break;
         case AuthenticationManager::AWAIT_AUTHENTICATION:
             qDebug("AuthenticationManager: toggle state to AWAIT_AUTHENTICATION");
             break;
-        case AuthenticationManager::AWAIT_CREDENTIALS:qDebug("AuthenticationManager: toggle state to AWAIT_CREDENTIALS");
+        case AuthenticationManager::AWAIT_CREDENTIALS : qDebug("AuthenticationManager: toggle state to AWAIT_CREDENTIALS");
             break;
     }
     state_ = state;
@@ -146,7 +146,7 @@ bool AuthenticationManager::tryToUpdateToken() {
 
     if (login != "") {
         qDebug("AuthenticationManager::tryToUpdateToken: try to authorize with credentials from config");
-        AuthorizeOrRegistrateAsyncCall *call = new AuthorizeAsyncCall(TECHNICAL_REQUEST_ID, DEFAULT_TIMEOUT_MILLIS);
+        auto call = new AuthorizeAsyncCall(TECHNICAL_AUTHENTICATION_RPC_ID, DEFAULT_TIMEOUT_MILLIS);
         setState(AWAIT_AUTHENTICATION);
         call->send(connector_);
         return true;

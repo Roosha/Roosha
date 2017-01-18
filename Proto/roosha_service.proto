@@ -31,7 +31,7 @@ option optimize_for = SPEED;
 
 
 service RooshaService {
-    rpc ping(Void) returns (Void);
+    rpc knock(Void) returns (Void);
 
   	rpc registrate(Credentials) returns (AuthenticationToken);
 	rpc authorize(Credentials) returns (AuthenticationToken);
