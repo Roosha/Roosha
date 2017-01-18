@@ -1,6 +1,6 @@
 #include "authentication_controller.h"
 #include <QQmlContext>
-#include <QtDebug>
+#include <QDebug>
 
 #include "Network/network_manager.h"
 
@@ -11,30 +11,31 @@ AuthenticationController::AuthenticationController(QObject *parent) :
         configurationManager_(ConfigureManager::Instance()) {
 
     qRegisterMetaType<AuthenticationState>("AuthenticationState");
-
     credentials_ = QVariantMap {
             {"login", configurationManager_.getLogin()},
             {"password", ""}
     };
+
+
 }
 
 void AuthenticationController::showLoginWindow() {
     setState(AuthenticationController::NotAuthenticated);
     if (registerWidget_) closeRegistrateWindow();
+    if (!loginWidget_) {
+        loginWidget_ = new QQuickWidget();
+        connect(loginWidget_, &QObject::destroyed, this, [this]{loginWidget_ = Q_NULLPTR;});
+        loginWidget_->rootContext()->setContextProperty("controller", this);
+        loginWidget_->rootContext()->setContextProperty("credentials", credentials_);
 
-    loginWidget_ = new QQuickWidget();
+        loginWidget_->setSource(QUrl(QStringLiteral("qrc:/authentication/loginView.qml")));
+        loginWidget_->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
-    loginWidget_->rootContext()->setContextProperty("controller", this);
-    loginWidget_->rootContext()->setContextProperty("credentials", credentials_);
+        loginWidget_->setFixedSize(loginWidget_->size());
 
-    loginWidget_->setSource(QUrl(QStringLiteral("qrc:/authentication/loginView.qml")));
-    loginWidget_->setResizeMode(QQuickWidget::SizeRootObjectToView);
-
-    loginWidget_->setFixedSize(loginWidget_->size());
-
-    loginWidget_->setAttribute(Qt::WA_DeleteOnClose);
-
-    loginWidget_->show();
+        loginWidget_->setAttribute(Qt::WA_DeleteOnClose);
+        loginWidget_->show();
+    }
 }
 
 void AuthenticationController::showRegistrateWindow() {

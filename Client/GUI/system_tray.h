@@ -13,13 +13,15 @@ class SystemTray : public QWidget {
     void onCloseButtonClicked();
     void onTranslateButtonClicked();
     void onShowButtonClicked();
-
+    void onLoginButtonClicked();
+    void updateMenu();
     void showNoConnectionNotification();
 
  signals:
     void closeApplication();
     void newWord(QString word);
-    void showMainWidnow();
+    void showMainWindow();
+    void showLoginWindow();
 
  private:
     void createMenu();
@@ -27,6 +29,7 @@ class SystemTray : public QWidget {
     QAction *showAction;
     QAction *closeAction;
     QAction *translateAction;
+    QAction *logAction;
 
     QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;

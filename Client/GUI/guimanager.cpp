@@ -1,5 +1,5 @@
 #include "GUI/guimanager.h"
-
+#include <QDebug>
 GUIManager::GUIManager(QObject *parent) : QObject(parent) {
 
     qmlRegisterType<Translation>("Translan", 1, 0, "Translation");

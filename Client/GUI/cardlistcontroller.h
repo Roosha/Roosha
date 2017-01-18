@@ -30,7 +30,7 @@ class CardListController : public QObject {
  public slots:
     void showCardListWindow();
     void applyPulledChanges(quint32 requestId, ChangeList pulledChanges);
-    void onWidgetClose();
+
  private:
     QQuickWidget *widget_;
     //Translations data;

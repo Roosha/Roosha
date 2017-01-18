@@ -27,7 +27,11 @@ void SystemTray::onTranslateButtonClicked() {
 }
 
 void SystemTray::onShowButtonClicked() {
-    emit showMainWidnow();
+    emit showMainWindow();
+}
+
+void SystemTray::onLoginButtonClicked() {
+    emit showLoginWindow();
 }
 
 void SystemTray::showNoConnectionNotification() {
@@ -51,9 +55,12 @@ void SystemTray::createMenu() {
     closeAction = new QAction(tr("Close application"), this);
     connect(closeAction, &QAction::triggered, this, &SystemTray::onCloseButtonClicked);
 
+    logAction = new QAction(tr("Login"), this);
+    connect(logAction, &QAction::triggered, this, &SystemTray::onLoginButtonClicked);
+
     trayMenu = new QMenu(this);
     trayMenu->addAction(translateAction);
-    trayMenu->addAction(showAction);
+    trayMenu->addAction(logAction);
     trayMenu->addAction(closeAction);
 
     trayIcon = new QSystemTrayIcon(this);
@@ -61,4 +68,10 @@ void SystemTray::createMenu() {
 
     icon = QIcon(":/img/32.png");
     trayIcon->setIcon(icon);
+}
+
+/// replace login option with Show Main Window option
+void SystemTray::updateMenu() {
+    trayMenu->removeAction(logAction);
+    trayMenu->insertAction(closeAction, showAction);
 }

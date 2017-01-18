@@ -41,7 +41,6 @@ class AuthenticationController : public QObject {
 
  signals:
     void stateChanged(AuthenticationState state);
-
  private:
     QQuickWidget *loginWidget_;
     QQuickWidget *registerWidget_;

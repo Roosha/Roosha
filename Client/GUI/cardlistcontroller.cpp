@@ -22,7 +22,7 @@ void CardListController::showCardListWindow() {
 
     if (widget_) closeWindow();
     widget_ = new QQuickWidget();
-
+    connect(widget_, &QObject::destroyed, this, [this]{widget_ = Q_NULLPTR;});
     widget_->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
     widget_->rootContext()->setContextProperty("controller", this);
 
@@ -42,9 +42,7 @@ void CardListController::applyPulledChanges(quint32 requestId, ChangeList pulled
     showCardListWindow();
 }
 
-void CardListController::onWidgetClose() {
-    widget_ = Q_NULLPTR;
-}
+
 
 void CardListController::closeWindow() {
     widget_->close();
