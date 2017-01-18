@@ -1,6 +1,7 @@
 #include <QtDebug>
 #include <QtConcurrent>
 
+#include "preferences.h"
 #include "roosha_service_connector.h"
 #include "network_manager.h"
 #include "Helpers/protobuf_converter.h"
@@ -12,15 +13,8 @@
 #error DEBUG_CALL macro is already defined
 #endif // DEBUG_CALL
 
-#ifndef QT_DEBUG
-#define ROOSHA_SERVER_ADDRESS "146.185.178.193:1543"
-#else
-#define ROOSHA_SERVER_ADDRESS "localhost:1543"
-#endif // QT_DEBUG
-
 using ProtobufConverter::changeFromProtobuf;
 using ProtobufConverter::grpcStatusCodeToCString;
-using namespace InternalNetworkConstants;
 
 RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
         isConnectedToServer_(true),
@@ -138,7 +132,7 @@ void RooshaServiceConnector::processStatus(grpc::Status status, bool forPingCall
             }
         }
         if (forPingCall) {
-            QTimer::singleShot(InternalNetworkConstants::PING_INTERVAL_MILLIS, this, &RooshaServiceConnector::knock);
+            QTimer::singleShot(PING_INTERVAL_MILLIS, this, &RooshaServiceConnector::knock);
         }
     }
 }

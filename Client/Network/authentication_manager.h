@@ -8,6 +8,8 @@
 
 #include <grpc++/grpc++.h>
 
+#include "preferences.h"
+
 class AuthenticatedAsyncCall;
 class AuthorizeOrRegistrateAsyncCall;
 class RpcAsyncCall;
@@ -37,8 +39,6 @@ class AuthenticationManager {
         AWAIT_AUTHENTICATION,
         AWAIT_CREDENTIALS,
     };
-
-
 
     void setState(State state);
 

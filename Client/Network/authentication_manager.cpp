@@ -25,8 +25,6 @@
 #endif
 
 using namespace ProtobufConverter;
-using InternalNetworkConstants::TOKEN_METADATA_KEY;
-using InternalNetworkConstants::TECHNICAL_AUTHENTICATION_RPC_ID;
 
 AuthenticationManager::AuthenticationManager(NetworkManager *n) :
         state_(AWAIT_CREDENTIALS),
@@ -133,7 +131,7 @@ void AuthenticationManager::setState(AuthenticationManager::State state) {
         case AuthenticationManager::AWAIT_AUTHENTICATION:
             qDebug("AuthenticationManager: toggle state to AWAIT_AUTHENTICATION");
             break;
-        case AuthenticationManager::AWAIT_CREDENTIALS : qDebug("AuthenticationManager: toggle state to AWAIT_CREDENTIALS");
+        case AuthenticationManager::AWAIT_CREDENTIALS :qDebug("AuthenticationManager: toggle state to AWAIT_CREDENTIALS");
             break;
     }
     state_ = state;

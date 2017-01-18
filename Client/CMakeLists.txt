@@ -83,7 +83,8 @@ set(ROOSHA_HEADERS Core/centralcontroller.h
         Helpers/protobuf_converter.h
         GUI/authentication_controller.h
         GUI/system_tray.h
-        GUI/cardeditioncontroller.h)
+        GUI/cardeditioncontroller.h
+        Network/preferences.h)
 
 set(ROOSHA_SOURCES main.cpp
         Core/centralcontroller.cpp

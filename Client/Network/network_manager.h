@@ -9,8 +9,6 @@
 
 class AuthenticationManager;
 
-#define DEFAULT_TIMEOUT_MILLIS 5000
-
 class NetworkManager : public QObject {
  Q_OBJECT
 
@@ -50,16 +48,6 @@ class NetworkManager : public QObject {
  private:
     QAtomicInteger<quint32> currentId_;
     AuthenticationManager *authenticationManager_;
-};
-
-namespace InternalNetworkConstants {
-    static constexpr char *TOKEN_METADATA_KEY = (char *const) "roosha-auth-token";
-
-    static constexpr quint32 PING_INTERVAL_MILLIS = 15000;
-
-    static constexpr quint32 TECHNICAL_AUTHENTICATION_RPC_ID = 0u;
-    static constexpr quint32 PING_REQUEST_ID = 1u;
-    static constexpr quint32 MINIMAL_PUBLIC_RPC_ID = 10u;
 };
 
 #endif // NETWORKMANAGER_H

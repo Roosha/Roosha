@@ -14,10 +14,9 @@
 
 using ProtobufConverter::translationsToProtobuf;
 
-
 NetworkManager::NetworkManager(QObject *parent) :
         QObject(parent),
-        currentId_(InternalNetworkConstants::MINIMAL_PUBLIC_RPC_ID),
+        currentId_(MINIMAL_PUBLIC_RPC_ID),
         authenticationManager_(new AuthenticationManager(this)) {
 
     qDebug("NetworkManager created");
@@ -84,7 +83,6 @@ quint32 NetworkManager::loadChanges(quint32 timeoutMillis) {
     call->authenticate(authenticationManager_);
     return call->id_;
 }
-
 
 #ifdef DEBUG_CALL
 #undef DEBUG_CALL

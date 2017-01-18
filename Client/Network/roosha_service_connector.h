@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "preferences.h"
 #include "authentication_manager.h"
 #include "Proto/roosha_service.grpc.pb.h"
 #include "server_response.h"
