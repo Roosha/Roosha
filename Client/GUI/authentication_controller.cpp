@@ -23,8 +23,8 @@ void AuthenticationController::showLoginWindow() {
     setState(AuthenticationController::NotAuthenticated);
     if (registerWidget_) closeRegistrateWindow();
     if (!loginWidget_) {
-        loginWidget_ = new QQuickWidget();
-        connect(loginWidget_, &QObject::destroyed, this, [this]{loginWidget_ = Q_NULLPTR;});
+        loginWidget_ = new QmlWidget();
+        connect(loginWidget_, &QmlWidget::closed, this, [this]{loginWidget_ = Q_NULLPTR;});
         loginWidget_->rootContext()->setContextProperty("controller", this);
         loginWidget_->rootContext()->setContextProperty("credentials", credentials_);
 
@@ -42,7 +42,9 @@ void AuthenticationController::showRegistrateWindow() {
     setState(AuthenticationController::NotAuthenticated);
     if (loginWidget_) closeLoginWindow();
 
-    registerWidget_ = new QQuickWidget();
+    registerWidget_ = new QmlWidget();
+
+    connect(registerWidget_, &QmlWidget::closed, this, [this]{registerWidget_ = Q_NULLPTR;});
 
     registerWidget_->rootContext()->setContextProperty("controller", this);
 
@@ -68,12 +70,10 @@ void AuthenticationController::sendRegistrateRequest(QString login, QString pass
 
 void AuthenticationController::closeLoginWindow() {
     loginWidget_->close();
-    loginWidget_ = Q_NULLPTR;
 }
 
 void AuthenticationController::closeRegistrateWindow() {
     registerWidget_->close();
-    registerWidget_ = Q_NULLPTR;
 }
 
 void AuthenticationController::setState(AuthenticationController::AuthenticationState state) {

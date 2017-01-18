@@ -4,7 +4,7 @@
 #include <QtGlobal>
 #include <QMap>
 #include <QSharedPointer>
-#include <QQuickWidget>
+#include "GUI/QmlWidget.h"
 #include "Core/translation.h"
 #include "Core/world.h"
 #include "Core/dbcard.h"
@@ -26,7 +26,7 @@ class CardEditionController : public QObject {
     void showCardEditWindow(QUuid id);
 
  private:
-    QQuickWidget *widget;
+    QmlWidget *widget;
     QSharedPointer<Translation> data;
 };
 

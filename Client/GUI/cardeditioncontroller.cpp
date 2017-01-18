@@ -7,7 +7,7 @@ CardEditionController::CardEditionController(QObject *parent) : QObject(parent),
 
 void CardEditionController::showNewCardEditWindow(QSharedPointer<Translation> trans) {
 
-    QQuickWidget *editionWidget = new QQuickWidget();
+    QmlWidget *editionWidget = new QmlWidget();
     data = trans;
 
     editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(data.data()));
@@ -17,10 +17,12 @@ void CardEditionController::showNewCardEditWindow(QSharedPointer<Translation> tr
     editionWidget->show();
 
     widget = editionWidget;
+
+    connect(widget, &QmlWidget::closed, this, [this]{widget = Q_NULLPTR; });
 }
 
 void CardEditionController::showCardEditWindow(QUuid id) {
-    QQuickWidget *editionWidget = new QQuickWidget();
+    QmlWidget *editionWidget = new QmlWidget();
     QSharedPointer<DBCard> card = world.getCards().value(id);
     editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(card.data()));
     editionWidget->rootContext()->setContextProperty("controller", this);
@@ -30,6 +32,8 @@ void CardEditionController::showCardEditWindow(QUuid id) {
     editionWidget->show();
 
     widget = editionWidget;
+
+    connect(widget, &QmlWidget::closed, this, [this]{widget = Q_NULLPTR;});
 }
 
 void CardEditionController::closeWindow() {
