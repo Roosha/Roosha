@@ -19,6 +19,7 @@
 package com.github.roosha.server;
 
 import com.github.roosha.proto.ChangesProto.Change;
+import com.github.roosha.proto.CommonsProto;
 import com.github.roosha.proto.RooshaServiceGrpc.RooshaServiceImplBase;
 import com.github.roosha.proto.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.TranslationServiceProto.Translations;
@@ -77,6 +78,12 @@ public class RooshaRpcService extends RooshaServiceImplBase {
         this.worldStorage = worldStorage;
     }
 
+    @Override
+    public void ping(Void request, StreamObserver<Void> responseObserver) {
+        responseObserver.onNext(Void.getDefaultInstance());
+        responseObserver.onCompleted();
+    }
+
 
     @Override
     public void translate(TranslationRequest request, StreamObserver<Translations> responseObserver) {
@@ -114,7 +121,8 @@ public class RooshaRpcService extends RooshaServiceImplBase {
             responseObserver.onCompleted();
 
             log.debug(RPC_COMPLETION_LOG_FMT_STRING, "registrate", request, response);
-        } else {
+        }
+        else {
             throw ErrorsStatusExceptions.registrationFailure();
         }
 
@@ -129,7 +137,8 @@ public class RooshaRpcService extends RooshaServiceImplBase {
             responseObserver.onCompleted();
 
             log.debug(RPC_COMPLETION_LOG_FMT_STRING, "authorize", request, response);
-        } else {
+        }
+        else {
             throw ErrorsStatusExceptions.authorizationFailure();
         }
     }
@@ -140,6 +149,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
         return new StreamObserver<Change>() {
             private final List<Change> world = new LinkedList<>();
+
             @Override
             public void onNext(Change value) {
                 world.add(value);
@@ -174,6 +184,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
     /**
      * Extract userId of caller if call is authorized, throw {@link ErrorsStatusExceptions#expiredAuthToken()} otherwise.
+     *
      * @return valid id of authorized user who made the request
      */
     private long requireCallerUserId() throws StatusRuntimeException {
