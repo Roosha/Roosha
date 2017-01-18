@@ -16,7 +16,7 @@
 namespace roosha {
 
 static const char* RooshaService_method_names[] = {
-  "/roosha.RooshaService/ping",
+  "/roosha.RooshaService/knock",
   "/roosha.RooshaService/registrate",
   "/roosha.RooshaService/authorize",
   "/roosha.RooshaService/translate",
@@ -31,7 +31,7 @@ std::unique_ptr< RooshaService::Stub> RooshaService::NewStub(const std::shared_p
 }
 
 RooshaService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
-  : channel_(channel), rpcmethod_ping_(RooshaService_method_names[0], ::grpc::RpcMethod::NORMAL_RPC, channel)
+  : channel_(channel), rpcmethod_knock_(RooshaService_method_names[0], ::grpc::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_registrate_(RooshaService_method_names[1], ::grpc::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_authorize_(RooshaService_method_names[2], ::grpc::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_translate_(RooshaService_method_names[3], ::grpc::RpcMethod::NORMAL_RPC, channel)
@@ -40,12 +40,12 @@ RooshaService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& chan
   , rpcmethod_loadChanges_(RooshaService_method_names[6], ::grpc::RpcMethod::SERVER_STREAMING, channel)
   {}
 
-::grpc::Status RooshaService::Stub::ping(::grpc::ClientContext* context, const ::roosha::Void& request, ::roosha::Void* response) {
-  return ::grpc::BlockingUnaryCall(channel_.get(), rpcmethod_ping_, context, request, response);
+::grpc::Status RooshaService::Stub::knock(::grpc::ClientContext* context, const ::roosha::Void& request, ::roosha::Void* response) {
+  return ::grpc::BlockingUnaryCall(channel_.get(), rpcmethod_knock_, context, request, response);
 }
 
-::grpc::ClientAsyncResponseReader< ::roosha::Void>* RooshaService::Stub::AsyncpingRaw(::grpc::ClientContext* context, const ::roosha::Void& request, ::grpc::CompletionQueue* cq) {
-  return new ::grpc::ClientAsyncResponseReader< ::roosha::Void>(channel_.get(), cq, rpcmethod_ping_, context, request);
+::grpc::ClientAsyncResponseReader< ::roosha::Void>* RooshaService::Stub::AsyncknockRaw(::grpc::ClientContext* context, const ::roosha::Void& request, ::grpc::CompletionQueue* cq) {
+  return new ::grpc::ClientAsyncResponseReader< ::roosha::Void>(channel_.get(), cq, rpcmethod_knock_, context, request);
 }
 
 ::grpc::Status RooshaService::Stub::registrate(::grpc::ClientContext* context, const ::roosha::Credentials& request, ::roosha::AuthenticationToken* response) {
@@ -102,7 +102,7 @@ RooshaService::Service::Service() {
       RooshaService_method_names[0],
       ::grpc::RpcMethod::NORMAL_RPC,
       new ::grpc::RpcMethodHandler< RooshaService::Service, ::roosha::Void, ::roosha::Void>(
-          std::mem_fn(&RooshaService::Service::ping), this)));
+          std::mem_fn(&RooshaService::Service::knock), this)));
   AddMethod(new ::grpc::RpcServiceMethod(
       RooshaService_method_names[1],
       ::grpc::RpcMethod::NORMAL_RPC,
@@ -138,7 +138,7 @@ RooshaService::Service::Service() {
 RooshaService::Service::~Service() {
 }
 
-::grpc::Status RooshaService::Service::ping(::grpc::ServerContext* context, const ::roosha::Void* request, ::roosha::Void* response) {
+::grpc::Status RooshaService::Service::knock(::grpc::ServerContext* context, const ::roosha::Void* request, ::roosha::Void* response) {
   (void) context;
   (void) request;
   (void) response;

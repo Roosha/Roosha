@@ -141,19 +141,19 @@ void protobuf_AddDesc_roosha_5fservice_2eproto() {
     "\003(\t\022\017\n\007example\030\002 \003(\t\022-\n\010provider\030\003 \001(\0162\033"
     ".roosha.TranslationProvider*P\n\023Translati"
     "onProvider\022\013\n\007UNKNOWN\020\000\022\025\n\021YANDEX_DICTIO"
-    "NARY\020\001\022\025\n\021YANDEX_TRANSLATOR\020\0022\216\003\n\rRoosha"
-    "Service\022\"\n\004ping\022\014.roosha.Void\032\014.roosha.V"
-    "oid\022>\n\nregistrate\022\023.roosha.Credentials\032\033"
-    ".roosha.AuthenticationToken\022=\n\tauthorize"
-    "\022\023.roosha.Credentials\032\033.roosha.Authentic"
-    "ationToken\022=\n\ttranslate\022\032.roosha.Transla"
-    "tionRequest\032\024.roosha.Translations\022=\n\027pro"
-    "poseUserTranslations\022\024.roosha.Translatio"
-    "ns\032\014.roosha.Void\022-\n\013saveChanges\022\016.roosha"
-    ".Change\032\014.roosha.Void(\001\022-\n\013loadChanges\022\014"
-    ".roosha.Void\032\016.roosha.Change0\001B7\n\027com.gi"
-    "thub.roosha.protoB\027TranslationServicePro"
-    "toH\001\370\001\000b\006proto3", 815);
+    "NARY\020\001\022\025\n\021YANDEX_TRANSLATOR\020\0022\217\003\n\rRoosha"
+    "Service\022#\n\005knock\022\014.roosha.Void\032\014.roosha."
+    "Void\022>\n\nregistrate\022\023.roosha.Credentials\032"
+    "\033.roosha.AuthenticationToken\022=\n\tauthoriz"
+    "e\022\023.roosha.Credentials\032\033.roosha.Authenti"
+    "cationToken\022=\n\ttranslate\022\032.roosha.Transl"
+    "ationRequest\032\024.roosha.Translations\022=\n\027pr"
+    "oposeUserTranslations\022\024.roosha.Translati"
+    "ons\032\014.roosha.Void\022-\n\013saveChanges\022\016.roosh"
+    "a.Change\032\014.roosha.Void(\001\022-\n\013loadChanges\022"
+    "\014.roosha.Void\032\016.roosha.Change0\001B7\n\027com.g"
+    "ithub.roosha.protoB\027TranslationServicePr"
+    "otoH\001\370\001\000b\006proto3", 816);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "roosha_service.proto", &protobuf_RegisterTypes);
   TranslationRequest::default_instance_ = new TranslationRequest();
