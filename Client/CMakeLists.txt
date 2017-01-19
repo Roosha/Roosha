@@ -84,7 +84,8 @@ set(ROOSHA_HEADERS Core/centralcontroller.h
         GUI/authentication_controller.h
         GUI/system_tray.h
         GUI/cardeditioncontroller.h
-        Network/preferences.h)
+        Network/preferences.h
+        Network/error_status.h)
 
 set(ROOSHA_SOURCES main.cpp
         Core/centralcontroller.cpp
