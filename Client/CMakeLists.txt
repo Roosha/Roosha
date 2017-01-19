@@ -1,46 +1,24 @@
 cmake_minimum_required(VERSION 3.5.1)
 
-project(RooshaClient)
+project(roosha.client)
 
 set(CMAKE_CXX_STANDARD 11)
 
-#------------------Prepare Qt related variables
-#TODO: come up with more convenient way to set qt installation path
-set(CMAKE_PREFIX_PATH  $ENV{HOME}/.Qt/5.7/gcc_64)
-set(QT5_USED_MODULES Qml Quick Widgets Core QuickWidgets QuickControls2 Concurrent)
-#-----------------/Prepare Qt related variables
-
 #------------------------ QHotkey
-#    TODO: use QHotkey as subdirectory with it's own CMakeLists.txt
-set(QHK_HEADERS lib/QHotkey/qhotkey_p.h lib/QHotkey/qhotkey.h)
-
-set(QHK_SOURCES lib/QHotkey/qhotkey.cpp)
-if (WIN32)
-    #    TODO: LIBS += -lUser32
-    set(QHK_SOURCES ${QHK_SOURCES} lib/QHotkey/qhotkey_win.cpp)
-elseif(APPLE)
-    #    TODO: LIBS += -framework Carbon
-    set(QHK_SOURCES ${QHK_SOURCES} lib/QHotkey/qhotkey_mac.cpp)
-elseif(UNIX)
-    set(QHK_SOURCES ${QHK_SOURCES} lib/QHotkey/qhotkey_x11.cpp)
-
-    set(QT5_USED_MODULES ${QT5_USED_MODULES} X11Extras)
-
-    find_package(X11 REQUIRED)
-    include_directories(${X11_INCLUDE_DIR})
-    link_libraries(${X11_LIBRARIES})
-else()
-    message(FATAL_ERROR "Unknown platform. Can not build. CMake will exit")
-endif()
-
+add_subdirectory(lib/QHotkey)
 include_directories(lib/QHotkey)
+set(LIBS_TO_LINK ${LIBS_TO_LINK} lib.qhotkey)
 #------------------------- /QHotkey
 
 #-----------------------Qt5
-find_package(Qt5 COMPONENTS ${QT5_USED_MODULES} REQUIRED)
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+
+#TODO: come up with more convenient way to set qt installation path
+set(CMAKE_PREFIX_PATH $ENV{HOME}/.Qt/5.7/gcc_64)
+
+set(QT5_USED_MODULES Qml Quick Widgets Core QuickWidgets QuickControls2 Concurrent)
+find_package(Qt5 COMPONENTS ${QT5_USED_MODULES} REQUIRED)
 #----------------------/Qt5
 
 
@@ -120,6 +98,6 @@ set(HEADERS ${QHK_HEADERS} ${ROOSHA_HEADERS} ${PROTO_HEADERS})
 set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES})
 qt5_add_resources(RESOURCES ${ROOSHA_RESOURCES})
 
-add_executable(roosha ${SOURCES} ${RESOURCES})
-
-qt5_use_modules(roosha ${QT5_USED_MODULES})
+add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})
+target_link_libraries(${PROJECT_NAME} ${LIBS_TO_LINK})
+qt5_use_modules(${PROJECT_NAME} ${QT5_USED_MODULES})
