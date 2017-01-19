@@ -2,7 +2,7 @@
 #define AUTHENTICATIONCONTROLLER_H
 
 #include <QObject>
-#include <QQuickWidget>
+#include "GUI/QmlWidget.h"
 #include <QVariant>
 
 #include "Helpers/configuremanager.h"
@@ -42,8 +42,8 @@ class AuthenticationController : public QObject {
  signals:
     void stateChanged(AuthenticationState state);
  private:
-    QQuickWidget *loginWidget_;
-    QQuickWidget *registerWidget_;
+    QmlWidget *loginWidget_;
+    QmlWidget *registerWidget_;
 
     QVariantMap credentials_;
 

@@ -63,7 +63,8 @@ set(ROOSHA_HEADERS Core/centralcontroller.h
         GUI/system_tray.h
         GUI/cardeditioncontroller.h
         Network/preferences.h
-        Network/error_status.h)
+        Network/error_status.h
+        GUI/QmlWidget.h)
 
 set(ROOSHA_SOURCES main.cpp
         Core/centralcontroller.cpp
@@ -88,7 +89,8 @@ set(ROOSHA_SOURCES main.cpp
         Test/Core/changes/worldtest.cpp
         GUI/cardlistcontroller.cpp
         GUI/authentication_controller.cpp
-        GUI/cardeditioncontroller.cpp)
+        GUI/cardeditioncontroller.cpp
+        GUI/QmlWidget.cpp )
 
 set(ROOSHA_RESOURCES QML/qml.qrc
         Img/img.qrc)

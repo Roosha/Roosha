@@ -5,7 +5,7 @@
 #include <QtGlobal>
 #include <QMap>
 #include <QSharedPointer>
-#include <QQuickWidget>
+#include "GUI/QmlWidget.h"
 #include "Core/translation.h"
 #include "Core/world.h"
 #include "Core/ichange.h"
@@ -32,7 +32,7 @@ class CardListController : public QObject {
     void applyPulledChanges(quint32 requestId, ChangeList pulledChanges);
 
  private:
-    QQuickWidget *widget_;
+    QmlWidget *widget_;
     //Translations data;
 };
 
