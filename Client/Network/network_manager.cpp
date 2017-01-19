@@ -18,7 +18,6 @@ NetworkManager::NetworkManager(QObject *parent) :
         QObject(parent),
         currentId_(MINIMAL_PUBLIC_RPC_ID),
         authenticationManager_(new AuthenticationManager(this)) {
-
     qDebug("NetworkManager created");
 }
 

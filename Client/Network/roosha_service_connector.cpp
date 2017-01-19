@@ -13,22 +13,18 @@
 #error DEBUG_CALL macro is already defined
 #endif // DEBUG_CALL
 
-using ProtobufConverter::changeFromProtobuf;
-using ProtobufConverter::grpcStatusCodeToCString;
+using namespace ProtobufConverter;
 
-RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
+RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *authNamager) :
+        QObject(authNamager),
         isConnectedToServer_(true),
         responseListener_(new AsyncRpcResponseListener(this)),
-        authManager_(m) {
+        authManager_(authNamager) {
     qDebug("Create RooshaServiceConnector");
 
     auto channel = grpc::CreateChannel(ROOSHA_SERVER_ADDRESS, grpc::InsecureChannelCredentials());
     stub_ = roosha::RooshaService::NewStub(channel);
 
-    QObject::connect(responseListener_, &AsyncRpcResponseListener::finished,
-                     responseListener_, &AsyncRpcResponseListener::deleteLater);
-
-    responseListener_->setParent(this);
     responseListener_->start();
 
     knock();
@@ -36,6 +32,9 @@ RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
 
 RooshaServiceConnector::~RooshaServiceConnector() {
     qDebug("Destroy RooshaServiceConnector");
+    responseListener_->requestInterruption();
+    knock(); // to guarantee immediate exit.
+    responseListener_->wait();
 }
 
 void RooshaServiceConnector::translate(TranslateAsyncCall *call) {
@@ -103,10 +102,10 @@ void RooshaServiceConnector::receiveResponse(RpcAsyncCall *call) {
     call->verify(authManager_);
 }
 
-void RooshaServiceConnector::knock() {
+void RooshaServiceConnector::knock(quint32 timeout) {
     qDebug("RooshaServiceConnector::knock called");
 
-    auto call = new KnockAsyncCall(PING_REQUEST_ID, PING_INTERVAL_MILLIS);
+    auto call = new KnockAsyncCall(PING_REQUEST_ID, timeout);
     auto responseReader = stub_->Asyncknock(&call->context_, call->request_, &completionQueue_);
     responseReader->Finish(&call->response_, &call->status_, call);
 }
@@ -123,7 +122,7 @@ void RooshaServiceConnector::processStatus(grpc::Status status, bool forPingCall
             qDebug("============emit connectionRestored()");
             emit connectionRestored();
         }
-    } else {
+    } else if (errorStatusFromGrpc(status) == NO_CONNECTION || errorStatusFromGrpc(status) == DEADLINE_EXCEEDED) {
         if (isConnectedToServer_.fetchAndStoreAcquire(false)) {
             qDebug("============emit connectionBroken(\"%s\")", status.error_message().c_str());
             emit connectionBroken(QString::fromStdString(status.error_message()));
@@ -132,21 +131,23 @@ void RooshaServiceConnector::processStatus(grpc::Status status, bool forPingCall
             }
         }
         if (forPingCall) {
-            QTimer::singleShot(PING_INTERVAL_MILLIS, this, &RooshaServiceConnector::knock);
+            QTimer::singleShot(PING_INTERVAL_MILLIS, this, [this] { knock(); });
         }
     }
 }
 
-AsyncRpcResponseListener::AsyncRpcResponseListener(RooshaServiceConnector *r) :
-        connector_(r) {
+AsyncRpcResponseListener::AsyncRpcResponseListener(RooshaServiceConnector *connector) :
+        QThread(connector),
+        connector_(connector) {
     qDebug("Create AsyncRpcResponseListener");
 }
 
 void AsyncRpcResponseListener::run() {
+    isInterruptionRequested();
     qDebug("AsyncRpcResponseListener::run: start listening");
     void *callLabel;
     bool ok;
-    while (connector_->completionQueue_.Next(&callLabel, &ok)) {
+    while (connector_->completionQueue_.Next(&callLabel, &ok) && !isInterruptionRequested()) {
         auto call = static_cast<RpcAsyncCall *>(callLabel);
         qDebug("AsyncRpcResponseListener::run: receive response for call %d. Status: %s, Message'%s'",
                call->id_,

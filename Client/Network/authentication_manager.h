@@ -25,7 +25,7 @@ class NetworkManager;
 class AuthenticationManager : public QObject {
  Q_OBJECT
  public:
-    AuthenticationManager(NetworkManager *n);
+    AuthenticationManager(NetworkManager *networkManager);
     ~AuthenticationManager();
 
     static std::string hashPassword(QString password);

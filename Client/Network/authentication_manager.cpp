@@ -27,16 +27,27 @@
 
 using namespace ProtobufConverter;
 
-AuthenticationManager::AuthenticationManager(NetworkManager *n) :
-        QObject(),
+AuthenticationManager::AuthenticationManager(NetworkManager *networkManager) :
+        QObject(networkManager),
         state_(AWAIT_CREDENTIALS),
         connector_(new RooshaServiceConnector(this)),
-        netManager_(n) {
+        netManager_(networkManager) {
     qDebug("AuthenticationManager created");
     connect(connector_, &RooshaServiceConnector::connectionBroken,
             this, &AuthenticationManager::onConnectionBroken);
     connect(connector_, &RooshaServiceConnector::connectionRestored,
             this, &AuthenticationManager::onConnectionRestored);
+
+    connect(connector_, &RooshaServiceConnector::connectionBroken,
+            netManager_, [networkManager](QString desctirion) {
+                emit
+                networkManager->connectionBroken(desctirion);
+            });
+    connect(connector_, &RooshaServiceConnector::connectionRestored,
+            netManager_, [networkManager] {
+                emit
+                networkManager->connectionRestored();
+            });
 }
 
 AuthenticationManager::~AuthenticationManager() {
@@ -197,10 +208,28 @@ void AuthenticationManager::processAuthorizeOrRegistrateResponse(AuthorizeOrRegi
         ConfigureManager::Instance().setToken(QString::fromStdString(call->response_.token()));
 
         retryAllQueuedCalls();
-    } else if (errorStatusFromGrpc(call->status_) != RPCErrorStatus::NOT_AUTHENTICATED) {
+    } else {
         setState(AWAIT_CREDENTIALS);
         ConfigureManager::Instance().setToken("");
-        failAllQueuedCalls(NOT_AUTHENTICATED);
+
+        //@formatter:off
+        switch (errorStatusFromGrpc(call->status_)) {
+            case NOT_AUTHENTICATED:
+                failAllQueuedCalls(NOT_AUTHENTICATED);
+                break;
+            case DEADLINE_EXCEEDED:
+            case NO_CONNECTION:
+                failAllQueuedCalls(NO_CONNECTION);
+                break;
+            case ALREADY_IN_AUTHNTICATION_PROCESS:
+                throw std::logic_error("Call with illegal status ALREADY_IN_AUTHNTICATION_PROCESS passed in "
+                                               "AuthenticationManager::processAuthorizeOrRegistrateResponse ");
+            case UNKNOWN:
+                qWarning("AuthenticationManager::processAuthorizeOrRegistrateResponse: "
+                                 "Unknown error type for call %d. Ignore id", call->id_);
+                break;
+        }
+        //@formatter:on
     }
 }
 
@@ -236,6 +265,7 @@ void AuthenticationManager::failAllQueuedCalls(RPCErrorStatus status) {
     }
     callsQueue_.clear();
 }
+
 void AuthenticationManager::retryAllQueuedCalls() {
     for (auto curCall : callsQueue_) {
         qDebug("retry call with id %d", curCall->id_);
