@@ -1,3 +1,4 @@
+#include <QObject>
 #include <QSharedPointer>
 #include <QMutexLocker>
 #include <QCryptographicHash>
@@ -26,15 +27,27 @@
 
 using namespace ProtobufConverter;
 
-const grpc::string AuthenticationManager::TOKEN_METADATA_KEY = "roosha-auth-token";
-const quint32 AuthenticationManager::TECHNICAL_REQUEST_ID = 0u;
-
-AuthenticationManager::AuthenticationManager(NetworkManager *n) :
+AuthenticationManager::AuthenticationManager(NetworkManager *networkManager) :
+        QObject(networkManager),
         state_(AWAIT_CREDENTIALS),
         connector_(new RooshaServiceConnector(this)),
-        netManager_(n) {
-
+        netManager_(networkManager) {
     qDebug("AuthenticationManager created");
+    connect(connector_, &RooshaServiceConnector::connectionBroken,
+            this, &AuthenticationManager::onConnectionBroken);
+    connect(connector_, &RooshaServiceConnector::connectionRestored,
+            this, &AuthenticationManager::onConnectionRestored);
+
+    connect(connector_, &RooshaServiceConnector::connectionBroken,
+            netManager_, [networkManager](QString desctirion) {
+                emit
+                networkManager->connectionBroken(desctirion);
+            });
+    connect(connector_, &RooshaServiceConnector::connectionRestored,
+            netManager_, [networkManager] {
+                emit
+                networkManager->connectionRestored();
+            });
 }
 
 AuthenticationManager::~AuthenticationManager() {
@@ -49,15 +62,22 @@ void AuthenticationManager::authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall
     DEBUG_CALL("authorizeOrRegistrate")
     QMutexLocker lock(&stateMutex_);
 
+    //@formatter:off
     switch (state_) {
         case AWAIT_CREDENTIALS:
-        case AUTHENTICATED:setState(AWAIT_AUTHENTICATION);
+        case AUTHENTICATED:
+            setState(AWAIT_AUTHENTICATION);
             ConfigureManager::Instance().setToken("");
             call->send(connector_);
             break;
-        case AWAIT_AUTHENTICATION:call->fail(netManager_, RPCErrorStatus::ALREADY_IN_AUTHNTICATION_PROCESS);
+        case AWAIT_AUTHENTICATION:
+            call->fail(netManager_, RPCErrorStatus::ALREADY_IN_AUTHNTICATION_PROCESS);
+            break;
+        case AWAIT_CONNECTION:
+            call->fail(netManager_, RPCErrorStatus::NO_CONNECTION);
             break;
     }
+    //@formatter:on
 }
 
 void AuthenticationManager::sendWithMetadata(AuthenticatedAsyncCall *call) {
@@ -75,6 +95,8 @@ void AuthenticationManager::sendWithMetadata(AuthenticatedAsyncCall *call) {
         callsQueue_.enqueue(call);
     } else if (state_ == AWAIT_CREDENTIALS) {
         call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
+    } else if (state_ == AWAIT_CONNECTION) {
+        call->fail(netManager_, RPCErrorStatus::NO_CONNECTION);
     } else {
         qWarning("Unexpected AuthenticationManager::state_ value: %d", state_);
     }
@@ -87,13 +109,15 @@ void AuthenticationManager::receiveAuthenticatedCall(AuthenticatedAsyncCall *cal
         return;
     } else if (call->status_.error_code() != grpc::StatusCode::UNAUTHENTICATED) {
         call->fail(netManager_);
+        return;
     }
 
     // -----------------Authentication error-------------
     QMutexLocker lock(&stateMutex_);
     qDebug("AuthenticationManager::receiveAuthenticatedCall: authentication error");
+    //@formatter:off
     switch (state_) {
-        case AuthenticationManager::AUTHENTICATED:
+        case AUTHENTICATED:
             if (tryToUpdateToken()) {
                 DEBUG_QUEUE_PUT("AuthenticationManager::receiveAuthenticatedCall")
                 callsQueue_.enqueue(call);
@@ -101,20 +125,24 @@ void AuthenticationManager::receiveAuthenticatedCall(AuthenticatedAsyncCall *cal
                 call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
             }
             break;
-        case AuthenticationManager::AWAIT_AUTHENTICATION:DEBUG_QUEUE_PUT(
-                    "AuthenticationManager::receiveAuthenticatedCall")
+        case AWAIT_AUTHENTICATION:
+            DEBUG_QUEUE_PUT("AuthenticationManager::receiveAuthenticatedCall")
             callsQueue_.enqueue(call);
             break;
-        case AuthenticationManager::AWAIT_CREDENTIALS:call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
+        case AWAIT_CONNECTION:
+        case AWAIT_CREDENTIALS:
+            call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
             break;
     }
+    //@formatter:on
 }
 
 void AuthenticationManager::receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegistrateAsyncCall *call) {
+    //TODO: handle network failures.
     DEBUG_CALL("receiveAuthorizeOrRegistrateResponse")
-    processAuthorizeOrRegitrateResponse(call);
+    processAuthorizeOrRegistrateResponse(call);
 
-    if (call->id_ != TECHNICAL_REQUEST_ID) {
+    if (call->id_ != TECHNICAL_AUTHENTICATION_RPC_ID) {
         if (call->status_.ok()) {
             call->succeed(netManager_);
         } else {
@@ -126,15 +154,22 @@ void AuthenticationManager::receiveAuthorizeOrRegistrateResponse(AuthorizeOrRegi
 }
 
 void AuthenticationManager::setState(AuthenticationManager::State state) {
+    //@formatter:off
     switch (state) {
-        case AuthenticationManager::AUTHENTICATED:qDebug("AuthenticationManager: toggle state to AUTHENTICATED");
+        case AuthenticationManager::AUTHENTICATED :
+            qDebug("AuthenticationManager: toggle state to AUTHENTICATED");
             break;
         case AuthenticationManager::AWAIT_AUTHENTICATION:
             qDebug("AuthenticationManager: toggle state to AWAIT_AUTHENTICATION");
             break;
-        case AuthenticationManager::AWAIT_CREDENTIALS:qDebug("AuthenticationManager: toggle state to AWAIT_CREDENTIALS");
+        case AuthenticationManager::AWAIT_CREDENTIALS :
+            qDebug("AuthenticationManager: toggle state to AWAIT_CREDENTIALS");
+            break;
+        case AWAIT_CONNECTION:
+            qDebug("AuthenticationManager: toggle state to AWAIT_CONNECTION");
             break;
     }
+    //@formatter:on
     state_ = state;
 }
 
@@ -145,7 +180,7 @@ bool AuthenticationManager::tryToUpdateToken() {
 
     if (login != "") {
         qDebug("AuthenticationManager::tryToUpdateToken: try to authorize with credentials from config");
-        AuthorizeOrRegistrateAsyncCall *call = new AuthorizeAsyncCall(TECHNICAL_REQUEST_ID, DEFAULT_TIMEOUT_MILLIS);
+        auto call = new AuthorizeAsyncCall(TECHNICAL_AUTHENTICATION_RPC_ID, DEFAULT_TIMEOUT_MILLIS);
         setState(AWAIT_AUTHENTICATION);
         call->send(connector_);
         return true;
@@ -156,11 +191,11 @@ bool AuthenticationManager::tryToUpdateToken() {
     }
 }
 
-void AuthenticationManager::processAuthorizeOrRegitrateResponse(AuthorizeOrRegistrateAsyncCall *call) {
-    DEBUG_CALL("processAuthorizeOrRegitrateResponse");
+void AuthenticationManager::processAuthorizeOrRegistrateResponse(AuthorizeOrRegistrateAsyncCall *call) {
+    DEBUG_CALL("processAuthorizeOrRegistrateResponse");
     QMutexLocker lock(&stateMutex_);
     if (state_ != AWAIT_AUTHENTICATION) {
-        qWarning("Illegal state %d when received AuthorizeOrRegistrateAsyncCall with id %du. Ignore it",
+        qWarning("Illegal state %d when received AuthorizeOrRegistrateAsyncCall with id %d. Ignore it",
                  state_,
                  call->id_);
         return;
@@ -172,18 +207,71 @@ void AuthenticationManager::processAuthorizeOrRegitrateResponse(AuthorizeOrRegis
         ConfigureManager::Instance().setPasswordHash(QString::fromStdString(call->request_.passwordhash()));
         ConfigureManager::Instance().setToken(QString::fromStdString(call->response_.token()));
 
-        for (auto curCall: callsQueue_) {
-            qDebug("AuthenticationManager::processAuthorizeOrRegitrateResponse: retry call %d", call->id_);
-            curCall->send(connector_);
-        }
+        retryAllQueuedCalls();
     } else {
         setState(AWAIT_CREDENTIALS);
         ConfigureManager::Instance().setToken("");
-        for (auto curCall: callsQueue_) {
-            qDebug("AuthenticationManager::processAuthorizeOrRegitrateResponse: fail call %d", call->id_);
-            curCall->fail(netManager_);
+
+        //@formatter:off
+        switch (errorStatusFromGrpc(call->status_)) {
+            case NOT_AUTHENTICATED:
+                failAllQueuedCalls(NOT_AUTHENTICATED);
+                break;
+            case DEADLINE_EXCEEDED:
+            case NO_CONNECTION:
+                failAllQueuedCalls(NO_CONNECTION);
+                break;
+            case ALREADY_IN_AUTHNTICATION_PROCESS:
+                throw std::logic_error("Call with illegal status ALREADY_IN_AUTHNTICATION_PROCESS passed in "
+                                               "AuthenticationManager::processAuthorizeOrRegistrateResponse ");
+            case UNKNOWN:
+                qWarning("AuthenticationManager::processAuthorizeOrRegistrateResponse: "
+                                 "Unknown error type for call %d. Ignore id", call->id_);
+                break;
         }
+        //@formatter:on
     }
+}
+
+void AuthenticationManager::onConnectionBroken() {
+    QMutexLocker stateLock(&stateMutex_);
+    qDebug("AuthenticationManager::onConnectionBroken");
+
+    //@formatter:off
+    switch (state_) {
+        case AUTHENTICATED:
+        case AWAIT_CREDENTIALS:
+        case AWAIT_CONNECTION:
+            return;
+        case AWAIT_AUTHENTICATION:
+            setState(AWAIT_CONNECTION);
+            failAllQueuedCalls(NO_CONNECTION);
+    }
+    //@formatter:on
+}
+
+void AuthenticationManager::onConnectionRestored() {
+    QMutexLocker stateLock(&stateMutex_);
+
+    if (state_ == AWAIT_CONNECTION) {
+        tryToUpdateToken();
+    }
+}
+
+void AuthenticationManager::failAllQueuedCalls(RPCErrorStatus status) {
+    for (auto curCall : callsQueue_) {
+        qDebug("fail call with id %d with status %d", curCall->id_, status);
+        curCall->fail(netManager_, status);
+    }
+    callsQueue_.clear();
+}
+
+void AuthenticationManager::retryAllQueuedCalls() {
+    for (auto curCall : callsQueue_) {
+        qDebug("retry call with id %d", curCall->id_);
+        curCall->send(connector_);
+    }
+    callsQueue_.clear();
 }
 
 #ifdef DEBUG_CALL

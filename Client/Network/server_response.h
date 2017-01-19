@@ -7,6 +7,8 @@
 
 #include <grpc++/grpc++.h>
 
+#include "preferences.h"
+#include "error_status.h"
 #include <Core/ichange.h>
 #include "Proto/roosha_service.pb.h"
 #include "Proto/commons.pb.h"
@@ -14,16 +16,6 @@
 class NetworkManager;
 class RooshaServiceConnector;
 class AuthenticationManager;
-
-enum RPCErrorStatus {
-    UNKNOWN,
-    DEADLINE_EXCEEDED,
-    NOT_AUTHENTICATED,
-    ALREADY_IN_AUTHNTICATION_PROCESS,
-
-};
-
-Q_DECLARE_METATYPE(RPCErrorStatus)
 
 /**
  * Base struct for all rpc data. It should be used to hold the all information about call in grpc CompletionQueue.
@@ -48,7 +40,7 @@ struct RpcAsyncCall {
 
     virtual void authenticate(AuthenticationManager *authManager) = 0;
     virtual void send(RooshaServiceConnector *connector) = 0;
-    void receive(RooshaServiceConnector *connector);
+    virtual void receive(RooshaServiceConnector *connector);
     virtual void verify(AuthenticationManager *authManager) = 0;
 
     /**
@@ -56,7 +48,7 @@ struct RpcAsyncCall {
      */
     virtual void succeed(NetworkManager *netManager) = 0;
 
-    /**
+    virtual /**
      * NOTE: this method will destroy this RpcAsyncCall instance, so do not deal with this object anymore after call.
      */
     void fail(NetworkManager *netManager);
@@ -69,6 +61,21 @@ struct RpcAsyncCall {
     const quint32 id_;
     grpc::ClientContext context_;
     grpc::Status status_;
+};
+
+struct KnockAsyncCall : public RpcAsyncCall {
+    using RpcAsyncCall::RpcAsyncCall;
+
+    void authenticate(AuthenticationManager *authManager) override;
+    void send(RooshaServiceConnector *connector) override;
+    void receive(RooshaServiceConnector *connector) override;
+    void verify(AuthenticationManager *authManager) override;
+    void succeed(NetworkManager *netManager) override;
+    void fail(NetworkManager *netManager) override;
+    void fail(NetworkManager *netManager, RPCErrorStatus status) override;
+
+    roosha::Void request_;
+    roosha::Void response_;
 };
 
 /**

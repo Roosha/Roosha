@@ -1,8 +1,9 @@
 #include <QtDebug>
 #include <QtConcurrent>
 
+#include "preferences.h"
 #include "roosha_service_connector.h"
-#include "server_response.h"
+#include "network_manager.h"
 #include "Helpers/protobuf_converter.h"
 
 #ifndef DEBUG_CALL
@@ -12,31 +13,28 @@
 #error DEBUG_CALL macro is already defined
 #endif // DEBUG_CALL
 
-#ifndef QT_DEBUG
-#define ROOSHA_SERVER_ADDRESS "146.185.178.193:1543"
-#else
-#define ROOSHA_SERVER_ADDRESS "localhost:1543"
-#endif // QT_DEBUG
+using namespace ProtobufConverter;
 
-using ProtobufConverter::changeFromProtobuf;
-
-RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *m) :
+RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *authNamager) :
+        QObject(authNamager),
+        isConnectedToServer_(true),
         responseListener_(new AsyncRpcResponseListener(this)),
-        authManager_(m) {
+        authManager_(authNamager) {
     qDebug("Create RooshaServiceConnector");
 
     auto channel = grpc::CreateChannel(ROOSHA_SERVER_ADDRESS, grpc::InsecureChannelCredentials());
     stub_ = roosha::RooshaService::NewStub(channel);
 
-    QObject::connect(responseListener_, &AsyncRpcResponseListener::finished,
-                     responseListener_, &AsyncRpcResponseListener::deleteLater);
-
-    responseListener_->setParent(this);
     responseListener_->start();
+
+    knock();
 }
 
 RooshaServiceConnector::~RooshaServiceConnector() {
     qDebug("Destroy RooshaServiceConnector");
+    responseListener_->requestInterruption();
+    knock(); // to guarantee immediate exit.
+    responseListener_->wait();
 }
 
 void RooshaServiceConnector::translate(TranslateAsyncCall *call) {
@@ -100,22 +98,61 @@ void RooshaServiceConnector::loadChanges(LoadChangesAsyncCall *call) {
 
 void RooshaServiceConnector::receiveResponse(RpcAsyncCall *call) {
     qDebug("RooshaServiceConnector::receiveResponse: receive response for call %d", call->id_);
+    processStatus(call->status_);
     call->verify(authManager_);
 }
 
-AsyncRpcResponseListener::AsyncRpcResponseListener(RooshaServiceConnector *r) :
-        connector_(r) {
+void RooshaServiceConnector::knock(quint32 timeout) {
+    qDebug("RooshaServiceConnector::knock called");
 
+    auto call = new KnockAsyncCall(PING_REQUEST_ID, timeout);
+    auto responseReader = stub_->Asyncknock(&call->context_, call->request_, &completionQueue_);
+    responseReader->Finish(&call->response_, &call->status_, call);
+}
+
+void RooshaServiceConnector::receivePingResponse(KnockAsyncCall *call) {
+    DEBUG_CALL("RooshaServiceConnector::receivePingResponse");
+    processStatus(call->status_, true);
+    delete call;
+}
+
+void RooshaServiceConnector::processStatus(grpc::Status status, bool forPingCall) {
+    if (status.ok()) {
+        if (!isConnectedToServer_.fetchAndStoreAcquire(true)) {
+            qDebug("============emit connectionRestored()");
+            emit connectionRestored();
+        }
+    } else if (errorStatusFromGrpc(status) == NO_CONNECTION || errorStatusFromGrpc(status) == DEADLINE_EXCEEDED) {
+        if (isConnectedToServer_.fetchAndStoreAcquire(false)) {
+            qDebug("============emit connectionBroken(\"%s\")", status.error_message().c_str());
+            emit connectionBroken(QString::fromStdString(status.error_message()));
+            if (!forPingCall) {
+                knock();
+            }
+        }
+        if (forPingCall) {
+            QTimer::singleShot(PING_INTERVAL_MILLIS, this, [this] { knock(); });
+        }
+    }
+}
+
+AsyncRpcResponseListener::AsyncRpcResponseListener(RooshaServiceConnector *connector) :
+        QThread(connector),
+        connector_(connector) {
     qDebug("Create AsyncRpcResponseListener");
 }
 
 void AsyncRpcResponseListener::run() {
+    isInterruptionRequested();
     qDebug("AsyncRpcResponseListener::run: start listening");
     void *callLabel;
     bool ok;
-    while (connector_->completionQueue_.Next(&callLabel, &ok)) {
+    while (connector_->completionQueue_.Next(&callLabel, &ok) && !isInterruptionRequested()) {
         auto call = static_cast<RpcAsyncCall *>(callLabel);
-        qDebug("AsyncRpcResponseListener::run: receive response for call %d", call->id_);
+        qDebug("AsyncRpcResponseListener::run: receive response for call %d. Status: %s, Message'%s'",
+               call->id_,
+               grpcStatusCodeToCString(call->status_.error_code()),
+               call->status_.error_message().c_str());
         call->receive(connector_);
     }
 }

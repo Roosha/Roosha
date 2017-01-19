@@ -21,6 +21,7 @@ roosha::Change changeToProtobuf(const DeleteElem &change);
 ChangePtr changeFromProtobuf(const roosha::Change &rawChange);
 
 RPCErrorStatus errorStatusFromGrpc(const grpc::Status &rawStatus);
+const char* grpcStatusCodeToCString(const grpc::StatusCode &rawStatus);
 };
 
 #endif // PROTOBUFCONVERTER_H

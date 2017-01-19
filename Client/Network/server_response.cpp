@@ -167,6 +167,33 @@ void LoadChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus statu
     delete this;
 }
 
+void KnockAsyncCall::authenticate(AuthenticationManager *authManager) {
+    throw std::logic_error("KnockAsyncCall::succeed should not be called ever");
+}
+
+void KnockAsyncCall::send(RooshaServiceConnector *connector) {
+    throw std::logic_error("KnockAsyncCall::succeed should not be called ever");
+}
+
+void KnockAsyncCall::receive(RooshaServiceConnector *connector) {
+    connector->receivePingResponse(this);
+}
+
+void KnockAsyncCall::verify(AuthenticationManager *authManager) {
+    throw std::logic_error("KnockAsyncCall::succeed should not be called ever");
+}
+void KnockAsyncCall::succeed(NetworkManager *netManager) {
+    throw std::logic_error("KnockAsyncCall::succeed should not be called ever");
+}
+
+void KnockAsyncCall::fail(NetworkManager *netManager) {
+    throw std::logic_error("KnockAsyncCall::succeed should not be called ever");
+}
+
+void KnockAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
+    throw std::logic_error("KnockAsyncCall::succeed should not be called ever");
+}
+
 #ifdef DEBUG
 #undef DEBUG
 #else

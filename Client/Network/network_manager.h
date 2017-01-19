@@ -9,8 +9,6 @@
 
 class AuthenticationManager;
 
-#define DEFAULT_TIMEOUT_MILLIS 5000
-
 class NetworkManager : public QObject {
  Q_OBJECT
 
@@ -47,6 +45,8 @@ class NetworkManager : public QObject {
     void successLoadChanges(quint32 id, ChangeList changes);
     void failLoadChanges(quint32 id, RPCErrorStatus status);
 
+    void connectionRestored();
+    void connectionBroken(QString description);
  private:
     QAtomicInteger<quint32> currentId_;
     AuthenticationManager *authenticationManager_;

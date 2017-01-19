@@ -7,8 +7,10 @@
 
 #include <memory>
 
+#include "preferences.h"
 #include "authentication_manager.h"
 #include "Proto/roosha_service.grpc.pb.h"
+#include "server_response.h"
 
 class TranslateAsyncCall;
 class ProposeUserTranslationsAsyncCall;
@@ -22,7 +24,7 @@ class AsyncRpcResponseListener;
 class RooshaServiceConnector : public QObject {
  Q_OBJECT
  public:
-    RooshaServiceConnector(AuthenticationManager *m);
+    RooshaServiceConnector(AuthenticationManager *authNamager);
     ~RooshaServiceConnector();
 
     void translate(TranslateAsyncCall *call);
@@ -33,9 +35,21 @@ class RooshaServiceConnector : public QObject {
     void loadChanges(LoadChangesAsyncCall *call);
 
     void receiveResponse(RpcAsyncCall *call);
+ signals:
+    void connectionBroken(QString description);
+    void connectionRestored();
+
  private:
     friend class AsyncRpcResponseListener;
 
+    friend class KnockAsyncCall;
+    void knock(quint32 timeout = PING_INTERVAL_MILLIS);
+    void receivePingResponse(KnockAsyncCall *call);
+
+    void processStatus(grpc::Status status, bool forPingCall = false);
+
+    /// treat as bool
+    QAtomicInt isConnectedToServer_;
     grpc::CompletionQueue completionQueue_;
     std::unique_ptr<roosha::RooshaService::Stub> stub_;
     AsyncRpcResponseListener *responseListener_;
@@ -45,7 +59,7 @@ class RooshaServiceConnector : public QObject {
 class AsyncRpcResponseListener : public QThread {
  Q_OBJECT
  public:
-    AsyncRpcResponseListener(RooshaServiceConnector *r);
+    AsyncRpcResponseListener(RooshaServiceConnector *connector);
 
     void run() Q_DECL_OVERRIDE;
  private:

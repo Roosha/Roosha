@@ -2,6 +2,8 @@
 
 #include <QtDebug>
 
+using ProtobufConverter::grpcStatusCodeToCString;
+
 roosha::Translations ProtobufConverter::translationsToProtobuf(const Translations &translations) {
     roosha::Translations result;
     result.set_source(translations[0]->getSource().toStdString());
@@ -47,8 +49,37 @@ RPCErrorStatus ProtobufConverter::errorStatusFromGrpc(const grpc::Status &rawSta
     switch (rawStatus.error_code()) {
         case grpc::StatusCode::DEADLINE_EXCEEDED: return RPCErrorStatus::DEADLINE_EXCEEDED;
         case grpc::StatusCode::UNAUTHENTICATED: return RPCErrorStatus::NOT_AUTHENTICATED;
-        default: return RPCErrorStatus::UNKNOWN;
+        case grpc::StatusCode::UNAVAILABLE: return RPCErrorStatus::NO_CONNECTION;
+        default:
+            qWarning("Unknown grpc statusCode: %s. Message: '%s'",
+                                       grpcStatusCodeToCString(rawStatus.error_code()),
+                                       rawStatus.error_message().c_str());
+            return RPCErrorStatus::UNKNOWN;
     }
+}
+
+const char *ProtobufConverter::grpcStatusCodeToCString(const grpc::StatusCode &rawStatus) {
+    switch (rawStatus) {
+        case grpc::OK: return "OK";
+        case grpc::CANCELLED: return "CANCELLED";
+        case grpc::UNKNOWN: return "UNKNOWN";
+        case grpc::INVALID_ARGUMENT: return "INVALID_ARGUMENT";
+        case grpc::DEADLINE_EXCEEDED: return "DEADLINE_EXCEEDED";
+        case grpc::NOT_FOUND: return "NOT_FOUND";
+        case grpc::ALREADY_EXISTS: return "ALREADY_EXISTS";
+        case grpc::PERMISSION_DENIED: return "PERMISSION_DENIED";
+        case grpc::UNAUTHENTICATED: return "UNAUTHENTICATED";
+        case grpc::RESOURCE_EXHAUSTED: return "RESOURCE_EXHAUSTED";
+        case grpc::FAILED_PRECONDITION: return "FAILED_PRECONDITION";
+        case grpc::ABORTED: return "ABORTED";
+        case grpc::OUT_OF_RANGE: return "OUT_OF_RANGE";
+        case grpc::UNIMPLEMENTED: return "UNIMPLEMENTED";
+        case grpc::INTERNAL: return "INTERNAL";
+        case grpc::UNAVAILABLE: return "UNAVAILABLE";
+        case grpc::DATA_LOSS: return "DATA_LOSS";
+        case grpc::DO_NOT_USE: return "DO_NOT_USE";
+    }
+    throw std::logic_error(QString::asprintf("Unhandled grpc::StatusCode value: %d", rawStatus).toStdString());
 }
 
 #ifndef DECLARE_CARD_CHANGE_RESULT
@@ -180,3 +211,4 @@ ChangePtr ProtobufConverter::changeFromProtobuf(const roosha::Change &rawChange)
     }
     throw std::logic_error("Unexpected change case: " + rawChange.change_case());
 }
+

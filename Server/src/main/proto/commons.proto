@@ -30,7 +30,7 @@ message Void{}
 
 message Credentials {
 	string login = 1;
-	string passwordHash = 2;	
+	string passwordHash = 2; // SHA3-256
 }
 
 message AuthenticationToken {

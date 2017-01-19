@@ -16,8 +16,8 @@ using ProtobufConverter::translationsToProtobuf;
 
 NetworkManager::NetworkManager(QObject *parent) :
         QObject(parent),
+        currentId_(MINIMAL_PUBLIC_RPC_ID),
         authenticationManager_(new AuthenticationManager(this)) {
-
     qDebug("NetworkManager created");
 }
 
@@ -37,7 +37,7 @@ quint32 NetworkManager::proposeUserTranslations(Translations translations, quint
     DEBUG_CALL("proposeUserTranslations")
     ProposeUserTranslationsAsyncCall *call = new ProposeUserTranslationsAsyncCall(++currentId_, timeoutMills);
     if (translations.size() != 0) {
-        call->request_ = translationsToProtobuf(translations);
+//        call->request_ = translationsToProtobuf(translations);
     }
 
     call->authenticate(authenticationManager_);
