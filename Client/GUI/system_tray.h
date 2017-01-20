@@ -20,7 +20,6 @@ class SystemTray : public QWidget {
     void onShowButtonClicked();
     void onLoginButtonClicked();
     void updateMenu();
-    void showNoConnectionNotification();
 
  signals:
     void closeApplication();
