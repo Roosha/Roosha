@@ -8,6 +8,7 @@ SystemTray::SystemTray(QWidget *parent) : QWidget(parent) {
     createMenu();
 
     trayIcon->show();
+    tray_ = this;
 }
 
 void SystemTray::onCloseButtonClicked() {
@@ -32,17 +33,6 @@ void SystemTray::onShowButtonClicked() {
 
 void SystemTray::onLoginButtonClicked() {
     emit showLoginWindow();
-}
-
-void SystemTray::showNoConnectionNotification() {
-#ifdef Q_OS_WIN
-    // TODO: make normal OSD in linux
-    trayIcon->showMessage(
-        tr("Connection problem"),
-        tr("Sorry, but now network in unavaliable"),
-        QSystemTrayIcon::MessageIcon::Critical,
-        5000);
-#endif
 }
 
 void SystemTray::createMenu() {

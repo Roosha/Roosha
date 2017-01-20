@@ -9,6 +9,11 @@ class SystemTray : public QWidget {
  public:
     SystemTray(QWidget *parent = Q_NULLPTR);
 
+    static SystemTray* tray_;
+    static void Notify(QString title, QString message, bool warning = false) {
+        tray_->trayIcon->showMessage(title, message, warning ? QSystemTrayIcon::Warning : QSystemTrayIcon::Information);
+    }
+
  public slots:
     void onCloseButtonClicked();
     void onTranslateButtonClicked();
