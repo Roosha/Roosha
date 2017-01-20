@@ -57,6 +57,7 @@ void CardListController::pullCards() {
     StateHolder::Instance().setSync(true);
     ConfigureManager::Instance().getNetworkManager()->loadChanges();
 //    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
+    StateHolder::Instance().setSync(false);
     qDebug() << "pull";
 }
 
@@ -64,6 +65,7 @@ void CardListController::pushCards() {
     StateHolder::Instance().setSync(true);
     ConfigureManager::Instance().getNetworkManager()->saveChanges(world_.getChanges());
 //    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
+    StateHolder::Instance().setSync(false);
     qDebug() << "push";
 }
 
