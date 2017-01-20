@@ -4,6 +4,8 @@
 #include <QApplication>
 #include <QClipboard>
 
+SystemTray* SystemTray::tray_ = Q_NULLPTR;
+
 SystemTray::SystemTray(QWidget *parent) : QWidget(parent) {
     createMenu();
 
