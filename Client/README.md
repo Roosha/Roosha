@@ -1,4 +1,6 @@
-### GRPC usage
+## Roosha Client
+
+### How to build client
 
 #### Getting grpc
 We use [grpc](https://github.com/grpc/grpc) for client-server communication, so first of all you need to install grpc to generate
@@ -7,15 +9,6 @@ RPC code. In Java we use Maven plugin to generate code, so you don't need to do 
 In C++ you need to build grpc from sources. To do this, follow
 [official installation guide](https://github.com/grpc/grpc/blob/master/INSTALL.md).
 
-#### Generating sources
-
-To generate RPC code for C++ and update .proto files in Java modules, you need to run make in Proto/ subdirectory:
-```
-cd Proto/
-make clean && make
-```
-
-This will copy .proto files to Java modules to appropriate folder, and generate C++ sources in appropriate folder.
 
 **Note:** you need to `make` generated files whenever you change any .proto file. Also you should not create any other file in `Client/Network/Proto` and `TranslationService/src/main/proto` directories because they will be removed by `make clean`
 
@@ -25,4 +18,32 @@ built it) and do the following:
 ```
 cd third_party/protobuf
 sudo make uninstall && sudo make install
+```
+
+#### Getting Qt 5
+Roosha client is based on [Qt 5](https://www.qt.io/), so you need it to [install](https://www.qt.io/download/) 
+this framework.
+
+In order to simplify build process you can set environment variable to specify path to your Qt installation for CMake.
+```
+export CMAKE_PREFIX_PATH=/path/to/Qt/version/gcc_64
+```
+#### Building project
+
+To build project, create build directory and copy all project files there.
+```
+mkdir build
+cp * build -r
+```
+
+Then you can build project.
+```
+cd build
+cmake . -DCMAKE_PREFIX_PATH=/path/to/Qt/version/gcc_64
+cmake --build . --target roosha.client
+```
+
+And than you can launch the app
+```
+./roosha.client
 ```
