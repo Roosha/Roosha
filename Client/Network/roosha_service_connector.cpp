@@ -33,7 +33,7 @@ RooshaServiceConnector::RooshaServiceConnector(AuthenticationManager *authNamage
 RooshaServiceConnector::~RooshaServiceConnector() {
     qDebug("Destroy RooshaServiceConnector");
     responseListener_->requestInterruption();
-    knock(); // to guarantee immediate exit.
+    knock(0); // to guarantee immediate exit.
     responseListener_->wait();
 }
 
