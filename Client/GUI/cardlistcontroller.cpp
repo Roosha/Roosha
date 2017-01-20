@@ -6,6 +6,9 @@
 #include <QApplication>
 #include <Helpers/qmlconvertation.h>
 #include <QDebug>
+#include <Helpers/StateHolder.h>
+#include <QtCore/QThread>
+#include <QtCore/QTimer>
 
 CardListController::CardListController(QObject *parent)
         : QObject(parent), world_(World::Instance()), widget_(Q_NULLPTR) {
@@ -25,7 +28,7 @@ void CardListController::showCardListWindow() {
     connect(widget_, &QmlWidget::closed, this, [this]{ widget_ = Q_NULLPTR;});
     widget_->rootContext()->setContextProperty("cards", QmlConvertation::prepareToQml(world_.getCards()));
     widget_->rootContext()->setContextProperty("controller", this);
-
+    widget_->rootContext()->setContextProperty("stateHolder",  &StateHolder::Instance());
     widget_->setSource(QUrl(QStringLiteral("qrc:/list/CardList.qml")));
     widget_->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
@@ -51,12 +54,16 @@ void CardListController::createCard() {
 }
 
 void CardListController::pullCards() {
+    StateHolder::Instance().setSync(true);
     ConfigureManager::Instance().getNetworkManager()->loadChanges();
+//    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
     qDebug() << "pull";
 }
 
 void CardListController::pushCards() {
+    StateHolder::Instance().setSync(true);
     ConfigureManager::Instance().getNetworkManager()->saveChanges(world_.getChanges());
+//    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
     qDebug() << "push";
 }
 

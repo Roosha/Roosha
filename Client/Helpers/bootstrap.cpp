@@ -30,4 +30,5 @@ void Bootstrap::run() { // TODO: create all stages of initialisation
     cc_->networkManager = nm;
     cc_->hkListener = hkl;
     cc_->systemTray = sysTray;
+    cc_->stateHolder = &StateHolder::Instance();
 }

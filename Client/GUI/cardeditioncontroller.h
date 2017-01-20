@@ -16,8 +16,8 @@ class CardEditionController : public QObject {
     CardEditionController(QObject *parent = nullptr);
     World &world;
 
-    Q_INVOKABLE void closeWindow();
-    Q_INVOKABLE void saveCard(QString src, QString tarStr, QString exStr, QUuid id);
+    Q_INVOKABLE void closeWindow(QQuickWidget *widget);
+    Q_INVOKABLE void saveCard(QQuickWidget *widget, QString src, QString tarStr, QString exStr, QUuid id);
  signals:
     void showCards();
 
@@ -26,8 +26,10 @@ class CardEditionController : public QObject {
     void showCardEditWindow(QUuid id);
 
  private:
-    QmlWidget *widget;
-    QSharedPointer<Translation> data;
+//    QmlWidget *widget;
+//    QSharedPointer<Translation> data_;
+
+    QMap<QQuickWidget *, QSharedPointer<Translation> > data_;
 };
 
 #endif // CARDCREATIONCONTROLLER_H

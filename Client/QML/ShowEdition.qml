@@ -38,7 +38,7 @@ Rectangle {
             anchors.leftMargin: 10
 
             onClicked: {
-                controller.closeWindow();
+                controller.closeWindow(self);
             }
         }
 
@@ -57,7 +57,7 @@ Rectangle {
             anchors.rightMargin: 10
 
             onClicked: {
-                controller.saveCard(edit.getSource(), edit.getTarget(), edit.getExample(), edit.getId());
+                controller.saveCard(self, edit.getSource(), edit.getTarget(), edit.getExample(), edit.getId());
             }
         }
     }

@@ -24,6 +24,11 @@ CentralController::CentralController() {
 
     qRegisterMetaType<RPCErrorStatus>("RPCErrorStatus");
 
+    connect(networkManager, &NetworkManager::successAuthorize, this, [this](quint32 id) {
+        this->stateHolder->setAuth(true); });
+    connect(networkManager, &NetworkManager::successRegistrate, this, [this](quint32 id) {
+        this->stateHolder->setAuth(true); });
+
     connect(networkManager, &NetworkManager::successAuthorize,
             guiManager, &GUIManager::authenticationSuccess);
     connect(networkManager, &NetworkManager::failAuthorize,

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include <Helpers/StateHolder.h>
 #include "Core/translation.h"
 
 class Bootstrap;
@@ -19,7 +20,6 @@ class CentralController : public QObject {
     friend class ::Bootstrap;
  public:
     CentralController();
-
     void start();
 
  private:
@@ -27,7 +27,9 @@ class CentralController : public QObject {
     NetworkManager *networkManager;
     GUIManager *guiManager;
     HotkeyListener *hkListener;
+    StateHolder *stateHolder;
     QSharedPointer<SystemTray> systemTray;
+
 
  public slots:
     void handleNewWord(QString word);

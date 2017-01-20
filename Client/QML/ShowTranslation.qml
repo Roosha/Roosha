@@ -108,6 +108,7 @@ Rectangle {
 
                         font.family: "Helvetica"
                         text: qsTr("🗋Create")
+                        enabled: stateHolder.auth & !stateHolder.sync
 
                         onClicked: {
                             controller.createCard(self, translationList.currentIndex);

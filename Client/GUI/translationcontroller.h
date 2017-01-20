@@ -25,7 +25,7 @@ class TranslationController : public QObject {
  private:
     void replaceWindows();
 
-    QMap<QQuickWidget *, Translations> data;
+    QMap<QQuickWidget *, Translations> data_;
 };
 
 #endif // TRANSLATIONCONTROLLER_H

@@ -87,6 +87,7 @@ Rectangle {
             onClicked: {
                 controller.createCard();
             }
+            enabled: !stateHolder.sync
         }
 
         Button {
@@ -103,6 +104,8 @@ Rectangle {
             onClicked: {
                 controller.pushCards();
             }
+            enabled: stateHolder.editionWindowOpen == 0
+
         }
 
         Button {
@@ -119,6 +122,7 @@ Rectangle {
             onClicked: {
                 controller.pullCards();
             }
+            enabled: stateHolder.editionWindowOpen == 0
         }
     }
 }

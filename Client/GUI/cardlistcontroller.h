@@ -33,7 +33,6 @@ class CardListController : public QObject {
 
  private:
     QmlWidget *widget_;
-    //Translations data;
 };
 
 #endif // CARDLISTCONTROLLER_H

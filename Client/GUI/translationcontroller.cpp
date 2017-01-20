@@ -4,19 +4,20 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <Helpers/qmlconvertation.h>
+#include <Helpers/StateHolder.h>
 TranslationController::TranslationController(QObject *parent) : QObject(parent) {
 }
 
 void TranslationController::addData(Translations translations) {
     QQuickWidget *translationWidget = new QQuickWidget();
 
-    data.insert(translationWidget, translations);
+    data_.insert(translationWidget, translations);
 
     translationWidget->rootContext()->setContextProperty("trans",
-                                                         QmlConvertation::prepareToQml(data.value(translationWidget)));
+                                                         QmlConvertation::prepareToQml(data_.value(translationWidget)));
     translationWidget->rootContext()->setContextProperty("controller", this);
     translationWidget->rootContext()->setContextProperty("self", translationWidget);
-
+    translationWidget->rootContext()->setContextProperty("stateHolder", &StateHolder::Instance());
     translationWidget->setSource(QUrl(QStringLiteral("qrc:/translation/ShowTranslation.qml")));
     translationWidget->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     translationWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -31,12 +32,17 @@ void TranslationController::addData(Translations translations) {
 
 void TranslationController::closeWindow(QQuickWidget *widget) {
     widget->close();
-    data.remove(widget);
+    data_.remove(widget);
     replaceWindows();
 }
 
 void TranslationController::createCard(QQuickWidget *widget, int index) {
-    emit createNewCard(data[widget][index]);
+    if (data_[widget].size() > 0) {
+        emit createNewCard(data_[widget][index]);
+    } else {
+        QSharedPointer<Translation> emptyData(new Translation());
+        emit createNewCard(emptyData);
+    }
 }
 
 void TranslationController::replaceWindows() {
@@ -44,7 +50,7 @@ void TranslationController::replaceWindows() {
     int spacing = 20;
 
     int number = 0;
-    for (auto widget : data.keys()) {
+    for (auto widget : data_.keys()) {
         int yPos = absTopMargin + (widget->height() + spacing) * (number++);
         int xPos = QApplication::desktop()->screenGeometry().width() - widget->width() - 50;
         widget->move(xPos, yPos);
