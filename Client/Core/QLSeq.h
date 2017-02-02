@@ -12,15 +12,20 @@
 #include <QtMath>
 #include <QtCore/QMap>
 #include <tuple>
+#include <random>
+#include <QList>
 
 class QLSeq;
 class QLKey;
 
-class QLKey : public QObject {
+class QLKey {
     friend class QLSeq;
+    Q_GADGET
 public:
     QLKey();
     QLKey(QByteArray array);
+    QLKey(std::initializer_list<char> list);
+    QLKey(const QLKey& other);
     ~QLKey();
 
     char at(int depth) const;
@@ -28,14 +33,15 @@ public:
     QByteArray toByteArray();
     int size() const;
 
-private:
+//private:
     QVector<char> data;
 };
 
 // --------------------------------------
 
 
-class QLSeq : public QObject{
+class QLSeq {
+    Q_GADGET
 public:
     QLSeq();
     ~QLSeq();
@@ -62,6 +68,9 @@ private:
     QMap<QLKey, QString> tree;
     int base;
     int boundary;
+
+    std::random_device rd;
+    std::mt19937 gen;
 };
 
 

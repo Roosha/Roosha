@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 #------------------------ QHotkey
 add_subdirectory(lib/QHotkey)
 include_directories(lib/QHotkey)
-set(LIBS_TO_LINK ${LIBS_TO_LINK} lib.qhotkey)
+set(LIBS_TO_LINK ${LIBS_TO_LINK} lib.qhotkey )
 #------------------------- /QHotkey
 
 #-----------------------Qt5
@@ -15,7 +15,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 #TODO: come up with more convenient way to set qt installation path
-set(CMAKE_PREFIX_PATH $ENV{HOME}/.Qt/5.7/gcc_64)
+set(CMAKE_PREFIX_PATH $ENV{HOME}/.Qt/5.8/gcc_64)
 
 set(QT5_USED_MODULES Qml Quick Widgets Core QuickWidgets QuickControls2 Concurrent)
 find_package(Qt5 COMPONENTS ${QT5_USED_MODULES} REQUIRED)

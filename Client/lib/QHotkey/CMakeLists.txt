@@ -5,7 +5,7 @@ project(lib.qhotkey)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-set(CMAKE_PREFIX_PATH $ENV{HOME}/.Qt/5.7/gcc_64)
+set(CMAKE_PREFIX_PATH $ENV{HOME}/.Qt/5.8/gcc_64)
 set(QT5_USED_COMPONENTS Gui)
 
 set(HEADERS qhotkey.h qhotkey_p.h)
