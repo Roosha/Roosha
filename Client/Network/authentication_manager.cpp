@@ -66,15 +66,13 @@ void AuthenticationManager::authorizeOrRegistrate(AuthorizeOrRegistrateAsyncCall
     switch (state_) {
         case AWAIT_CREDENTIALS:
         case AUTHENTICATED:
+        case AWAIT_CONNECTION:
             setState(AWAIT_AUTHENTICATION);
             ConfigureManager::Instance().setToken("");
             call->send(connector_);
             break;
         case AWAIT_AUTHENTICATION:
             call->fail(netManager_, RPCErrorStatus::ALREADY_IN_AUTHNTICATION_PROCESS);
-            break;
-        case AWAIT_CONNECTION:
-            call->fail(netManager_, RPCErrorStatus::NO_CONNECTION);
             break;
     }
     //@formatter:on
@@ -88,15 +86,13 @@ void AuthenticationManager::sendWithMetadata(AuthenticatedAsyncCall *call) {
         call->context_.AddMetadata(TOKEN_METADATA_KEY, ConfigureManager::Instance().getToken().toStdString());
     }
 
-    if (state_ == AUTHENTICATED || !call->isAuthenticationRequired()) {
+    if (state_ == AWAIT_CONNECTION || state_ == AUTHENTICATED || !call->isAuthenticationRequired()) {
         call->send(connector_);
     } else if (state_ == AWAIT_AUTHENTICATION) {
         DEBUG_QUEUE_PUT("AuthenticationManager::sendWithMetadata")
         callsQueue_.enqueue(call);
     } else if (state_ == AWAIT_CREDENTIALS) {
         call->fail(netManager_, RPCErrorStatus::NOT_AUTHENTICATED);
-    } else if (state_ == AWAIT_CONNECTION) {
-        call->fail(netManager_, RPCErrorStatus::NO_CONNECTION);
     } else {
         qWarning("Unexpected AuthenticationManager::state_ value: %d", state_);
     }
@@ -222,7 +218,7 @@ void AuthenticationManager::processAuthorizeOrRegistrateResponse(AuthorizeOrRegi
                 failAllQueuedCalls(NO_CONNECTION);
                 break;
             case ALREADY_IN_AUTHNTICATION_PROCESS:
-                throw std::logic_error("Call with illegal status ALREADY_IN_AUTHNTICATION_PROCESS passed in "
+                throw std::logic_error("Call with illegal status ALREADY_IN_AUTHENTICATION_PROCESS passed in "
                                                "AuthenticationManager::processAuthorizeOrRegistrateResponse ");
             case UNKNOWN:
                 qWarning("AuthenticationManager::processAuthorizeOrRegistrateResponse: "
