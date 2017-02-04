@@ -51,13 +51,24 @@ public:
     QMap<QLKey, QString>::const_iterator cend() const;
     int size() const;
 
+    QLKey lastKey();
+    QLKey firstKey();
+
+    QString at(QLKey key);
+    QString at(int index);
+
     void remove(QString element);
     void remove(QLKey key);
 
+    void insertAfter(QLKey key, QString newElement);
+    void insertAfter(int index, QString newElement);
+
+    void insert(QLKey key, QString newElement);
+
+private:
     void insertBetween(QString newElement, QLKey p, QLKey q);
     void insertBetween(QString newElement, int p, int q); // между p-ым и q-тым по счету
 
-private:
     std::tuple<int, QLKey, QLKey> findFreeSpace(QLKey p, QLKey q, int depth = 0);
     QLKey allocate(QLKey p, QLKey q);
     int strategy(int depth);

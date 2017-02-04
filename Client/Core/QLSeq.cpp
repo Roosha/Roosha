@@ -5,6 +5,7 @@
 #include <climits>
 #include <QQueue>
 #include <exception>
+#include <cassert>
 #include "QLSeq.h"
 
 QLKey::QLKey() {}
@@ -55,7 +56,7 @@ int QLKey::size() const {
 // ------------------------------------
 
 
-QLSeq::QLSeq() : base(CHAR_MAX), boundary(CHAR_MAX / 4), gen(std::mt19937(rd())) {
+QLSeq::QLSeq() : base(CHAR_MAX), boundary(CHAR_MAX / 32), gen(std::mt19937(rd())) {
     QLKey begin;
     QLKey end;
     begin.data.push_back(0);
@@ -75,7 +76,7 @@ void QLSeq::remove(QLKey key) {
 }
 
 int QLSeq::size() const {
-    return tree.size();
+    return tree.size() - 2;
 }
 
 QMap<QLKey, QString>::const_iterator QLSeq::cbegin() const {
@@ -86,6 +87,20 @@ QMap<QLKey, QString>::const_iterator QLSeq::cend() const {
     return tree.cend()-1;
 }
 
+void QLSeq::insertAfter(int index, QString newElement) {
+    insertBetween(newElement, index, index+1);
+}
+
+void QLSeq::insertAfter(QLKey key, QString newElement) {
+    auto left = tree.find(key);
+    QLKey right = (left+1).key();
+    insertBetween(newElement, key, right);
+}
+
+void QLSeq::insert(QLKey key, QString newElement) {
+    tree.insert(key, newElement); // TODO: switch to MultiMap in order to resolve collision keys
+}
+
 /**
  * Distance between p and q must be 1
  * @param newElement
@@ -93,9 +108,7 @@ QMap<QLKey, QString>::const_iterator QLSeq::cend() const {
  * @param q
  */
 void QLSeq::insertBetween(QString newElement, int p, int q) {
-    if(q-p != 1) {
-        throw std::invalid_argument("Distance between p and q must be 1");
-    }
+    assert(q-p == 1);
 
     QLKey left, right;
 
@@ -106,6 +119,28 @@ void QLSeq::insertBetween(QString newElement, int p, int q) {
     right = it.key();
 
     insertBetween(newElement, left, right);
+}
+
+QLKey QLSeq::firstKey() {
+    return cbegin().key();
+}
+
+QLKey QLSeq::lastKey() {
+    return (cend()-1).key();
+}
+
+QString QLSeq::at(QLKey key) {
+    auto result = tree.find(key);
+    if(result != tree.end()) {
+        return result.value();
+    } else {
+        throw std::out_of_range("No key");
+    }
+}
+
+QString QLSeq::at(int index) {
+    if(index < 0 or index >= size()) throw std::out_of_range("No index");
+    return (cbegin()+index).value();
 }
 
 QStringList QLSeq::toList() {
@@ -176,7 +211,7 @@ QLKey QLSeq::allocate(QLKey p, QLKey q) {
     std::uniform_int_distribution<int> dis(1, qMin(boundary, qAbs(left.at(d)-right.at(d) ) )-1 );
 
     QLKey newKey;
-    newKey.data.resize(d);
+    newKey.data.resize(d+1);
 
     if(strategy(d) == 1) {
         for(int i = 0; i < d; i++) newKey.data[i] = left.at(i);
