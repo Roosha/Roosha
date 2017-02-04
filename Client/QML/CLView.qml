@@ -47,8 +47,8 @@ Rectangle {
                 width: parent.width
                 text: target
                 wrapMode: Text.WordWrap
-                anchors.top: src.bottom
             }
+                anchors.top: src.bottom
         }
 
         RowLayout {
@@ -67,8 +67,8 @@ Rectangle {
                 text: examples
 
                 wrapMode: Text.WordWrap
-                anchors.top: tar.bottom
             }
+                anchors.top: tar.bottom
         }
         RowLayout {
             Button {
@@ -80,6 +80,11 @@ Rectangle {
                 background: Rectangle {
                     color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
                 }
+
+                enabled: !stateHolder.synchronizationInProgress
+
+                //ToolTip.visible: stateHolder.synchronizationInProgress
+                //ToolTip.text: qsTr("you cannot delete card when synchronization is in progress")
 
                 onClicked: {
                     controller.deleteCard(id);
@@ -95,7 +100,10 @@ Rectangle {
                 background: Rectangle {
                     color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
                 }
+                enabled: !stateHolder.synchronizationInProgress
 
+                //ToolTip.visible: stateHolder.synchronizationInProgress
+                //ToolTip.text: qsTr("you cannot edit card when synchronization is in progress")
                 onClicked: {
                     controller.editCard(id);
                 }

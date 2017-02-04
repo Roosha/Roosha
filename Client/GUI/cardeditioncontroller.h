@@ -26,10 +26,8 @@ class CardEditionController : public QObject {
     void showCardEditWindow(QUuid id);
 
  private:
-//    QmlWidget *widget;
-//    QSharedPointer<Translation> data_;
-
-    QMap<QQuickWidget *, QSharedPointer<Translation> > data_;
+    QMap<QmlWidget *, QUuid> data_edit;
+    QMap<QmlWidget *, QSharedPointer<Translation> > data_create;
 };
 
 #endif // CARDCREATIONCONTROLLER_H

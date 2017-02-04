@@ -108,8 +108,9 @@ Rectangle {
 
                         font.family: "Helvetica"
                         text: qsTr("🗋Create")
-                        enabled: stateHolder.auth & !stateHolder.sync
-
+                        enabled: !stateHolder.synchronizationInProgress
+                        //ToolTip.visible: stateHolder.synchronizationInProgress
+                        //ToolTip.text: qsTr("you cannot create card when synchronization is in progress")
                         onClicked: {
                             controller.createCard(self, translationList.currentIndex);
                         }

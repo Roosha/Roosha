@@ -44,6 +44,11 @@ CentralController::CentralController() {
     connect(networkManager, &NetworkManager::successRegistrate,
             systemTray.data(), &SystemTray::updateMenu);
 
+    connect(networkManager, &NetworkManager::connectionBroken,
+            [](){
+                SystemTray::Notify(QString("Network error"), QString("Connection lost"));
+            });
+
     connect(systemTray.data(), &SystemTray::newWord, this, &CentralController::handleNewWord);
     connect(systemTray.data(), &SystemTray::closeApplication, this, &CentralController::closeApplication);
     connect(systemTray.data(), &SystemTray::showMainWindow, guiManager, &GUIManager::showMainWindow);

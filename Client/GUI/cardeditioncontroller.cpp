@@ -8,44 +8,57 @@ CardEditionController::CardEditionController(QObject *parent) : QObject(parent),
 
 void CardEditionController::showNewCardEditWindow(QSharedPointer<Translation> trans) {
 
-    QmlWidget *editionWidget = new QmlWidget();
+    QmlWidget *editionWidget = data_create.key(trans, nullptr);
+    if (!editionWidget) {
+        editionWidget = new QmlWidget();
 
-    data_.insert(editionWidget, trans);
+        data_create.insert(editionWidget, trans);
 
-    editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(data_[editionWidget].data()));
-    editionWidget->rootContext()->setContextProperty("controller", this);
-    editionWidget->rootContext()->setContextProperty("self", editionWidget);
-    editionWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    editionWidget->setSource(QUrl(QStringLiteral("qrc:/edition/ShowEdition.qml")));
-    editionWidget->show();
+        editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(data_create[editionWidget].data()));
+        editionWidget->rootContext()->setContextProperty("controller", this);
+        editionWidget->rootContext()->setContextProperty("self", editionWidget);
+        editionWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+        editionWidget->setSource(QUrl(QStringLiteral("qrc:/edition/ShowEdition.qml")));
+        editionWidget->show();
 
-    StateHolder::Instance().setEditions(data_.size());
+        StateHolder::Instance().setEditors(data_create.size() + data_edit.size());
 
-    connect(editionWidget, &QmlWidget::closed, this,
-            [this, editionWidget] {
-                data_.remove(editionWidget);
-                StateHolder::Instance().setEditions(data_.size());
-            });
+        connect(editionWidget, &QmlWidget::closed, this,
+                [this, editionWidget] {
+                    data_create.remove(editionWidget);
+                    StateHolder::Instance().setEditors(data_create.size() + data_edit.size());
+                });
+    } else
+        editionWidget->activateWindow();
 }
 
 void CardEditionController::showCardEditWindow(QUuid id) {
-    QmlWidget *editionWidget = new QmlWidget();
-    QSharedPointer<DBCard> card = world.getCards().value(id);
-    editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(card.data()));
-    editionWidget->rootContext()->setContextProperty("controller", this);
-    editionWidget->rootContext()->setContextProperty("self", editionWidget);
-    editionWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    editionWidget->setSource(QUrl(QStringLiteral("qrc:/edition/ShowEdition.qml")));
-    editionWidget->show();
 
-    StateHolder::Instance().setEditions(data_.size());
+    QmlWidget *editionWidget = data_edit.key(id, nullptr);
 
-    connect(editionWidget, &QmlWidget::closed, this,
-            [this, editionWidget] {
-                data_.remove(editionWidget);
-                StateHolder::Instance().setEditions(data_.size());
-                qInfo() << "size of data " << data_.size();
-            });
+    if (!editionWidget) {
+        editionWidget = new QmlWidget();
+        QSharedPointer<DBCard> card = world.getCards().value(id);
+        data_edit.insert(editionWidget, id);
+
+        editionWidget->rootContext()->setContextProperty("trans", QVariant::fromValue(card.data()));
+        editionWidget->rootContext()->setContextProperty("controller", this);
+        editionWidget->rootContext()->setContextProperty("self", editionWidget);
+        editionWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+        editionWidget->setSource(QUrl(QStringLiteral("qrc:/edition/ShowEdition.qml")));
+        editionWidget->show();
+
+        StateHolder::Instance().setEditors(data_create.size() + data_edit.size());
+        StateHolder::Instance().startEdit(id);
+
+        connect(editionWidget, &QmlWidget::closed, this,
+                [this, editionWidget, id] {
+                    data_edit.remove(editionWidget);
+                    StateHolder::Instance().setEditors(data_create.size() + data_edit.size());
+                    StateHolder::Instance().endEdit(id);
+                });
+    } else
+        editionWidget->activateWindow();
 }
 
 void CardEditionController::closeWindow(QQuickWidget *widget) {

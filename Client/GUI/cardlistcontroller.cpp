@@ -1,6 +1,8 @@
 #include "cardlistcontroller.h"
 #include "Helpers/configuremanager.h"
 #include "Network/network_manager.h"
+#include "cardeditioncontroller.h"
+#include "system_tray.h"
 
 #include <QQmlContext>
 #include <QApplication>
@@ -70,8 +72,11 @@ void CardListController::pushCards() {
 }
 
 void CardListController::deleteCard(QUuid id) {
-    world_.deleteCard(id);
-    showCardListWindow();
+    if (!StateHolder::Instance().isEditing(id)) {
+        world_.deleteCard(id);
+        showCardListWindow();
+    } else
+        SystemTray::Notify(QString("Deletion ignored"), QString("You are now editing this card"));
 }
 
 void CardListController::editCard(QUuid id) {

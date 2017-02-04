@@ -87,7 +87,7 @@ Rectangle {
             onClicked: {
                 controller.createCard();
             }
-            enabled: !stateHolder.sync
+            enabled: !stateHolder.synchronizationInProgress
         }
 
         Button {

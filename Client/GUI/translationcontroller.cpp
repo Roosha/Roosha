@@ -1,4 +1,5 @@
 #include "translationcontroller.h"
+#include "system_tray.h"
 
 #include <QQmlContext>
 #include <QApplication>
@@ -37,7 +38,10 @@ void TranslationController::closeWindow(QQuickWidget *widget) {
 }
 
 void TranslationController::createCard(QQuickWidget *widget, int index) {
-    if (data_[widget].size() > 0) {
+    if (!(StateHolder::Instance()).isAuth()){
+        SystemTray::Notify(QString("Not authorized"),
+                           QString("You need to login if you want to create a new card"));
+    } else if (data_[widget].size() > 0) {
         emit createNewCard(data_[widget][index]);
     } else {
         QSharedPointer<Translation> emptyData(new Translation());
