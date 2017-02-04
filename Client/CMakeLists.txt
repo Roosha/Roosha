@@ -26,43 +26,17 @@ link_libraries(grpc++_unsecure grpc gpr ${PROTOBUF_LIBRARY})
 set(PROTO_HEADERS Network/Proto/changes.pb.h
         Network/Proto/commons.pb.h
         Network/Proto/roosha_service.grpc.pb.h
-        Network/Proto/roosha_service.pb.h)
+        Network/Proto/roosha_service.pb.h
+        )
 
 set(PROTO_SOURCES Network/Proto/changes.pb.cc
         Network/Proto/commons.pb.cc
         Network/Proto/roosha_service.grpc.pb.cc
-        Network/Proto/roosha_service.pb.cc)
+        Network/Proto/roosha_service.pb.cc
+        )
 #----------------/GRPC
 
 #--------------------Project sources
-set(ROOSHA_HEADERS Core/centralcontroller.h
-        Core/hotkeylistener.h
-        Core/card.h
-        Core/dbcard.h
-        GUI/guimanager.h
-        Helpers/bootstrap.h
-        Helpers/configuremanager.h
-        Core/translation.h
-        GUI/translationcontroller.h
-        Helpers/qmlconvertation.h
-        Core/ichange.h
-        Core/changes.h
-        Network/server_response.h
-        Network/authentication_manager.h
-        Network/roosha_service_connector.h
-        Network/network_manager.h
-        Test/Network/translations_test_slot_holder.h
-        Core/world.h
-        Test/Core/changes/worldtest.h
-        GUI/cardlistcontroller.h
-        Helpers/protobuf_converter.h
-        GUI/authentication_controller.h
-        GUI/system_tray.h
-        GUI/cardeditioncontroller.h
-        Network/preferences.h
-        Network/error_status.h
-        GUI/QmlWidget.h
-        Helpers/StateHolder.h)
 
 set(ROOSHA_SOURCES main.cpp
         Core/centralcontroller.cpp
@@ -89,14 +63,19 @@ set(ROOSHA_SOURCES main.cpp
         GUI/authentication_controller.cpp
         GUI/cardeditioncontroller.cpp
         GUI/QmlWidget.cpp
-        Helpers/StateHolder.cpp)
+        Helpers/StateHolder.cpp
+        GUI/Learning/LearningManager.cpp
+        GUI/Learning/LearningStrategy.cpp
+        GUI/Learning/CardLearningModel.cpp
+        GUI/Learning/CardLearningModel.h)
 
 set(ROOSHA_RESOURCES QML/qml.qrc
-        Img/img.qrc)
+        Img/img.qrc
+        )
 #------------------------------/Project sources
 
 set(HEADERS ${QHK_HEADERS} ${ROOSHA_HEADERS} ${PROTO_HEADERS})
-set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES})
+set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES} GUI/Learning/CardLearningModel.cpp GUI/Learning/CardLearningModel.h)
 qt5_add_resources(RESOURCES ${ROOSHA_RESOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})

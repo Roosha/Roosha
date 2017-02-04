@@ -104,7 +104,7 @@ Rectangle {
             onClicked: {
                 controller.pushCards();
             }
-            enabled: stateHolder.editionWindowOpen == 0
+            enabled: stateHolder.editionWindowOpen === 0
 
         }
 
@@ -122,7 +122,25 @@ Rectangle {
             onClicked: {
                 controller.pullCards();
             }
-            enabled: stateHolder.editionWindowOpen == 0
+            enabled: stateHolder.editionWindowOpen === 0
+        }
+
+
+        Button {
+            id: learnButton
+
+            text: qsTr("Learn Cards")
+            height: parent.height - 6
+            width: 100
+            anchors.right: pullButton.left
+            anchors.rightMargin: 10
+            background: Rectangle {
+                color: learnButton.down ? '#7fb5b5' : '#c7d0cc'
+            }
+            onClicked: {
+                controller.learn();
+            }
+            enabled: true
         }
     }
 }

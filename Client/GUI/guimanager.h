@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <Core/translation.h>
+#include <GUI/Learning/LearningManager.h>
 #include "GUI/translationcontroller.h"
 #include "GUI/cardeditioncontroller.h"
 #include "GUI/cardlistcontroller.h"
@@ -20,6 +21,7 @@ class GUIManager : public QObject {
     CardEditionController *cardEditionController;
     CardListController *cardListController;
     AuthenticationController *authenticationController;
+    LearningManager *learningController;
 
  public slots:
     void showNewTranslationWindow(quint32 id, Translations trans);

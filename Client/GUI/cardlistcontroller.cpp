@@ -5,9 +5,7 @@
 #include <QQmlContext>
 #include <QApplication>
 #include <Helpers/qmlconvertation.h>
-#include <QDebug>
 #include <Helpers/StateHolder.h>
-#include <QtCore/QThread>
 #include <QtCore/QTimer>
 
 CardListController::CardListController(QObject *parent)
@@ -76,4 +74,8 @@ void CardListController::deleteCard(QUuid id) {
 
 void CardListController::editCard(QUuid id) {
     emit editThisCard(id);
+}
+
+void CardListController::learn() {
+    emit learnCards();
 }

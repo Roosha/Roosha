@@ -19,4 +19,8 @@
         <file>loginView.qml</file>
         <file>registerView.qml</file>
     </qresource>
+    <qresource prefix="/learning">
+        <file>LearningWindow.qml</file>
+        <file>CardLearningView.qml</file>
+    </qresource>
 </RCC>

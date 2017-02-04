@@ -1,5 +1,4 @@
 #include "GUI/guimanager.h"
-#include <QDebug>
 GUIManager::GUIManager(QObject *parent) : QObject(parent) {
 
     qmlRegisterType<Translation>("Translan", 1, 0, "Translation");
@@ -9,6 +8,7 @@ GUIManager::GUIManager(QObject *parent) : QObject(parent) {
     cardEditionController = new CardEditionController(this);
     cardListController = new CardListController(this);
     authenticationController = new AuthenticationController(this);
+    learningController = new LearningManager(this);
 
     connect(translationController, &TranslationController::createNewCard,
             cardEditionController, &CardEditionController::showNewCardEditWindow);
@@ -18,6 +18,8 @@ GUIManager::GUIManager(QObject *parent) : QObject(parent) {
             this, &GUIManager::showMainWindow);
     connect(cardListController, &CardListController::editThisCard,
             cardEditionController, &CardEditionController::showCardEditWindow);
+    connect(cardListController, &CardListController::learnCards, learningController,
+            &LearningManager::showLearningWindow);
 }
 
 void GUIManager::showNewTranslationWindow(quint32 id, Translations trans) {

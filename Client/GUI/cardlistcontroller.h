@@ -22,11 +22,12 @@ class CardListController : public QObject {
     Q_INVOKABLE void createCard();
     Q_INVOKABLE void deleteCard(QUuid id);
     Q_INVOKABLE void editCard(QUuid id);
+    Q_INVOKABLE void learn();
 
  signals:
     void createNewCard(QSharedPointer<Translation> data);
     void editThisCard(QUuid id);
-
+    void learnCards();
  public slots:
     void showCardListWindow();
     void applyPulledChanges(quint32 requestId, ChangeList pulledChanges);
