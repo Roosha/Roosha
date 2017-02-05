@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QUuid>
 #include <QObject>
+#include "Core/QLSeq.h"
 
 class Card : public QObject {
  Q_OBJECT
@@ -28,8 +29,8 @@ class Card : public QObject {
 
     QUuid id_;
     QString source_;
-    QStringList targets_;
-    QStringList examples_;
+    QLSeq targets_;
+    QLSeq examples_;
 };
 
 #endif // CARD_H

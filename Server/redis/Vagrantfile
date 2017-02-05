@@ -6,6 +6,7 @@ Vagrant.configure(VAGRANT_API_VERSION) do |conf|
 
     conf.vm.provider 'virtualbox' do |vb|
         vb.memory = 128
+        vb.cpus = 4
     end
 
     conf.vm.provision :shell, :path => 'init.sh'

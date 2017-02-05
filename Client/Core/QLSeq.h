@@ -46,7 +46,7 @@ public:
     QLSeq();
     ~QLSeq();
 
-    QStringList toList();
+    QStringList toList() const;
     QMap<QLKey, QString>::const_iterator cbegin() const;
     QMap<QLKey, QString>::const_iterator cend() const;
     int size() const;
@@ -59,15 +59,19 @@ public:
 
     void remove(QString element);
     void remove(QLKey key);
+    QLKey remove(int index);
 
-    void insertAfter(QLKey key, QString newElement);
-    void insertAfter(int index, QString newElement);
+    QLKey modify(int index, QString newValue);
+    void modify(QLKey key, QString newValue);
 
-    void insert(QLKey key, QString newElement);
+    QLKey insertAfter(QLKey key, QString newElement);
+    QLKey insertAfter(int index, QString newElement);
+
+    QLKey insert(QLKey key, QString newElement);
 
 private:
-    void insertBetween(QString newElement, QLKey p, QLKey q);
-    void insertBetween(QString newElement, int p, int q); // между p-ым и q-тым по счету
+    QLKey insertBetween(QString newElement, QLKey p, QLKey q);
+    QLKey insertBetween(QString newElement, int p, int q); // между p-ым и q-тым по счету
 
     std::tuple<int, QLKey, QLKey> findFreeSpace(QLKey p, QLKey q, int depth = 0);
     QLKey allocate(QLKey p, QLKey q);

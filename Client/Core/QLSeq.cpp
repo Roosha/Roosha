@@ -75,8 +75,24 @@ void QLSeq::remove(QLKey key) {
     tree.remove(key);
 }
 
+QLKey QLSeq::remove(int index) {
+    QLKey key = (cbegin()+index).key();
+    tree.remove(key);
+    return key;
+}
+
 int QLSeq::size() const {
     return tree.size() - 2;
+}
+
+QLKey QLSeq::modify(int index, QString newValue) {
+    QLKey key = (cbegin() + index).key();
+    tree[key] = newValue;
+    return key;
+}
+
+void QLSeq::modify(QLKey key, QString newValue) {
+    tree[key] = newValue;
 }
 
 QMap<QLKey, QString>::const_iterator QLSeq::cbegin() const {
@@ -87,18 +103,19 @@ QMap<QLKey, QString>::const_iterator QLSeq::cend() const {
     return tree.cend()-1;
 }
 
-void QLSeq::insertAfter(int index, QString newElement) {
-    insertBetween(newElement, index, index+1);
+QLKey QLSeq::insertAfter(int index, QString newElement) {
+    return insertBetween(newElement, index, index+1);
 }
 
-void QLSeq::insertAfter(QLKey key, QString newElement) {
+QLKey QLSeq::insertAfter(QLKey key, QString newElement) {
     auto left = tree.find(key);
     QLKey right = (left+1).key();
-    insertBetween(newElement, key, right);
+    return insertBetween(newElement, key, right);
 }
 
-void QLSeq::insert(QLKey key, QString newElement) {
+QLKey QLSeq::insert(QLKey key, QString newElement) {
     tree.insert(key, newElement); // TODO: switch to MultiMap in order to resolve collision keys
+    return key;
 }
 
 /**
@@ -107,7 +124,7 @@ void QLSeq::insert(QLKey key, QString newElement) {
  * @param p
  * @param q
  */
-void QLSeq::insertBetween(QString newElement, int p, int q) {
+QLKey QLSeq::insertBetween(QString newElement, int p, int q) {
     assert(q-p == 1);
 
     QLKey left, right;
@@ -118,7 +135,7 @@ void QLSeq::insertBetween(QString newElement, int p, int q) {
     it++;
     right = it.key();
 
-    insertBetween(newElement, left, right);
+    return insertBetween(newElement, left, right);
 }
 
 QLKey QLSeq::firstKey() {
@@ -143,7 +160,7 @@ QString QLSeq::at(int index) {
     return (cbegin()+index).value();
 }
 
-QStringList QLSeq::toList() {
+QStringList QLSeq::toList() const {
     QList<QString> l = tree.values();
     l.pop_back();
     l.pop_front();
@@ -224,7 +241,8 @@ QLKey QLSeq::allocate(QLKey p, QLKey q) {
     return newKey;
 }
 
-void QLSeq::insertBetween(QString newElement, QLKey p, QLKey q) {
+QLKey QLSeq::insertBetween(QString newElement, QLKey p, QLKey q) {
     QLKey newKey = allocate(p, q);
     tree.insert(newKey, newElement);
+    return newKey;
 }

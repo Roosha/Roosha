@@ -43,18 +43,18 @@ message CardChange {
 
 	message InsertElem {
 		Field field = 1;
-		uint32 index = 2;
+		bytes index = 2;
 		string value = 3;	
 	}
 
 	message DeleteElem {
 		Field field = 1;
-		uint32 index = 2;
+		bytes index = 2;
 	}
 
 	message EditElem {
 		Field field = 1;
-		uint32 position = 2; // element should be inserted onto this position.
+		bytes position = 2; // element should be inserted onto this position.
 		string value = 3;
 	}
 }
