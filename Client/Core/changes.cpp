@@ -24,15 +24,31 @@ QString ChangeSource::getNewSource() const {
     return newSource;
 }
 
-EditElem::EditElem(QUuid cardId, const enum Field &field, const QString &newEl, const qint32 &p) :
+EditElem::EditElem() {}
+
+EditElem::EditElem(QUuid cardId, const enum Field &field, const QString &newEl, const QLKey &p) :
         cardId(cardId), fieldName(field), newElem(newEl), pos(p) {}
+
+void EditElem::buildAndApply(QUuid id, const enum Field &field, const QString &newEl, const qint32 &p, World *world) {
+    cardId = id;
+    fieldName = field;
+    newElem = newEl;
+
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
+    switch (fieldName) {
+        case TARGET: pos = cardptr->targets_.modify(p, newElem);
+            break;
+        case EXAMPLE: pos = cardptr->examples_.modify(p, newElem);
+            break;
+    }
+}
 
 void EditElem::apply(World *world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     switch (fieldName) {
-        case TARGET:cardptr->targets_[pos] = newElem;
+        case TARGET:cardptr->targets_.modify(pos, newElem);
             break;
-        case EXAMPLE:cardptr->examples_[pos] = newElem;
+        case EXAMPLE:cardptr->examples_.modify(pos, newElem);
             break;
     }
 }
@@ -53,12 +69,32 @@ QString EditElem::getNewElem() const {
     return newElem;
 }
 
-qint32 EditElem::getPos() const {
+QLKey EditElem::getPos() const {
     return pos;
 }
 
-InsertElem::InsertElem(QUuid cardId, const enum Field &field, const QString &insertingEl, const qint32 &p) :
+InsertElem::InsertElem() {}
+
+InsertElem::InsertElem(QUuid cardId, const enum Field &field, const QString &insertingEl, const QLKey &p) :
         cardId(cardId), fieldName(field), insertingElem(insertingEl), pos(p) {}
+
+void InsertElem::buildAndApply(QUuid id,
+                               const enum Field &field,
+                               const QString &insertingEl,
+                               const qint32 &p,
+                               World *world) {
+    cardId = id;
+    fieldName = field;
+    insertingElem = insertingEl;
+
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
+    switch (fieldName) {
+        case TARGET: pos = cardptr->targets_.insertAfter(p-1, insertingElem);
+            break;
+        case EXAMPLE: pos = cardptr->examples_.insertAfter(p-1, insertingElem);
+            break;
+    }
+}
 
 void InsertElem::apply(World *world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
@@ -86,19 +122,34 @@ QString InsertElem::getInsertingElem() const {
     return insertingElem;
 }
 
-qint32 InsertElem::getPos() const {
+QLKey InsertElem::getPos() const {
     return pos;
 }
 
-DeleteElem::DeleteElem(QUuid cardId, const enum Field &field, const qint32 &p) :
+DeleteElem::DeleteElem() {}
+
+DeleteElem::DeleteElem(QUuid cardId, const enum Field &field, const QLKey &p) :
         cardId(cardId), fieldName(field), pos(p) {}
+
+void DeleteElem::buildAndApply(QUuid id, const enum Field &field, const qint32 &p, World *world) {
+    cardId = id;
+    fieldName = field;
+
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
+    switch (fieldName) {
+        case TARGET: pos = cardptr->targets_.remove(p);
+            break;
+        case EXAMPLE: pos = cardptr->examples_.remove(p);
+            break;
+    }
+}
 
 void DeleteElem::apply(World *world) {
     const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
     switch (fieldName) {
-        case TARGET:cardptr->targets_.erase(cardptr->targets_.begin() + pos);
+        case TARGET: cardptr->targets_.remove(pos);
             break;
-        case EXAMPLE:cardptr->examples_.erase(cardptr->examples_.begin() + pos);
+        case EXAMPLE: cardptr->examples_.remove(pos);
             break;
     }
 }
@@ -115,7 +166,7 @@ Field DeleteElem::getFieldName() const {
     return fieldName;
 }
 
-qint32 DeleteElem::getPos() const {
+QLKey DeleteElem::getPos() const {
     return pos;
 }
 

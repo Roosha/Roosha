@@ -11,17 +11,17 @@ QUuid Card::getId() const {
 }
 
 QStringList Card::getTargets() const {
-    return targets_;
+    return targets_.toList();
 }
 
 QStringList Card::getExamples() const {
-    return examples_;
+    return examples_.toList();
 }
 
 QString Card::getExampleString() const {
-    return examples_.join(";\n");
+    return examples_.toList().join(";\n");
 }
 
 QString Card::getTargetString() const {
-    return targets_.join("; ");
+    return targets_.toList().join("; ");
 }

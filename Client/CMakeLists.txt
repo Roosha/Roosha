@@ -7,14 +7,17 @@ set(CMAKE_CXX_STANDARD 11)
 #------------------------ QHotkey
 add_subdirectory(lib/QHotkey)
 include_directories(lib/QHotkey)
-set(LIBS_TO_LINK ${LIBS_TO_LINK} lib.qhotkey)
+set(LIBS_TO_LINK ${LIBS_TO_LINK} lib.qhotkey )
 #------------------------- /QHotkey
 
 #-----------------------Qt5
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-set(QT5_USED_MODULES Qml Quick Widgets Core QuickWidgets QuickControls2 Concurrent)
+#TODO: come up with more convenient way to set qt installation path
+set(CMAKE_PREFIX_PATH $ENV{HOME}/.Qt/5.8/gcc_64)
+
+set(QT5_USED_MODULES Qml Quick Widgets Core QuickWidgets QuickControls2 Concurrent Test)
 find_package(Qt5 COMPONENTS ${QT5_USED_MODULES} REQUIRED)
 #----------------------/Qt5
 
@@ -62,7 +65,8 @@ set(ROOSHA_HEADERS Core/centralcontroller.h
         Network/preferences.h
         Network/error_status.h
         GUI/QmlWidget.h
-        Helpers/StateHolder.h)
+        Helpers/StateHolder.h
+        Core/QLSeq.h)
 
 set(ROOSHA_SOURCES main.cpp
         Core/centralcontroller.cpp
@@ -89,16 +93,34 @@ set(ROOSHA_SOURCES main.cpp
         GUI/authentication_controller.cpp
         GUI/cardeditioncontroller.cpp
         GUI/QmlWidget.cpp
-        Helpers/StateHolder.cpp)
+        Helpers/StateHolder.cpp
+        Core/QLSeq.cpp)
 
 set(ROOSHA_RESOURCES QML/qml.qrc
         Img/img.qrc)
 #------------------------------/Project sources
 
 set(HEADERS ${QHK_HEADERS} ${ROOSHA_HEADERS} ${PROTO_HEADERS})
-set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES})
+set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES} Test/Core/TestLSequence.cpp)
 qt5_add_resources(RESOURCES ${ROOSHA_RESOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT_NAME} ${LIBS_TO_LINK})
 qt5_use_modules(${PROJECT_NAME} ${QT5_USED_MODULES})
+
+
+#-----------------------------Testing
+
+enable_testing()
+
+find_package(Qt5Test REQUIRED)
+
+set(TESTED_SOURCES Core/QLSeq.cpp)
+
+set(TESTS_SOURCES Test/Core/TestLSequence.cpp)
+
+add_executable(TestApp Test/runTests.cpp ${TESTED_SOURCES} ${TESTS_SOURCES})
+add_test(TestApp TestApp)
+
+target_link_libraries(TestApp Qt5::Test ${LIBS_TO_LINK})
+qt5_use_modules(TestApp ${QT5_USED_MODULES})

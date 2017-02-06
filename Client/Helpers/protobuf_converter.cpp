@@ -120,7 +120,7 @@ roosha::Change ProtobufConverter::changeToProtobuf(const EditElem &change) {
     DECLARE_CARD_CHANGE_RESULT;
     auto editElem = result.mutable_cardchange()->mutable_editelem();
     editElem->set_field(__toProtoField(change.getFieldName()));
-    editElem->set_position(change.getPos());
+    editElem->set_position(change.getPos().toByteArray().constData());
     editElem->set_value(change.getNewElem().toStdString());
     return result;
 }
@@ -129,7 +129,7 @@ roosha::Change ProtobufConverter::changeToProtobuf(const InsertElem &change) {
     DECLARE_CARD_CHANGE_RESULT;
     auto insertElem = result.mutable_cardchange()->mutable_insertelem();
     insertElem->set_field(__toProtoField(change.getFieldName()));
-    insertElem->set_index(change.getPos());
+    insertElem->set_index(change.getPos().toByteArray().constData());
     insertElem->set_value(change.getInsertingElem().toStdString());
     return result;
 }
@@ -138,7 +138,7 @@ roosha::Change ProtobufConverter::changeToProtobuf(const DeleteElem &change) {
     DECLARE_CARD_CHANGE_RESULT;
     auto deleteElem = result.mutable_cardchange()->mutable_deleteelem();
     deleteElem->set_field(__toProtoField(change.getFieldName()));
-    deleteElem->set_index(change.getPos());
+    deleteElem->set_index(change.getPos().toByteArray().constData());
     return result;
 }
 
@@ -178,20 +178,20 @@ ChangePtr __cardChangeFromProto(const roosha::CardChange &rawChange) {
                     cardId,
                     __fielfFromProto(rawChange.insertelem().field()),
                     QString::fromStdString(rawChange.insertelem().value()),
-                    rawChange.insertelem().index()
+                    QLKey(QByteArray::fromStdString(rawChange.insertelem().index()))
             );
         case roosha::CardChange::kDeleteElem:
             return QSharedPointer<DeleteElem>::create(
                     cardId,
                     __fielfFromProto(rawChange.deleteelem().field()),
-                    rawChange.deleteelem().index()
+                    QLKey(QByteArray::fromStdString(rawChange.deleteelem().index()))
             );
         case roosha::CardChange::kEditElem:
             return QSharedPointer<EditElem>::create(
                     cardId,
                     __fielfFromProto(rawChange.editelem().field()),
                     QString::fromStdString(rawChange.editelem().value()),
-                    rawChange.editelem().position()
+                    QLKey(QByteArray::fromStdString(rawChange.editelem().position()))
             );
         case roosha::CardChange::CHANGE_NOT_SET:
             qWarning("__cardChangeFromProto: empty card change passed. Return nullptr");

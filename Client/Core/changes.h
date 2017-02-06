@@ -5,6 +5,7 @@
 #include <QSharedPointer>
 #include <QUuid>
 #include "dbcard.h"
+#include "Core/QLSeq.h"
 
 class ChangeSource : public IChange {
  public:
@@ -23,57 +24,63 @@ class ChangeSource : public IChange {
 
 class EditElem : public IChange {
  public:
-    EditElem(QUuid cardId, const enum Field &field, const QString &newEl, const qint32 &p);
+    EditElem();
+    EditElem(QUuid cardId, const enum Field &field, const QString &newEl, const QLKey &p);
 
     void apply(World *world) override;
+    void buildAndApply(QUuid id, const enum Field &field, const QString &newEl, const qint32 &p, World* world);
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
     Field getFieldName() const;
     QString getNewElem() const;
-    qint32 getPos() const;
+    QLKey getPos() const;
 
  private:
-    const QUuid cardId;
-    const enum Field fieldName;
-    const QString newElem;
-    const qint32 pos;
+    QUuid cardId;
+    enum Field fieldName;
+    QString newElem;
+    QLKey pos;
 };
 
 class InsertElem : public IChange {
  public:
-    InsertElem(QUuid id, const enum Field &field, const QString &insertingEl, const qint32 &p);
+    InsertElem();
+    InsertElem(QUuid id, const enum Field &field, const QString &insertingEl, const QLKey &p);
 
     void apply(World *world) override;
+    void buildAndApply(QUuid id, const enum Field &field, const QString &insertingEl, const qint32 &p, World* world);
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
     Field getFieldName() const;
     QString getInsertingElem() const;
-    qint32 getPos() const;
+    QLKey getPos() const;
 
  private:
-    const QUuid cardId;
-    const enum Field fieldName;
-    const QString insertingElem;
-    const qint32 pos;
+    QUuid cardId;
+    enum Field fieldName;
+    QString insertingElem;
+    QLKey pos;
 };
 
 class DeleteElem : public IChange {
  public:
-    DeleteElem(QUuid id, const enum Field &field, const qint32 &p);
+    DeleteElem();
+    DeleteElem(QUuid id, const enum Field &field, const QLKey &p); // TODO: deprecated
 
     void apply(World *world) override;
+    void buildAndApply(QUuid id, const enum Field &field, const qint32 &p, World* world);
     roosha::Change toProtobuf() const override;
 
     QUuid getCardId() const;
     Field getFieldName() const;
-    qint32 getPos() const;
+    QLKey getPos() const;
 
  private:
-    const QUuid cardId;
-    const enum Field fieldName;
-    const qint32 pos;
+    QUuid cardId;
+    enum Field fieldName;
+    QLKey pos;
 };
 
 class CreateCard : public IChange {

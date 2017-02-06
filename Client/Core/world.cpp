@@ -44,21 +44,24 @@ void World::setSource(QUuid cardId, QString newSource) {
 }
 
 void World::editElem(QUuid cardId, const enum Field &fieldName, const QString &newElem, qint32 pos) {
-    QSharedPointer<EditElem> change = QSharedPointer<EditElem>::create(cardId, fieldName, newElem, pos);
+    QSharedPointer<EditElem> change = QSharedPointer<EditElem>::create();
+    change->buildAndApply(cardId, fieldName, newElem, pos, this);
     changes_.append(change);
-    change->apply(this);
+//    change->apply(this);
 }
 
 void World::insertElem(QUuid cardId, const enum Field &fieldName, const QString &insertingElem, qint32 pos) {
-    QSharedPointer<InsertElem> change = QSharedPointer<InsertElem>::create(cardId, fieldName, insertingElem, pos);
+    QSharedPointer<InsertElem> change = QSharedPointer<InsertElem>::create();
+    change->buildAndApply(cardId, fieldName, insertingElem, pos, this);
     changes_.append(change);
-    change->apply(this);
+//    change->apply(this);
 }
 
 void World::deleteElem(QUuid cardId, const enum Field &fieldName, qint32 pos) {
-    QSharedPointer<DeleteElem> change = QSharedPointer<DeleteElem>::create(cardId, fieldName, pos);
+    QSharedPointer<DeleteElem> change = QSharedPointer<DeleteElem>::create();
+    change->buildAndApply(cardId, fieldName, pos, this);
     changes_.append(change);
-    change->apply(this);
+//    change->apply(this);
 }
 
 void World::saveToDB() {
