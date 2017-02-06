@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
+import roosha.learning 1.0
 
 Rectangle {
     height: 500
@@ -98,11 +99,38 @@ Rectangle {
     }
 
     function showNextCard() {
-        var nextCard = strategy.nextCard();
-        console.log(nextCard);
-        console.log(nextCard.viewMode);
-        console.log(nextCard.card);
-        console.log(nextCard.card.source);
+        var nextCardModel = strategy.firstCard();
+        console.log(nextCardModel);
+        var card = nextCardModel.card
+        console.log('card: ',  card)
+        console.log('card source: ',  card.source)
+
+        var view = nextCardModel.viewModel
+        console.log('viewModel: ',  view)
+        console.log('front view: ',  view.frontViewName)
+        console.log('back view: ',  view.backViewName)
+
+        var input = nextCardModel.inputModel
+        console.log('inputModel: ', input)
+        console.log('input view: ', input.viewName)
+
+        console.log('------------------')
+
+        nextCardModel = strategy.nextCard(Difficulty.FAILED);
+        console.log(nextCardModel);
+        card = nextCardModel.card
+        console.log('card: ',  card)
+        console.log('card source: ',  card.source)
+
+        view = nextCardModel.viewModel
+        console.log('viewModel: ',  view)
+        console.log('front view: ',  view.frontViewName)
+        console.log('back view: ',  view.backViewName)
+
+        input = nextCardModel.inputModel
+        console.log('inputModel: ', input)
+        console.log('input view: ', input.viewName)
+
 
         cardViewport.incrementCurrentIndex();
         cardViewport.removeItem(0);

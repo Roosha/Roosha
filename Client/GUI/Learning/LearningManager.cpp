@@ -9,7 +9,7 @@
 
 LearningManager::LearningManager(QObject *parent) :
         QObject(parent),
-        strategy_(new LearningStrategy(this)),
+        strategy_(new TestStrategy(this)),
         window_(Q_NULLPTR) {
 
 }

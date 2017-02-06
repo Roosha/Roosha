@@ -17,7 +17,7 @@ class LearningManager : public QObject {
     void showLearningWindow();
     Q_INVOKABLE void closeLearningWindow();
  private:
-    LearningStrategy *strategy_;
+    ILearningStrategy *strategy_;
     QmlWidget *window_;
 };
 

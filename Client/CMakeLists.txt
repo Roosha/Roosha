@@ -66,8 +66,8 @@ set(ROOSHA_SOURCES main.cpp
         Helpers/StateHolder.cpp
         GUI/Learning/LearningManager.cpp
         GUI/Learning/LearningStrategy.cpp
-        GUI/Learning/CardLearningModel.cpp
-        GUI/Learning/CardLearningModel.h)
+        GUI/Learning/CardLearningViewModels.cpp
+        )
 
 set(ROOSHA_RESOURCES QML/qml.qrc
         Img/img.qrc
@@ -75,7 +75,7 @@ set(ROOSHA_RESOURCES QML/qml.qrc
 #------------------------------/Project sources
 
 set(HEADERS ${QHK_HEADERS} ${ROOSHA_HEADERS} ${PROTO_HEADERS})
-set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES} GUI/Learning/CardLearningModel.cpp GUI/Learning/CardLearningModel.h)
+set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES} GUI/Learning/UserInputModels.cpp GUI/Learning/UserInputModels.h)
 qt5_add_resources(RESOURCES ${ROOSHA_RESOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})

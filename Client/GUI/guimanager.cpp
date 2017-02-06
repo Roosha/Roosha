@@ -3,6 +3,7 @@ GUIManager::GUIManager(QObject *parent) : QObject(parent) {
 
     qmlRegisterType<Translation>("Translan", 1, 0, "Translation");
     qmlRegisterType<AuthenticationController>("roosha.controllers", 1, 0, "AuthController");
+    CardDifficulty::registerInQml();
 
     translationController = new TranslationController(this);
     cardEditionController = new CardEditionController(this);
