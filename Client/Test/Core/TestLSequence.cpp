@@ -128,3 +128,16 @@ void TestLSequence::highload() {
     QVERIFY(max <= 15);
 
 }
+
+void TestLSequence::nullTerminatedSymbol() {
+    QLSeq s;
+
+    for(int i = 0; i < 127*3; i++) {
+        s.insertAfter(s.lastKey(), "Q");
+    }
+    QCOMPARE(s.size(), 127*3);
+
+    for(auto i = s.cbegin(); i != s.cend(); i++) {
+        QVERIFY(!i.key().data.contains(0));
+    }
+}

@@ -6,6 +6,7 @@
 #include <QQueue>
 #include <exception>
 #include <cassert>
+#include <QDebug>
 #include "QLSeq.h"
 
 QLKey::QLKey() {}
@@ -59,7 +60,7 @@ int QLKey::size() const {
 QLSeq::QLSeq() : base(CHAR_MAX), boundary(CHAR_MAX / 32), gen(std::mt19937(rd())) {
     QLKey begin;
     QLKey end;
-    begin.data.push_back(0);
+    begin.data.push_back(1);
     end.data.push_back(CHAR_MAX);
 
     tree.insert(begin, "b\n\0");
