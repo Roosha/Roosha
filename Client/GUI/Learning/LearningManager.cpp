@@ -14,6 +14,19 @@ LearningManager::LearningManager(QObject *parent) :
 
 }
 
+void LearningManager::registerQmlTypes() {
+    static bool registered = false;
+    if (!registered) {
+        qmlRegisterType<CardDifficulty>(LEARNING_QML_URI, 1, 0, "Difficulty");
+        qRegisterMetaType<CardDifficulty::Rate>();
+
+        qmlRegisterType<CardLearningModel>();
+
+        registered = true;
+    }
+
+}
+
 void LearningManager::showLearningWindow() {
     if (window_) { closeLearningWindow(); }
 
@@ -29,7 +42,6 @@ void LearningManager::showLearningWindow() {
     window_->setAttribute(Qt::WA_DeleteOnClose);
     window_->show();
 }
-
 void LearningManager::closeLearningWindow() {
     qDebug() << "closeLearningWindow called";
     if (window_) {

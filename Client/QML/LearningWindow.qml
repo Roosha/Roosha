@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import roosha.learning 1.0
+import roosha.data 1.0
 
 Rectangle {
     height: 500

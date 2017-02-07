@@ -6,18 +6,18 @@
 
 #include "LearningStrategy.h"
 
-QObject *CardLearningModel::getCard() {
+Card * CardLearningModel::getCard() {
     return card_;
 }
 
-QObject *CardLearningModel::getViewModel() {
+CardViewModelBase * CardLearningModel::getViewModel() {
     return viewModel_;
 }
 
-QObject *CardLearningModel::getInputModel() {
+UserInputModelBase * CardLearningModel::getInputModel() {
     return inputModel_;
 }
-CardLearningModel::CardLearningModel(DBCard *card_,
+CardLearningModel::CardLearningModel(Card *card_,
                                      CardViewModelBase *viewModel_,
                                      UserInputModelBase *inputModel_,
                                      QObject *parent) :
@@ -35,7 +35,7 @@ TestStrategy::TestStrategy(QObject *parent) :
         ILearningStrategy(parent) {
 }
 
-QObject *TestStrategy::firstCard() {
+CardLearningModel * TestStrategy::firstCard() {
     qDebug() << "TestStrategy::firstCard() called";
 
     auto cards = World::Instance().getCards().values();
@@ -49,7 +49,7 @@ QObject *TestStrategy::firstCard() {
     return new CardLearningModel(card, view, input);
 }
 
-QObject *TestStrategy::nextCard(CardDifficulty::Rate previousRate) {
+CardLearningModel * TestStrategy::nextCard(CardDifficulty::Rate previousRate) {
     qDebug() << "TestStrategy::nextCard(" << previousRate << ") called";
 
     auto cards = World::Instance().getCards().values();

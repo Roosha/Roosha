@@ -16,21 +16,21 @@ class CardLearningModel : public QObject {
     //@formatter:off
     Q_OBJECT
  public:
-    Q_PROPERTY(QObject* card READ getCard)
-    Q_PROPERTY(QObject* viewModel READ getViewModel)
-    Q_PROPERTY(QObject* inputModel READ getInputModel)
+    Q_PROPERTY(Card* card READ getCard)
+    Q_PROPERTY(CardViewModelBase* viewModel READ getViewModel)
+    Q_PROPERTY(UserInputModelBase* inputModel READ getInputModel)
     //@formatter:on
  public:
-    CardLearningModel(DBCard *card_,
+    CardLearningModel(Card *card_,
                       CardViewModelBase *viewModel_,
                       UserInputModelBase *inputModel_,
                       QObject *parent = Q_NULLPTR);
 
-    QObject *getCard();
-    QObject *getViewModel();
-    QObject *getInputModel();
+    Card *getCard();
+    CardViewModelBase *getViewModel();
+    UserInputModelBase *getInputModel();
  private:
-    DBCard *card_;
+    Card *card_;
     CardViewModelBase *viewModel_;
     UserInputModelBase *inputModel_;
 };
@@ -45,15 +45,6 @@ class CardDifficulty : public QObject {
         DIFFICULT
     };
     Q_ENUM(Rate)
-
-    static void registerInQml() {
-        static bool registered = false;
-        if (!registered) {
-            qmlRegisterType<CardDifficulty>("roosha.learning", 1, 0, "Difficulty");
-            qRegisterMetaType<Rate>();
-            registered = true;
-        }
-    }
 };
 
 class ILearningStrategy : public QObject {
@@ -66,14 +57,14 @@ class ILearningStrategy : public QObject {
      * nextCard method.
      * @return a pointer to CardLearningModel instance for next card to learn.
      */
-    Q_INVOKABLE virtual QObject *firstCard() = 0;
+    Q_INVOKABLE virtual CardLearningModel *firstCard() = 0;
 
     /**
      * Get the next card to learn.
      * @param previousRate difficulty of previous learned card.
      * @return a pointer to CardLeaningModel instance for next card to learn.
      */
-    Q_INVOKABLE virtual QObject *nextCard(CardDifficulty::Rate previousRate) = 0;
+    Q_INVOKABLE virtual CardLearningModel *nextCard(CardDifficulty::Rate previousRate) = 0;
 
     /**
      * Finish learning session successfully by setting difficulty of the last learned card.
@@ -92,8 +83,8 @@ class TestStrategy : public ILearningStrategy {
  public:
     TestStrategy(QObject *parent = Q_NULLPTR);
 
-    QObject *firstCard() override;
-    QObject *nextCard(CardDifficulty::Rate previousRate) override;
+    CardLearningModel *firstCard() override;
+    CardLearningModel *nextCard(CardDifficulty::Rate previousRate) override;
     void finish(CardDifficulty::Rate previousRate) override;
     void cancel() override;
 };

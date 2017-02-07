@@ -1,9 +1,11 @@
 #include "GUI/guimanager.h"
+
 GUIManager::GUIManager(QObject *parent) : QObject(parent) {
 
     qmlRegisterType<Translation>("Translan", 1, 0, "Translation");
     qmlRegisterType<AuthenticationController>("roosha.controllers", 1, 0, "AuthController");
-    CardDifficulty::registerInQml();
+    qmlRegisterType<Card>("roosha.data", 1, 0, "Card"); // TODO: register DBCard in more suitable place.
+    LearningManager::registerQmlTypes();
 
     translationController = new TranslationController(this);
     cardEditionController = new CardEditionController(this);
