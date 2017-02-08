@@ -2,6 +2,17 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MainForm.ui.qml</file>
+
+        <file>learning/LearningWindow.qml</file>
+        <file>learning/ViewportElement.qml</file>
+        <file>learning/CardViewBase.qml</file>
+        <file>learning/UserInputBase.qml</file>
+
+        <file>learning/views/TargetsAndExampleView.qml</file>
+        <file>learning/views/DefaultCardView.qml</file>
+
+        <file>learning/inputs/TextInputStatus.qml</file>
+        <file>learning/inputs/TextInputView.qml</file>
     </qresource>
     <qresource prefix="/translation">
         <file>ShowTranslation.qml</file>
