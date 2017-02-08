@@ -12,12 +12,6 @@ namespace ProtobufConverter {
 roosha::Translations translationsToProtobuf(const Translations &translations);
 Translations translationsFromProtobuf(const roosha::Translations &rawTranslations);
 
-roosha::Change changeToProtobuf(const CreateCard &change);
-roosha::Change changeToProtobuf(const DeleteCard &change);
-roosha::Change changeToProtobuf(const ChangeSource &change);
-roosha::Change changeToProtobuf(const EditElem &change);
-roosha::Change changeToProtobuf(const InsertElem &change);
-roosha::Change changeToProtobuf(const DeleteElem &change);
 ChangePtr changeFromProtobuf(const roosha::Change &rawChange);
 
 RPCErrorStatus errorStatusFromGrpc(const grpc::Status &rawStatus);

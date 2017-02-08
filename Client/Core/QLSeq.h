@@ -30,7 +30,7 @@ public:
 
     char at(int depth) const;
     bool operator<(const QLKey & other) const;
-    QByteArray toByteArray();
+    QByteArray toByteArray() const;
     int size() const;
 
 //private:

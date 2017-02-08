@@ -17,8 +17,14 @@ enum Field {
 class IChange {
  public:
     ~IChange() {}
+    IChange(roosha::Change change) : rawChange(change) {}
+
     virtual void apply(World *world) = 0;
-    virtual roosha::Change toProtobuf() const = 0;
+    roosha::Change toProtobuf() const {
+        return rawChange;
+    }
+ protected:
+    roosha::Change rawChange;
 };
 
 typedef QSharedPointer<IChange> ChangePtr;

@@ -41,7 +41,7 @@ bool QLKey::operator<(const QLKey &other) const {
     return false;
 }
 
-QByteArray QLKey::toByteArray() {
+QByteArray QLKey::toByteArray() const {
     QByteArray bytes;
     bytes.reserve(data.size());
     for(char e : data) {

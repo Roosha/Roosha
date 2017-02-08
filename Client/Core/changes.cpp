@@ -2,198 +2,282 @@
 #include "Helpers/protobuf_converter.h"
 
 #include <QDebug>
+#include <stdexcept>
 
-using ProtobufConverter::changeToProtobuf;
+inline roosha::CardChange::Field __toProtoField(Field field) {
+    switch (field) {
+        case EXAMPLE: return roosha::CardChange::Field::CardChange_Field_EXAMPLE;
+        case TARGET: return roosha::CardChange::Field::CardChange_Field_TARGET;
+    }
+    throw std::logic_error(std::logic_error("Unexpected card field type: " + static_cast<int>(field)));
+}
 
-ChangeSource::ChangeSource(QUuid cardId, const QString &newSrc) : cardId(cardId), newSource(newSrc) {}
+Field __fieldFromProto(roosha::CardChange::Field rawField) {
+    switch (rawField) {
+        case roosha::CardChange::Field::CardChange_Field_EXAMPLE: return Field::EXAMPLE;
+        case roosha::CardChange::Field::CardChange_Field_TARGET: return Field::TARGET;
+
+        case roosha::CardChange::Field::CardChange_Field_UNKNOWN:
+        case roosha::CardChange::Field::CardChange_Field_CardChange_Field_INT_MAX_SENTINEL_DO_NOT_USE_:
+        case roosha::CardChange::Field::CardChange_Field_CardChange_Field_INT_MIN_SENTINEL_DO_NOT_USE_:
+            qFatal("__fieldFromProto: unexpected raw field.L %d",
+                   rawField);
+    }
+    throw std::logic_error("Unexpected card field: " + static_cast<int>(rawField));
+}
+
+CardChange::CardChange(roosha::Change change) : IChange(change) {
+    if (change.change_case() == roosha::Change::CHANGE_NOT_SET)  {
+        rawChange.mutable_cardchange();
+    } else if (change.change_case() != roosha::Change::kCardChange) {
+        throw std::invalid_argument("wrong change type in CardChange::CardChange(roosha::Change change); got "
+                                            + std::to_string(change.change_case()));
+    }
+}
+
+QUuid CardChange::getCardId() const {
+    return QUuid(QString::fromStdString(rawChange.cardchange().cardid()));
+}
+
+ChangeSource::ChangeSource(QUuid cardId, const QString &newSrc) : CardChange(roosha::Change()) {
+    rawChange.mutable_cardchange()->set_cardid(cardId.toString().toStdString());
+    rawChange.mutable_cardchange()->mutable_changesource()->set_newsource(newSrc.toStdString());
+}
+
+ChangeSource::ChangeSource(roosha::Change change) : CardChange(change) {
+    if (change.cardchange().change_case() != roosha::CardChange::kChangeSource) {
+        throw std::invalid_argument("wrong change type in ChangeSource::ChangeSource(roosha::Change change); got "
+                                            + std::to_string(change.cardchange().change_case()));
+    }
+}
 
 void ChangeSource::apply(World *world) {
-    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
-    cardptr->source_ = newSource;
-}
-
-roosha::Change ChangeSource::toProtobuf() const {
-    return changeToProtobuf(*this);
-}
-
-QUuid ChangeSource::getCardId() const {
-    return cardId;
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(getCardId());
+    cardptr->source_ = getNewSource();
 }
 
 QString ChangeSource::getNewSource() const {
-    return newSource;
+    return QString::fromStdString(rawChange.cardchange().changesource().newsource());
 }
 
-EditElem::EditElem() {}
+EditElem::EditElem(QUuid cardId,
+                   const enum Field &field,
+                   const QString &newEl,
+                   const QLKey &p) : CardChange(roosha::Change()) {
+    rawChange.mutable_cardchange()->set_cardid((cardId.toString().toStdString()));
+    rawChange.mutable_cardchange()->mutable_editelem()->set_field(__toProtoField(field));
+    rawChange.mutable_cardchange()->mutable_editelem()->set_value(newEl.toStdString());
+    rawChange.mutable_cardchange()->mutable_editelem()->set_position(p.toByteArray().constData());
+}
 
-EditElem::EditElem(QUuid cardId, const enum Field &field, const QString &newEl, const QLKey &p) :
-        cardId(cardId), fieldName(field), newElem(newEl), pos(p) {}
+EditElem::EditElem() : CardChange(roosha::Change()) {
+    rawChange.mutable_cardchange()->mutable_editelem();
+}
 
-void EditElem::buildAndApply(QUuid id, const enum Field &field, const QString &newEl, const qint32 &p, World *world) {
-    cardId = id;
-    fieldName = field;
-    newElem = newEl;
+EditElem::EditElem(roosha::Change change) : CardChange(change) {
+    if (change.cardchange().change_case() != roosha::CardChange::kEditElem) {
+        throw std::invalid_argument("wrong change type in EditElem::EditElem(roosha::Change change); got "
+                                            + std::to_string(change.cardchange().change_case()));
+    }
+}
 
-    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
-    switch (fieldName) {
-        case TARGET: pos = cardptr->targets_.modify(p, newElem);
+void EditElem::buildAndApply(QUuid id,
+                             const enum Field &field,
+                             const QString &newEl,
+                             const qint32 &p,
+                             World *world) {
+    rawChange.mutable_cardchange()->set_cardid((id.toString().toStdString()));
+    rawChange.mutable_cardchange()->mutable_editelem()->set_field(__toProtoField(field));
+    rawChange.mutable_cardchange()->mutable_editelem()->set_value(newEl.toStdString());
+
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(id);
+    switch (field) {
+        case TARGET:
+            rawChange.mutable_cardchange()->mutable_editelem()->set_position(
+                    cardptr->targets_.modify(p, newEl).toByteArray().constData());
             break;
-        case EXAMPLE: pos = cardptr->examples_.modify(p, newElem);
+        case EXAMPLE:
+            rawChange.mutable_cardchange()->mutable_editelem()->set_position(
+                    cardptr->examples_.modify(p, newEl).toByteArray().constData());
             break;
     }
 }
 
 void EditElem::apply(World *world) {
-    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
-    switch (fieldName) {
-        case TARGET:cardptr->targets_.modify(pos, newElem);
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(getCardId());
+    switch (getFieldName()) {
+        case TARGET:
+            cardptr->targets_.modify(getPos(), getNewElem());
             break;
-        case EXAMPLE:cardptr->examples_.modify(pos, newElem);
+        case EXAMPLE:
+            cardptr->examples_.modify(getPos(), getNewElem());
             break;
     }
 }
 
-roosha::Change EditElem::toProtobuf() const {
-    return changeToProtobuf(*this);
-}
-
-QUuid EditElem::getCardId() const {
-    return cardId;
-}
-
 Field EditElem::getFieldName() const {
-    return fieldName;
+    return __fieldFromProto(rawChange.cardchange().editelem().field());
 }
 
 QString EditElem::getNewElem() const {
-    return newElem;
+    return QString::fromStdString(rawChange.cardchange().editelem().value());
 }
 
 QLKey EditElem::getPos() const {
-    return pos;
+    return QLKey(QByteArray::fromStdString(rawChange.cardchange().editelem().position()));
 }
 
-InsertElem::InsertElem() {}
+InsertElem::InsertElem() : CardChange(roosha::Change()) {
+    rawChange.mutable_cardchange()->mutable_insertelem();
+}
 
-InsertElem::InsertElem(QUuid cardId, const enum Field &field, const QString &insertingEl, const QLKey &p) :
-        cardId(cardId), fieldName(field), insertingElem(insertingEl), pos(p) {}
+InsertElem::InsertElem(roosha::Change change) : CardChange(change) {
+    if (change.cardchange().change_case() != roosha::CardChange::kInsertElem) {
+        throw std::invalid_argument("wrong change type in InsertElem::InsertElem(roosha::Change change); got "
+                                            + std::to_string(change.cardchange().change_case()));
+    }
+}
+
+InsertElem::InsertElem(QUuid cardId,
+                       const enum Field &field,
+                       const QString &insertingEl,
+                       const QLKey &p) : CardChange(roosha::Change()) {
+    rawChange.mutable_cardchange()->set_cardid((cardId.toString().toStdString()));
+    rawChange.mutable_cardchange()->mutable_insertelem()->set_field(__toProtoField(field));
+    rawChange.mutable_cardchange()->mutable_insertelem()->set_value(insertingEl.toStdString());
+    rawChange.mutable_cardchange()->mutable_insertelem()->set_index(p.toByteArray().constData());
+}
 
 void InsertElem::buildAndApply(QUuid id,
                                const enum Field &field,
                                const QString &insertingEl,
                                const qint32 &p,
                                World *world) {
-    cardId = id;
-    fieldName = field;
-    insertingElem = insertingEl;
+    rawChange.mutable_cardchange()->set_cardid((id.toString().toStdString()));
+    rawChange.mutable_cardchange()->mutable_insertelem()->set_field(__toProtoField(field));
+    rawChange.mutable_cardchange()->mutable_insertelem()->set_value(insertingEl.toStdString());
 
-    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
-    switch (fieldName) {
-        case TARGET: pos = cardptr->targets_.insertAfter(p-1, insertingElem);
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(id);
+    switch (field) {
+        case TARGET:
+            rawChange.mutable_cardchange()->mutable_insertelem()->set_index(
+                    cardptr->targets_.insertAfter(p - 1, insertingEl).toByteArray().constData());
             break;
-        case EXAMPLE: pos = cardptr->examples_.insertAfter(p-1, insertingElem);
+        case EXAMPLE:
+            rawChange.mutable_cardchange()->mutable_insertelem()->set_index(
+                    cardptr->examples_.insertAfter(p - 1, insertingEl).toByteArray().constData());
             break;
     }
 }
 
 void InsertElem::apply(World *world) {
-    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
-    switch (fieldName) {
-        case TARGET:cardptr->targets_.insert(pos, insertingElem);
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(getCardId());
+    switch (getFieldName()) {
+        case TARGET: cardptr->targets_.insert(getPos(), getInsertingElem());
             break;
-        case EXAMPLE:cardptr->examples_.insert(pos, insertingElem);
+        case EXAMPLE: cardptr->examples_.insert(getPos(), getInsertingElem());
             break;
     }
 }
 
-roosha::Change InsertElem::toProtobuf() const {
-    return changeToProtobuf(*this);
-}
-
-QUuid InsertElem::getCardId() const {
-    return cardId;
-}
-
 Field InsertElem::getFieldName() const {
-    return fieldName;
+    return __fieldFromProto(rawChange.cardchange().insertelem().field());
 }
 
 QString InsertElem::getInsertingElem() const {
-    return insertingElem;
+    return QString::fromStdString(rawChange.cardchange().insertelem().value());
 }
 
 QLKey InsertElem::getPos() const {
-    return pos;
+    return QLKey(QByteArray::fromStdString(rawChange.cardchange().insertelem().index()));;
 }
 
-DeleteElem::DeleteElem() {}
+DeleteElem::DeleteElem() : CardChange(roosha::Change()) {
+    rawChange.mutable_cardchange()->mutable_deleteelem();
+}
+DeleteElem::DeleteElem(roosha::Change change) : CardChange(change) {
+    if (change.cardchange().change_case() != roosha::CardChange::kDeleteElem) {
+        throw std::invalid_argument("wrong change type in DeleteElem::DeleteElem(roosha::Change change) ; got "
+                                            + std::to_string(change.cardchange().change_case()));
+    }
+}
 
-DeleteElem::DeleteElem(QUuid cardId, const enum Field &field, const QLKey &p) :
-        cardId(cardId), fieldName(field), pos(p) {}
+DeleteElem::DeleteElem(QUuid cardId,
+                       const enum Field &field,
+                       const QLKey &p) : CardChange(roosha::Change()) {
 
-void DeleteElem::buildAndApply(QUuid id, const enum Field &field, const qint32 &p, World *world) {
-    cardId = id;
-    fieldName = field;
+    rawChange.mutable_cardchange()->set_cardid((cardId.toString().toStdString()));
+    rawChange.mutable_cardchange()->mutable_deleteelem()->set_field(__toProtoField(field));
+    rawChange.mutable_cardchange()->mutable_deleteelem()->set_index(p.toByteArray().constData());
+}
 
-    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
-    switch (fieldName) {
-        case TARGET: pos = cardptr->targets_.remove(p);
+void DeleteElem::buildAndApply(QUuid id,
+                               const enum Field &field,
+                               const qint32 &p,
+                               World *world) {
+    rawChange.mutable_cardchange()->set_cardid((id.toString().toStdString()));
+    rawChange.mutable_cardchange()->mutable_deleteelem()->set_field(__toProtoField(field));
+
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(id);
+    switch (field) {
+        case TARGET:
+            rawChange.mutable_cardchange()->mutable_deleteelem()->set_index(
+                    cardptr->targets_.remove(p).toByteArray().constData());
             break;
-        case EXAMPLE: pos = cardptr->examples_.remove(p);
+        case EXAMPLE:
+            rawChange.mutable_cardchange()->mutable_deleteelem()->set_index(
+                    cardptr->examples_.remove(p).toByteArray().constData());
             break;
     }
 }
 
 void DeleteElem::apply(World *world) {
-    const QSharedPointer<DBCard> cardptr = world->getCards().value(this->cardId);
-    switch (fieldName) {
-        case TARGET: cardptr->targets_.remove(pos);
+    const QSharedPointer<DBCard> cardptr = world->getCards().value(getCardId());
+    switch (getFieldName()) {
+        case TARGET: cardptr->targets_.remove(getPos());
             break;
-        case EXAMPLE: cardptr->examples_.remove(pos);
+        case EXAMPLE: cardptr->examples_.remove(getPos());
             break;
     }
 }
 
-roosha::Change DeleteElem::toProtobuf() const {
-    return changeToProtobuf(*this);
-}
-
-QUuid DeleteElem::getCardId() const {
-    return cardId;
-}
-
 Field DeleteElem::getFieldName() const {
-    return fieldName;
+    return __fieldFromProto(rawChange.cardchange().deleteelem().field());
 }
 
 QLKey DeleteElem::getPos() const {
-    return pos;
+    return QLKey(QByteArray::fromStdString(rawChange.cardchange().deleteelem().index()));
 }
 
-CreateCard::CreateCard(QUuid id) : cardId(id) {}
+CreateCard::CreateCard(QUuid id) : CardChange(roosha::Change()) {
+    rawChange.mutable_cardchange()->set_cardid(id.toString().toStdString());
+    rawChange.mutable_cardchange()->mutable_createcard();
+}
 
-QUuid CreateCard::getCardId() const {
-    return cardId;
+CreateCard::CreateCard(roosha::Change change) : CardChange(change) {
+
+    if (change.cardchange().change_case() != roosha::CardChange::kCreateCard) {
+        throw std::invalid_argument("wrong change type in CreateCard::CreateCard(roosha::Change change) ; got "
+                                            + std::to_string(change.cardchange().change_case()));
+    }
 }
 
 void CreateCard::apply(World *world) {
-    world->insertCard(cardId, QSharedPointer<DBCard>::create(cardId));
+    world->insertCard(getCardId(), QSharedPointer<DBCard>::create(getCardId()));
 }
 
-roosha::Change CreateCard::toProtobuf() const {
-    return changeToProtobuf(*this);
+DeleteCard::DeleteCard(QUuid id) : CardChange(roosha::Change()) {
+    rawChange.mutable_cardchange()->set_cardid(id.toString().toStdString());
+    rawChange.mutable_cardchange()->mutable_deletecard();
 }
 
-DeleteCard::DeleteCard(QUuid id) : cardId(id) {}
+DeleteCard::DeleteCard(roosha::Change change) : CardChange(change) {
+    if (change.cardchange().change_case() != roosha::CardChange::kDeleteCard) {
+        throw std::invalid_argument("wrong change type in DeleteCard::DeleteCard(roosha::Change change) ; got "
+                                            + std::to_string(change.cardchange().change_case()));
+    }
+}
 
 void DeleteCard::apply(World *world) {
-    world->removeCard(cardId);
-}
-
-roosha::Change DeleteCard::toProtobuf() const {
-    return changeToProtobuf(*this);
-}
-
-QUuid DeleteCard::getCardId() const {
-    return cardId;
+    world->removeCard(getCardId());
 }
