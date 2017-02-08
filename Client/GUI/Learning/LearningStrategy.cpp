@@ -6,67 +6,96 @@
 
 #include "LearningStrategy.h"
 
-Card * CardLearningModel::getCard() {
+Card *CardLearningModel::getCard() {
     return card_;
 }
 
-CardViewModelBase * CardLearningModel::getViewModel() {
+CardLearningModel *CardLearningModel::emptyCard() {
+    return new CardLearningModel();
+}
+
+CardViewModelBase *CardLearningModel::getViewModel() {
     return viewModel_;
 }
 
-UserInputModelBase * CardLearningModel::getInputModel() {
+UserInputModelBase *CardLearningModel::getInputModel() {
     return inputModel_;
 }
+
 CardLearningModel::CardLearningModel(Card *card_,
                                      CardViewModelBase *viewModel_,
                                      UserInputModelBase *inputModel_,
                                      QObject *parent) :
         QObject(parent),
+        empty_(false),
         card_(card_),
         viewModel_(viewModel_),
         inputModel_(inputModel_) {
 }
 
-ILearningStrategy::ILearningStrategy(QObject *parent) :
-        QObject(parent) {
+CardLearningModel::CardLearningModel() :
+        QObject(Q_NULLPTR),
+        empty_(true),
+        card_(Q_NULLPTR),
+        viewModel_(Q_NULLPTR),
+        inputModel_(Q_NULLPTR) {
 }
 
-TestStrategy::TestStrategy(QObject *parent) :
-        ILearningStrategy(parent) {
+bool CardLearningModel::isEmpty() {
+    return empty_;
 }
 
-CardLearningModel * TestStrategy::firstCard() {
-    qDebug() << "TestStrategy::firstCard() called";
+LearningStrategyBase::LearningStrategyBase(QObject *parent) :
+        QObject(parent),
+        lastCardShown_(Q_NULLPTR) {
+}
 
+CardLearningModel *LearningStrategyBase::currentCard() {
+    return lastCardShown_;
+}
+
+// ---------------------Random card strategy
+
+RandomCardStrategy::RandomCardStrategy(QObject *parent) :
+        LearningStrategyBase(parent) {
+}
+
+CardLearningModel *RandomCardStrategy::firstCard() {
+    if (lastCardShown_) { throw std::logic_error("RandomCardStrategy::firstCard called while lastCardShown is not null"); }
+
+    auto card = randomCard();
+    return (!card) ?
+            lastCardShown_ = CardLearningModel::emptyCard() :
+            lastCardShown_ = new CardLearningModel(card, new TargetsAndExampleViewModel, new TextUserInputModel);
+}
+
+CardLearningModel *RandomCardStrategy::nextCard(CardDifficulty::Rate previousRate) {
+    if (!lastCardShown_) { throw std::logic_error("RandomCardStrategy::nextCard called while lastCardShown is null"); }
+
+    delete lastCardShown_;
+
+    auto card = randomCard();
+    return (!card) ?
+            lastCardShown_ = CardLearningModel::emptyCard() :
+            lastCardShown_ = new CardLearningModel(card, new TargetsAndExampleViewModel, new TextUserInputModel);
+}
+
+void RandomCardStrategy::finish(CardDifficulty::Rate previousRate) {
+    if (!lastCardShown_) { throw std::logic_error("RandomCardStrategy::nextCard called while lastCardShown is null"); }
+
+    delete lastCardShown_;
+    lastCardShown_ = Q_NULLPTR;
+}
+
+void RandomCardStrategy::cancel() {
+    if (lastCardShown_) { delete lastCardShown_; }
+    lastCardShown_ = Q_NULLPTR;
+}
+
+DBCard *RandomCardStrategy::randomCard() {
     auto cards = World::Instance().getCards().values();
-    if (cards.size() == 0) {
-        qDebug() << "No cards, nothing to return";
-        return nullptr;
-    }
-    DBCard *card = cards[qrand() % cards.size()].data();
-    CardViewModelBase *view = new CardViewModelBase("front", "back");
-    UserInputModelBase *input = new UserInputModelBase("input");
-    return new CardLearningModel(card, view, input);
+    if (cards.size() == 0) { return Q_NULLPTR; }
+    return cards[qrand() % cards.size()].data();
 }
 
-CardLearningModel * TestStrategy::nextCard(CardDifficulty::Rate previousRate) {
-    qDebug() << "TestStrategy::nextCard(" << previousRate << ") called";
-
-    auto cards = World::Instance().getCards().values();
-    if (cards.size() == 0) {
-        qDebug() << "No cards, nothing to return";
-        return nullptr;
-    }
-    DBCard *card = cards[qrand() % cards.size()].data();
-    CardViewModelBase *view = new CardViewModelBase("front", "back");
-    UserInputModelBase *input = new UserInputModelBase("input");
-    return new CardLearningModel(card, view, input);
-}
-
-void TestStrategy::finish(CardDifficulty::Rate previousRate) {
-    qDebug() << "TestStrategy::finish(" << previousRate << ") called";
-}
-
-void TestStrategy::cancel() {
-    qDebug() << "TestStrategy::cancel() called";
-}
+// ---------------------/RandomCardStrategy

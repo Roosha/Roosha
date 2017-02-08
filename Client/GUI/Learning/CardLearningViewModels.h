@@ -25,4 +25,9 @@ class CardViewModelBase : public QObject {
     QString backViewName_;
 };
 
+class TargetsAndExampleViewModel : public CardViewModelBase {
+ public:
+    TargetsAndExampleViewModel(QObject *parent = Q_NULLPTR);
+};
+
 #endif //ROOSHA_CLIENT_CARDLEARNINGVIEWMODEL_H

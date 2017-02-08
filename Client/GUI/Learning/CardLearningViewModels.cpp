@@ -16,3 +16,7 @@ QString CardViewModelBase::getFrontViewName() const {
 QString CardViewModelBase::getBackViewName() const {
     return backViewName_;
 }
+
+TargetsAndExampleViewModel::TargetsAndExampleViewModel(QObject *parent) :
+        CardViewModelBase("views/TargetsAndExampleView.qml", "views/DefaultCardView.qml", parent) {
+}

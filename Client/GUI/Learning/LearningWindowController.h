@@ -11,17 +11,17 @@
 
 #define LEARNING_QML_URI "roosha.learning"
 
-class LearningManager : public QObject {
+class LearningWindowController : public QObject {
  Q_OBJECT
  public:
     static void registerQmlTypes();
 
-    LearningManager(QObject *parent = Q_NULLPTR);
+    LearningWindowController(QObject *parent = Q_NULLPTR);
 
     void showLearningWindow();
     Q_INVOKABLE void closeLearningWindow();
  private:
-    ILearningStrategy *strategy_;
+    LearningStrategyBase *strategy_;
     QmlWidget *window_;
 };
 

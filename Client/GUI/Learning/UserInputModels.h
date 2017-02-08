@@ -12,14 +12,22 @@ class UserInputModelBase : public QObject {
     //@formatter:off
     Q_OBJECT
  public:
-    Q_PROPERTY(QString viewName READ getViewName)
+    Q_PROPERTY(QString inputViewName READ getInputViewName)
+    Q_PROPERTY(QString statusViewName READ getStatusViewName)
     //@formatter:on
  public:
-    UserInputModelBase(const QString &viewName_, QObject *parent = Q_NULLPTR);
+    UserInputModelBase(const QString &inputViewName, const QString &statusViewName, QObject *parent = Q_NULLPTR);
 
-    QString getViewName() const;
+    QString getInputViewName() const;
+    QString getStatusViewName() const;
  private:
-    QString viewName_;
+    QString inputViewName_;
+    QString statusViewName_;
+};
+
+class TextUserInputModel : public UserInputModelBase {
+ public:
+    TextUserInputModel(QObject *parent = Q_NULLPTR);
 };
 
 #endif //ROOSHA_CLIENT_USERINPUTMODELS_H

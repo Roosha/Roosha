@@ -5,13 +5,13 @@ GUIManager::GUIManager(QObject *parent) : QObject(parent) {
     qmlRegisterType<Translation>("Translan", 1, 0, "Translation");
     qmlRegisterType<AuthenticationController>("roosha.controllers", 1, 0, "AuthController");
     qmlRegisterType<Card>("roosha.data", 1, 0, "Card"); // TODO: register DBCard in more suitable place.
-    LearningManager::registerQmlTypes();
+    LearningWindowController::registerQmlTypes();
 
     translationController = new TranslationController(this);
     cardEditionController = new CardEditionController(this);
     cardListController = new CardListController(this);
     authenticationController = new AuthenticationController(this);
-    learningController = new LearningManager(this);
+    learningController = new LearningWindowController(this);
 
     connect(translationController, &TranslationController::createNewCard,
             cardEditionController, &CardEditionController::showNewCardEditWindow);
@@ -22,7 +22,7 @@ GUIManager::GUIManager(QObject *parent) : QObject(parent) {
     connect(cardListController, &CardListController::editThisCard,
             cardEditionController, &CardEditionController::showCardEditWindow);
     connect(cardListController, &CardListController::learnCards, learningController,
-            &LearningManager::showLearningWindow);
+            &LearningWindowController::showLearningWindow);
 }
 
 void GUIManager::showNewTranslationWindow(quint32 id, Translations trans) {

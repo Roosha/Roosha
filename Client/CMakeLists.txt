@@ -64,7 +64,7 @@ set(ROOSHA_SOURCES main.cpp
         GUI/cardeditioncontroller.cpp
         GUI/QmlWidget.cpp
         Helpers/StateHolder.cpp
-        GUI/Learning/LearningManager.cpp
+        GUI/Learning/LearningWindowController.cpp
         GUI/Learning/LearningStrategy.cpp
         GUI/Learning/CardLearningViewModels.cpp
         )
