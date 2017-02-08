@@ -82,133 +82,25 @@ const char *ProtobufConverter::grpcStatusCodeToCString(const grpc::StatusCode &r
     throw std::logic_error(QString::asprintf("Unhandled grpc::StatusCode value: %d", rawStatus).toStdString());
 }
 
-#ifndef DECLARE_CARD_CHANGE_RESULT
-#define DECLARE_CARD_CHANGE_RESULT \
-    roosha::Change result; \
-    result.mutable_cardchange()->set_cardid(change.getCardId().toString().toStdString());
-#else
-#error DECLARE_CARD_CHANGE_RESULT macro already defined
-#endif
-
-inline roosha::CardChange::Field __toProtoField(Field field) {
-    switch (field) {
-        case EXAMPLE: return roosha::CardChange::Field::CardChange_Field_EXAMPLE;
-        case TARGET: return roosha::CardChange::Field::CardChange_Field_TARGET;
-    }
-    throw std::logic_error(std::logic_error("Unexpected card field type: " + static_cast<int>(field)));
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const DeleteCard &change) {
-    DECLARE_CARD_CHANGE_RESULT;
-    result.mutable_cardchange()->mutable_deletecard();
-    return result;
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const ChangeSource &change) {
-    DECLARE_CARD_CHANGE_RESULT;
-    result.mutable_cardchange()->mutable_changesource()->set_newsource(change.getNewSource().toStdString());
-    return result;
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const CreateCard &change) {
-    DECLARE_CARD_CHANGE_RESULT;
-    result.mutable_cardchange()->mutable_createcard();
-    return result;
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const EditElem &change) {
-    DECLARE_CARD_CHANGE_RESULT;
-    auto editElem = result.mutable_cardchange()->mutable_editelem();
-    editElem->set_field(__toProtoField(change.getFieldName()));
-    editElem->set_position(change.getPos().toByteArray().constData());
-    editElem->set_value(change.getNewElem().toStdString());
-    return result;
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const InsertElem &change) {
-    DECLARE_CARD_CHANGE_RESULT;
-    auto insertElem = result.mutable_cardchange()->mutable_insertelem();
-    insertElem->set_field(__toProtoField(change.getFieldName()));
-    insertElem->set_index(change.getPos().toByteArray().constData());
-    insertElem->set_value(change.getInsertingElem().toStdString());
-    return result;
-}
-
-roosha::Change ProtobufConverter::changeToProtobuf(const DeleteElem &change) {
-    DECLARE_CARD_CHANGE_RESULT;
-    auto deleteElem = result.mutable_cardchange()->mutable_deleteelem();
-    deleteElem->set_field(__toProtoField(change.getFieldName()));
-    deleteElem->set_index(change.getPos().toByteArray().constData());
-    return result;
-}
-
-#ifdef DECLARE_CARD_CHANGE_RESULT
-#undef DECLARE_CARD_CHANGE_RESULT
-#else
-#error DECLARE_CARD_CHANGE_RESULT macro is not defined
-#endif
-
-Field __fielfFromProto(roosha::CardChange::Field rawField) {
-    switch (rawField) {
-        case roosha::CardChange::Field::CardChange_Field_EXAMPLE: return Field::EXAMPLE;
-        case roosha::CardChange::Field::CardChange_Field_TARGET: return Field::TARGET;
-
-        case roosha::CardChange::Field::CardChange_Field_UNKNOWN:
-        case roosha::CardChange::Field::CardChange_Field_CardChange_Field_INT_MAX_SENTINEL_DO_NOT_USE_:
-        case roosha::CardChange::Field::CardChange_Field_CardChange_Field_INT_MIN_SENTINEL_DO_NOT_USE_:
-            qFatal("__fielfFromProto: unexpected raw field.L %d",
-                   rawField);
-    }
-    throw std::logic_error("Unexpected card field: " + static_cast<int>(rawField));
-}
-
-ChangePtr __cardChangeFromProto(const roosha::CardChange &rawChange) {
-    QUuid cardId = QUuid(QString::fromStdString(rawChange.cardid()));
-
-    switch (rawChange.change_case()) {
-        case roosha::CardChange::kCreateCard: return QSharedPointer<CreateCard>::create(cardId);
-        case roosha::CardChange::kDeleteCard: return QSharedPointer<DeleteCard>::create(cardId);
-        case roosha::CardChange::kChangeSource:
-            return QSharedPointer<ChangeSource>::create(
-                    cardId,
-                    QString::fromStdString(rawChange.changesource().newsource())
-            );
-        case roosha::CardChange::kInsertElem:
-            return QSharedPointer<InsertElem>::create(
-                    cardId,
-                    __fielfFromProto(rawChange.insertelem().field()),
-                    QString::fromStdString(rawChange.insertelem().value()),
-                    QLKey(QByteArray::fromStdString(rawChange.insertelem().index()))
-            );
-        case roosha::CardChange::kDeleteElem:
-            return QSharedPointer<DeleteElem>::create(
-                    cardId,
-                    __fielfFromProto(rawChange.deleteelem().field()),
-                    QLKey(QByteArray::fromStdString(rawChange.deleteelem().index()))
-            );
-        case roosha::CardChange::kEditElem:
-            return QSharedPointer<EditElem>::create(
-                    cardId,
-                    __fielfFromProto(rawChange.editelem().field()),
-                    QString::fromStdString(rawChange.editelem().value()),
-                    QLKey(QByteArray::fromStdString(rawChange.editelem().position()))
-            );
-        case roosha::CardChange::CHANGE_NOT_SET:
-            qWarning("__cardChangeFromProto: empty card change passed. Return nullptr");
-            return ChangePtr(nullptr);
-
-    }
-    throw std::logic_error("Unexpected change case: " + rawChange.change_case());
-}
-
 ChangePtr ProtobufConverter::changeFromProtobuf(const roosha::Change &rawChange) {
     switch (rawChange.change_case()) {
-        case roosha::Change::kCardChange: return __cardChangeFromProto(rawChange.cardchange());
+        case roosha::Change::kCardChange:
+            switch (rawChange.cardchange().change_case()) {
+                case roosha::CardChange::kCreateCard: return QSharedPointer<CreateCard>::create(rawChange);
+                case roosha::CardChange::kDeleteCard: return QSharedPointer<DeleteCard>::create(rawChange);
+                case roosha::CardChange::kChangeSource: return QSharedPointer<ChangeSource>::create(rawChange);
+                case roosha::CardChange::kInsertElem: return QSharedPointer<InsertElem>::create(rawChange);
+                case roosha::CardChange::kDeleteElem: return QSharedPointer<DeleteElem>::create(rawChange);
+                case roosha::CardChange::kEditElem: return QSharedPointer<EditElem>::create(rawChange);
+                case roosha::CardChange::CHANGE_NOT_SET:
+                    qWarning("ChangeFromProto: empty card change passed. Return nullptr");
+                    return ChangePtr(nullptr);
+
+            }
         case roosha::Change::CHANGE_NOT_SET:
             qWarning("ProtobufConverter::changeFromProtobuf: empty Change passed. Return nullptr");
             return ChangePtr(nullptr);
 
     }
-    throw std::logic_error("Unexpected change case: " + rawChange.change_case());
 }
 

@@ -7,106 +7,87 @@
 #include "dbcard.h"
 #include "Core/QLSeq.h"
 
-class ChangeSource : public IChange {
- public:
-    ChangeSource(QUuid id, const QString &newSrc);
 
-    void apply(World *world) override;
-    roosha::Change toProtobuf() const override;
+class CardChange : public IChange {
+ public:
+    CardChange(roosha::Change change);
 
     QUuid getCardId() const;
-    QString getNewSource() const;
-
- private:
-    const QUuid cardId;
-    const QString newSource;
 };
 
-class EditElem : public IChange {
+
+class ChangeSource : public CardChange {
+ public:
+    ChangeSource(QUuid id, const QString &newSrc);
+    ChangeSource(roosha::Change change);
+
+    void apply(World *world) override;
+
+    QString getNewSource() const;
+};
+
+class EditElem : public CardChange {
  public:
     EditElem();
+    EditElem(roosha::Change change);
     EditElem(QUuid cardId, const enum Field &field, const QString &newEl, const QLKey &p);
 
     void apply(World *world) override;
     void buildAndApply(QUuid id, const enum Field &field, const QString &newEl, const qint32 &p, World* world);
-    roosha::Change toProtobuf() const override;
 
-    QUuid getCardId() const;
     Field getFieldName() const;
     QString getNewElem() const;
     QLKey getPos() const;
 
- private:
-    QUuid cardId;
-    enum Field fieldName;
-    QString newElem;
-    QLKey pos;
 };
 
-class InsertElem : public IChange {
+class InsertElem : public CardChange {
  public:
     InsertElem();
+    InsertElem(roosha::Change change);
     InsertElem(QUuid id, const enum Field &field, const QString &insertingEl, const QLKey &p);
 
     void apply(World *world) override;
     void buildAndApply(QUuid id, const enum Field &field, const QString &insertingEl, const qint32 &p, World* world);
-    roosha::Change toProtobuf() const override;
 
-    QUuid getCardId() const;
     Field getFieldName() const;
     QString getInsertingElem() const;
     QLKey getPos() const;
 
- private:
-    QUuid cardId;
-    enum Field fieldName;
-    QString insertingElem;
-    QLKey pos;
 };
 
-class DeleteElem : public IChange {
+class DeleteElem : public CardChange {
  public:
     DeleteElem();
+    DeleteElem(roosha::Change change);
     DeleteElem(QUuid id, const enum Field &field, const QLKey &p); // TODO: deprecated
 
     void apply(World *world) override;
     void buildAndApply(QUuid id, const enum Field &field, const qint32 &p, World* world);
-    roosha::Change toProtobuf() const override;
 
-    QUuid getCardId() const;
     Field getFieldName() const;
     QLKey getPos() const;
 
- private:
-    QUuid cardId;
-    enum Field fieldName;
-    QLKey pos;
 };
 
-class CreateCard : public IChange {
+class CreateCard : public CardChange {
  public:
     CreateCard(QUuid id);
+    CreateCard(roosha::Change change);
 
     void apply(World *world) override;
-    roosha::Change toProtobuf() const override;
 
-    QUuid getCardId() const;
 
- private:
-    const QUuid cardId;
 };
 
-class DeleteCard : public IChange {
+class DeleteCard : public CardChange {
  public:
     DeleteCard(QUuid id);
+    DeleteCard(roosha::Change change);
+
 
     void apply(World *world) override;
-    roosha::Change toProtobuf() const override;
 
-    QUuid getCardId() const;
-
- private:
-    const QUuid cardId;
 };
 
 #endif // CHANGES_H

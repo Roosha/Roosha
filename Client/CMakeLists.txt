@@ -101,7 +101,7 @@ set(ROOSHA_RESOURCES QML/qml.qrc
 #------------------------------/Project sources
 
 set(HEADERS ${QHK_HEADERS} ${ROOSHA_HEADERS} ${PROTO_HEADERS})
-set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES} Test/Core/TestLSequence.cpp)
+set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES} Test/Core/TestLSequence.cpp Sync/SynchronizationManager.cpp Sync/SynchronizationManager.h)
 qt5_add_resources(RESOURCES ${ROOSHA_RESOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})
