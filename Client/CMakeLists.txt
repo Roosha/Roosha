@@ -26,16 +26,11 @@ find_package(Qt5 COMPONENTS ${QT5_USED_MODULES} REQUIRED)
 find_package(Protobuf REQUIRED)
 link_libraries(grpc++_unsecure grpc gpr ${PROTOBUF_LIBRARY})
 
-set(PROTO_HEADERS Network/Proto/changes.pb.h
-        Network/Proto/commons.pb.h
-        Network/Proto/roosha_service.grpc.pb.h
-        Network/Proto/roosha_service.pb.h
-        )
-
 set(PROTO_SOURCES Network/Proto/changes.pb.cc
         Network/Proto/commons.pb.cc
         Network/Proto/roosha_service.grpc.pb.cc
         Network/Proto/roosha_service.pb.cc
+        Network/Proto/learning.pb.cc
         )
 #----------------/GRPC
 
@@ -73,6 +68,8 @@ set(ROOSHA_SOURCES main.cpp
         Core/QLSeq.cpp
         GUI/Learning/UserInputModels.cpp 
         GUI/Learning/UserInputModels.h
+        Core/Scrutiny.cpp Core/Scrutiny.cpp
+        GUI/Learning/CardDifficulty.cpp
         )
 
 set(ROOSHA_RESOURCES QML/qml.qrc

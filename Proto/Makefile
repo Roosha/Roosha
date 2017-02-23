@@ -19,7 +19,7 @@ java_proto_directory:
 register_metatypes: cxx_generated_sources make_register_metatypes_script_executable
 	$(REGISTER_METATYPES) -i $(PROTOS_DIR) -o $(CPP_GENERATED_DIR)
 
-cxx_generated_sources: roosha_service.pb.cc roosha_service.grpc.pb.cc commons.pb.cc changes.pb.cc
+cxx_generated_sources: roosha_service.pb.cc roosha_service.grpc.pb.cc commons.pb.cc changes.pb.cc learning.pb.cc
 
 %.grpc.pb.cc: %.proto
 	$(PROTOC) -I=$(PROTOS_DIR) --grpc_out=$(CPP_GENERATED_DIR) --plugin=protoc-gen-grpc=$(GRPC_CPP_PLUGIN_PATH) $<

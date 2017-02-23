@@ -7,7 +7,12 @@
 
 #include <QtCore/QObject>
 
-// TODO: there should be stored input status, received from Javascript
+enum class LearningInputType {
+    TEXT_USER_INPUT,
+};
+
+/// UserInputModel classes are used to store settings of user input, such as whether it should be checked
+/// case-insensitively or not.
 class UserInputModelBase : public QObject {
     //@formatter:off
     Q_OBJECT
@@ -20,14 +25,25 @@ class UserInputModelBase : public QObject {
 
     QString getInputViewName() const;
     QString getStatusViewName() const;
+
+    virtual LearningInputType getType() const = 0;
  private:
     QString inputViewName_;
     QString statusViewName_;
 };
 
 class TextUserInputModel : public UserInputModelBase {
+    Q_OBJECT
  public:
-    TextUserInputModel(QObject *parent = Q_NULLPTR);
+    Q_PROPERTY(bool caseInsensitive READ isCaseInsensitive)
+
+    TextUserInputModel(bool isCaseInsensitive = true, QObject *parent = Q_NULLPTR);
+
+    bool isCaseInsensitive() const;
+
+    LearningInputType getType() const override;
+ private:
+    const bool caseInsensitive_;
 };
 
 #endif //ROOSHA_CLIENT_USERINPUTMODELS_H

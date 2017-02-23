@@ -52,8 +52,8 @@ RPCErrorStatus ProtobufConverter::errorStatusFromGrpc(const grpc::Status &rawSta
         case grpc::StatusCode::UNAVAILABLE: return RPCErrorStatus::NO_CONNECTION;
         default:
             qWarning("Unknown grpc statusCode: %s. Message: '%s'",
-                                       grpcStatusCodeToCString(rawStatus.error_code()),
-                                       rawStatus.error_message().c_str());
+                     grpcStatusCodeToCString(rawStatus.error_code()),
+                     rawStatus.error_message().c_str());
             return RPCErrorStatus::UNKNOWN;
     }
 }
@@ -101,6 +101,61 @@ ChangePtr ProtobufConverter::changeFromProtobuf(const roosha::Change &rawChange)
             qWarning("ProtobufConverter::changeFromProtobuf: empty Change passed. Return nullptr");
             return ChangePtr(nullptr);
 
+    }
+}
+
+roosha::ScrutinyInput ProtobufConverter::learningInputToProtobuf(const LearningInputType &type) {
+    switch (type) {
+        case LearningInputType::TEXT_USER_INPUT: return roosha::TEXT_INPUT;
+    }
+    qWarning("ProtobufConverter::learningInputToProtobuf: unknown learning input type.");
+}
+
+LearningInputType ProtobufConverter::learningInputFromProtobuf(const roosha::ScrutinyInput &type) {
+    switch (type) {
+        case roosha::TEXT_INPUT: return LearningInputType::TEXT_USER_INPUT;
+        default: qWarning("ProtobufConverter::learningInputFromProtobuf: unexpected type passed.");
+    }
+}
+
+roosha::ScrutinyView ProtobufConverter::learningViewToProtobuf(const LearningViewType &type) {
+    switch (type) {
+        case LearningViewType::TARGETS_AND_EXAMPLE: return roosha::TARGETS_AND_EXAMPLE;
+    }
+    qWarning("ProtobufConverter::learningViewToProtobuf: unknown learning input type");
+}
+
+LearningViewType ProtobufConverter::learningViewFromProtobuf(const roosha::ScrutinyView &type) {
+    switch (type) {
+        case roosha::TARGETS_AND_EXAMPLE: return LearningViewType::TARGETS_AND_EXAMPLE;
+        default: qWarning("ProtobufConverter::learningViewFromProtobuf: unexpected type passed");
+    }
+}
+
+roosha::ScrutinyStatus ProtobufConverter::cardDifficultyRateToProtobuf(const CardDifficulty::Rate &status) {
+    switch (status) {
+        case CardDifficulty::Rate::UNKNOWN:
+            qWarning("ProtobufConverter::cardDifficultyRateToProtobuf: unknown status passed");
+            break;
+        case CardDifficulty::Rate::SKIPPED: return roosha::SKIPPED;
+        case CardDifficulty::Rate::FAILED: return roosha::FAILED;
+        case CardDifficulty::Rate::EASY: return roosha::EASY;
+        case CardDifficulty::Rate::NORMAL: return roosha::NORMAL;
+        case CardDifficulty::Rate::DIFFICULT: return roosha::DIFFICULT;
+    }
+}
+
+CardDifficulty::Rate ProtobufConverter::cardDifficultyRateFromProtobuf(const roosha::ScrutinyStatus &status) {
+    switch (status) {
+        case roosha::SKIPPED: return CardDifficulty::Rate::SKIPPED;
+        case roosha::FAILED: return CardDifficulty::Rate::FAILED;
+        case roosha::EASY: return CardDifficulty::Rate::EASY;
+        case roosha::NORMAL: return CardDifficulty::Rate::NORMAL;
+        case roosha::DIFFICULT: return CardDifficulty::Rate::DIFFICULT;
+
+        default:
+            qWarning("ProtobufConverter::cardDifficultyRateFromProtobuf: unexpected status value");
+            return CardDifficulty::Rate::UNKNOWN;
     }
 }
 

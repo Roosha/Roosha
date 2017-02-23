@@ -20,3 +20,7 @@ QString CardViewModelBase::getBackViewName() const {
 TargetsAndExampleViewModel::TargetsAndExampleViewModel(QObject *parent) :
         CardViewModelBase("views/TargetsAndExampleView.qml", "views/DefaultCardView.qml", parent) {
 }
+
+LearningViewType TargetsAndExampleViewModel::getType() const {
+    return LearningViewType::TARGETS_AND_EXAMPLE;
+}

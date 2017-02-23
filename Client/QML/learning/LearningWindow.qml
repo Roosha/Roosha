@@ -7,11 +7,19 @@ import roosha.data 1.0
 Rectangle {
     id: root
     height: 500
-    width: 500
+    width: 550
     Component.onCompleted: onFirstCard();
 
-    // 0 -- initial, 1 -- front side, 2 -- back side, 3 -- nothing to change
+    /// 0 -- initial,
+    /// 1 -- front side,
+    /// 2 -- back side after correct input(evaluating difficulty)
+    /// 3 -- back side after incorrect input
+    /// 4 -- nothing to show
     property int state: 0
+
+    UserInputBase {
+        Component.onCompleted: console.log("UserInputBase completed");
+    }
 
     Column {
         anchors.fill: parent
@@ -34,10 +42,24 @@ Rectangle {
             width: parent.width
 
             Button {
-                id: easyButton
+                id: nextButton
 
                 anchors {
                     left: parent.left
+                    verticalCenter: parent.verticalCenter
+                }
+
+                text: qsTr("Next card")
+                onClicked: onNextCard(null)
+                enabled: root.state === 3
+            }
+
+            Button {
+                id: easyButton
+
+                anchors {
+                    left: nextButton.right
+                    leftMargin: 10
                     verticalCenter: parent.verticalCenter
                 }
 
@@ -93,14 +115,20 @@ Rectangle {
 
         if (cardModel.empty) {
             showNothing();
-            state = 3;
+            state = 4;
         } else {
             showFrontSide(cardModel);
         }
     }
 
+    /// @param difficulty difficulty of the card or null, if it is not set(
+    ///                   will be used current strategy.currentCard().difficultyRate value)
     function onNextCard(difficulty) {
-        var cardModel = strategy.nextCard(difficulty);
+        if (!(difficulty === null)) {
+            strategy.currentCard().difficultyRate = difficulty
+        }
+
+        var cardModel = strategy.nextCard();
 
 
         if (cardModel.empty) {
@@ -117,64 +145,36 @@ Rectangle {
     }
 
     function showFrontSide(cardModel) {
-        console.log("Trying to load object", cardModel.viewModel.frontViewName);
-        console.log("cardModel.viewModel: ", cardModel.viewModel);
-
         var viewComponent = Qt.createComponent(cardModel.viewModel.frontViewName);
-        var frontView = viewComponent.createObject(null, {
-                "card": cardModel.card,
-                "model": cardModel.viewModel
-        });
-        console.log("frontView.height", frontView.height);
-        console.log("Trying to load object", cardModel.inputModel.inputViewName);
+        var frontView = viewComponent.createObject(null, { "model": cardModel });
 
         var inputComponent = Qt.createComponent(cardModel.inputModel.inputViewName);
-        var inputView = inputComponent.createObject(null, {
-                "card": cardModel.card,
-                "model": cardModel.inputModel,
-        });
+        var inputView = inputComponent.createObject(null, { "model": cardModel });
         inputView.inputCompleted.connect(function() {
-            console.log("handling `inputCompleted` signal.");
-            showBackSide();
+            var difficulty = strategy.currentCard().difficultyRate;
+            showBackSide(difficulty === Difficulty.UNKNOWN);
         });
 
         toggleViewport(frontView, inputView);
         state = 1;
     }
 
-    function showBackSide() {
-        console.log("showBackSide called");
-
+    function showBackSide(correctness) {
         var cardModel = strategy.currentCard();
         var viewComponent = Qt.createComponent(cardModel.viewModel.backViewName);
-        var backView = viewComponent.createObject(null, {
-                "card": cardModel.card,
-                "model": cardModel.viewModel
-        });
+        var backView = viewComponent.createObject(null, { "model": cardModel });
         var statusComponent = Qt.createComponent(cardModel.inputModel.statusViewName);
-        var statusView = statusComponent.createObject(null, {
-                "card": cardModel.card,
-                "model": cardModel.inputModel
-        });
+        var statusView = statusComponent.createObject(null, { "model": cardModel });
 
         toggleViewport(backView, statusView);
-        state = 2;
-        console.log("state = ", state);
-        console.log("state === 2", state === 2);
+        state = correctness ? 2 : 3;
     }
 
     function toggleViewport(topComponent, bottomComponent) {
         var elementComponent = Qt.createComponent("ViewportElement.qml");
-        var view = elementComponent.createObject(cardViewport, {
-                "children": [
-                    topComponent,
-                    bottomComponent
-                ]
-        });
+        var view = elementComponent.createObject(cardViewport, { "children": [ topComponent, bottomComponent ] });
 
         cardViewport.addItem(view);
-        console.log("cardViewport.currentIndex: ", cardViewport.currentIndex);
-        console.log("cardViewport.count : ", cardViewport.count);
         if (cardViewport.count > 1) {
             cardViewport.incrementCurrentIndex();
             cardViewport.removeItem(0);

@@ -7,6 +7,10 @@
 
 #include <QtCore/QObject>
 
+enum class LearningViewType {
+    TARGETS_AND_EXAMPLE,
+};
+
 class CardViewModelBase : public QObject {
     //@formatter:off
  Q_OBJECT
@@ -20,6 +24,7 @@ class CardViewModelBase : public QObject {
     QString getFrontViewName() const;
     QString getBackViewName() const;
 
+    virtual LearningViewType getType() const = 0;
  private:
     QString frontViewName_;
     QString backViewName_;
@@ -28,6 +33,8 @@ class CardViewModelBase : public QObject {
 class TargetsAndExampleViewModel : public CardViewModelBase {
  public:
     TargetsAndExampleViewModel(QObject *parent = Q_NULLPTR);
+
+    LearningViewType getType() const override;
 };
 
 #endif //ROOSHA_CLIENT_CARDLEARNINGVIEWMODEL_H

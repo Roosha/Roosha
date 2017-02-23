@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package roosha;
+
+option java_package = "com.github.roosha.proto";
+option java_outer_classname = "Learning";
+
+option cc_enable_arenas = false;
+
+option optimize_for = SPEED;
+
+message Scrutiny {
+	string cardId = 1;
+	
+	/// moment of scrutiny in ISO-8601 zoned date time string format
+	string moment = 2;
+	
+	ScrutinyInput inputMethod = 3;
+
+	ScrutinyView viewMethod = 4;
+
+	ScrutinyStatus status = 5;
+}
+
+enum ScrutinyView {
+	UNKNOWN_SCRUTINY_VIEW  = 0;
+	
+	TARGETS_AND_EXAMPLE = 1;
+}
+
+enum ScrutinyInput {
+	UNKNOWN_SCRUTINY_INPUT = 0;
+	
+	TEXT_INPUT = 1;
+}
+
+enum ScrutinyStatus {
+	UNKNOWN_SCTUTINY_STATUS = 0;
+
+	/// for empty user input
+	SKIPPED = 1;
+	
+	/// for incorrect non-empty user input
+	FAILED = 2;
+	
+	/// for coorect user input if card was marked 'easy'
+	EASY = 3;
+	
+	/// for coorect user input if card was marked 'normal'
+	NORMAL = 4;
+	
+	/// for coorect user input if card was marked 'difficult'
+	DIFFICULT = 5;
+}

@@ -20,9 +20,7 @@ void LearningWindowController::registerQmlTypes() {
         qmlRegisterType<CardDifficulty>(LEARNING_QML_URI, 1, 0, "Difficulty");
         qRegisterMetaType<CardDifficulty::Rate>();
 
-        qmlRegisterType<CardLearningModel>();
-        qmlRegisterType<CardViewModelBase>();
-        qmlRegisterType<UserInputModelBase>();
+        qmlRegisterType<CardLearningModel>(LEARNING_QML_URI, 1, 0, "CardLearningModel");
 
         registered = true;
     }

@@ -7,10 +7,13 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
+#include <QtQml/qqml.h>
+
 #include <Core/dbcard.h>
+#include <Core/Scrutiny.h>
 #include "UserInputModels.h"
 #include "CardLearningViewModels.h"
-#include <QtQml/qqml.h>
+#include "CardDifficulty.h"
 
 class CardLearningModel : public QObject {
     //@formatter:off
@@ -20,42 +23,32 @@ class CardLearningModel : public QObject {
     Q_PROPERTY(CardViewModelBase* viewModel READ getViewModel)
     Q_PROPERTY(UserInputModelBase* inputModel READ getInputModel)
     Q_PROPERTY(bool empty READ isEmpty)
+    Q_PROPERTY(CardDifficulty::Rate difficultyRate MEMBER difficultyRate_)
     //@formatter:on
  public:
     /// create instance with empty flag set.
     static CardLearningModel *emptyCard();
 
+    /// Empty model constructor
+    CardLearningModel();
     CardLearningModel(Card *card_,
                       CardViewModelBase *viewModel_,
                       UserInputModelBase *inputModel_,
                       QObject *parent = Q_NULLPTR);
 
     /// if this flag is set, there is no cards to learn, so nothing to show
-    bool isEmpty();
+    bool isEmpty() const;
+    CardDifficulty::Rate getCardDifficultyRate() const;
     Card *getCard();
     CardViewModelBase *getViewModel();
     UserInputModelBase *getInputModel();
  private:
-    /// Empty model constructor
-    CardLearningModel();
 
     bool empty_;
+    CardDifficulty::Rate difficultyRate_;
     Card *card_;
     CardViewModelBase *viewModel_;
     UserInputModelBase *inputModel_;
-};
-
-class CardDifficulty : public QObject {
- Q_OBJECT
- public:
-    enum Rate {
-        FAILED,
-        EASY,
-        NORMAL,
-        DIFFICULT
-    };
-
-    Q_ENUM(Rate)
 };
 
 class LearningStrategyBase : public QObject {
@@ -71,26 +64,32 @@ class LearningStrategyBase : public QObject {
     Q_INVOKABLE virtual CardLearningModel *firstCard() = 0;
 
     /**
-     * Get the next card to learn.
-     * @param previousRate difficulty of previous learned card.
+     * Get the next card to learn. This method should be called after difficulty rate of the current card is set.
+     * Otherwise, std::logic_error should be thrown.
+     * @note this method should always call World::addScrutiny to save result of the scrutiny
      * @return next card to learn.
      */
-    Q_INVOKABLE virtual CardLearningModel *nextCard(CardDifficulty::Rate previousRate) = 0;
+    Q_INVOKABLE virtual CardLearningModel *nextCard() = 0;
 
     /** Get current card. */
     Q_INVOKABLE CardLearningModel *currentCard();
 
     /**
      * Finish learning session successfully by setting difficulty of the last learned card.
+     * This method should be called after difficulty rate of the current card is set.
+     * Otherwise, std::logic_error should be thrown.
      * If the last card returned by firstCard or nextCard methods was not learned, use cancel method.
-     * @param previousRate
+     * @note this method should always call World::addScrutiny to save result of the scrutiny
      */
-    Q_INVOKABLE virtual void finish(CardDifficulty::Rate previousRate) = 0;
+    Q_INVOKABLE virtual void finish() = 0;
 
     /** Finish learning session with the last shown card not learned. */
     Q_INVOKABLE virtual void cancel() = 0;
 
  protected:
+    /** @throws logic_exception if lastCardShown_ is nullptr or its */
+    Scrutiny currentScrunity() throw(std::logic_error);
+
     CardLearningModel *lastCardShown_;
 };
 
@@ -99,8 +98,8 @@ class RandomCardStrategy : public LearningStrategyBase {
     RandomCardStrategy(QObject *parent = Q_NULLPTR);
 
     CardLearningModel *firstCard() override;
-    CardLearningModel *nextCard(CardDifficulty::Rate previousRate) override;
-    void finish(CardDifficulty::Rate previousRate) override;
+    CardLearningModel *nextCard() override;
+    void finish() override;
     void cancel() override;
 
  private:

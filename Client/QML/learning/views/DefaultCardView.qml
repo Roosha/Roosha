@@ -8,17 +8,17 @@ CardViewBase {
     Column {
         Text {
             id: source
-            text: card.source
+            text: model.card.source
         }
 
         Text {
             id: targets
-            text: card.target
+            text: model.card.target
         }
 
         Text {
             id: examples
-            text: card.examples
+            text: model.card.examples
         }
     }
 }

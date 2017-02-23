@@ -27,6 +27,7 @@ CardLearningModel::CardLearningModel(Card *card_,
                                      UserInputModelBase *inputModel_,
                                      QObject *parent) :
         QObject(parent),
+        difficultyRate_(CardDifficulty::Rate::UNKNOWN),
         empty_(false),
         card_(card_),
         viewModel_(viewModel_),
@@ -35,15 +36,21 @@ CardLearningModel::CardLearningModel(Card *card_,
 
 CardLearningModel::CardLearningModel() :
         QObject(Q_NULLPTR),
+        difficultyRate_(CardDifficulty::Rate::UNKNOWN),
         empty_(true),
         card_(Q_NULLPTR),
         viewModel_(Q_NULLPTR),
         inputModel_(Q_NULLPTR) {
 }
 
-bool CardLearningModel::isEmpty() {
+bool CardLearningModel::isEmpty() const {
     return empty_;
 }
+
+CardDifficulty::Rate CardLearningModel::getCardDifficultyRate() const {
+    return difficultyRate_;
+}
+
 
 LearningStrategyBase::LearningStrategyBase(QObject *parent) :
         QObject(parent),
@@ -52,6 +59,24 @@ LearningStrategyBase::LearningStrategyBase(QObject *parent) :
 
 CardLearningModel *LearningStrategyBase::currentCard() {
     return lastCardShown_;
+}
+
+Scrutiny LearningStrategyBase::currentScrunity() throw(std::logic_error) {
+    if (!lastCardShown_) {
+        throw std::logic_error("LearningStrategyBase::currentScrunity called while lastCardShown is null");
+    }
+    if (lastCardShown_->getCardDifficultyRate() == CardDifficulty::Rate::UNKNOWN) {
+        throw std::logic_error("LearningStrategyBase::currentScrunity called "
+                                       "while lastCardShown.cardDifficulty is unknown");
+    }
+
+    return Scrutiny(
+            lastCardShown_->getCard()->getId(),
+            QDateTime::currentDateTime(),
+            lastCardShown_->getInputModel()->getType(),
+            lastCardShown_->getViewModel()->getType(),
+            lastCardShown_->getCardDifficultyRate()
+    );
 }
 
 // ---------------------Random card strategy
@@ -69,8 +94,10 @@ CardLearningModel *RandomCardStrategy::firstCard() {
             lastCardShown_ = new CardLearningModel(card, new TargetsAndExampleViewModel, new TextUserInputModel);
 }
 
-CardLearningModel *RandomCardStrategy::nextCard(CardDifficulty::Rate previousRate) {
-    if (!lastCardShown_) { throw std::logic_error("RandomCardStrategy::nextCard called while lastCardShown is null"); }
+CardLearningModel *RandomCardStrategy::nextCard() {
+    Scrutiny lastScrutiny = currentScrunity();
+    World::Instance().addScrutiny(lastScrutiny);
+
 
     delete lastCardShown_;
 
@@ -80,8 +107,9 @@ CardLearningModel *RandomCardStrategy::nextCard(CardDifficulty::Rate previousRat
             lastCardShown_ = new CardLearningModel(card, new TargetsAndExampleViewModel, new TextUserInputModel);
 }
 
-void RandomCardStrategy::finish(CardDifficulty::Rate previousRate) {
-    if (!lastCardShown_) { throw std::logic_error("RandomCardStrategy::nextCard called while lastCardShown is null"); }
+void RandomCardStrategy::finish() {
+    Scrutiny lastScrutiny = currentScrunity();
+    World::Instance().addScrutiny(lastScrutiny);
 
     delete lastCardShown_;
     lastCardShown_ = Q_NULLPTR;

@@ -4,6 +4,7 @@
 #include <QUuid>
 #include "dbcard.h"
 #include "card.h"
+#include "Scrutiny.h"
 #include <QSharedPointer>
 
 enum Action {
@@ -16,6 +17,10 @@ enum Action {
 class World {
  public:
     static World &Instance();
+
+    const QVector<Scrutiny> &getLearningHistory() const;
+    void setLearningHistory(QVector<Scrutiny> newHistory);
+    void addScrutiny(Scrutiny scrutiny);
 
     const QMap<QUuid, QSharedPointer<DBCard>> &getCards();
     const ChangeList &getChanges();
@@ -43,7 +48,7 @@ class World {
 
     QMap<QUuid, QSharedPointer<DBCard>> cards_;
     ChangeList changes_;
-
+    QVector<Scrutiny> learningHistory_;
 };
 
 #endif // WORLD_H

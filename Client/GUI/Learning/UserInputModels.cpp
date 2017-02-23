@@ -18,6 +18,15 @@ QString UserInputModelBase::getStatusViewName() const {
     return statusViewName_;
 }
 
-TextUserInputModel::TextUserInputModel(QObject *parent) :
-        UserInputModelBase("inputs/TextInputView.qml", "inputs/TextInputStatus.qml", parent) {
+TextUserInputModel::TextUserInputModel(bool isCaseInsensitive, QObject *parent) :
+        UserInputModelBase("inputs/TextInputView.qml", "inputs/TextInputStatus.qml", parent),
+        caseInsensitive_(isCaseInsensitive) {
+}
+
+bool TextUserInputModel::isCaseInsensitive() const {
+    return caseInsensitive_;
+}
+
+LearningInputType TextUserInputModel::getType() const {
+    return LearningInputType::TEXT_USER_INPUT;
 }
