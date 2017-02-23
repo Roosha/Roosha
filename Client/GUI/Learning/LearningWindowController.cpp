@@ -9,7 +9,7 @@
 
 LearningWindowController::LearningWindowController(QObject *parent) :
         QObject(parent),
-        strategy_(new RandomCardStrategy(this)),
+        strategy_(new SimpleDiffStrategy(this)),
         window_(Q_NULLPTR) {
 
 }
@@ -29,6 +29,9 @@ void LearningWindowController::registerQmlTypes() {
 
 void LearningWindowController::showLearningWindow() {
     if (window_) { closeLearningWindow(); }
+
+    // TODO: strategy should be rather updated than re-created whenever new card is added or deleted from world.
+    strategy_ = new SimpleDiffStrategy();
 
     window_ = new QmlWidget();
     connect(window_, &QmlWidget::closed, this, [this] { window_ = Q_NULLPTR; strategy_->cancel(); });

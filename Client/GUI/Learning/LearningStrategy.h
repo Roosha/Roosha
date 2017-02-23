@@ -11,6 +11,7 @@
 
 #include <Core/dbcard.h>
 #include <Core/Scrutiny.h>
+#include <queue>
 #include "UserInputModels.h"
 #include "CardLearningViewModels.h"
 #include "CardDifficulty.h"
@@ -105,5 +106,31 @@ class RandomCardStrategy : public LearningStrategyBase {
  private:
     DBCard *randomCard();
 };
+
+class SimpleDiffStrategy : public LearningStrategyBase {
+ public:
+    SimpleDiffStrategy(QObject *parent = Q_NULLPTR);
+
+    CardLearningModel *firstCard() override;
+    CardLearningModel *nextCard() override;
+    void finish() override;
+    void cancel() override;
+
+ private:
+    qint32 getDiffOfDifficultyRate(CardDifficulty::Rate rate);
+    CardLearningModel *nextCardLearningModel();
+    /** If last shown card was not emoty, add the scrutiny to learning history and update cardQueue_ */
+    void processLastScrutiny();
+
+    QHash<QUuid, qint32> diffs_;
+
+    typedef std::pair<QUuid, qint32> CardDiff;
+
+    struct CompareDiff { bool operator()(const CardDiff &lhs, const CardDiff &rhs) { return lhs.second > rhs.second; }};
+
+    typedef std::priority_queue<CardDiff, std::vector<CardDiff>, CompareDiff> CardDiffQueue;
+    CardDiffQueue cardQueue_;
+};
+
 
 #endif //ROOSHA_CLIENT_LEARNINGSTRATEGY_H
