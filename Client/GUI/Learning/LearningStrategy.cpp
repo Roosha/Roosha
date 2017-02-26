@@ -89,6 +89,10 @@ void LearningStrategyBase::onCardDeleted(QUuid cardId) {
     this->onCardsDeleted(set);
 }
 
+quint32 LearningStrategyBase::getScrutiniesNumber() {
+    return scrutiniesNumber_;
+}
+
 // ---------------------SimpleDiffStrategy
 
 SimpleDiffStrategy::SimpleDiffStrategy(QList<QUuid> cardIds, QList<Scrutiny> scrutinies, QObject *parent) :

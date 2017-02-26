@@ -25,7 +25,6 @@ class LearningWindowController : public QObject {
 
     LearningStrategyBase *strategy_;
     quint32 changesHistoryPosition_;
-    quint32 learningHistoryPosition_;
     QmlWidget *window_;
 };
 

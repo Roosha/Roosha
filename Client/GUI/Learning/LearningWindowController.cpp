@@ -10,7 +10,6 @@
 LearningWindowController::LearningWindowController(QObject *parent) :
         QObject(parent),
         changesHistoryPosition_((quint32) World::Instance().getCards().size()),
-        learningHistoryPosition_((quint32) World::Instance().getLearningHistory().size()),
         strategy_(new SimpleDiffStrategy(World::Instance().getCards().keys(),
                                          QList<Scrutiny>::fromVector(World::Instance().getLearningHistory()),
                                          this)),
@@ -73,7 +72,6 @@ void LearningWindowController::updateHistoryInformationForStrategy() {
     }
 
     const auto scrutinies = World::Instance().getLearningHistory();
-    auto newScrutinies = scrutinies.mid(learningHistoryPosition_);
+    auto newScrutinies = scrutinies.mid(strategy_->getScrutiniesNumber());
     strategy_->appendScrutinies(QList<Scrutiny>::fromVector(newScrutinies));
-    learningHistoryPosition_ = (quint32) scrutinies.size();
 }

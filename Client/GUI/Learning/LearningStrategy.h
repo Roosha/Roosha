@@ -87,6 +87,9 @@ class LearningStrategyBase : public QObject {
     /** Finish learning session with the last shown card not learned. */
     Q_INVOKABLE virtual void cancel() = 0;
 
+    /** @see LearningStrategyBase::scrutiniesNumber_ */
+    quint32 getScrutiniesNumber();
+
  public slots:
     /** @see onCardsCreated */
     void onCardCreated(QUuid cardId);
