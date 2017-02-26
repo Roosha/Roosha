@@ -116,7 +116,7 @@ class LearningStrategyBase : public QObject {
      * Adjust strategy taking into account specified scrutinies.
      *
      * <b>NOTE:</b> the strategy should be familiar with existence of all cards specified in scrutinies. Otherwise,
-     * behaviour is undefined.
+     * these scrutinies will be ignored.
      * @see LearningStrategyBase::scrutiniesNumber_
      */
     virtual void appendScrutinies(QList<Scrutiny> scrutinies) = 0;

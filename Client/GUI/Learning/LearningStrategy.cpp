@@ -184,6 +184,8 @@ void SimpleDiffStrategy::onCardsDeleted(QSet<QUuid> cardIds) {
 void SimpleDiffStrategy::appendScrutinies(QList<Scrutiny> scrutinies) {
     scrutiniesNumber_ += scrutinies.size();
     for (auto &&scrutiny : scrutinies) {
-        diffs_[scrutiny.getCardId()] += getDiffOfDifficultyRate(scrutiny.getDifficultyRate());
+        if (diffs_.contains(scrutiny.getCardId())) {
+            diffs_[scrutiny.getCardId()] += getDiffOfDifficultyRate(scrutiny.getDifficultyRate());
+        }
     }
 }
