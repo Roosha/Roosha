@@ -53,6 +53,7 @@ CardDifficulty::Rate CardLearningModel::getCardDifficultyRate() const {
 
 LearningStrategyBase::LearningStrategyBase(QObject *parent) :
         QObject(parent),
+        scrutiniesNumber_(0),
         lastCardShown_(Q_NULLPTR) {
 }
 
@@ -60,12 +61,12 @@ CardLearningModel *LearningStrategyBase::currentCard() {
     return lastCardShown_;
 }
 
-Scrutiny LearningStrategyBase::currentScrunity() throw(std::logic_error) {
+Scrutiny LearningStrategyBase::currentScrutiny() throw(std::logic_error) {
     if (!lastCardShown_) {
-        throw std::logic_error("LearningStrategyBase::currentScrunity called while lastCardShown is null");
+        throw std::logic_error("LearningStrategyBase::currentScrutiny called while lastCardShown is null");
     }
     if (lastCardShown_->getCardDifficultyRate() == CardDifficulty::Rate::UNKNOWN) {
-        throw std::logic_error("LearningStrategyBase::currentScrunity called "
+        throw std::logic_error("LearningStrategyBase::currentScrutiny called "
                                        "while lastCardShown.cardDifficulty is unknown");
     }
 
@@ -78,69 +79,22 @@ Scrutiny LearningStrategyBase::currentScrunity() throw(std::logic_error) {
     );
 }
 
-// ---------------------Random card strategy
-
-RandomCardStrategy::RandomCardStrategy(QObject *parent) :
-        LearningStrategyBase(parent) {
+void LearningStrategyBase::onCardCreated(QUuid cardId) {
+    QSet<QUuid> set{cardId};
+    this->onCardsCreated(set);
 }
 
-CardLearningModel *RandomCardStrategy::firstCard() {
-    if (lastCardShown_) { throw std::logic_error("RandomCardStrategy::firstCard called while lastCardShown is not null"); }
-
-    auto card = randomCard();
-    return (!card) ?
-            lastCardShown_ = CardLearningModel::emptyCard() :
-            lastCardShown_ = new CardLearningModel(card, new TargetsAndExampleViewModel, new TextUserInputModel);
+void LearningStrategyBase::onCardDeleted(QUuid cardId) {
+    QSet<QUuid> set{cardId};
+    this->onCardsDeleted(set);
 }
-
-CardLearningModel *RandomCardStrategy::nextCard() {
-    Scrutiny lastScrutiny = currentScrunity();
-    World::Instance().addScrutiny(lastScrutiny);
-
-    delete lastCardShown_;
-
-    auto card = randomCard();
-    return (!card) ?
-            lastCardShown_ = CardLearningModel::emptyCard() :
-            lastCardShown_ = new CardLearningModel(card, new TargetsAndExampleViewModel, new TextUserInputModel);
-}
-
-void RandomCardStrategy::finish() {
-    Scrutiny lastScrutiny = currentScrunity();
-    World::Instance().addScrutiny(lastScrutiny);
-
-    delete lastCardShown_;
-    lastCardShown_ = Q_NULLPTR;
-}
-
-void RandomCardStrategy::cancel() {
-    if (lastCardShown_) { delete lastCardShown_; }
-    lastCardShown_ = Q_NULLPTR;
-}
-
-DBCard *RandomCardStrategy::randomCard() {
-    auto cards = World::Instance().getCards().values();
-    if (cards.size() == 0) { return Q_NULLPTR; }
-    return cards[qrand() % cards.size()].data();
-}
-
-// ---------------------/RandomCardStrategy
 
 // ---------------------SimpleDiffStrategy
 
-SimpleDiffStrategy::SimpleDiffStrategy(QObject *parent) :
+SimpleDiffStrategy::SimpleDiffStrategy(QList<QUuid> cardIds, QList<Scrutiny> scrutinies, QObject *parent) :
         LearningStrategyBase(parent) {
-    for (auto &&cardId : World::Instance().getCards().keys()) {
-        diffs_[cardId] = 0;
-    }
-
-    auto history = World::Instance().getLearningHistory();
-    for (auto &&scrutiny : history) {
-        diffs_[scrutiny.getCardId()] += getDiffOfDifficultyRate(scrutiny.getDifficultyRate());
-    }
-    for (auto &&id : diffs_.keys()) {
-        cardQueue_.emplace(id, diffs_[id]);
-    }
+    this->onCardsCreated(QSet<QUuid>::fromList(cardIds));
+    this->appendScrutinies(scrutinies);
 }
 
 CardLearningModel *SimpleDiffStrategy::firstCard() {
@@ -162,10 +116,12 @@ void SimpleDiffStrategy::finish() {
 }
 
 void SimpleDiffStrategy::cancel() {
-    if (lastCardShown_->isEmpty()) { return; }
+    if (!lastCardShown_) { throw std::logic_error("SimpleDiffStrategy::cancel called while lastCardShown is null"); }
 
-    QUuid prevCardId = lastCardShown_->getCard()->getId();
-    cardQueue_.emplace(prevCardId, diffs_[prevCardId]);
+    if (!lastCardShown_->isEmpty()) {
+        QUuid prevCardId = lastCardShown_->getCard()->getId();
+        if (diffs_.contains(prevCardId)) { cardQueue_.emplace(prevCardId, diffs_[prevCardId]); }
+    }
 
     lastCardShown_ = Q_NULLPTR;
 }
@@ -183,22 +139,47 @@ qint32 SimpleDiffStrategy::getDiffOfDifficultyRate(CardDifficulty::Rate rate) {
 }
 
 CardLearningModel *SimpleDiffStrategy::nextCardLearningModel() {
-    if (cardQueue_.empty()) { return CardLearningModel::emptyCard(); }
-    QUuid cardId = cardQueue_.top().first;
-    cardQueue_.pop();
-    return lastCardShown_ = new CardLearningModel(
-            World::Instance().getCards()[cardId].data(),
-            new TargetsAndExampleViewModel(),
-            new TextUserInputModel()
-    );
+    while (!cardQueue_.empty()) {
+        QUuid cardId = cardQueue_.top().first;
+        cardQueue_.pop();
+        if (diffs_.contains(cardId)) {
+            return lastCardShown_ = new CardLearningModel(
+                    World::Instance().getCards()[cardId].data(),
+                    new TargetsAndExampleViewModel(),
+                    new TextUserInputModel()
+            );
+        }
+    }
+
+    return CardLearningModel::emptyCard();
 }
 
 void SimpleDiffStrategy::processLastScrutiny() {
     if (!lastCardShown_->isEmpty()) {
-        World::Instance().addScrutiny(currentScrunity());
+        World::Instance().addScrutiny(currentScrutiny());
 
         QUuid prevCardId = lastCardShown_->getCard()->getId();
         diffs_[prevCardId] += getDiffOfDifficultyRate(lastCardShown_->getCardDifficultyRate());
-        cardQueue_.emplace(prevCardId, diffs_[prevCardId]);
+        if (diffs_.contains(prevCardId)) { cardQueue_.emplace(prevCardId, diffs_[prevCardId]); }
+    }
+}
+
+void SimpleDiffStrategy::onCardsCreated(QSet<QUuid> cardIds) {
+    for (auto &&cardId : cardIds) {
+        diffs_[cardId] = 0;
+        cardQueue_.emplace(cardId, 0);
+    }
+}
+
+void SimpleDiffStrategy::onCardsDeleted(QSet<QUuid> cardIds) {
+    for (auto &&cardId : cardIds) {
+        diffs_.remove(cardId);
+    }
+}
+
+void SimpleDiffStrategy::appendScrutinies(QList<Scrutiny> scrutinies) {
+    scrutiniesNumber_ += scrutinies.size();
+    for (auto &&scrutiny : scrutinies) {
+        diffs_[scrutiny.getCardId()] += getDiffOfDifficultyRate(scrutiny.getDifficultyRate());
     }
 }

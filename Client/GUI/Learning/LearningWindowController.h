@@ -21,7 +21,11 @@ class LearningWindowController : public QObject {
     void showLearningWindow();
     Q_INVOKABLE void closeLearningWindow();
  private:
+    void updateHistoryInformationForStrategy();
+
     LearningStrategyBase *strategy_;
+    quint32 changesHistoryPosition_;
+    quint32 learningHistoryPosition_;
     QmlWidget *window_;
 };
 

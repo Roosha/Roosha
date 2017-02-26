@@ -9,7 +9,11 @@
 
 LearningWindowController::LearningWindowController(QObject *parent) :
         QObject(parent),
-        strategy_(new SimpleDiffStrategy(this)),
+        changesHistoryPosition_((quint32) World::Instance().getCards().size()),
+        learningHistoryPosition_((quint32) World::Instance().getLearningHistory().size()),
+        strategy_(new SimpleDiffStrategy(World::Instance().getCards().keys(),
+                                         QList<Scrutiny>::fromVector(World::Instance().getLearningHistory()),
+                                         this)),
         window_(Q_NULLPTR) {
 
 }
@@ -30,11 +34,13 @@ void LearningWindowController::registerQmlTypes() {
 void LearningWindowController::showLearningWindow() {
     if (window_) { closeLearningWindow(); }
 
-    // TODO: strategy should be rather updated than re-created whenever new card is added or deleted from world.
-    strategy_ = new SimpleDiffStrategy();
+    updateHistoryInformationForStrategy();
 
     window_ = new QmlWidget();
-    connect(window_, &QmlWidget::closed, this, [this] { window_ = Q_NULLPTR; strategy_->cancel(); });
+    connect(window_, &QmlWidget::closed, this, [this] {
+        window_ = Q_NULLPTR;
+        strategy_->cancel();
+    });
 
     window_->rootContext()->setContextProperty("controller", this);
     window_->rootContext()->setContextProperty("strategy", strategy_);
@@ -51,4 +57,23 @@ void LearningWindowController::closeLearningWindow() {
         window_->close();
     }
     window_ = Q_NULLPTR;
+}
+
+void LearningWindowController::updateHistoryInformationForStrategy() {
+    const auto changes = World::Instance().getChanges();
+    for (int i = changesHistoryPosition_; i < changes.size(); i++, changesHistoryPosition_++) {
+        const auto protoChange = changes[i]->toProtobuf();
+        if (protoChange.change_case() == protoChange.kCardChange) {
+            if (protoChange.cardchange().change_case() == protoChange.cardchange().kCreateCard) {
+                strategy_->onCardCreated(((CreateCard *) changes[i].data())->getCardId());
+            } else if (protoChange.cardchange().change_case() == protoChange.cardchange().kDeleteCard) {
+                strategy_->onCardDeleted(((DeleteCard *) changes[i].data())->getCardId());
+            }
+        }
+    }
+
+    const auto scrutinies = World::Instance().getLearningHistory();
+    auto newScrutinies = scrutinies.mid(learningHistoryPosition_);
+    strategy_->appendScrutinies(QList<Scrutiny>::fromVector(newScrutinies));
+    learningHistoryPosition_ = (quint32) scrutinies.size();
 }
