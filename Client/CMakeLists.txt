@@ -70,6 +70,7 @@ set(ROOSHA_SOURCES main.cpp
         GUI/Learning/UserInputModels.h
         Core/Scrutiny.cpp Core/Scrutiny.cpp
         GUI/Learning/CardDifficulty.cpp
+        GUI/Learning/LearningManager.cpp
         )
 
 set(ROOSHA_RESOURCES QML/qml.qrc

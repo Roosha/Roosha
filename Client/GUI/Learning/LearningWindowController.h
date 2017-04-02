@@ -2,8 +2,8 @@
 // Created by gylo on 04.02.17.
 //
 
-#ifndef ROOSHA_CLIENT_LEARNINGMANAGER_H
-#define ROOSHA_CLIENT_LEARNINGMANAGER_H
+#ifndef ROOSHA_CLIENT_LEARNINGWINDOWCONTROLLER_H
+#define ROOSHA_CLIENT_LEARNINGWINDOWCONTROLLER_H
 
 #include <QObject>
 #include <GUI/QmlWidget.h>
@@ -32,24 +32,4 @@ class LearningWindowController : public QObject {
     QmlWidget *window_;
 };
 
-
-// TODO: this class should be moved to a separate file, but, unfortunately, all my attempts to do this failed due to
-// some crappy compilation errors.
-class LearningManager : public QObject {
- Q_OBJECT
- public:
-    LearningManager();
-
-    QSharedPointer<LearningStrategyBase> loadStrategy(const LearningStrategyType &strategyType);
-    void saveStrategy(QSharedPointer<LearningStrategyBase> strategy);
-
- private:
-    LearningStrategyBase *loadStrategyForType(const LearningStrategyType &strategyType);
-
-    /// This map contains elements for each defined strategy type. Even so, it may contain null pointer since some
-    /// strategies may be not loaded at the moment.
-    QMap<LearningStrategyType, QWeakPointer<LearningStrategyBase>> strategies_;
-};
-
-
-#endif //ROOSHA_CLIENT_LEARNINGMANAGER_H
+#endif //ROOSHA_CLIENT_LEARNINGWINDOWCONTROLLER_H
