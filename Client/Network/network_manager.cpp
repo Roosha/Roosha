@@ -4,6 +4,7 @@
 
 #include <QMessageBox>
 #include <QThread>
+#include <QNetworkInterface>
 
 #ifndef DEBUG_CALL
 #define DEBUG_CALL(methodName)\
@@ -50,6 +51,17 @@ quint32 NetworkManager::authorize(QString login, QString password, quint32 timeo
     call->request_.set_login(login.toStdString());
     call->request_.set_passwordhash(AuthenticationManager::hashPassword(password));
 
+    auto mac_address = []() -> QString {
+        for(QNetworkInterface in : QNetworkInterface::allInterfaces()) {
+            if(!(in.flags() & QNetworkInterface::IsLoopBack)) {
+                return in.hardwareAddress();
+            }
+        }
+        return QString("");
+    };
+
+    call->request_.set_macaddress(mac_address().toStdString());
+
     call->authenticate(authenticationManager_);
     return call->id_;
 }
@@ -59,6 +71,18 @@ quint32 NetworkManager::registrate(QString login, QString password, quint32 time
     RegistrateAsyncCall *call = new RegistrateAsyncCall(++currentId_, timeoutMills);
     call->request_.set_login(login.toStdString());
     call->request_.set_passwordhash(AuthenticationManager::hashPassword(password));
+
+    auto mac_address = []() -> QString {
+        for(QNetworkInterface in : QNetworkInterface::allInterfaces()) {
+            if(!(in.flags() & QNetworkInterface::IsLoopBack)) {
+                return in.hardwareAddress();
+            }
+        }
+        return QString("");
+    };
+
+    std::string a = mac_address().toStdString();
+    call->request_.set_macaddress(mac_address().toStdString());
 
     call->authenticate(authenticationManager_);
     return call->id_;

@@ -20,10 +20,12 @@ class ConfigureManager {
     QString getLogin();
     QString getPasswordHash();
     QString getToken();
+    qint8 getMachineId();
 
     void setLogin(QString login);
     void setPasswordHash(QString password);
     void setToken(QString token);
+    void setMachineId(qint8 machineId);
 
  protected:
     ConfigureManager();

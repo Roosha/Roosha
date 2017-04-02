@@ -56,9 +56,10 @@ void protobuf_AssignDesc_commons_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Void, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Void, _is_default_instance_));
   Credentials_descriptor_ = file->message_type(1);
-  static const int Credentials_offsets_[2] = {
+  static const int Credentials_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Credentials, login_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Credentials, passwordhash_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Credentials, macaddress_),
   };
   Credentials_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -72,8 +73,9 @@ void protobuf_AssignDesc_commons_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Credentials, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Credentials, _is_default_instance_));
   AuthenticationToken_descriptor_ = file->message_type(2);
-  static const int AuthenticationToken_offsets_[1] = {
+  static const int AuthenticationToken_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AuthenticationToken, token_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(AuthenticationToken, machineid_),
   };
   AuthenticationToken_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -126,11 +128,12 @@ void protobuf_AddDesc_commons_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\rcommons.proto\022\006roosha\"\006\n\004Void\"2\n\013Crede"
+    "\n\rcommons.proto\022\006roosha\"\006\n\004Void\"F\n\013Crede"
     "ntials\022\r\n\005login\030\001 \001(\t\022\024\n\014passwordHash\030\002 "
-    "\001(\t\"$\n\023AuthenticationToken\022\r\n\005token\030\001 \001("
-    "\tB,\n\027com.github.roosha.protoB\014CommonsPro"
-    "toH\001\370\001\000b\006proto3", 175);
+    "\001(\t\022\022\n\nmacAddress\030\003 \001(\t\"7\n\023Authenticatio"
+    "nToken\022\r\n\005token\030\001 \001(\t\022\021\n\tmachineId\030\002 \001(\005"
+    "B,\n\027com.github.roosha.protoB\014CommonsProt"
+    "oH\001\370\001\000b\006proto3", 214);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "commons.proto", &protobuf_RegisterTypes);
   Void::default_instance_ = new Void();
@@ -335,6 +338,7 @@ void Void::InternalSwap(Void* other) {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Credentials::kLoginFieldNumber;
 const int Credentials::kPasswordHashFieldNumber;
+const int Credentials::kMacAddressFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Credentials::Credentials()
@@ -361,6 +365,7 @@ void Credentials::SharedCtor() {
   _cached_size_ = 0;
   login_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   passwordhash_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  macaddress_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 Credentials::~Credentials() {
@@ -371,6 +376,7 @@ Credentials::~Credentials() {
 void Credentials::SharedDtor() {
   login_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   passwordhash_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  macaddress_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != default_instance_) {
   }
 }
@@ -404,6 +410,7 @@ void Credentials::Clear() {
 // @@protoc_insertion_point(message_clear_start:roosha.Credentials)
   login_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   passwordhash_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  macaddress_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 bool Credentials::MergePartialFromCodedStream(
@@ -442,6 +449,23 @@ bool Credentials::MergePartialFromCodedStream(
             this->passwordhash().data(), this->passwordhash().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
             "roosha.Credentials.passwordHash"));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_macAddress;
+        break;
+      }
+
+      // optional string macAddress = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_macAddress:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_macaddress()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->macaddress().data(), this->macaddress().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "roosha.Credentials.macAddress"));
         } else {
           goto handle_unusual;
         }
@@ -493,6 +517,16 @@ void Credentials::SerializeWithCachedSizes(
       2, this->passwordhash(), output);
   }
 
+  // optional string macAddress = 3;
+  if (this->macaddress().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->macaddress().data(), this->macaddress().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "roosha.Credentials.macAddress");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->macaddress(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:roosha.Credentials)
 }
 
@@ -521,6 +555,17 @@ void Credentials::SerializeWithCachedSizes(
         2, this->passwordhash(), target);
   }
 
+  // optional string macAddress = 3;
+  if (this->macaddress().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->macaddress().data(), this->macaddress().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "roosha.Credentials.macAddress");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->macaddress(), target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:roosha.Credentials)
   return target;
 }
@@ -541,6 +586,13 @@ int Credentials::ByteSize() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->passwordhash());
+  }
+
+  // optional string macAddress = 3;
+  if (this->macaddress().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->macaddress());
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -579,6 +631,10 @@ void Credentials::MergeFrom(const Credentials& from) {
 
     passwordhash_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.passwordhash_);
   }
+  if (from.macaddress().size() > 0) {
+
+    macaddress_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.macaddress_);
+  }
 }
 
 void Credentials::CopyFrom(const ::google::protobuf::Message& from) {
@@ -607,6 +663,7 @@ void Credentials::Swap(Credentials* other) {
 void Credentials::InternalSwap(Credentials* other) {
   login_.Swap(&other->login_);
   passwordhash_.Swap(&other->passwordhash_);
+  macaddress_.Swap(&other->macaddress_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -710,12 +767,57 @@ void Credentials::clear_passwordhash() {
   // @@protoc_insertion_point(field_set_allocated:roosha.Credentials.passwordHash)
 }
 
+// optional string macAddress = 3;
+void Credentials::clear_macaddress() {
+  macaddress_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& Credentials::macaddress() const {
+  // @@protoc_insertion_point(field_get:roosha.Credentials.macAddress)
+  return macaddress_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void Credentials::set_macaddress(const ::std::string& value) {
+  
+  macaddress_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:roosha.Credentials.macAddress)
+}
+ void Credentials::set_macaddress(const char* value) {
+  
+  macaddress_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:roosha.Credentials.macAddress)
+}
+ void Credentials::set_macaddress(const char* value, size_t size) {
+  
+  macaddress_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:roosha.Credentials.macAddress)
+}
+ ::std::string* Credentials::mutable_macaddress() {
+  
+  // @@protoc_insertion_point(field_mutable:roosha.Credentials.macAddress)
+  return macaddress_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* Credentials::release_macaddress() {
+  // @@protoc_insertion_point(field_release:roosha.Credentials.macAddress)
+  
+  return macaddress_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void Credentials::set_allocated_macaddress(::std::string* macaddress) {
+  if (macaddress != NULL) {
+    
+  } else {
+    
+  }
+  macaddress_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), macaddress);
+  // @@protoc_insertion_point(field_set_allocated:roosha.Credentials.macAddress)
+}
+
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
 
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int AuthenticationToken::kTokenFieldNumber;
+const int AuthenticationToken::kMachineIdFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 AuthenticationToken::AuthenticationToken()
@@ -741,6 +843,7 @@ void AuthenticationToken::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   token_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  machineid_ = 0;
 }
 
 AuthenticationToken::~AuthenticationToken() {
@@ -782,6 +885,7 @@ AuthenticationToken* AuthenticationToken::New(::google::protobuf::Arena* arena) 
 void AuthenticationToken::Clear() {
 // @@protoc_insertion_point(message_clear_start:roosha.AuthenticationToken)
   token_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  machineid_ = 0;
 }
 
 bool AuthenticationToken::MergePartialFromCodedStream(
@@ -803,6 +907,21 @@ bool AuthenticationToken::MergePartialFromCodedStream(
             this->token().data(), this->token().length(),
             ::google::protobuf::internal::WireFormatLite::PARSE,
             "roosha.AuthenticationToken.token"));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_machineId;
+        break;
+      }
+
+      // optional int32 machineId = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_machineId:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &machineid_)));
+
         } else {
           goto handle_unusual;
         }
@@ -844,6 +963,11 @@ void AuthenticationToken::SerializeWithCachedSizes(
       1, this->token(), output);
   }
 
+  // optional int32 machineId = 2;
+  if (this->machineid() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->machineid(), output);
+  }
+
   // @@protoc_insertion_point(serialize_end:roosha.AuthenticationToken)
 }
 
@@ -861,6 +985,11 @@ void AuthenticationToken::SerializeWithCachedSizes(
         1, this->token(), target);
   }
 
+  // optional int32 machineId = 2;
+  if (this->machineid() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->machineid(), target);
+  }
+
   // @@protoc_insertion_point(serialize_to_array_end:roosha.AuthenticationToken)
   return target;
 }
@@ -874,6 +1003,13 @@ int AuthenticationToken::ByteSize() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->token());
+  }
+
+  // optional int32 machineId = 2;
+  if (this->machineid() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->machineid());
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -908,6 +1044,9 @@ void AuthenticationToken::MergeFrom(const AuthenticationToken& from) {
 
     token_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.token_);
   }
+  if (from.machineid() != 0) {
+    set_machineid(from.machineid());
+  }
 }
 
 void AuthenticationToken::CopyFrom(const ::google::protobuf::Message& from) {
@@ -935,6 +1074,7 @@ void AuthenticationToken::Swap(AuthenticationToken* other) {
 }
 void AuthenticationToken::InternalSwap(AuthenticationToken* other) {
   token_.Swap(&other->token_);
+  std::swap(machineid_, other->machineid_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -992,6 +1132,20 @@ void AuthenticationToken::clear_token() {
   }
   token_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), token);
   // @@protoc_insertion_point(field_set_allocated:roosha.AuthenticationToken.token)
+}
+
+// optional int32 machineId = 2;
+void AuthenticationToken::clear_machineid() {
+  machineid_ = 0;
+}
+ ::google::protobuf::int32 AuthenticationToken::machineid() const {
+  // @@protoc_insertion_point(field_get:roosha.AuthenticationToken.machineId)
+  return machineid_;
+}
+ void AuthenticationToken::set_machineid(::google::protobuf::int32 value) {
+  
+  machineid_ = value;
+  // @@protoc_insertion_point(field_set:roosha.AuthenticationToken.machineId)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

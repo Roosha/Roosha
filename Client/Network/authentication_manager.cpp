@@ -83,7 +83,7 @@ void AuthenticationManager::sendWithMetadata(AuthenticatedAsyncCall *call) {
     QMutexLocker lock(&stateMutex_);
 
     if (state_ == AUTHENTICATED) {
-        call->context_.AddMetadata(TOKEN_METADATA_KEY, ConfigureManager::Instance().getToken().toStdString());
+        call->context_.AddMetadata(TOKEN_METADATA_KEY, ConfigureManager::Instance().getToken().toStdString()); //TODO: add
     }
 
     if (state_ == AWAIT_CONNECTION || state_ == AUTHENTICATED || !call->isAuthenticationRequired()) {
@@ -202,6 +202,7 @@ void AuthenticationManager::processAuthorizeOrRegistrateResponse(AuthorizeOrRegi
         ConfigureManager::Instance().setLogin(QString::fromStdString(call->request_.login()));
         ConfigureManager::Instance().setPasswordHash(QString::fromStdString(call->request_.passwordhash()));
         ConfigureManager::Instance().setToken(QString::fromStdString(call->response_.token()));
+        ConfigureManager::Instance().setMachineId(static_cast<qint8>(call->response_.machineid()));
 
         retryAllQueuedCalls();
     } else {
