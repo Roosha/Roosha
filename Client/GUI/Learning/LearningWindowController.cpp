@@ -5,16 +5,15 @@
 #include <QQmlContext>
 #include <Core/world.h>
 
+#include "LearningStrategy.h"
 #include "LearningWindowController.h"
 
 LearningWindowController::LearningWindowController(QObject *parent) :
         QObject(parent),
-        changesHistoryPosition_((quint32) World::Instance().getCards().size()),
-        strategy_(new SimpleDiffStrategy(World::Instance().getCards().keys(),
-                                         QList<Scrutiny>::fromVector(World::Instance().getLearningHistory()),
-                                         this)),
+        strategyType_(LearningStrategyType::SIMPLE_DIFF_STRATEGY),
+        learningManager_(QPointer<LearningManager>(new LearningManager())),
         window_(Q_NULLPTR) {
-
+    strategy_ = learningManager_->loadStrategy(strategyType_);
 }
 
 void LearningWindowController::registerQmlTypes() {
@@ -33,16 +32,16 @@ void LearningWindowController::registerQmlTypes() {
 void LearningWindowController::showLearningWindow() {
     if (window_) { closeLearningWindow(); }
 
-    updateHistoryInformationForStrategy();
+    strategy_ = learningManager_->loadStrategy(strategyType_);
 
     window_ = new QmlWidget();
     connect(window_, &QmlWidget::closed, this, [this] {
         window_ = Q_NULLPTR;
-        strategy_->cancel();
+        closeLearningWindow();
     });
 
     window_->rootContext()->setContextProperty("controller", this);
-    window_->rootContext()->setContextProperty("strategy", strategy_);
+    window_->rootContext()->setContextProperty("strategy", strategy_.data());
     window_->setSource(QStringLiteral("qrc:/learning/LearningWindow.qml"));
 
     window_->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -56,22 +55,52 @@ void LearningWindowController::closeLearningWindow() {
         window_->close();
     }
     window_ = Q_NULLPTR;
+
+    strategy_->cancel();
+    learningManager_->saveStrategy(strategy_);
 }
 
-void LearningWindowController::updateHistoryInformationForStrategy() {
-    const auto changes = World::Instance().getChanges();
-    for (int i = changesHistoryPosition_; i < changes.size(); i++, changesHistoryPosition_++) {
+LearningManager::LearningManager() :
+        QObject(Q_NULLPTR) {
+    strategies_[LearningStrategyType::SIMPLE_DIFF_STRATEGY] = QWeakPointer<SimpleDiffStrategy>();
+}
+
+QSharedPointer<LearningStrategyBase> LearningManager::loadStrategy(const LearningStrategyType &strategyType) {
+    QSharedPointer<LearningStrategyBase> strategy = strategies_[strategyType].toStrongRef();
+    if (strategy.isNull()) {
+        strategy = QSharedPointer<LearningStrategyBase>(loadStrategyForType(strategyType));
+    }
+
+    auto changes = World::Instance().getChanges();
+    for (int i = strategy->getChangesNumber(); i < changes.size(); i++) {
         const auto protoChange = changes[i]->toProtobuf();
         if (protoChange.change_case() == protoChange.kCardChange) {
-            if (protoChange.cardchange().change_case() == protoChange.cardchange().kCreateCard) {
-                strategy_->onCardCreated(((CreateCard *) changes[i].data())->getCardId());
-            } else if (protoChange.cardchange().change_case() == protoChange.cardchange().kDeleteCard) {
-                strategy_->onCardDeleted(((DeleteCard *) changes[i].data())->getCardId());
+            const auto cardChange = protoChange.cardchange();
+            if (cardChange.change_case() == cardChange.kCreateCard) {
+                strategy->onCardCreated(((CreateCard *) changes[i].data())->getCardId());
+            } else if (cardChange.change_case() == cardChange.kDeleteCard) {
+                strategy->onCardDeleted(((DeleteCard *) changes[i].data())->getCardId());
             }
         }
     }
+    strategy->setChangesNumber((quint32) changes.size());
 
     const auto scrutinies = World::Instance().getLearningHistory();
-    auto newScrutinies = scrutinies.mid(strategy_->getScrutiniesNumber());
-    strategy_->appendScrutinies(QList<Scrutiny>::fromVector(newScrutinies));
+    strategy->appendScrutinies(scrutinies.mid(strategy->getScrutiniesNumber()).toList());
+
+    return strategies_[strategyType] = strategy;
+}
+
+void LearningManager::saveStrategy(QSharedPointer<LearningStrategyBase> strategy) {
+    // TODO: implement
+}
+
+LearningStrategyBase *LearningManager::loadStrategyForType(const LearningStrategyType &strategyType) {
+    switch (strategyType) {
+        case LearningStrategyType::SIMPLE_DIFF_STRATEGY:
+            return new SimpleDiffStrategy(
+                    World::Instance().getCards().keys(),
+                    World::Instance().getLearningHistory().toList()
+            );
+    }
 }

@@ -54,6 +54,7 @@ CardDifficulty::Rate CardLearningModel::getCardDifficultyRate() const {
 LearningStrategyBase::LearningStrategyBase(QObject *parent) :
         QObject(parent),
         scrutiniesNumber_(0),
+        changesNumber_(0),
         lastCardShown_(Q_NULLPTR) {
 }
 
@@ -93,6 +94,14 @@ quint32 LearningStrategyBase::getScrutiniesNumber() {
     return scrutiniesNumber_;
 }
 
+quint32 LearningStrategyBase::getChangesNumber() const {
+    return changesNumber_;
+}
+
+void LearningStrategyBase::setChangesNumber(quint32 changesNumber_) {
+    LearningStrategyBase::changesNumber_ = changesNumber_;
+}
+
 // ---------------------SimpleDiffStrategy
 
 SimpleDiffStrategy::SimpleDiffStrategy(QList<QUuid> cardIds, QList<Scrutiny> scrutinies, QObject *parent) :
@@ -120,9 +129,7 @@ void SimpleDiffStrategy::finish() {
 }
 
 void SimpleDiffStrategy::cancel() {
-    if (!lastCardShown_) { throw std::logic_error("SimpleDiffStrategy::cancel called while lastCardShown is null"); }
-
-    if (!lastCardShown_->isEmpty()) {
+    if (lastCardShown_ && !lastCardShown_->isEmpty()) {
         QUuid prevCardId = lastCardShown_->getCard()->getId();
         if (diffs_.contains(prevCardId)) { cardQueue_.emplace(prevCardId, diffs_[prevCardId]); }
     }
@@ -188,4 +195,8 @@ void SimpleDiffStrategy::appendScrutinies(QList<Scrutiny> scrutinies) {
             diffs_[scrutiny.getCardId()] += getDiffOfDifficultyRate(scrutiny.getDifficultyRate());
         }
     }
+}
+
+LearningStrategyType SimpleDiffStrategy::getType() {
+    return LearningStrategyType::SIMPLE_DIFF_STRATEGY;
 }

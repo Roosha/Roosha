@@ -16,6 +16,13 @@
 #include "CardLearningViewModels.h"
 #include "CardDifficulty.h"
 
+
+enum class LearningStrategyType {
+    // NOTE: if any type is added to this enum, it should be added to LearningManager constructor
+
+    SIMPLE_DIFF_STRATEGY,
+};
+
 class CardLearningModel : public QObject {
     //@formatter:off
     Q_OBJECT
@@ -84,11 +91,17 @@ class LearningStrategyBase : public QObject {
      */
     Q_INVOKABLE virtual void finish() = 0;
 
-    /** Finish learning session with the last shown card not learned. */
+    /** Finish learning session with the last shown card not learned. If no cards have shown yet, do nothing. */
     Q_INVOKABLE virtual void cancel() = 0;
 
     /** @see LearningStrategyBase::scrutiniesNumber_ */
     quint32 getScrutiniesNumber();
+
+    /** @see LearningStrategyBase::changesNumber_ */
+    quint32 getChangesNumber() const;
+
+
+    virtual LearningStrategyType getType() = 0;
 
  public slots:
     /** @see onCardsCreated */
@@ -100,6 +113,9 @@ class LearningStrategyBase : public QObject {
      * <b>NOTE:</b> recurrent call of this method with the same cardId may make following behaviour of the strategy
      * undefined.
      * @param cardIds ids of created cards
+
+     * @note update LearningStrategyBase::changesNumber_ whenever you notify the strategy about new card creations and
+     *       deletions
      */
     virtual void onCardsCreated(QSet<QUuid> cardIds) = 0;
 
@@ -109,6 +125,9 @@ class LearningStrategyBase : public QObject {
     /**
      * Notify the strategy on deletion of cards.
      * @param cardIds ids of deleted cards
+     *
+     * @note update LearningStrategyBase::changesNumber_ whenever you notify the strategy about new card creations and
+     *       deletions
      */
     virtual void onCardsDeleted(QSet<QUuid> cardIds) = 0;
 
@@ -121,6 +140,8 @@ class LearningStrategyBase : public QObject {
      */
     virtual void appendScrutinies(QList<Scrutiny> scrutinies) = 0;
 
+    /** @see LearningStrategyBase::changesNumber_ */
+    void setChangesNumber(quint32 changesNumber_);
  protected:
     /** @throws logic_exception if lastCardShown_ is nullptr or its */
     Scrutiny currentScrutiny() throw(std::logic_error);
@@ -130,6 +151,16 @@ class LearningStrategyBase : public QObject {
      * whenever strategy receives new scrutiny, whether from QML or LearningStrategyBase::appendScrutinies method.
      */
     quint32 scrutiniesNumber_;
+
+    /**
+     * This counter stores length of changes history prefix that is known for the strategy.
+     * It should be set by client whenever he notifies the strategy about creations and deletions of cards in the world.
+     *
+     * It should be used to avoid recurrence of notifications on the same event, which may cause errors in the strategy,
+     * including segmentation faults.
+     */
+    quint32 changesNumber_;
+ protected:
 
     CardLearningModel *lastCardShown_;
 };
@@ -158,6 +189,8 @@ class SimpleDiffStrategy : public LearningStrategyBase {
     void onCardsCreated(QSet<QUuid> cardIds) override;
     void onCardsDeleted(QSet<QUuid> cardIds) override;
     void appendScrutinies(QList<Scrutiny> scrutinies) override;
+
+    LearningStrategyType getType() override;
  private:
     qint32 getDiffOfDifficultyRate(CardDifficulty::Rate rate);
     CardLearningModel *nextCardLearningModel();

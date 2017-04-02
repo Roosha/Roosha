@@ -7,9 +7,13 @@
 
 #include <QObject>
 #include <GUI/QmlWidget.h>
-#include "LearningStrategy.h"
+#include <QtCore/QPointer>
 
 #define LEARNING_QML_URI "roosha.learning"
+
+class LearningManager;
+class LearningStrategyBase;
+enum class LearningStrategyType;
 
 class LearningWindowController : public QObject {
  Q_OBJECT
@@ -21,11 +25,31 @@ class LearningWindowController : public QObject {
     void showLearningWindow();
     Q_INVOKABLE void closeLearningWindow();
  private:
-    void updateHistoryInformationForStrategy();
+    LearningStrategyType strategyType_;
+    QPointer<LearningManager> learningManager_;
+    QSharedPointer<LearningStrategyBase> strategy_;
 
-    LearningStrategyBase *strategy_;
-    quint32 changesHistoryPosition_;
     QmlWidget *window_;
 };
+
+
+// TODO: this class should be moved to a separate file, but, unfortunately, all my attempts to do this failed due to
+// some crappy compilation errors.
+class LearningManager : public QObject {
+ Q_OBJECT
+ public:
+    LearningManager();
+
+    QSharedPointer<LearningStrategyBase> loadStrategy(const LearningStrategyType &strategyType);
+    void saveStrategy(QSharedPointer<LearningStrategyBase> strategy);
+
+ private:
+    LearningStrategyBase *loadStrategyForType(const LearningStrategyType &strategyType);
+
+    /// This map contains elements for each defined strategy type. Even so, it may contain null pointer since some
+    /// strategies may be not loaded at the moment.
+    QMap<LearningStrategyType, QWeakPointer<LearningStrategyBase>> strategies_;
+};
+
 
 #endif //ROOSHA_CLIENT_LEARNINGMANAGER_H
