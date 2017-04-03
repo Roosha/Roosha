@@ -56,7 +56,7 @@ public class InMemoryHashMapAuthManager implements AuthManager {
 
     @Override
     public @Nullable Integer getMachineId(@NotNull CommonsProto.Credentials userCredentials) {
-        return null; // TODO: fix
+        return 1; // TODO: fix
     }
 
     private static class CaseSensitiveString {
