@@ -3,6 +3,8 @@
 #include "Core/centralcontroller.h"
 
 int main(int argc, char *argv[]) {
+    srand((unsigned int) time(NULL));
+
     QApplication app(argc, argv);
 
 

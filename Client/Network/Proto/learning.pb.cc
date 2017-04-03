@@ -6,124 +6,128 @@
 
 #include <algorithm>
 
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/stubs/port.h>
-#include <google/protobuf/stubs/once.h>
-#include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
-#include <google/protobuf/descriptor.h>
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 
 namespace roosha {
+class ScrutinyDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Scrutiny> {
+} _Scrutiny_default_instance_;
+
+namespace protobuf_learning_2eproto {
+
 
 namespace {
 
-const ::google::protobuf::Descriptor* Scrutiny_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  Scrutiny_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* ScrutinyView_descriptor_ = NULL;
-const ::google::protobuf::EnumDescriptor* ScrutinyInput_descriptor_ = NULL;
-const ::google::protobuf::EnumDescriptor* ScrutinyStatus_descriptor_ = NULL;
+::google::protobuf::Metadata file_level_metadata[1];
+const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[3];
 
 }  // namespace
 
+const ::google::protobuf::uint32 TableStruct::offsets[] = {
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, cardid_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, moment_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, inputmethod_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, viewmethod_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, status_),
+};
 
-void protobuf_AssignDesc_learning_2eproto() GOOGLE_ATTRIBUTE_COLD;
-void protobuf_AssignDesc_learning_2eproto() {
-  protobuf_AddDesc_learning_2eproto();
-  const ::google::protobuf::FileDescriptor* file =
-    ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
-      "learning.proto");
-  GOOGLE_CHECK(file != NULL);
-  Scrutiny_descriptor_ = file->message_type(0);
-  static const int Scrutiny_offsets_[5] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, cardid_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, moment_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, inputmethod_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, viewmethod_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, status_),
-  };
-  Scrutiny_reflection_ =
-    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
-      Scrutiny_descriptor_,
-      Scrutiny::default_instance_,
-      Scrutiny_offsets_,
-      -1,
-      -1,
-      -1,
-      sizeof(Scrutiny),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, _internal_metadata_),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Scrutiny, _is_default_instance_));
-  ScrutinyView_descriptor_ = file->enum_type(0);
-  ScrutinyInput_descriptor_ = file->enum_type(1);
-  ScrutinyStatus_descriptor_ = file->enum_type(2);
-}
+static const ::google::protobuf::internal::MigrationSchema schemas[] = {
+  { 0, -1, sizeof(Scrutiny)},
+};
+
+static ::google::protobuf::Message const * const file_default_instances[] = {
+  reinterpret_cast<const ::google::protobuf::Message*>(&_Scrutiny_default_instance_),
+};
 
 namespace {
 
-GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AssignDescriptors_once_);
-inline void protobuf_AssignDescriptorsOnce() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AssignDescriptors_once_,
-                 &protobuf_AssignDesc_learning_2eproto);
+void protobuf_AssignDescriptors() {
+  AddDescriptors();
+  ::google::protobuf::MessageFactory* factory = NULL;
+  AssignDescriptors(
+      "learning.proto", schemas, file_default_instances, TableStruct::offsets, factory,
+      file_level_metadata, file_level_enum_descriptors, NULL);
+}
+
+void protobuf_AssignDescriptorsOnce() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &protobuf_AssignDescriptors);
 }
 
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      Scrutiny_descriptor_, &Scrutiny::default_instance());
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 1);
 }
 
 }  // namespace
 
-void protobuf_ShutdownFile_learning_2eproto() {
-  delete Scrutiny::default_instance_;
-  delete Scrutiny_reflection_;
+void TableStruct::Shutdown() {
+  _Scrutiny_default_instance_.Shutdown();
+  delete file_level_metadata[0].reflection;
 }
 
-void protobuf_AddDesc_learning_2eproto() GOOGLE_ATTRIBUTE_COLD;
-void protobuf_AddDesc_learning_2eproto() {
-  static bool already_here = false;
-  if (already_here) return;
-  already_here = true;
+void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-  ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\016learning.proto\022\006roosha\"\250\001\n\010Scrutiny\022\016\n"
-    "\006cardId\030\001 \001(\t\022\016\n\006moment\030\002 \001(\t\022*\n\013inputMe"
-    "thod\030\003 \001(\0162\025.roosha.ScrutinyInput\022(\n\nvie"
-    "wMethod\030\004 \001(\0162\024.roosha.ScrutinyView\022&\n\006s"
-    "tatus\030\005 \001(\0162\026.roosha.ScrutinyStatus*B\n\014S"
-    "crutinyView\022\031\n\025UNKNOWN_SCRUTINY_VIEW\020\000\022\027"
-    "\n\023TARGETS_AND_EXAMPLE\020\001*;\n\rScrutinyInput"
-    "\022\032\n\026UNKNOWN_SCRUTINY_INPUT\020\000\022\016\n\nTEXT_INP"
-    "UT\020\001*k\n\016ScrutinyStatus\022\033\n\027UNKNOWN_SCTUTI"
-    "NY_STATUS\020\000\022\013\n\007SKIPPED\020\001\022\n\n\006FAILED\020\002\022\010\n\004"
-    "EASY\020\003\022\n\n\006NORMAL\020\004\022\r\n\tDIFFICULT\020\005B(\n\027com"
-    ".github.roosha.protoB\010LearningH\001\370\001\000b\006pro"
-    "to3", 483);
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
-    "learning.proto", &protobuf_RegisterTypes);
-  Scrutiny::default_instance_ = new Scrutiny();
-  Scrutiny::default_instance_->InitAsDefaultInstance();
-  ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_learning_2eproto);
+  ::google::protobuf::internal::InitProtobufDefaults();
+  _Scrutiny_default_instance_.DefaultConstruct();
 }
 
+void InitDefaults() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &TableStruct::InitDefaultsImpl);
+}
+void AddDescriptorsImpl() {
+  InitDefaults();
+  static const char descriptor[] = {
+      "\n\016learning.proto\022\006roosha\"\250\001\n\010Scrutiny\022\016\n"
+      "\006cardId\030\001 \001(\t\022\016\n\006moment\030\002 \001(\t\022*\n\013inputMe"
+      "thod\030\003 \001(\0162\025.roosha.ScrutinyInput\022(\n\nvie"
+      "wMethod\030\004 \001(\0162\024.roosha.ScrutinyView\022&\n\006s"
+      "tatus\030\005 \001(\0162\026.roosha.ScrutinyStatus*B\n\014S"
+      "crutinyView\022\031\n\025UNKNOWN_SCRUTINY_VIEW\020\000\022\027"
+      "\n\023TARGETS_AND_EXAMPLE\020\001*;\n\rScrutinyInput"
+      "\022\032\n\026UNKNOWN_SCRUTINY_INPUT\020\000\022\016\n\nTEXT_INP"
+      "UT\020\001*k\n\016ScrutinyStatus\022\033\n\027UNKNOWN_SCTUTI"
+      "NY_STATUS\020\000\022\013\n\007SKIPPED\020\001\022\n\n\006FAILED\020\002\022\010\n\004"
+      "EASY\020\003\022\n\n\006NORMAL\020\004\022\r\n\tDIFFICULT\020\005B(\n\027com"
+      ".github.roosha.protoB\010LearningH\001\370\001\000b\006pro"
+      "to3"
+  };
+  ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
+      descriptor, 483);
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
+    "learning.proto", &protobuf_RegisterTypes);
+  ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
+}
+
+void AddDescriptors() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &AddDescriptorsImpl);
+}
 // Force AddDescriptors() to be called at static initialization time.
-struct StaticDescriptorInitializer_learning_2eproto {
-  StaticDescriptorInitializer_learning_2eproto() {
-    protobuf_AddDesc_learning_2eproto();
+struct StaticDescriptorInitializer {
+  StaticDescriptorInitializer() {
+    AddDescriptors();
   }
-} static_descriptor_initializer_learning_2eproto_;
+} static_descriptor_initializer;
+
+}  // namespace protobuf_learning_2eproto
+
 const ::google::protobuf::EnumDescriptor* ScrutinyView_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return ScrutinyView_descriptor_;
+  protobuf_learning_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_learning_2eproto::file_level_enum_descriptors[0];
 }
 bool ScrutinyView_IsValid(int value) {
-  switch(value) {
+  switch (value) {
     case 0:
     case 1:
       return true;
@@ -133,11 +137,11 @@ bool ScrutinyView_IsValid(int value) {
 }
 
 const ::google::protobuf::EnumDescriptor* ScrutinyInput_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return ScrutinyInput_descriptor_;
+  protobuf_learning_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_learning_2eproto::file_level_enum_descriptors[1];
 }
 bool ScrutinyInput_IsValid(int value) {
-  switch(value) {
+  switch (value) {
     case 0:
     case 1:
       return true;
@@ -147,11 +151,11 @@ bool ScrutinyInput_IsValid(int value) {
 }
 
 const ::google::protobuf::EnumDescriptor* ScrutinyStatus_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return ScrutinyStatus_descriptor_;
+  protobuf_learning_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_learning_2eproto::file_level_enum_descriptors[2];
 }
 bool ScrutinyStatus_IsValid(int value) {
-  switch(value) {
+  switch (value) {
     case 0:
     case 1:
     case 2:
@@ -177,31 +181,37 @@ const int Scrutiny::kStatusFieldNumber;
 
 Scrutiny::Scrutiny()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    protobuf_learning_2eproto::InitDefaults();
+  }
   SharedCtor();
   // @@protoc_insertion_point(constructor:roosha.Scrutiny)
 }
-
-void Scrutiny::InitAsDefaultInstance() {
-  _is_default_instance_ = true;
-}
-
 Scrutiny::Scrutiny(const Scrutiny& from)
   : ::google::protobuf::Message(),
-    _internal_metadata_(NULL) {
-  SharedCtor();
-  MergeFrom(from);
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  cardid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.cardid().size() > 0) {
+    cardid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.cardid_);
+  }
+  moment_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  if (from.moment().size() > 0) {
+    moment_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.moment_);
+  }
+  ::memcpy(&inputmethod_, &from.inputmethod_,
+    reinterpret_cast<char*>(&status_) -
+    reinterpret_cast<char*>(&inputmethod_) + sizeof(status_));
   // @@protoc_insertion_point(copy_constructor:roosha.Scrutiny)
 }
 
 void Scrutiny::SharedCtor() {
-    _is_default_instance_ = false;
-  ::google::protobuf::internal::GetEmptyString();
-  _cached_size_ = 0;
   cardid_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   moment_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  inputmethod_ = 0;
-  viewmethod_ = 0;
-  status_ = 0;
+  ::memset(&inputmethod_, 0, reinterpret_cast<char*>(&status_) -
+    reinterpret_cast<char*>(&inputmethod_) + sizeof(status_));
+  _cached_size_ = 0;
 }
 
 Scrutiny::~Scrutiny() {
@@ -212,8 +222,6 @@ Scrutiny::~Scrutiny() {
 void Scrutiny::SharedDtor() {
   cardid_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   moment_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  if (this != default_instance_) {
-  }
 }
 
 void Scrutiny::SetCachedSize(int size) const {
@@ -222,16 +230,14 @@ void Scrutiny::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
 const ::google::protobuf::Descriptor* Scrutiny::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return Scrutiny_descriptor_;
+  protobuf_learning_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_learning_2eproto::file_level_metadata[0].descriptor;
 }
 
 const Scrutiny& Scrutiny::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_learning_2eproto();
-  return *default_instance_;
+  protobuf_learning_2eproto::InitDefaults();
+  return *internal_default_instance();
 }
-
-Scrutiny* Scrutiny::default_instance_ = NULL;
 
 Scrutiny* Scrutiny::New(::google::protobuf::Arena* arena) const {
   Scrutiny* n = new Scrutiny;
@@ -243,29 +249,10 @@ Scrutiny* Scrutiny::New(::google::protobuf::Arena* arena) const {
 
 void Scrutiny::Clear() {
 // @@protoc_insertion_point(message_clear_start:roosha.Scrutiny)
-#if defined(__clang__)
-#define ZR_HELPER_(f) \
-  _Pragma("clang diagnostic push") \
-  _Pragma("clang diagnostic ignored \"-Winvalid-offsetof\"") \
-  __builtin_offsetof(Scrutiny, f) \
-  _Pragma("clang diagnostic pop")
-#else
-#define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<Scrutiny*>(16)->f)
-#endif
-
-#define ZR_(first, last) do {\
-  ::memset(&first, 0,\
-           ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
-} while (0)
-
-  ZR_(inputmethod_, status_);
   cardid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   moment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-
-#undef ZR_HELPER_
-#undef ZR_
-
+  ::memset(&inputmethod_, 0, reinterpret_cast<char*>(&status_) -
+    reinterpret_cast<char*>(&inputmethod_) + sizeof(status_));
 }
 
 bool Scrutiny::MergePartialFromCodedStream(
@@ -274,13 +261,13 @@ bool Scrutiny::MergePartialFromCodedStream(
   ::google::protobuf::uint32 tag;
   // @@protoc_insertion_point(parse_start:roosha.Scrutiny)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional string cardId = 1;
+      // string cardId = 1;
       case 1: {
-        if (tag == 10) {
+        if (tag == 10u) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_cardid()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -290,14 +277,12 @@ bool Scrutiny::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(18)) goto parse_moment;
         break;
       }
 
-      // optional string moment = 2;
+      // string moment = 2;
       case 2: {
-        if (tag == 18) {
-         parse_moment:
+        if (tag == 18u) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_moment()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -307,14 +292,12 @@ bool Scrutiny::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_inputMethod;
         break;
       }
 
-      // optional .roosha.ScrutinyInput inputMethod = 3;
+      // .roosha.ScrutinyInput inputMethod = 3;
       case 3: {
-        if (tag == 24) {
-         parse_inputMethod:
+        if (tag == 24u) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -323,14 +306,12 @@ bool Scrutiny::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_viewMethod;
         break;
       }
 
-      // optional .roosha.ScrutinyView viewMethod = 4;
+      // .roosha.ScrutinyView viewMethod = 4;
       case 4: {
-        if (tag == 32) {
-         parse_viewMethod:
+        if (tag == 32u) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -339,14 +320,12 @@ bool Scrutiny::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(40)) goto parse_status;
         break;
       }
 
-      // optional .roosha.ScrutinyStatus status = 5;
+      // .roosha.ScrutinyStatus status = 5;
       case 5: {
-        if (tag == 40) {
-         parse_status:
+        if (tag == 40u) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -355,7 +334,6 @@ bool Scrutiny::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectAtEnd()) goto success;
         break;
       }
 
@@ -383,7 +361,7 @@ failure:
 void Scrutiny::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:roosha.Scrutiny)
-  // optional string cardId = 1;
+  // string cardId = 1;
   if (this->cardid().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->cardid().data(), this->cardid().length(),
@@ -393,7 +371,7 @@ void Scrutiny::SerializeWithCachedSizes(
       1, this->cardid(), output);
   }
 
-  // optional string moment = 2;
+  // string moment = 2;
   if (this->moment().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->moment().data(), this->moment().length(),
@@ -403,19 +381,19 @@ void Scrutiny::SerializeWithCachedSizes(
       2, this->moment(), output);
   }
 
-  // optional .roosha.ScrutinyInput inputMethod = 3;
+  // .roosha.ScrutinyInput inputMethod = 3;
   if (this->inputmethod() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->inputmethod(), output);
   }
 
-  // optional .roosha.ScrutinyView viewMethod = 4;
+  // .roosha.ScrutinyView viewMethod = 4;
   if (this->viewmethod() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       4, this->viewmethod(), output);
   }
 
-  // optional .roosha.ScrutinyStatus status = 5;
+  // .roosha.ScrutinyStatus status = 5;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       5, this->status(), output);
@@ -426,8 +404,9 @@ void Scrutiny::SerializeWithCachedSizes(
 
 ::google::protobuf::uint8* Scrutiny::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic;  // Unused
   // @@protoc_insertion_point(serialize_to_array_start:roosha.Scrutiny)
-  // optional string cardId = 1;
+  // string cardId = 1;
   if (this->cardid().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->cardid().data(), this->cardid().length(),
@@ -438,7 +417,7 @@ void Scrutiny::SerializeWithCachedSizes(
         1, this->cardid(), target);
   }
 
-  // optional string moment = 2;
+  // string moment = 2;
   if (this->moment().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->moment().data(), this->moment().length(),
@@ -449,19 +428,19 @@ void Scrutiny::SerializeWithCachedSizes(
         2, this->moment(), target);
   }
 
-  // optional .roosha.ScrutinyInput inputMethod = 3;
+  // .roosha.ScrutinyInput inputMethod = 3;
   if (this->inputmethod() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->inputmethod(), target);
   }
 
-  // optional .roosha.ScrutinyView viewMethod = 4;
+  // .roosha.ScrutinyView viewMethod = 4;
   if (this->viewmethod() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       4, this->viewmethod(), target);
   }
 
-  // optional .roosha.ScrutinyStatus status = 5;
+  // .roosha.ScrutinyStatus status = 5;
   if (this->status() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       5, this->status(), target);
@@ -471,54 +450,53 @@ void Scrutiny::SerializeWithCachedSizes(
   return target;
 }
 
-int Scrutiny::ByteSize() const {
+size_t Scrutiny::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:roosha.Scrutiny)
-  int total_size = 0;
+  size_t total_size = 0;
 
-  // optional string cardId = 1;
+  // string cardId = 1;
   if (this->cardid().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->cardid());
   }
 
-  // optional string moment = 2;
+  // string moment = 2;
   if (this->moment().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->moment());
   }
 
-  // optional .roosha.ScrutinyInput inputMethod = 3;
+  // .roosha.ScrutinyInput inputMethod = 3;
   if (this->inputmethod() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->inputmethod());
   }
 
-  // optional .roosha.ScrutinyView viewMethod = 4;
+  // .roosha.ScrutinyView viewMethod = 4;
   if (this->viewmethod() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->viewmethod());
   }
 
-  // optional .roosha.ScrutinyStatus status = 5;
+  // .roosha.ScrutinyStatus status = 5;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
   }
 
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
+  _cached_size_ = cached_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
   return total_size;
 }
 
 void Scrutiny::MergeFrom(const ::google::protobuf::Message& from) {
 // @@protoc_insertion_point(generalized_merge_from_start:roosha.Scrutiny)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) {
-    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
-  }
-  const Scrutiny* source = 
+  GOOGLE_DCHECK_NE(&from, this);
+  const Scrutiny* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const Scrutiny>(
           &from);
   if (source == NULL) {
@@ -532,9 +510,8 @@ void Scrutiny::MergeFrom(const ::google::protobuf::Message& from) {
 
 void Scrutiny::MergeFrom(const Scrutiny& from) {
 // @@protoc_insertion_point(class_specific_merge_from_start:roosha.Scrutiny)
-  if (GOOGLE_PREDICT_FALSE(&from == this)) {
-    ::google::protobuf::internal::MergeFromFail(__FILE__, __LINE__);
-  }
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from.cardid().size() > 0) {
 
     cardid_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.cardid_);
@@ -569,7 +546,6 @@ void Scrutiny::CopyFrom(const Scrutiny& from) {
 }
 
 bool Scrutiny::IsInitialized() const {
-
   return true;
 }
 
@@ -583,56 +559,60 @@ void Scrutiny::InternalSwap(Scrutiny* other) {
   std::swap(inputmethod_, other->inputmethod_);
   std::swap(viewmethod_, other->viewmethod_);
   std::swap(status_, other->status_);
-  _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
 ::google::protobuf::Metadata Scrutiny::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Scrutiny_descriptor_;
-  metadata.reflection = Scrutiny_reflection_;
-  return metadata;
+  protobuf_learning_2eproto::protobuf_AssignDescriptorsOnce();
+  return protobuf_learning_2eproto::file_level_metadata[0];
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // Scrutiny
 
-// optional string cardId = 1;
+// string cardId = 1;
 void Scrutiny::clear_cardid() {
   cardid_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- const ::std::string& Scrutiny::cardid() const {
+const ::std::string& Scrutiny::cardid() const {
   // @@protoc_insertion_point(field_get:roosha.Scrutiny.cardId)
-  return cardid_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return cardid_.GetNoArena();
 }
- void Scrutiny::set_cardid(const ::std::string& value) {
+void Scrutiny::set_cardid(const ::std::string& value) {
   
   cardid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:roosha.Scrutiny.cardId)
 }
- void Scrutiny::set_cardid(const char* value) {
+#if LANG_CXX11
+void Scrutiny::set_cardid(::std::string&& value) {
+  
+  cardid_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:roosha.Scrutiny.cardId)
+}
+#endif
+void Scrutiny::set_cardid(const char* value) {
   
   cardid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:roosha.Scrutiny.cardId)
 }
- void Scrutiny::set_cardid(const char* value, size_t size) {
+void Scrutiny::set_cardid(const char* value, size_t size) {
   
   cardid_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:roosha.Scrutiny.cardId)
 }
- ::std::string* Scrutiny::mutable_cardid() {
+::std::string* Scrutiny::mutable_cardid() {
   
   // @@protoc_insertion_point(field_mutable:roosha.Scrutiny.cardId)
   return cardid_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- ::std::string* Scrutiny::release_cardid() {
+::std::string* Scrutiny::release_cardid() {
   // @@protoc_insertion_point(field_release:roosha.Scrutiny.cardId)
   
   return cardid_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- void Scrutiny::set_allocated_cardid(::std::string* cardid) {
+void Scrutiny::set_allocated_cardid(::std::string* cardid) {
   if (cardid != NULL) {
     
   } else {
@@ -642,41 +622,49 @@ void Scrutiny::clear_cardid() {
   // @@protoc_insertion_point(field_set_allocated:roosha.Scrutiny.cardId)
 }
 
-// optional string moment = 2;
+// string moment = 2;
 void Scrutiny::clear_moment() {
   moment_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- const ::std::string& Scrutiny::moment() const {
+const ::std::string& Scrutiny::moment() const {
   // @@protoc_insertion_point(field_get:roosha.Scrutiny.moment)
-  return moment_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  return moment_.GetNoArena();
 }
- void Scrutiny::set_moment(const ::std::string& value) {
+void Scrutiny::set_moment(const ::std::string& value) {
   
   moment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set:roosha.Scrutiny.moment)
 }
- void Scrutiny::set_moment(const char* value) {
+#if LANG_CXX11
+void Scrutiny::set_moment(::std::string&& value) {
+  
+  moment_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:roosha.Scrutiny.moment)
+}
+#endif
+void Scrutiny::set_moment(const char* value) {
   
   moment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:roosha.Scrutiny.moment)
 }
- void Scrutiny::set_moment(const char* value, size_t size) {
+void Scrutiny::set_moment(const char* value, size_t size) {
   
   moment_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
   // @@protoc_insertion_point(field_set_pointer:roosha.Scrutiny.moment)
 }
- ::std::string* Scrutiny::mutable_moment() {
+::std::string* Scrutiny::mutable_moment() {
   
   // @@protoc_insertion_point(field_mutable:roosha.Scrutiny.moment)
   return moment_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- ::std::string* Scrutiny::release_moment() {
+::std::string* Scrutiny::release_moment() {
   // @@protoc_insertion_point(field_release:roosha.Scrutiny.moment)
   
   return moment_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
- void Scrutiny::set_allocated_moment(::std::string* moment) {
+void Scrutiny::set_allocated_moment(::std::string* moment) {
   if (moment != NULL) {
     
   } else {
@@ -686,43 +674,43 @@ void Scrutiny::clear_moment() {
   // @@protoc_insertion_point(field_set_allocated:roosha.Scrutiny.moment)
 }
 
-// optional .roosha.ScrutinyInput inputMethod = 3;
+// .roosha.ScrutinyInput inputMethod = 3;
 void Scrutiny::clear_inputmethod() {
   inputmethod_ = 0;
 }
- ::roosha::ScrutinyInput Scrutiny::inputmethod() const {
+::roosha::ScrutinyInput Scrutiny::inputmethod() const {
   // @@protoc_insertion_point(field_get:roosha.Scrutiny.inputMethod)
   return static_cast< ::roosha::ScrutinyInput >(inputmethod_);
 }
- void Scrutiny::set_inputmethod(::roosha::ScrutinyInput value) {
+void Scrutiny::set_inputmethod(::roosha::ScrutinyInput value) {
   
   inputmethod_ = value;
   // @@protoc_insertion_point(field_set:roosha.Scrutiny.inputMethod)
 }
 
-// optional .roosha.ScrutinyView viewMethod = 4;
+// .roosha.ScrutinyView viewMethod = 4;
 void Scrutiny::clear_viewmethod() {
   viewmethod_ = 0;
 }
- ::roosha::ScrutinyView Scrutiny::viewmethod() const {
+::roosha::ScrutinyView Scrutiny::viewmethod() const {
   // @@protoc_insertion_point(field_get:roosha.Scrutiny.viewMethod)
   return static_cast< ::roosha::ScrutinyView >(viewmethod_);
 }
- void Scrutiny::set_viewmethod(::roosha::ScrutinyView value) {
+void Scrutiny::set_viewmethod(::roosha::ScrutinyView value) {
   
   viewmethod_ = value;
   // @@protoc_insertion_point(field_set:roosha.Scrutiny.viewMethod)
 }
 
-// optional .roosha.ScrutinyStatus status = 5;
+// .roosha.ScrutinyStatus status = 5;
 void Scrutiny::clear_status() {
   status_ = 0;
 }
- ::roosha::ScrutinyStatus Scrutiny::status() const {
+::roosha::ScrutinyStatus Scrutiny::status() const {
   // @@protoc_insertion_point(field_get:roosha.Scrutiny.status)
   return static_cast< ::roosha::ScrutinyStatus >(status_);
 }
- void Scrutiny::set_status(::roosha::ScrutinyStatus value) {
+void Scrutiny::set_status(::roosha::ScrutinyStatus value) {
   
   status_ = value;
   // @@protoc_insertion_point(field_set:roosha.Scrutiny.status)

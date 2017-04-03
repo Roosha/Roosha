@@ -51,10 +51,10 @@ CardDifficulty::Rate CardLearningModel::getCardDifficultyRate() const {
     return difficultyRate_;
 }
 
-LearningStrategyBase::LearningStrategyBase(QObject *parent) :
+LearningStrategyBase::LearningStrategyBase(quint32 changesNumber, QObject *parent) :
         QObject(parent),
         scrutiniesNumber_(0),
-        changesNumber_(0),
+        changesNumber_(changesNumber),
         lastCardShown_(Q_NULLPTR) {
 }
 
@@ -102,10 +102,13 @@ void LearningStrategyBase::setChangesNumber(quint32 changesNumber_) {
     LearningStrategyBase::changesNumber_ = changesNumber_;
 }
 
-// ---------------------SimpleDiffStrategy
+// --------------------- SimpleDiffStrategy --------------------------------
 
-SimpleDiffStrategy::SimpleDiffStrategy(QList<QUuid> cardIds, QList<Scrutiny> scrutinies, QObject *parent) :
-        LearningStrategyBase(parent) {
+SimpleDiffStrategy::SimpleDiffStrategy(quint32 changesNumber,
+                                       QList<QUuid> cardIds,
+                                       QList<Scrutiny> scrutinies,
+                                       QObject *parent) :
+        LearningStrategyBase(changesNumber, parent) {
     this->onCardsCreated(QSet<QUuid>::fromList(cardIds));
     this->appendScrutinies(scrutinies);
 }
@@ -198,5 +201,120 @@ void SimpleDiffStrategy::appendScrutinies(QList<Scrutiny> scrutinies) {
 }
 
 LearningStrategyType SimpleDiffStrategy::getType() {
-    return LearningStrategyType::SIMPLE_DIFF_STRATEGY;
+    return LearningStrategyType::SIMPLE_DIFF;
 }
+
+// ---------------------- SuperMemo2 Strategy ------------------------------------
+
+SuperMemo2Strategy::SuperMemo2Strategy(quint32 changesNumber,
+                                       QList<QUuid> cardIds,
+                                       QList<Scrutiny> scrutinies,
+                                       QObject *parent,
+                                       double difficultFactor,
+                                       double normalFactor,
+                                       double easyFactor,
+                                       quint32 intervalMax) :
+        LearningStrategyBase(changesNumber, parent),
+        difficultFactor_(difficultFactor),
+        normalFactor_(normalFactor),
+        easyFactor_(easyFactor),
+        intervalMaximum_(intervalMax) {
+    auto currentTime = QDateTime::currentDateTime();
+    for (auto &&cardId : cardIds) {
+        auto delta = rand() % (changesNumber + 1) - (changesNumber / 2); // to shuffle cards a little bit
+        cardQueue_.emplace(cardId, currentTime.addMSecs(delta));
+    }
+
+    appendScrutinies(scrutinies);
+}
+
+CardLearningModel *SuperMemo2Strategy::firstCard() {
+    // TODO: implement
+}
+
+CardLearningModel *SuperMemo2Strategy::nextCard() {
+    // TODO: implement
+
+}
+
+void SuperMemo2Strategy::finish() {
+    // TODO: implement
+
+}
+
+void SuperMemo2Strategy::cancel() {
+    // TODO: implement
+}
+
+LearningStrategyType SuperMemo2Strategy::getType() {
+    return LearningStrategyType::SUPERMEMO_2;
+}
+
+void SuperMemo2Strategy::onCardsCreated(QSet<QUuid> cardIds) {
+
+}
+
+void SuperMemo2Strategy::onCardsDeleted(QSet<QUuid> cardIds) {
+    // TODO: implement
+
+}
+
+void SuperMemo2Strategy::appendScrutinies(QList<Scrutiny> scrutinies) {
+    // TODO: implement
+
+}
+
+SuperMemo2Strategy::CardInfo SuperMemo2Strategy::nextCardInfo(const SuperMemo2Strategy::CardInfo &cardInfo,
+                                                              CardDifficulty::Rate scrutinyStatus)  {
+    // see https://www.supermemo.com/english/ol/sm2.htm for details
+    const quint32 ord = CardDifficulty::ord(scrutinyStatus);
+    double factor = std::max(1.3, cardInfo.currentFactor_ + (0.1 - (5 - ord) * (0.08 + (5 - ord) * 0.02)));
+
+    QDateTime nextScrutiny = QDateTime::currentDateTime();
+    quint32 interval;
+    switch (scrutinyStatus) {
+        case CardDifficulty::Rate::UNKNOWN:
+            throw std::logic_error("Unexpected UNKNOWN difficulty rate in SuperMemo2Strategy::nextCardInfo");
+        case CardDifficulty::Rate::SKIPPED:interval = 0;
+            nextScrutiny = nextScrutiny.addSecs(TEN_MINUTES_IN_SECONDS);
+            break;
+        case CardDifficulty::Rate::FAILED:
+            interval = std::max(1 * ONE_DAY_IN_SECONDS,
+                                cardInfo.currentIntervalSeconds_ / 2);
+            nextScrutiny = nextScrutiny.addSecs(TEN_MINUTES_IN_SECONDS);
+            break;
+        case CardDifficulty::Rate::DIFFICULT:
+            interval = std::min(intervalMaximum_,
+                                nextIntervalWhenSucceeded(cardInfo.currentIntervalSeconds_, factor));
+            nextScrutiny = nextScrutiny.addSecs(interval);
+            break;
+        case CardDifficulty::Rate::NORMAL:
+            interval = std::min(intervalMaximum_,
+                                nextIntervalWhenSucceeded(cardInfo.currentIntervalSeconds_, factor));
+            nextScrutiny = nextScrutiny.addSecs(interval);
+            break;
+        case CardDifficulty::Rate::EASY:
+            interval = std::min(intervalMaximum_,
+                                nextIntervalWhenSucceeded(cardInfo.currentIntervalSeconds_, factor));
+            nextScrutiny = nextScrutiny.addSecs(interval);
+            break;
+    }
+
+    return SuperMemo2Strategy::CardInfo(
+            cardInfo.cardId_,
+            nextScrutiny,
+            interval,
+            factor
+    );
+}
+
+quint32 SuperMemo2Strategy::nextIntervalWhenSucceeded(quint32 currentInterval, double factor) {
+    if (currentInterval < TEN_MINUTES_IN_SECONDS) {
+        return TEN_MINUTES_IN_SECONDS;
+    } else if (currentInterval <= TEN_MINUTES_IN_SECONDS && currentInterval < ONE_DAY_IN_SECONDS) {
+        return ONE_DAY_IN_SECONDS;
+    } else {
+        return (quint32) (currentInterval * factor);
+    }
+}
+

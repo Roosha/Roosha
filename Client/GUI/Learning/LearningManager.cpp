@@ -5,8 +5,14 @@
 #include "LearningManager.h"
 #include "LearningStrategy.h"
 
+LearningManager::LearningManager() :
+        QObject(Q_NULLPTR) {
+    strategies_[LearningStrategyType::SIMPLE_DIFF] = QWeakPointer<SimpleDiffStrategy>();
+    strategies_[LearningStrategyType::SUPERMEMO_2] = QWeakPointer<SuperMemo2Strategy>();
+}
+
 QSharedPointer<LearningStrategyBase> LearningManager::loadStrategy(const LearningStrategyType &strategyType) {
-    QSharedPointer<LearningStrategyBase> `strategy = strategies_[strategyType].toStrongRef();
+    QSharedPointer<LearningStrategyBase> strategy = strategies_[strategyType].toStrongRef();
     if (strategy.isNull()) {
         strategy = QSharedPointer<LearningStrategyBase>(loadStrategyForType(strategyType));
     }
@@ -32,13 +38,20 @@ QSharedPointer<LearningStrategyBase> LearningManager::loadStrategy(const Learnin
 }
 
 void LearningManager::saveStrategy(QSharedPointer<LearningStrategyBase> strategy) {
-    // TODO: implement
+    // save to disk
 }
 
 LearningStrategyBase *LearningManager::loadStrategyForType(const LearningStrategyType &strategyType) {
     switch (strategyType) {
-        case LearningStrategyType::SIMPLE_DIFF_STRATEGY:
+        case LearningStrategyType::SIMPLE_DIFF:
             return new SimpleDiffStrategy(
+                    (quint32) World::Instance().getChanges().size(),
+                    World::Instance().getCards().keys(),
+                    World::Instance().getLearningHistory().toList()
+            );
+        case LearningStrategyType::SUPERMEMO_2:
+            return new SuperMemo2Strategy(
+                    (quint32) World::Instance().getChanges().size(),
                     World::Instance().getCards().keys(),
                     World::Instance().getLearningHistory().toList()
             );

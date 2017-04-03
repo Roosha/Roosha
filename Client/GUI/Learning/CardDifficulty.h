@@ -20,6 +20,17 @@ class CardDifficulty : public QObject {
     };
 
     Q_ENUM(Rate)
+
+    static quint32 ord(Rate rate) {
+        switch (rate) {
+            case Rate::UNKNOWN: return 0;
+            case Rate::SKIPPED: return 1;
+            case Rate::FAILED: return 2;
+            case Rate::EASY: return 3;
+            case Rate::NORMAL: return 4;
+            case Rate::DIFFICULT: return 5;
+        }
+    }
 };
 
 

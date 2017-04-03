@@ -11,7 +11,7 @@
 
 LearningWindowController::LearningWindowController(QObject *parent) :
         QObject(parent),
-        strategyType_(LearningStrategyType::SIMPLE_DIFF_STRATEGY),
+        strategyType_(LearningStrategyType::SIMPLE_DIFF),
         learningManager_(QPointer<LearningManager>(new LearningManager())),
         window_(Q_NULLPTR) {
     strategy_ = learningManager_->loadStrategy(strategyType_);
@@ -61,8 +61,4 @@ void LearningWindowController::closeLearningWindow() {
     learningManager_->saveStrategy(strategy_);
 }
 
-LearningManager::LearningManager() :
-        QObject(Q_NULLPTR) {
-    strategies_[LearningStrategyType::SIMPLE_DIFF_STRATEGY] = QWeakPointer<SimpleDiffStrategy>();
-}
 

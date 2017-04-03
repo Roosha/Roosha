@@ -23,8 +23,6 @@ class LearningManager : public QObject {
  private:
     LearningStrategyBase *loadStrategyForType(const LearningStrategyType &strategyType);
 
-    /// This map contains elements for each defined strategy type. Even so, it may contain null pointer since some
-    /// strategies may be not loaded at the moment.
     QMap<LearningStrategyType, QWeakPointer<LearningStrategyBase>> strategies_;
 };
 

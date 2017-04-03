@@ -16,11 +16,11 @@
 #include "CardLearningViewModels.h"
 #include "CardDifficulty.h"
 
-
 enum class LearningStrategyType {
     // NOTE: if any type is added to this enum, it should be added to LearningManager constructor
 
-    SIMPLE_DIFF_STRATEGY,
+    SIMPLE_DIFF,
+    SUPERMEMO_2
 };
 
 class CardLearningModel : public QObject {
@@ -62,7 +62,7 @@ class CardLearningModel : public QObject {
 class LearningStrategyBase : public QObject {
  Q_OBJECT
  public:
-    LearningStrategyBase(QObject *parent);
+    LearningStrategyBase(quint32 changesNumber, QObject *parent = Q_NULLPTR);
 
     /**
      * This function should be called to get the first card in learning session. To get subsequent cards, use
@@ -99,7 +99,6 @@ class LearningStrategyBase : public QObject {
 
     /** @see LearningStrategyBase::changesNumber_ */
     quint32 getChangesNumber() const;
-
 
     virtual LearningStrategyType getType() = 0;
 
@@ -176,7 +175,8 @@ class SimpleDiffStrategy : public LearningStrategyBase {
      * @param scrutinies learning history
      * @param parent parent
      */
-    SimpleDiffStrategy(QList<QUuid> cardIds = QList<QUuid>(),
+    SimpleDiffStrategy(quint32 changesNumber,
+                       QList<QUuid> cardIds = QList<QUuid>(),
                        QList<Scrutiny> scrutinies = QList<Scrutiny>(),
                        QObject *parent = Q_NULLPTR);
 
@@ -207,6 +207,66 @@ class SimpleDiffStrategy : public LearningStrategyBase {
     /** may contain non-existing card. Whenever take element of this queue, check if it's cardId is contained in diffs_ */
     CardDiffQueue cardQueue_;
     //@formatter:on
+};
+
+class SuperMemo2Strategy : public LearningStrategyBase {
+ Q_OBJECT
+ public:
+    static constexpr double DIFFICULT_DEFAULT_FACTOR = 1.2;
+    static constexpr double NORMAL_DEFAULT_FACTOR = 1.5;
+    static constexpr double EASY_DEFAULT_FACTOR = 2.;
+    static constexpr quint32 DEFAULT_INTERVAL_MAXIMUM = 60 * 60 * 24 * 60; // 60 days
+
+    SuperMemo2Strategy(quint32 changesNumber,
+                       QList<QUuid> cardIds = QList<QUuid>(),
+                       QList<Scrutiny> scrutinies = QList<Scrutiny>(),
+                       QObject *parent = Q_NULLPTR,
+                       double difficultFactor = DIFFICULT_DEFAULT_FACTOR,
+                       double normalFactor = NORMAL_DEFAULT_FACTOR,
+                       double easyFactor = EASY_DEFAULT_FACTOR,
+                       quint32 intervalMax = DEFAULT_INTERVAL_MAXIMUM);
+
+    CardLearningModel *firstCard() override;
+    CardLearningModel *nextCard() override;
+    void finish() override;
+    void cancel() override;
+    LearningStrategyType getType() override;
+    void onCardsCreated(QSet<QUuid> cardIds) override;
+    void onCardsDeleted(QSet<QUuid> cardIds) override;
+    void appendScrutinies(QList<Scrutiny> scrutinies) override;
+
+ private:
+    static const constexpr quint32 ONE_DAY_IN_SECONDS = 1 * 24 * 60 * 60;
+    static const constexpr quint32 TEN_MINUTES_IN_SECONDS = 10 * 60;
+
+    //@formatter:off
+    struct CardInfo {
+        QUuid cardId_;
+        QDateTime nextScrutiny_;
+        quint32 currentIntervalSeconds_;
+        double currentFactor_;
+
+        CardInfo(const QUuid &cardId_ = QUuid(),
+                 const QDateTime &nextScrutiny_ = QDateTime::currentDateTime(),
+                 quint32 currentIntervalSeconds = 0,
+                 double currentFactor_ = 1.) :
+                cardId_(cardId_),
+                nextScrutiny_(nextScrutiny_),
+                currentIntervalSeconds_(currentIntervalSeconds),
+                currentFactor_(currentFactor_) {}
+    };
+    struct Comparator {bool operator()(const CardInfo &lhv, const CardInfo &rhv) {return lhv.nextScrutiny_ > rhv.nextScrutiny_;}};
+    //@formatter:on
+
+    CardInfo nextCardInfo(const CardInfo &cardInfo, CardDifficulty::Rate scrutinyStatus);
+    quint32 nextIntervalWhenSucceeded(quint32 currentInterval, double factor);
+
+    double difficultFactor_;
+    double normalFactor_;
+    double easyFactor_;
+    quint32 intervalMaximum_;
+
+    std::priority_queue<CardInfo, std::vector<CardInfo>, Comparator> cardQueue_;
 };
 
 #endif //ROOSHA_CLIENT_LEARNINGSTRATEGY_H
