@@ -1,5 +1,6 @@
 package com.github.roosha.server.db;
 
+import com.github.roosha.proto.ChangesProto;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +52,31 @@ public class RedisWorldStorage implements WorldStorage {
                 val lock = new WorldLock(jedis, id)) {
             val key = worldKey(id).getBytes();
             jedis.del(key);
+            if (world != null) {
+                world.forEach(change -> jedis.rpush(key, change.toByteArray()));
+            }
+        } catch(Throwable t) {
+            log.warn("Exception while putting world.", t);
+        }
+    }
+
+    @Override
+    public long getHistoryLen(long id) {
+        try (val jedis = pool.getResource();
+             val lock = new WorldLock(jedis, id)) {
+            val key = worldKey(id).getBytes();
+            return jedis.llen(key);
+        } catch(Throwable t) {
+            log.warn("Exception while getting size world.", t);
+            return -1;
+        }
+    }
+
+    @Override
+    public void appendToWorld(long id, @Nullable List<Change> world) {
+        try (val jedis = pool.getResource();
+             val lock = new WorldLock(jedis, id)) {
+            val key = worldKey(id).getBytes();
             if (world != null) {
                 world.forEach(change -> jedis.rpush(key, change.toByteArray()));
             }

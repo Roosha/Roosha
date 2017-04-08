@@ -1,5 +1,6 @@
 #include "cardlistcontroller.h"
 #include "Helpers/configuremanager.h"
+#include "Network/synchronizer.h"
 #include "Network/network_manager.h"
 #include "cardeditioncontroller.h"
 #include "system_tray.h"
@@ -13,10 +14,11 @@
 CardListController::CardListController(QObject *parent)
         : QObject(parent), world_(World::Instance()), widget_(Q_NULLPTR) {
     auto netManager = ConfigureManager::Instance().getNetworkManager();
+    auto synchronizer = ConfigureManager::Instance().getSynchronizer();
 
     qRegisterMetaType<ChangeList>("ChangeList");
-    connect(netManager, &NetworkManager::successLoadChanges,
-            this, &CardListController::applyPulledChanges,
+    connect(synchronizer, &Synchronizer::finishSynchronization,
+            this, &CardListController::applySynchronizedChanges,
             Qt::QueuedConnection);
     // TODO: add translation error handler
 }
@@ -37,10 +39,10 @@ void CardListController::showCardListWindow() {
     widget_->show();
 }
 
-void CardListController::applyPulledChanges(quint32 requestId, ChangeList pulledChanges) {
-    qDebug("CardListController::applyPulledChanges: pull request %d succeeded", requestId);
+void CardListController::applySynchronizedChanges(ChangeList synchronizedChanges) {
+    qDebug("CardListController::applySynchronizedChanges: sync succeeded");
 
-    world_.setChanges(pulledChanges);
+    world_.setChanges(synchronizedChanges);
     showCardListWindow();
 }
 
@@ -53,18 +55,27 @@ void CardListController::createCard() {
     emit createNewCard(emptyData);
 }
 
+void CardListController::synchronize() {
+    StateHolder::Instance().setSync(true);
+    ConfigureManager::Instance().getSynchronizer()->synchronize(world_.getChanges());
+//    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
+    StateHolder::Instance().setSync(false);
+
+}
+
+//TODO:delete this completely
 void CardListController::pullCards() {
     StateHolder::Instance().setSync(true);
-    ConfigureManager::Instance().getNetworkManager()->loadChanges();
-//    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
+    ConfigureManager::Instance().getNetworkManager()->loadChanges(0);
+    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
     StateHolder::Instance().setSync(false);
     qDebug() << "pull";
 }
 
 void CardListController::pushCards() {
     StateHolder::Instance().setSync(true);
-    ConfigureManager::Instance().getNetworkManager()->saveChanges(world_.getChanges());
-//    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
+    ConfigureManager::Instance().getNetworkManager()->saveChanges(world_.getChanges(), 0);
+    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
     StateHolder::Instance().setSync(false);
     qDebug() << "push";
 }

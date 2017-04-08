@@ -50,6 +50,7 @@ RPCErrorStatus ProtobufConverter::errorStatusFromGrpc(const grpc::Status &rawSta
         case grpc::StatusCode::DEADLINE_EXCEEDED: return RPCErrorStatus::DEADLINE_EXCEEDED;
         case grpc::StatusCode::UNAUTHENTICATED: return RPCErrorStatus::NOT_AUTHENTICATED;
         case grpc::StatusCode::UNAVAILABLE: return RPCErrorStatus::NO_CONNECTION;
+        case grpc::StatusCode::ABORTED: return RPCErrorStatus::CONCURRENT_HISTORY_MODIFICATION;
         default:
             qWarning("Unknown grpc statusCode: %s. Message: '%s'",
                                        grpcStatusCodeToCString(rawStatus.error_code()),

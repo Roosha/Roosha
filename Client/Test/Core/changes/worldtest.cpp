@@ -1,33 +1,9 @@
 #include "worldtest.h"
-#include <QDebug>
-
-WorldTest::WorldTest() {}
-
-void WorldTest::printCard(QSharedPointer<DBCard> card) {
-//    qInfo() << "id: " << card->getId();
-    qInfo() << "src: " << card->getSource();
-    qInfo() << "ex: ";
-    for (auto ex: card->getExamples()) {
-        qInfo() << ex;
-    }
-    qInfo() << "tar: ";
-    for (auto tar: card->getTargets()) {
-        qInfo() << tar;
-    }
-}
-
-void WorldTest::printCards(World *world) {
-    QMap<QUuid, QSharedPointer<DBCard>>::const_iterator i = world->getCards().constBegin();
-    while (i != world->getCards().constEnd()) {
-        qInfo() << i.key() << ": ";
-        printCard(i.value());
-        ++i;
-    }
-}
 
 void WorldTest::run() {
     World &world = World::Instance();
     QSharedPointer<DBCard> card = world.createCard();
+    QUuid id1 = card->getId();
     card->insertElem(EXAMPLE, "ex1", 0);
     card->setSource("src1");
     card->insertElem(EXAMPLE, "ex2", 0);
@@ -35,27 +11,61 @@ void WorldTest::run() {
     card->insertElem(EXAMPLE, "ex3", 0);
     card->editElem(EXAMPLE, "ex4", 0);
     card->insertElem(TARGET, "tar", 0);
+
+    QCOMPARE(world.getCards()[id1]->getSource(), "src1");
+    QCOMPARE(world.getCards()[id1]->getTargets()[0], "tar");
+    QCOMPARE(world.getCards()[id1]->getExamples()[0], "ex4");
+    QCOMPARE(world.getCards()[id1]->getExamples()[1], "ex2");
+
     card = world.createCard();
-//    QUuid id_to_del = card->getId();
+    QUuid id2 = card->getId();
+
     card->setSource("src");
     card->insertElem(EXAMPLE, "ex", 0);
     card->deleteElem(EXAMPLE, 0);
     card->insertElem(EXAMPLE, "ex3", 0);
     card->editElem(EXAMPLE, "ex4", 0);
     card->insertElem(TARGET, "t", 0);
+
+    QCOMPARE(world.getCards()[id2]->getSource(), "src");
+    QCOMPARE(world.getCards()[id2]->getTargets()[0], "t");
+    QCOMPARE(world.getCards()[id2]->getExamples()[0], "ex4");
+
     card = world.createCard();
+    QUuid id3 = card->getId();
     card->setSource("src");
     card->insertElem(EXAMPLE, "ex", 0);
     card->deleteElem(EXAMPLE, 0);
     card->insertElem(EXAMPLE, "ex", 0);
     card->editElem(EXAMPLE, "e", 0);
     card->insertElem(TARGET, "tr", 0);
-    printCards(&world);
-    qInfo() << "after remove \n";
-//    world.deleteCard(id_to_del);
-    printCards(&world);
+
+
+    QCOMPARE(world.getCards()[id3]->getSource(), "src");
+    QCOMPARE(world.getCards()[id3]->getTargets()[0], "tr");
+    QCOMPARE(world.getCards()[id3]->getExamples()[0], "e");
+
+    world.removeCard(id2);
+//    qInfo() << "after remove \n";
+
+    QCOMPARE(world.getCards()[id1]->getSource(), "src1");
+    QCOMPARE(world.getCards()[id1]->getTargets()[0], "tar");
+    QCOMPARE(world.getCards()[id1]->getExamples()[0], "ex4");
+    QCOMPARE(world.getCards()[id1]->getExamples()[1], "ex2");
+
+    QCOMPARE(world.getCards()[id3]->getSource(), "src");
+    QCOMPARE(world.getCards()[id3]->getTargets()[0], "tr");
+    QCOMPARE(world.getCards()[id3]->getExamples()[0], "e");
     world.applyChanges();
-    qInfo() << "after reapplying in world\n";
-    printCards(&world);
+//    qInfo() << "after reapplying in world\n";
+
+    QCOMPARE(world.getCards()[id1]->getSource(), "src1");
+    QCOMPARE(world.getCards()[id1]->getTargets()[0], "tar");
+    QCOMPARE(world.getCards()[id1]->getExamples()[0], "ex4");
+    QCOMPARE(world.getCards()[id1]->getExamples()[1], "ex2");
+
+    QCOMPARE(world.getCards()[id3]->getSource(), "src");
+    QCOMPARE(world.getCards()[id3]->getTargets()[0], "tr");
+    QCOMPARE(world.getCards()[id3]->getExamples()[0], "e");
 }
 

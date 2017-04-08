@@ -15,6 +15,8 @@ enum RPCErrorStatus {
             ALREADY_IN_AUTHNTICATION_PROCESS,
     /// Failed to connect to server.
             NO_CONNECTION,
+    /// Server history changed during synchronization, need to retry
+            CONCURRENT_HISTORY_MODIFICATION,
     /// Any other error.
             UNKNOWN,
 };

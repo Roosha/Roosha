@@ -27,7 +27,7 @@ struct RpcAsyncCall {
     /**
      * These methods provide interface for simple passage of any RpcAsyncCall through network stack.
      * Each method just passes this call to proper handler on appropriate network stack layer:
-     * This is the cheme of request performance:
+     * This is the scheme of request performance:
      *
      * CLIENT              NetworkManager            AuthManager      Connector        Listener           REMOTE SERVER
      *
@@ -183,7 +183,7 @@ struct LoadChangesAsyncCall : public AuthenticatedAsyncCall {
     using RpcAsyncCall::fail;
     void fail(NetworkManager *netManager, RPCErrorStatus status) override;
 
-    roosha::Void request_;
+    roosha::PullRequest request_;
     ChangeList response_;
 };
 

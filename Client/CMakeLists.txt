@@ -61,7 +61,6 @@ set(ROOSHA_SOURCES main.cpp
         Helpers/protobuf_converter.cpp
         Core/world.cpp
         GUI/system_tray.cpp
-        Test/Core/changes/worldtest.cpp
         GUI/cardlistcontroller.cpp
         GUI/authentication_controller.cpp
         GUI/cardeditioncontroller.cpp
@@ -81,7 +80,7 @@ set(ROOSHA_RESOURCES QML/qml.qrc
 #------------------------------/Project sources
 
 set(HEADERS ${QHK_HEADERS} ${ROOSHA_HEADERS} ${PROTO_HEADERS})
-set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES})
+set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES} Core/ichange.cpp Network/synchronizer.cpp Network/synchronizer.h)
 qt5_add_resources(RESOURCES ${ROOSHA_RESOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})

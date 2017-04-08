@@ -13,6 +13,13 @@ NetworkManager *ConfigureManager::getNetworkManager() {
 void ConfigureManager::setNetworkManager(NetworkManager *manager) {
     networkManager_ = manager;
 }
+Synchronizer *ConfigureManager::getSynchronizer() {
+    return synchronizer_;
+}
+
+void ConfigureManager::setSynchronizer(Synchronizer *synchronizer){
+    synchronizer_ = synchronizer;
+}
 
 QString ConfigureManager::getLogin() {
     return settings_.value("auth/login", "").toString();

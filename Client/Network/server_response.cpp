@@ -64,7 +64,7 @@ void TranslateAsyncCall::succeed(NetworkManager *netManager) {
 
 void TranslateAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("TranslateAsyncCall::fail");
-    netManager->failTranslate(id_, status);
+    emit netManager->failTranslate(id_, status);
     delete this;
 }
 
@@ -85,7 +85,7 @@ void ProposeUserTranslationsAsyncCall::succeed(NetworkManager *netManager) {
 
 void ProposeUserTranslationsAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("ProposeUserTranslationsAsyncCall::fail")
-    netManager->failPropose(id_, status);
+    emit netManager->failPropose(id_, status);
     delete this;
 }
 
@@ -140,13 +140,13 @@ void SaveChangesAsyncCall::send(RooshaServiceConnector *connector) {
 
 void SaveChangesAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("SaveChangesAsyncCall::succeed")
-    netManager->successSaveChanges(id_);
+    emit netManager->successSaveChanges(id_);
     delete this;
 }
 
 void SaveChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("SaveChangesAsyncCall::fail")
-    netManager->failSaveChanges(id_, status);
+    emit netManager->failSaveChanges(id_, status);
     delete this;
 }
 
@@ -157,13 +157,13 @@ void LoadChangesAsyncCall::send(RooshaServiceConnector *connector) {
 
 void LoadChangesAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("LoadChangesAsyncCall::succeed")
-    netManager->successLoadChanges(id_, response_);
+    emit netManager->successLoadChanges(id_, response_);
     delete this;
 }
 
 void LoadChangesAsyncCall::fail(NetworkManager *netManager, RPCErrorStatus status) {
     DEBUG("LoadChangesAsyncCall::fail")
-    netManager->failLoadChanges(id_, status);
+    emit netManager->failLoadChanges(id_, status);
     delete this;
 }
 
