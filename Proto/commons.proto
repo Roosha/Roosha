@@ -31,8 +31,10 @@ message Void{}
 message Credentials {
 	string login = 1;
 	string passwordHash = 2; // SHA3-256
+	string macAddress = 3;
 }
 
 message AuthenticationToken {
 	string token = 1;
+	int32 machineId = 2;
 }

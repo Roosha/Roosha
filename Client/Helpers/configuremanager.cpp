@@ -37,3 +37,11 @@ void ConfigureManager::setPasswordHash(QString password) {
 void ConfigureManager::setToken(QString token) {
     settings_.setValue("auth/token", QVariant::fromValue(token));
 }
+
+qint8 ConfigureManager::getMachineId() {
+    return static_cast<qint8>(settings_.value("auth/machineId", QVariant::fromValue(0)).toInt());
+}
+
+void ConfigureManager::setMachineId(qint8 machineId) {
+    settings_.setValue("auth/machineId", QVariant::fromValue(machineId));
+}

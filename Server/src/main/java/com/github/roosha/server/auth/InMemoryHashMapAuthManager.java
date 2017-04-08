@@ -1,5 +1,6 @@
 package com.github.roosha.server.auth;
 
+import com.github.roosha.proto.CommonsProto;
 import com.github.roosha.proto.CommonsProto.Credentials;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +52,11 @@ public class InMemoryHashMapAuthManager implements AuthManager {
         } while (authorizedUsers.putIfAbsent(token, userId) != null);
         return token;
 
+    }
+
+    @Override
+    public @Nullable Integer getMachineId(@NotNull CommonsProto.Credentials userCredentials) {
+        return 1; // TODO: fix
     }
 
     private static class CaseSensitiveString {

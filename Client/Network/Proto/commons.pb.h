@@ -227,12 +227,24 @@ class Credentials : public ::google::protobuf::Message /* @@protoc_insertion_poi
   ::std::string* release_passwordhash();
   void set_allocated_passwordhash(::std::string* passwordhash);
 
+  // optional string macAddress = 3;
+  void clear_macaddress();
+  static const int kMacAddressFieldNumber = 3;
+  const ::std::string& macaddress() const;
+  void set_macaddress(const ::std::string& value);
+  void set_macaddress(const char* value);
+  void set_macaddress(const char* value, size_t size);
+  ::std::string* mutable_macaddress();
+  ::std::string* release_macaddress();
+  void set_allocated_macaddress(::std::string* macaddress);
+
   // @@protoc_insertion_point(class_scope:roosha.Credentials)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr login_;
   ::google::protobuf::internal::ArenaStringPtr passwordhash_;
+  ::google::protobuf::internal::ArenaStringPtr macaddress_;
   mutable int _cached_size_;
   friend struct  protobuf_commons_2eproto::TableStruct;
 };
@@ -319,11 +331,18 @@ class AuthenticationToken : public ::google::protobuf::Message /* @@protoc_inser
   ::std::string* release_token();
   void set_allocated_token(::std::string* token);
 
+  // optional int32 machineId = 2;
+  void clear_machineid();
+  static const int kMachineIdFieldNumber = 2;
+  ::google::protobuf::int32 machineid() const;
+  void set_machineid(::google::protobuf::int32 value);
+
   // @@protoc_insertion_point(class_scope:roosha.AuthenticationToken)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::internal::ArenaStringPtr token_;
+  ::google::protobuf::int32 machineid_;
   mutable int _cached_size_;
   friend struct  protobuf_commons_2eproto::TableStruct;
 };
@@ -443,6 +462,50 @@ inline void Credentials::set_allocated_passwordhash(::std::string* passwordhash)
   // @@protoc_insertion_point(field_set_allocated:roosha.Credentials.passwordHash)
 }
 
+// optional string macAddress = 3;
+inline void Credentials::clear_macaddress() {
+  macaddress_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& Credentials::macaddress() const {
+  // @@protoc_insertion_point(field_get:roosha.Credentials.macAddress)
+  return macaddress_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Credentials::set_macaddress(const ::std::string& value) {
+  
+  macaddress_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:roosha.Credentials.macAddress)
+}
+inline void Credentials::set_macaddress(const char* value) {
+  
+  macaddress_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:roosha.Credentials.macAddress)
+}
+inline void Credentials::set_macaddress(const char* value, size_t size) {
+  
+  macaddress_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:roosha.Credentials.macAddress)
+}
+inline ::std::string* Credentials::mutable_macaddress() {
+  
+  // @@protoc_insertion_point(field_mutable:roosha.Credentials.macAddress)
+  return macaddress_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Credentials::release_macaddress() {
+  // @@protoc_insertion_point(field_release:roosha.Credentials.macAddress)
+  
+  return macaddress_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Credentials::set_allocated_macaddress(::std::string* macaddress) {
+  if (macaddress != NULL) {
+    
+  } else {
+    
+  }
+  macaddress_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), macaddress);
+  // @@protoc_insertion_point(field_set_allocated:roosha.Credentials.macAddress)
+}
+
 // -------------------------------------------------------------------
 
 // AuthenticationToken
@@ -497,6 +560,20 @@ inline void AuthenticationToken::set_allocated_token(::std::string* token) {
   }
   token_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), token);
   // @@protoc_insertion_point(field_set_allocated:roosha.AuthenticationToken.token)
+}
+
+// optional int32 machineId = 2;
+inline void AuthenticationToken::clear_machineid() {
+  machineid_ = 0;
+}
+inline ::google::protobuf::int32 AuthenticationToken::machineid() const {
+  // @@protoc_insertion_point(field_get:roosha.AuthenticationToken.machineId)
+  return machineid_;
+}
+inline void AuthenticationToken::set_machineid(::google::protobuf::int32 value) {
+  
+  machineid_ = value;
+  // @@protoc_insertion_point(field_set:roosha.AuthenticationToken.machineId)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

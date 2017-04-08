@@ -116,7 +116,9 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     public void registrate(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
         final String authToken = authManager.register(request);
         if (authToken != null) {
-            val response = AuthenticationToken.newBuilder().setToken(authToken).build();
+            Integer machineId = authManager.getMachineId(request);
+
+            val response = AuthenticationToken.newBuilder().setToken(authToken).setMachineId(machineId).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
 
@@ -132,7 +134,9 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     public void authorize(Credentials request, StreamObserver<AuthenticationToken> responseObserver) {
         final String authToken = authManager.authorize(request);
         if (authToken != null) {
-            val response = AuthenticationToken.newBuilder().setToken(authToken).build();
+            Integer machineId = authManager.getMachineId(request);
+
+            val response = AuthenticationToken.newBuilder().setToken(authToken).setMachineId(machineId).build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
 

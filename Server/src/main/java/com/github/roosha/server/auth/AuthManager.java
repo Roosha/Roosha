@@ -25,4 +25,11 @@ public interface AuthManager {
      * @return generated token if registration dsucceeded, {@code null} otherwise
      */
     @Nullable String register(@NotNull Credentials userCredentials);
+
+    /**
+     * Return a machine id of current client machine and register it in system
+     * @param userCredentials authorization credentials
+     * @return id of current client machine
+     */
+    @Nullable Integer getMachineId(@NotNull Credentials userCredentials);
 }

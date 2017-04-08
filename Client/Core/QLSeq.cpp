@@ -8,14 +8,19 @@
 #include <cassert>
 #include <QDebug>
 #include "QLSeq.h"
+#include "Helpers/configuremanager.h"
 
-QLKey::QLKey() {}
+QLKey::QLKey() {
+    machineId = ConfigureManager::Instance().getMachineId();
+}
 QLKey::~QLKey() {}
 
 QLKey::QLKey(QByteArray array) {
-    data.reserve(array.size());
-    for(char e : array) {
-        data.push_back(e);
+    machineId = array.at(0);
+
+    data.reserve(array.size() - sizeof(qint8));
+    for(int i = 1; i < array.size(); i++) {
+        data.push_back(array.at(i));
     }
 }
 
@@ -29,21 +34,27 @@ char QLKey::at(int depth) const {
 
 QLKey::QLKey(const QLKey &other) {
     data = other.data;
+    machineId = other.machineId;
 }
 
-QLKey::QLKey(std::initializer_list<char> list) : data(list) {}
+QLKey::QLKey(std::initializer_list<char> list) : data(list) {
+    machineId = ConfigureManager::Instance().getMachineId();
+}
 
 bool QLKey::operator<(const QLKey &other) const {
     for(int i = 0; i < qMax(size(), other.size()); i++) {
         if(at(i) < other.at(i)) return true;
         else if(at(i) > other.at(i)) return false;
     }
-    return false;
+    return machineId < other.machineId;
 }
 
 QByteArray QLKey::toByteArray() const {
     QByteArray bytes;
-    bytes.reserve(data.size());
+    bytes.reserve(data.size() + sizeof(qint8));
+
+    bytes.push_back(machineId);
+
     for(char e : data) {
         bytes.push_back(e);
     }
