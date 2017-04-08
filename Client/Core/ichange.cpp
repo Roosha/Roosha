@@ -7,7 +7,7 @@
 
 IChange::~IChange() {}
 IChange::IChange(roosha::Change change) : rawChange(change) {}
-CMP IChange::compare(IChange *otherChange) {
+CMP IChange::compare(QSharedPointer<IChange> otherChange) {
     roosha::Change ch1 = this->rawChange;
     roosha::Change ch2 = otherChange->rawChange;
     if (ch1.change_case() != roosha::Change::kCardChange &&

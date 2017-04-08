@@ -9,8 +9,7 @@
 #include <QtCore/QObject>
 #include <Core/ichange.h>
 #include "error_status.h"
-
-class NetworkManager;
+#include "network_manager.h"
 
 class Synchronizer: public QObject {
  Q_OBJECT

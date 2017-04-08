@@ -34,7 +34,7 @@ void Synchronizer::receivedChanges(qint32 requestId, ChangeList recivedChanges) 
     suffix.clear();
     for (int i = synchronized_prefix_length; i < synchronizing.length(); i++) {
         for (int j = 0; j < recivedChanges.length(); j++) {
-            CMP changes_are = recivedChanges[j]->compare((IChange *)synchronizing[i]);
+            CMP changes_are = recivedChanges[j]->compare(synchronizing[i]);
             if (changes_are == DIFFER) {
                 suffix.append(recivedChanges[j]);
             } else if (changes_are == CONFLICT) {

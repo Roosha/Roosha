@@ -28,7 +28,7 @@ class IChange {
     roosha::Change toProtobuf() const {
         return rawChange;
     }
-    CMP compare(IChange* otherChange);
+    CMP compare(QSharedPointer<IChange> otherChange);
  protected:
     roosha::Change rawChange;
 };
