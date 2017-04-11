@@ -12,6 +12,7 @@
 #include <Core/dbcard.h>
 #include <Core/Scrutiny.h>
 #include <queue>
+#include <QtCore/QPointer>
 #include "UserInputModels.h"
 #include "CardLearningViewModels.h"
 #include "CardDifficulty.h"
@@ -161,7 +162,7 @@ class LearningStrategyBase : public QObject {
     quint32 changesNumber_;
  protected:
 
-    CardLearningModel *lastCardShown_;
+    CardLearningModel *lastShownCard_;
 };
 
 class SimpleDiffStrategy : public LearningStrategyBase {
@@ -215,7 +216,7 @@ class SuperMemo2Strategy : public LearningStrategyBase {
     static constexpr double DIFFICULT_DEFAULT_FACTOR = 1.2;
     static constexpr double NORMAL_DEFAULT_FACTOR = 1.5;
     static constexpr double EASY_DEFAULT_FACTOR = 2.;
-    static constexpr quint32 DEFAULT_INTERVAL_MAXIMUM = 60 * 60 * 24 * 60; // 60 days
+    static constexpr quint32 DEFAULT_INTERVAL_MAXIMUM = 60 * 24 * 60 * 60; // 60 days
 
     SuperMemo2Strategy(quint32 changesNumber,
                        QList<QUuid> cardIds = QList<QUuid>(),
@@ -258,14 +259,17 @@ class SuperMemo2Strategy : public LearningStrategyBase {
     struct Comparator {bool operator()(const CardInfo &lhv, const CardInfo &rhv) {return lhv.nextScrutiny_ > rhv.nextScrutiny_;}};
     //@formatter:on
 
-    CardInfo nextCardInfo(const CardInfo &cardInfo, CardDifficulty::Rate scrutinyStatus);
+    CardInfo alteredCardInfo(const CardInfo &cardInfo, CardDifficulty::Rate scrutinyStatus);
     quint32 nextIntervalWhenSucceeded(quint32 currentInterval, double factor);
+    CardLearningModel *learningModelForCard(const CardInfo* cardInfo);
+    CardInfo *nextCardInfo();
 
     double difficultFactor_;
     double normalFactor_;
     double easyFactor_;
     quint32 intervalMaximum_;
 
+    CardInfo *lastShownCardInfo_;
     std::priority_queue<CardInfo, std::vector<CardInfo>, Comparator> cardQueue_;
 };
 

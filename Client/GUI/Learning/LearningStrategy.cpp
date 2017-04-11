@@ -55,28 +55,28 @@ LearningStrategyBase::LearningStrategyBase(quint32 changesNumber, QObject *paren
         QObject(parent),
         scrutiniesNumber_(0),
         changesNumber_(changesNumber),
-        lastCardShown_(Q_NULLPTR) {
+        lastShownCard_(Q_NULLPTR) {
 }
 
 CardLearningModel *LearningStrategyBase::currentCard() {
-    return lastCardShown_;
+    return lastShownCard_;
 }
 
 Scrutiny LearningStrategyBase::currentScrutiny() throw(std::logic_error) {
-    if (!lastCardShown_) {
+    if (!lastShownCard_) {
         throw std::logic_error("LearningStrategyBase::currentScrutiny called while lastCardShown is null");
     }
-    if (lastCardShown_->getCardDifficultyRate() == CardDifficulty::Rate::UNKNOWN) {
+    if (lastShownCard_->getCardDifficultyRate() == CardDifficulty::Rate::UNKNOWN) {
         throw std::logic_error("LearningStrategyBase::currentScrutiny called "
                                        "while lastCardShown.cardDifficulty is unknown");
     }
 
     return Scrutiny(
-            lastCardShown_->getCard()->getId(),
+            lastShownCard_->getCard()->getId(),
             QDateTime::currentDateTime(),
-            lastCardShown_->getInputModel()->getType(),
-            lastCardShown_->getViewModel()->getType(),
-            lastCardShown_->getCardDifficultyRate()
+            lastShownCard_->getInputModel()->getType(),
+            lastShownCard_->getViewModel()->getType(),
+            lastShownCard_->getCardDifficultyRate()
     );
 }
 
@@ -114,30 +114,30 @@ SimpleDiffStrategy::SimpleDiffStrategy(quint32 changesNumber,
 }
 
 CardLearningModel *SimpleDiffStrategy::firstCard() {
-    if (lastCardShown_) { throw std::logic_error("SimpleDiffStrategy::firstCard called while lastCardShown is not null"); }
+    if (lastShownCard_) { throw std::logic_error("SimpleDiffStrategy::firstCard called while lastCardShown is not null"); }
 
-    return lastCardShown_ = nextCardLearningModel();
+    return lastShownCard_ = nextCardLearningModel();
 }
 
 CardLearningModel *SimpleDiffStrategy::nextCard() {
     processLastScrutiny();
 
-    return lastCardShown_ = nextCardLearningModel();
+    return lastShownCard_ = nextCardLearningModel();
 }
 
 void SimpleDiffStrategy::finish() {
     processLastScrutiny();
 
-    lastCardShown_ = Q_NULLPTR;
+    lastShownCard_ = Q_NULLPTR;
 }
 
 void SimpleDiffStrategy::cancel() {
-    if (lastCardShown_ && !lastCardShown_->isEmpty()) {
-        QUuid prevCardId = lastCardShown_->getCard()->getId();
+    if (lastShownCard_ && !lastShownCard_->isEmpty()) {
+        QUuid prevCardId = lastShownCard_->getCard()->getId();
         if (diffs_.contains(prevCardId)) { cardQueue_.emplace(prevCardId, diffs_[prevCardId]); }
     }
 
-    lastCardShown_ = Q_NULLPTR;
+    lastShownCard_ = Q_NULLPTR;
 }
 
 qint32 SimpleDiffStrategy::getDiffOfDifficultyRate(CardDifficulty::Rate rate) {
@@ -157,7 +157,7 @@ CardLearningModel *SimpleDiffStrategy::nextCardLearningModel() {
         QUuid cardId = cardQueue_.top().first;
         cardQueue_.pop();
         if (diffs_.contains(cardId)) {
-            return lastCardShown_ = new CardLearningModel(
+            return lastShownCard_ = new CardLearningModel(
                     World::Instance().getCards()[cardId].data(),
                     new TargetsAndExampleViewModel(),
                     new TextUserInputModel()
@@ -169,11 +169,11 @@ CardLearningModel *SimpleDiffStrategy::nextCardLearningModel() {
 }
 
 void SimpleDiffStrategy::processLastScrutiny() {
-    if (!lastCardShown_->isEmpty()) {
+    if (!lastShownCard_->isEmpty()) {
         World::Instance().addScrutiny(currentScrutiny());
 
-        QUuid prevCardId = lastCardShown_->getCard()->getId();
-        diffs_[prevCardId] += getDiffOfDifficultyRate(lastCardShown_->getCardDifficultyRate());
+        QUuid prevCardId = lastShownCard_->getCard()->getId();
+        diffs_[prevCardId] += getDiffOfDifficultyRate(lastShownCard_->getCardDifficultyRate());
         if (diffs_.contains(prevCardId)) { cardQueue_.emplace(prevCardId, diffs_[prevCardId]); }
     }
 }
@@ -215,35 +215,55 @@ SuperMemo2Strategy::SuperMemo2Strategy(quint32 changesNumber,
                                        double easyFactor,
                                        quint32 intervalMax) :
         LearningStrategyBase(changesNumber, parent),
+        lastShownCardInfo_(Q_NULLPTR),
         difficultFactor_(difficultFactor),
         normalFactor_(normalFactor),
         easyFactor_(easyFactor),
         intervalMaximum_(intervalMax) {
-    auto currentTime = QDateTime::currentDateTime();
-    for (auto &&cardId : cardIds) {
-        auto delta = rand() % (changesNumber + 1) - (changesNumber / 2); // to shuffle cards a little bit
-        cardQueue_.emplace(cardId, currentTime.addMSecs(delta));
-    }
-
+    onCardsCreated(cardIds.toSet());
     appendScrutinies(scrutinies);
 }
 
 CardLearningModel *SuperMemo2Strategy::firstCard() {
-    // TODO: implement
+    if (lastShownCard_) { throw std::logic_error("SuperMemo2Strategy::firstCard called while lastShownCard is not null"); }
+    if (lastShownCardInfo_) {
+        throw std::logic_error("SuperMemo2Strategy::firstCard called while lastShownCardInfo is not null");
+    }
+
+    lastShownCardInfo_ = nextCardInfo();
+    return lastShownCard_ = learningModelForCard(lastShownCardInfo_);
 }
 
 CardLearningModel *SuperMemo2Strategy::nextCard() {
-    // TODO: implement
+    if (!lastShownCard_) { throw std::logic_error("SuperMemo2Strategy::nextCard called while lastShownCard is null."); }
 
+    if (lastShownCardInfo_) {
+        cardQueue_.push(alteredCardInfo(*lastShownCardInfo_, lastShownCard_->getCardDifficultyRate()));
+    }
+
+    lastShownCardInfo_ = nextCardInfo();
+    return lastShownCard_ = learningModelForCard(lastShownCardInfo_);
 }
 
 void SuperMemo2Strategy::finish() {
-    // TODO: implement
+    if (!lastShownCard_) { throw std::logic_error("SuperMemo2Strategy::finish called while lastShownCard is null."); }
 
+    if (lastShownCardInfo_) {
+        auto newCardInfo = alteredCardInfo(*lastShownCardInfo_, lastShownCard_->getCardDifficultyRate());
+        cardQueue_.push(alteredCardInfo(newCardInfo, lastShownCard_->getCardDifficultyRate()));
+    }
+
+    lastShownCard_ = Q_NULLPTR;
+    lastShownCardInfo_ = Q_NULLPTR;
 }
 
 void SuperMemo2Strategy::cancel() {
-    // TODO: implement
+    if (lastShownCard_ && lastShownCardInfo_) {
+        cardQueue_.push(*lastShownCardInfo_);
+    }
+
+    lastShownCard_ = Q_NULLPTR;
+    lastShownCardInfo_ = Q_NULLPTR;
 }
 
 LearningStrategyType SuperMemo2Strategy::getType() {
@@ -251,21 +271,45 @@ LearningStrategyType SuperMemo2Strategy::getType() {
 }
 
 void SuperMemo2Strategy::onCardsCreated(QSet<QUuid> cardIds) {
-
+    auto currentTime = QDateTime::currentDateTime();
+    auto cardsNum = cardIds.size();
+    for (auto &&cardId : cardIds) {
+        auto delta = rand() % (cardsNum + 1) - (cardsNum / 2); // to shuffle cards a little bit
+        cardQueue_.emplace(cardId, currentTime.addMSecs(delta));
+    }
 }
 
 void SuperMemo2Strategy::onCardsDeleted(QSet<QUuid> cardIds) {
-    // TODO: implement
-
+    // do nothing since we check all cards from cardQueue
 }
 
 void SuperMemo2Strategy::appendScrutinies(QList<Scrutiny> scrutinies) {
-    // TODO: implement
+    QMap<QUuid, QVector<Scrutiny>> map;
+    for (auto currentScrutiny : scrutinies) {
+        if (!map.contains(currentScrutiny.getCardId())) {
+            map[currentScrutiny.getCardId()] = QVector<Scrutiny>();
+        }
+        map[currentScrutiny.getCardId()].append(currentScrutiny);
+    }
 
+    QVector<CardInfo> newInfos((int) cardQueue_.size());
+    while (!cardQueue_.empty()) {
+        CardInfo info = cardQueue_.top();
+        for (auto &&scrutiny : map.value(info.cardId_, QVector<Scrutiny>())) {
+            info = alteredCardInfo(info, scrutiny.getDifficultyRate());
+        }
+        newInfos.append(info);
+        cardQueue_.pop();
+    }
+
+    cardQueue_ = std::priority_queue<CardInfo, std::vector<CardInfo>, Comparator>();
+    for (auto &&newInfo : newInfos) {
+        cardQueue_.push(newInfo);
+    }
 }
 
-SuperMemo2Strategy::CardInfo SuperMemo2Strategy::nextCardInfo(const SuperMemo2Strategy::CardInfo &cardInfo,
-                                                              CardDifficulty::Rate scrutinyStatus)  {
+SuperMemo2Strategy::CardInfo SuperMemo2Strategy::alteredCardInfo(const SuperMemo2Strategy::CardInfo &cardInfo,
+                                                                 CardDifficulty::Rate scrutinyStatus) {
     // see https://www.supermemo.com/english/ol/sm2.htm for details
     const quint32 ord = CardDifficulty::ord(scrutinyStatus);
     double factor = std::max(1.3, cardInfo.currentFactor_ + (0.1 - (5 - ord) * (0.08 + (5 - ord) * 0.02)));
@@ -274,7 +318,7 @@ SuperMemo2Strategy::CardInfo SuperMemo2Strategy::nextCardInfo(const SuperMemo2St
     quint32 interval;
     switch (scrutinyStatus) {
         case CardDifficulty::Rate::UNKNOWN:
-            throw std::logic_error("Unexpected UNKNOWN difficulty rate in SuperMemo2Strategy::nextCardInfo");
+            throw std::logic_error("Unexpected UNKNOWN difficulty rate in SuperMemo2Strategy::alteredCardInfo");
         case CardDifficulty::Rate::SKIPPED:interval = 0;
             nextScrutiny = nextScrutiny.addSecs(TEN_MINUTES_IN_SECONDS);
             break;
@@ -316,5 +360,36 @@ quint32 SuperMemo2Strategy::nextIntervalWhenSucceeded(quint32 currentInterval, d
     } else {
         return (quint32) (currentInterval * factor);
     }
+}
+
+CardLearningModel *SuperMemo2Strategy::learningModelForCard(const SuperMemo2Strategy::CardInfo *cardInfo) {
+    if (cardInfo) {
+        return new CardLearningModel(
+                World::Instance().getCards()[cardInfo->cardId_].data(),
+                new TargetsAndExampleViewModel(), // TODO: fix memory leak here
+                new TextUserInputModel()
+        );
+    } else {
+        return CardLearningModel::emptyCard();
+    }
+}
+
+SuperMemo2Strategy::CardInfo *SuperMemo2Strategy::nextCardInfo() {
+    QDateTime now = QDateTime::currentDateTime().addSecs(TEN_MINUTES_IN_SECONDS);
+    while (!cardQueue_.empty()) {
+        CardInfo info = cardQueue_.top();
+        if (World::Instance().getCards().contains(info.cardId_)) {
+            if (info.nextScrutiny_ <= now) {
+                CardInfo *result = new CardInfo(info);
+                cardQueue_.pop();
+                return result;
+            } else {
+                return Q_NULLPTR;
+            }
+        } else {
+            cardQueue_.pop();
+        }
+    }
+    return Q_NULLPTR;
 }
 
