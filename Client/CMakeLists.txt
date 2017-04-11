@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5.1)
 
 project(roosha.client)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 #------------------------ QHotkey
 add_subdirectory(lib/QHotkey)

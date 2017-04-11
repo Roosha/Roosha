@@ -7,7 +7,7 @@
 #include "LearningStrategy.h"
 
 Card *CardLearningModel::getCard() {
-    return card_;
+    return card_.data();
 }
 
 CardLearningModel *CardLearningModel::emptyCard() {
@@ -22,9 +22,9 @@ UserInputModelBase *CardLearningModel::getInputModel() {
     return inputModel_;
 }
 
-CardLearningModel::CardLearningModel(Card *card_,
-                                     CardViewModelBase *viewModel_,
-                                     UserInputModelBase *inputModel_,
+CardLearningModel::CardLearningModel(QSharedPointer<Card> card_,
+                                     QPointer<CardViewModelBase> viewModel_,
+                                     QPointer<UserInputModelBase> inputModel_,
                                      QObject *parent) :
         QObject(parent),
         difficultyRate_(CardDifficulty::Rate::UNKNOWN),
@@ -158,9 +158,9 @@ CardLearningModel *SimpleDiffStrategy::nextCardLearningModel() {
         cardQueue_.pop();
         if (diffs_.contains(cardId)) {
             return lastShownCard_ = new CardLearningModel(
-                    World::Instance().getCards()[cardId].data(),
-                    new TargetsAndExampleViewModel(),
-                    new TextUserInputModel()
+                    World::Instance().getCards()[cardId],
+                    QPointer<CardViewModelBase>(new TargetsAndExampleViewModel()),
+                    QPointer<UserInputModelBase>(new TextUserInputModel())
             );
         }
     }
@@ -362,19 +362,19 @@ quint32 SuperMemo2Strategy::nextIntervalWhenSucceeded(quint32 currentInterval, d
     }
 }
 
-CardLearningModel *SuperMemo2Strategy::learningModelForCard(const SuperMemo2Strategy::CardInfo *cardInfo) {
+CardLearningModel *SuperMemo2Strategy::learningModelForCard(const std::unique_ptr<SuperMemo2Strategy::CardInfo> &cardInfo) {
     if (cardInfo) {
         return new CardLearningModel(
-                World::Instance().getCards()[cardInfo->cardId_].data(),
-                new TargetsAndExampleViewModel(), // TODO: fix memory leak here
-                new TextUserInputModel()
+                World::Instance().getCards()[cardInfo->cardId_],
+                QPointer<CardViewModelBase>(new TargetsAndExampleViewModel()),
+                QPointer<UserInputModelBase>(new TextUserInputModel())
         );
     } else {
         return CardLearningModel::emptyCard();
     }
 }
 
-SuperMemo2Strategy::CardInfo *SuperMemo2Strategy::nextCardInfo() {
+std::unique_ptr<SuperMemo2Strategy::CardInfo> SuperMemo2Strategy::nextCardInfo() {
     QDateTime now = QDateTime::currentDateTime().addSecs(TEN_MINUTES_IN_SECONDS);
     while (!cardQueue_.empty()) {
         CardInfo info = cardQueue_.top();
@@ -382,7 +382,7 @@ SuperMemo2Strategy::CardInfo *SuperMemo2Strategy::nextCardInfo() {
             if (info.nextScrutiny_ <= now) {
                 CardInfo *result = new CardInfo(info);
                 cardQueue_.pop();
-                return result;
+                return std::unique_ptr<SuperMemo2Strategy::CardInfo>(result);
             } else {
                 return Q_NULLPTR;
             }

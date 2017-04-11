@@ -40,9 +40,9 @@ class CardLearningModel : public QObject {
 
     /// Empty model constructor
     CardLearningModel();
-    CardLearningModel(Card *card_,
-                      CardViewModelBase *viewModel_,
-                      UserInputModelBase *inputModel_,
+    CardLearningModel(QSharedPointer<Card> card_,
+                      QPointer<CardViewModelBase> viewModel_,
+                      QPointer<UserInputModelBase> inputModel_,
                       QObject *parent = Q_NULLPTR);
 
     /// if this flag is set, there is no cards to learn, so nothing to show
@@ -55,9 +55,9 @@ class CardLearningModel : public QObject {
 
     bool empty_;
     CardDifficulty::Rate difficultyRate_;
-    Card *card_;
-    CardViewModelBase *viewModel_;
-    UserInputModelBase *inputModel_;
+    QSharedPointer<Card> card_;
+    QPointer<CardViewModelBase> viewModel_;
+    QPointer<UserInputModelBase> inputModel_;
 };
 
 class LearningStrategyBase : public QObject {
@@ -162,7 +162,7 @@ class LearningStrategyBase : public QObject {
     quint32 changesNumber_;
  protected:
 
-    CardLearningModel *lastShownCard_;
+    QPointer<CardLearningModel> lastShownCard_;
 };
 
 class SimpleDiffStrategy : public LearningStrategyBase {
@@ -261,15 +261,15 @@ class SuperMemo2Strategy : public LearningStrategyBase {
 
     CardInfo alteredCardInfo(const CardInfo &cardInfo, CardDifficulty::Rate scrutinyStatus);
     quint32 nextIntervalWhenSucceeded(quint32 currentInterval, double factor);
-    CardLearningModel *learningModelForCard(const CardInfo* cardInfo);
-    CardInfo *nextCardInfo();
+    CardLearningModel * learningModelForCard(const std::unique_ptr<CardInfo> &cardInfo);
+    std::unique_ptr<CardInfo> nextCardInfo();
 
     double difficultFactor_;
     double normalFactor_;
     double easyFactor_;
     quint32 intervalMaximum_;
 
-    CardInfo *lastShownCardInfo_;
+    std::unique_ptr<CardInfo> lastShownCardInfo_;
     std::priority_queue<CardInfo, std::vector<CardInfo>, Comparator> cardQueue_;
 };
 
