@@ -20,13 +20,13 @@ class Synchronizer: public QObject {
     ~Synchronizer();
 
 public slots:
-    void receivedChanges(qint32 requestId, ChangeList recivedChanges);
+    void receivedChanges(qint32 requestId, ChangeList serverChanges);
     void pullSucceeded(qint32 requestId);
     void pullFailed(qint32 requestId, RPCErrorStatus status);
  signals:
     void finishSynchronization(ChangeList changes);
 private:
-    ChangeList synchronizing;
+    ChangeList clientChanges;
     ChangeList suffix;
     NetworkManager *networkManager_;
     qint32 synchronized_prefix_length;

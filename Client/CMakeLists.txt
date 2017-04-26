@@ -14,8 +14,6 @@ set(LIBS_TO_LINK ${LIBS_TO_LINK} lib.qhotkey )
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-#TODO: come up with more convenient way to set qt installation path
-set(CMAKE_PREFIX_PATH $ENV{HOME}/.Qt/5.8/gcc_64)
 
 set(QT5_USED_MODULES Qml Quick Widgets Core QuickWidgets QuickControls2 Concurrent Test)
 find_package(Qt5 COMPONENTS ${QT5_USED_MODULES} REQUIRED)
@@ -94,9 +92,16 @@ enable_testing()
 
 find_package(Qt5Test REQUIRED)
 
-set(TESTED_SOURCES Core/QLSeq.cpp)
+set(TESTED_SOURCES
+        Core/QLSeq.cpp
+        Core/world.cpp
+        Core/card.cpp
+        Core/dbcard.cpp
+        Core/changes.cpp
+        Core/ichange.cpp
+        ${PROTO_SOURCES})
 
-set(TESTS_SOURCES Test/Core/TestLSequence.cpp)
+set(TESTS_SOURCES Test/Core/TestLSequence.cpp Test/Core/changes/worldtest.cpp)
 
 add_executable(TestApp Test/runTests.cpp ${TESTED_SOURCES} ${TESTS_SOURCES})
 add_test(TestApp TestApp)

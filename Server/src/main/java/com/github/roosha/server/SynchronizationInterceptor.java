@@ -19,7 +19,7 @@ public class SynchronizationInterceptor implements ServerInterceptor {
     @Autowired
     private SynchronizationInterceptor(
             @Qualifier("historyLenContextKey") Context.Key<Long> HISTORY_LEN_CONTEXT_KEY,
-            @Qualifier("authTokenMetadataKey") Metadata.Key<String> HISTORY_LEN_METADATA_KEY) {
+            @Qualifier("historyLenMetadataKey") Metadata.Key<String> HISTORY_LEN_METADATA_KEY) {
         assertNotNull(HISTORY_LEN_CONTEXT_KEY, "len key must be not null");
         assertNotNull(HISTORY_LEN_METADATA_KEY, "len metadata key must be not null");
 

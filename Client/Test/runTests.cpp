@@ -4,7 +4,7 @@
 #define private public
 #include <QtTest>
 #include "Test/Core/TestLSequence.h"
-//#include "Test/Core/changes/worldtest.h"
+#include "Test/Core/changes/worldtest.h"
 
 int main(int argc, char** argv) {
     int status = 0;
@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
 
     // add new tests here
     RUN_TEST(new TestLSequence());
-//    RUN_TEST(new WorldTest());
+    RUN_TEST(new WorldTest());
 
     return status;
 }
