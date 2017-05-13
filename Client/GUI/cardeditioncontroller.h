@@ -18,6 +18,14 @@ class CardEditionController : public QObject {
 
     Q_INVOKABLE void closeWindow(QQuickWidget *widget);
     Q_INVOKABLE void saveCard(QQuickWidget *widget, QString src, QString tarStr, QString exStr, QUuid id);
+
+    static CardEditionController *getInstance() {
+        if(self == nullptr) {
+            self = new CardEditionController();
+        }
+        return self;
+    }
+
  signals:
     void showCards();
 
@@ -28,6 +36,15 @@ class CardEditionController : public QObject {
  private:
     QMap<QmlWidget *, QUuid> data_edit;
     QMap<QmlWidget *, QSharedPointer<Translation> > data_create;
+
+    static CardEditionController *self;
 };
+
+static QObject *register_card_edition_controller(QQmlEngine *engine, QJSEngine *scriptEngine) {
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return CardEditionController::getInstance();
+}
 
 #endif // CARDCREATIONCONTROLLER_H

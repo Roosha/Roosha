@@ -3,6 +3,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.0
 import roosha.controllers 1.0
 
+import Roosha.controllers.authentication 1.0
+
 Rectangle {
     id: root
     width: 300
@@ -53,7 +55,7 @@ Rectangle {
             focus: true
 
             onAccepted: {
-                controller.sendAuthenticationRequest(login.text, password.text);
+                AuthenticationController.sendAuthenticationRequest(login.text, password.text);
             }
         }
 
@@ -67,7 +69,7 @@ Rectangle {
 
                 text: qsTr("Sign Up")
                 onClicked: {
-                    controller.showRegistrateWindow();
+                    AuthenticationController.showRegistrateWindow();
                 }
             }
 
@@ -78,7 +80,7 @@ Rectangle {
 
                 text: qsTr("Login")
                 onClicked: {
-                    controller.sendAuthenticationRequest(login.text, password.text);
+                    AuthenticationController.sendAuthenticationRequest(login.text, password.text);
                 }
             }
         }
@@ -86,7 +88,7 @@ Rectangle {
         states: [
             State {
                 name: "NotAuthenticated"
-                when: controller.state_ === AuthController.NotAuthenticated
+                when: AuthenticationController.state_ === AuthController.NotAuthenticated
                 PropertyChanges {
                     target: signUpButton
                     enabled: true
@@ -119,7 +121,7 @@ Rectangle {
             },
             State {
                 name: "InProgress"
-                when: controller.state_ === AuthController.InProgress
+                when: AuthenticationController.state_ === AuthController.InProgress
                 PropertyChanges {
                     target: signUpButton
                     enabled: false
@@ -152,7 +154,7 @@ Rectangle {
             },
             State {
                 name: "AuthenticationFailure"
-                when: controller.state_ === AuthController.AuthenticationFailure
+                when: AuthenticationController.state_ === AuthController.AuthenticationFailure
                 PropertyChanges {
                     target: signUpButton
                     enabled: true
@@ -185,7 +187,7 @@ Rectangle {
             },
             State {
                 name: "AuthenticationSuccess"
-                when: controller.state_ === AuthController.AuthenticationSuccess
+                when: AuthenticationController.state_ === AuthController.AuthenticationSuccess
                 PropertyChanges {
                     target: signUpButton
                     enabled: false

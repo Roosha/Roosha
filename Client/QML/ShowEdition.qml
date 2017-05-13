@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
+import Roosha.controllers.cardEdition 1.0
 
 Rectangle {
     id: root
@@ -38,7 +39,7 @@ Rectangle {
             anchors.leftMargin: 10
 
             onClicked: {
-                controller.closeWindow(self);
+                CardEditionController.closeWindow(self);
             }
         }
 
@@ -57,7 +58,7 @@ Rectangle {
             anchors.rightMargin: 10
 
             onClicked: {
-                controller.saveCard(self, edit.getSource(), edit.getTarget(), edit.getExample(), edit.getId());
+                CardEditionController.saveCard(self, edit.getSource(), edit.getTarget(), edit.getExample(), edit.getId());
             }
         }
     }

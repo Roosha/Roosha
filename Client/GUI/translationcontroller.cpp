@@ -6,6 +6,9 @@
 #include <QDesktopWidget>
 #include <Helpers/qmlconvertation.h>
 #include <Helpers/StateHolder.h>
+
+TranslationController *TranslationController::self = nullptr;
+
 TranslationController::TranslationController(QObject *parent) : QObject(parent) {
 }
 

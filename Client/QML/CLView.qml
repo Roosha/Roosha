@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.0
 
+import Roosha.controllers.cardList 1.0
+
 Rectangle {
     width: parent.width / 3
     height: parent.height
@@ -87,7 +89,7 @@ Rectangle {
                 //ToolTip.text: qsTr("you cannot delete card when synchronization is in progress")
 
                 onClicked: {
-                    controller.deleteCard(id);
+                    CardListController.deleteCard(id);
                 }
             }
 
@@ -105,7 +107,7 @@ Rectangle {
                 //ToolTip.visible: stateHolder.synchronizationInProgress
                 //ToolTip.text: qsTr("you cannot edit card when synchronization is in progress")
                 onClicked: {
-                    controller.editCard(id);
+                    CardListController.editCard(id);
                 }
             }
 

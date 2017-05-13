@@ -4,6 +4,8 @@
 
 #include "Network/network_manager.h"
 
+AuthenticationController *AuthenticationController::self = nullptr;
+
 AuthenticationController::AuthenticationController(QObject *parent) :
         QObject(parent),
         loginWidget_(nullptr),

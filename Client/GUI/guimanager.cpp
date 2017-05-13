@@ -7,11 +7,42 @@ GUIManager::GUIManager(QObject *parent) : QObject(parent) {
     qmlRegisterType<Card>("roosha.data", 1, 0, "Card"); // TODO: register DBCard in more suitable place.
     LearningWindowController::registerQmlTypes();
 
-    translationController = new TranslationController(this);
-    cardEditionController = new CardEditionController(this);
-    cardListController = new CardListController(this);
-    authenticationController = new AuthenticationController(this);
-    learningController = new LearningWindowController(this);
+    translationController = TranslationController::getInstance();
+    cardEditionController = CardEditionController::getInstance();
+    cardListController = CardListController::getInstance();
+    authenticationController = AuthenticationController::getInstance();
+    learningController = LearningWindowController::getInstance();
+
+
+    qmlRegisterSingletonType<TranslationController>(
+            "Roosha.controllers.translation",
+            1, 0, "TranslationController",
+            register_translation_controller
+    );
+
+    qmlRegisterSingletonType<CardEditionController>(
+            "Roosha.controllers.cardEdition",
+            1, 0, "CardEditionController",
+            register_card_edition_controller
+    );
+
+    qmlRegisterSingletonType<CardListController>(
+            "Roosha.controllers.cardList",
+            1, 0, "CardListController",
+            register_card_list_controller
+    );
+
+    qmlRegisterSingletonType<AuthenticationController>(
+            "Roosha.controllers.authentication",
+            1, 0, "AuthenticationController",
+            register_authentication_controller
+    );
+
+    qmlRegisterSingletonType<LearningWindowController>(
+            "Roosha.controllers.learning",
+            1, 0, "LearningWindowController",
+            register_learning_window_controller
+    );
 
     connect(translationController, &TranslationController::createNewCard,
             cardEditionController, &CardEditionController::showNewCardEditWindow);

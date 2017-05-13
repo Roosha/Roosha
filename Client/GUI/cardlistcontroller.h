@@ -24,6 +24,13 @@ class CardListController : public QObject {
     Q_INVOKABLE void editCard(QUuid id);
     Q_INVOKABLE void learn();
 
+    static CardListController *getInstance() {
+        if(self == nullptr) {
+            self = new CardListController();
+        }
+        return self;
+    }
+
  signals:
     void createNewCard(QSharedPointer<Translation> data);
     void editThisCard(QUuid id);
@@ -34,6 +41,16 @@ class CardListController : public QObject {
 
  private:
     QmlWidget *widget_;
+
+    static CardListController *self;
 };
+
+
+static QObject *register_card_list_controller(QQmlEngine *engine, QJSEngine *scriptEngine) {
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return CardListController::getInstance();
+}
 
 #endif // CARDLISTCONTROLLER_H

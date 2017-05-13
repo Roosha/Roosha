@@ -10,6 +10,8 @@
 #include <Helpers/StateHolder.h>
 #include <QtCore/QTimer>
 
+CardListController *CardListController::self = nullptr;
+
 CardListController::CardListController(QObject *parent)
         : QObject(parent), world_(World::Instance()), widget_(Q_NULLPTR) {
     auto netManager = ConfigureManager::Instance().getNetworkManager();

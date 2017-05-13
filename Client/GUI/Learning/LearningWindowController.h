@@ -24,12 +24,29 @@ class LearningWindowController : public QObject {
 
     void showLearningWindow();
     Q_INVOKABLE void closeLearningWindow();
+
+    static LearningWindowController *getInstance() {
+        if(self == nullptr) {
+            self = new LearningWindowController();
+        }
+        return self;
+    }
+
  private:
     LearningStrategyType strategyType_;
     QPointer<LearningManager> learningManager_;
     QSharedPointer<LearningStrategyBase> strategy_;
 
     QmlWidget *window_;
+
+    static LearningWindowController *self;
 };
+
+static QObject *register_learning_window_controller(QQmlEngine *engine, QJSEngine *scriptEngine) {
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return LearningWindowController::getInstance();
+}
 
 #endif //ROOSHA_CLIENT_LEARNINGWINDOWCONTROLLER_H

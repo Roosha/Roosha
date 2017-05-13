@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
+import Roosha.controllers.translation 1.0
 
 Rectangle {
     id: root
@@ -96,7 +97,7 @@ Rectangle {
                         text: qsTr("⮾Close")
 
                         onClicked: {
-                            controller.closeWindow(self);
+                            TranslationController.closeWindow(self);
                         }
                     }
                     Button {
@@ -112,7 +113,7 @@ Rectangle {
                         //ToolTip.visible: stateHolder.synchronizationInProgress
                         //ToolTip.text: qsTr("you cannot create card when synchronization is in progress")
                         onClicked: {
-                            controller.createCard(self, translationList.currentIndex);
+                            TranslationController.createCard(self, translationList.currentIndex);
                         }
                     }
                 }
@@ -126,7 +127,7 @@ Rectangle {
         running: true
         onTriggered: {
             if(root.closeByTimer) {
-                controller.closeWindow(self);
+                TranslationController.closeWindow(self);
             }
         }
     }

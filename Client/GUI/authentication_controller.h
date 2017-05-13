@@ -17,6 +17,13 @@ class AuthenticationController : public QObject {
     Q_INVOKABLE void sendAuthenticationRequest(QString login, QString password);
     Q_INVOKABLE void sendRegistrateRequest(QString login, QString password);
 
+    static AuthenticationController *getInstance() {
+        if(self == nullptr) {
+            self = new AuthenticationController();
+        }
+        return self;
+    }
+
     void closeLoginWindow();
     void closeRegistrateWindow();
 
@@ -50,6 +57,15 @@ class AuthenticationController : public QObject {
     AuthenticationState state_;
 
     ConfigureManager &configurationManager_;
+
+    static AuthenticationController *self;
 };
+
+static QObject *register_authentication_controller(QQmlEngine *engine, QJSEngine *scriptEngine) {
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return AuthenticationController::getInstance();
+}
 
 #endif // AUTHENTICATIONCONTROLLER_H

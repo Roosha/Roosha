@@ -9,6 +9,8 @@
 #include "LearningStrategy.h"
 #include "LearningManager.h"
 
+LearningWindowController *LearningWindowController::self = nullptr;
+
 LearningWindowController::LearningWindowController(QObject *parent) :
         QObject(parent),
         strategyType_(LearningStrategyType::SIMPLE_DIFF),

@@ -1,6 +1,7 @@
 import QtQuick 2.0
 
 import QtQuick.Layouts 1.0
+import Roosha.controllers.translation 1.0
 
 Rectangle {
     color: "transparent"
@@ -45,7 +46,7 @@ Rectangle {
             anchors.fill: parent
             onClicked: translationList.currentIndex = index
             onDoubleClicked: {
-                if (stateHolder.isAuthorized & !stateHolder.synchronizationInProgress) controller.createCard(self, index)
+                if (stateHolder.isAuthorized & !stateHolder.synchronizationInProgress) TranslationController.createCard(self, index)
             }
         }
     }

@@ -19,6 +19,13 @@ class TranslationController : public QObject {
     Q_INVOKABLE void createCard(QQuickWidget *widget, int index);
 //    Q_INVOKABLE void createLater(quint32 id);
 
+    static TranslationController *getInstance() {
+        if(self == nullptr) {
+            self = new TranslationController();
+        }
+        return self;
+    }
+
  signals:
     void createNewCard(QSharedPointer<Translation> trans);
 
@@ -26,6 +33,15 @@ class TranslationController : public QObject {
     void replaceWindows();
 
     QMap<QQuickWidget *, Translations> data_;
+
+    static TranslationController *self;
 };
+
+static QObject *register_translation_controller(QQmlEngine *engine, QJSEngine *scriptEngine) {
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+
+    return TranslationController::getInstance();
+}
 
 #endif // TRANSLATIONCONTROLLER_H

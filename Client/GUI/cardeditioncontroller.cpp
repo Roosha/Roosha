@@ -3,6 +3,9 @@
 #include <QApplication>
 #include <Helpers/StateHolder.h>
 #include <QDebug>
+
+CardEditionController *CardEditionController::self = nullptr;
+
 CardEditionController::CardEditionController(QObject *parent) : QObject(parent), world(World::Instance()) {
 }
 

@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 
+import Roosha.controllers.cardList 1.0
 
 Rectangle {
     id: root
@@ -69,7 +70,7 @@ Rectangle {
             }
 
             onClicked: {
-                controller.closeWindow();
+                CardListController.closeWindow();
             }
         }
 
@@ -85,7 +86,7 @@ Rectangle {
                 color: createButton.down ? '#7fb5b5' : '#c7d0cc'
             }
             onClicked: {
-                controller.createCard();
+                CardListController.createCard();
             }
             enabled: !stateHolder.synchronizationInProgress
         }
@@ -102,7 +103,7 @@ Rectangle {
                 color: pushButton.down ? '#7fb5b5' : '#c7d0cc'
             }
             onClicked: {
-                controller.pushCards();
+                CardListController.pushCards();
             }
             enabled: stateHolder.editionWindowOpen === 0
 
@@ -120,7 +121,7 @@ Rectangle {
                 color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
             }
             onClicked: {
-                controller.pullCards();
+                CardListController.pullCards();
             }
             enabled: stateHolder.editionWindowOpen === 0
         }
@@ -138,7 +139,7 @@ Rectangle {
                 color: learnButton.down ? '#7fb5b5' : '#c7d0cc'
             }
             onClicked: {
-                controller.learn();
+                CardListController.learn();
             }
             enabled: true
         }
