@@ -6,9 +6,10 @@
 #include <QtCore/QSet>
 #include <QDebug>
 #include "synchronizer.h"
+#include "Helpers/configuremanager.h"
 
 Synchronizer::Synchronizer(QObject *parent, NetworkManager * nm) :
-        QObject(parent), networkManager_(nm), synchronized_prefix_length(0) {
+        QObject(parent), networkManager_(nm), synchronized_prefix_length(/*ConfigureManager::Instance().getSyncLength()*/ 0     ) {
     qDebug("Synchronizer created");
     connect(networkManager_, &NetworkManager::successLoadChanges,
            this, &Synchronizer::receivedChanges,
@@ -17,9 +18,11 @@ Synchronizer::Synchronizer(QObject *parent, NetworkManager * nm) :
            this, &Synchronizer::pullSucceeded,
            Qt::QueuedConnection);
     connect(networkManager_, &NetworkManager::failSaveChanges,
-           this, &Synchronizer::pullFailed,
+           this, &Synchronizer::syncFailed,
            Qt::QueuedConnection);
-
+    connect(networkManager_, &NetworkManager::failLoadChanges,
+            this, &Synchronizer::syncFailed,
+            Qt::QueuedConnection);
 }
 Synchronizer::~Synchronizer() {
     qDebug("Synchronizer destroyed");
@@ -29,10 +32,11 @@ void Synchronizer::pullSucceeded(qint32 requestId) {
     updatedClientChanges.erase(updatedClientChanges.begin() + synchronized_prefix_length, updatedClientChanges.end());
     updatedClientChanges.append(suffix);
     synchronized_prefix_length = updatedClientChanges.length();
+//    ConfigureManager::Instance().setSyncLength(synchronized_prefix_length); if client is persistent it's makes sense but not now
     suffix.clear();
     emit finishSynchronization(updatedClientChanges);
 }
-void Synchronizer::pullFailed(qint32 requestId, RPCErrorStatus status) {
+void Synchronizer::syncFailed(qint32 requestId, RPCErrorStatus status) {
     synchronize(clientChanges);
 }
 void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverChanges) {
@@ -60,7 +64,7 @@ void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverChanges) {
         }
     }
 
-    networkManager_->saveChanges(suffix, synchronized_prefix_length);
+    networkManager_->saveChanges(suffix, synchronized_prefix_length + serverChanges.length());
 }
 
 qint32 Synchronizer::synchronize(ChangeList fullClientHistory) {

@@ -23,10 +23,12 @@ class ConfigureManager {
     QString getLogin();
     QString getPasswordHash();
     QString getToken();
+    qint32 getSyncLength();
 
     void setLogin(QString login);
     void setPasswordHash(QString password);
     void setToken(QString token);
+    void setSyncLength(qint32 len);
 
  protected:
     ConfigureManager();

@@ -22,7 +22,7 @@ class Synchronizer: public QObject {
 public slots:
     void receivedChanges(qint32 requestId, ChangeList serverChanges);
     void pullSucceeded(qint32 requestId);
-    void pullFailed(qint32 requestId, RPCErrorStatus status);
+    void syncFailed(qint32 requestId, RPCErrorStatus status);
  signals:
     void finishSynchronization(ChangeList changes);
 private:

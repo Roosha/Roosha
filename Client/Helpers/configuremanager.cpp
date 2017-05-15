@@ -44,3 +44,11 @@ void ConfigureManager::setPasswordHash(QString password) {
 void ConfigureManager::setToken(QString token) {
     settings_.setValue("auth/token", QVariant::fromValue(token));
 }
+
+qint32 ConfigureManager::getSyncLength() {
+    return settings_.value("sync/len", 0).toInt();
+}
+
+void ConfigureManager::setSyncLength(qint32 len) {
+    settings_.setValue("sync/len", QVariant::fromValue(len));
+}
