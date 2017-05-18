@@ -27,6 +27,7 @@ public slots:
     void finishSynchronization(ChangeList changes);
 private:
     ChangeList clientChanges;
+    ChangeList serverChangesInSync;
     ChangeList suffix;
     NetworkManager *networkManager_;
     qint32 synchronized_prefix_length;

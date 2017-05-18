@@ -5,6 +5,7 @@
 #include <QtWidgets/QInputDialog>
 #include <QtCore/QSet>
 #include <QDebug>
+#include <Core/QLSeq.h>
 #include "synchronizer.h"
 #include "Helpers/configuremanager.h"
 
@@ -30,6 +31,7 @@ Synchronizer::~Synchronizer() {
 void Synchronizer::pullSucceeded(qint32 requestId) {
     ChangeList updatedClientChanges = clientChanges;
     updatedClientChanges.erase(updatedClientChanges.begin() + synchronized_prefix_length, updatedClientChanges.end());
+    updatedClientChanges.append(serverChangesInSync);
     updatedClientChanges.append(suffix);
     synchronized_prefix_length = updatedClientChanges.length();
 //    ConfigureManager::Instance().setSyncLength(synchronized_prefix_length); if client is persistent it's makes sense but not now
@@ -41,11 +43,10 @@ void Synchronizer::syncFailed(qint32 requestId, RPCErrorStatus status) {
 }
 void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverChanges) {
     suffix.clear();
-    QSet<int> cancelledIndices;
     for (int i = synchronized_prefix_length; i < clientChanges.length(); i++) {
         bool conflict = false;
-        for (int j = 0; j < serverChanges.length(); j++) {
-            if (cancelledIndices.contains(j)) { continue; }
+        int lenServ = serverChanges.length();
+        for (int j = 0; j < lenServ; j++) {
             CMP changes_are = serverChanges[j]->compare(clientChanges[i]);
             if (changes_are == CONFLICT) {
                 bool conflict = true;
@@ -56,14 +57,18 @@ void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverChanges) {
 
                 QString choice = QInputDialog::getItem(nullptr, "Choose item", "", items, 0, false);
                 suffix.append((choice == "Client") ? clientChanges[i] : serverChanges[j]);
-                if (choice == "Client") { cancelledIndices.insert(j); }
+                if (choice == "Client") {
+                    serverChanges.remove(j);
+                    j--;
+                    lenServ--;
+                }
             }
         }
         if (!conflict) {
             suffix.append(clientChanges[i]);
         }
     }
-
+    serverChangesInSync = serverChanges;
     networkManager_->saveChanges(suffix, synchronized_prefix_length + serverChanges.length());
 }
 
