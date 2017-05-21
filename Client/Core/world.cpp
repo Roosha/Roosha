@@ -10,16 +10,8 @@ World &World::Instance() {
     return world;
 }
 
-const QVector<Scrutiny> &World::getLearningHistory() const {
-    return learningHistory_;
-}
-
-void World::setLearningHistory(QVector<Scrutiny> newHistory) {
-    learningHistory_ = newHistory;
-}
-
 void World::addScrutiny(Scrutiny scrutiny) {
-    learningHistory_.append(scrutiny);
+    changes_.append(QSharedPointer<Scrutiny>::create(scrutiny.toProtobuf()));
 }
 
 const QMap<QUuid, QSharedPointer<DBCard>> &World::getCards() {

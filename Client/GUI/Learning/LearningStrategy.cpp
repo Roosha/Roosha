@@ -51,10 +51,8 @@ CardDifficulty::Rate CardLearningModel::getCardDifficultyRate() const {
     return difficultyRate_;
 }
 
-LearningStrategyBase::LearningStrategyBase(quint32 changesNumber, QObject *parent) :
+LearningStrategyBase::LearningStrategyBase(QObject *parent) :
         QObject(parent),
-        scrutiniesNumber_(0),
-        changesNumber_(changesNumber),
         lastShownCard_(Q_NULLPTR) {
 }
 
@@ -90,28 +88,14 @@ void LearningStrategyBase::onCardDeleted(QUuid cardId) {
     this->onCardsDeleted(set);
 }
 
-quint32 LearningStrategyBase::getScrutiniesNumber() {
-    return scrutiniesNumber_;
-}
-
-quint32 LearningStrategyBase::getChangesNumber() const {
-    return changesNumber_;
-}
-
-void LearningStrategyBase::setChangesNumber(quint32 changesNumber_) {
-    LearningStrategyBase::changesNumber_ = changesNumber_;
+void LearningStrategyBase::appendScrutiny(Scrutiny scrutiny) {
+    QList<Scrutiny> list{scrutiny};
+    this->appendScrutinies(list);
 }
 
 // --------------------- SimpleDiffStrategy --------------------------------
 
-SimpleDiffStrategy::SimpleDiffStrategy(quint32 changesNumber,
-                                       QList<QUuid> cardIds,
-                                       QList<Scrutiny> scrutinies,
-                                       QObject *parent) :
-        LearningStrategyBase(changesNumber, parent) {
-    this->onCardsCreated(QSet<QUuid>::fromList(cardIds));
-    this->appendScrutinies(scrutinies);
-}
+SimpleDiffStrategy::SimpleDiffStrategy(QObject *parent) : LearningStrategyBase(parent) {}
 
 CardLearningModel *SimpleDiffStrategy::firstCard() {
     if (lastShownCard_) { throw std::logic_error("SimpleDiffStrategy::firstCard called while lastCardShown is not null"); }
@@ -192,7 +176,6 @@ void SimpleDiffStrategy::onCardsDeleted(QSet<QUuid> cardIds) {
 }
 
 void SimpleDiffStrategy::appendScrutinies(QList<Scrutiny> scrutinies) {
-    scrutiniesNumber_ += scrutinies.size();
     for (auto &&scrutiny : scrutinies) {
         if (diffs_.contains(scrutiny.getCardId())) {
             diffs_[scrutiny.getCardId()] += getDiffOfDifficultyRate(scrutiny.getDifficultyRate());
@@ -206,23 +189,17 @@ LearningStrategyType SimpleDiffStrategy::getType() {
 
 // ---------------------- SuperMemo2 Strategy ------------------------------------
 
-SuperMemo2Strategy::SuperMemo2Strategy(quint32 changesNumber,
-                                       QList<QUuid> cardIds,
-                                       QList<Scrutiny> scrutinies,
-                                       QObject *parent,
+SuperMemo2Strategy::SuperMemo2Strategy(QObject *parent,
                                        double difficultFactor,
                                        double normalFactor,
                                        double easyFactor,
                                        quint32 intervalMax) :
-        LearningStrategyBase(changesNumber, parent),
+        LearningStrategyBase(parent),
         lastShownCardInfo_(Q_NULLPTR),
         difficultFactor_(difficultFactor),
         normalFactor_(normalFactor),
         easyFactor_(easyFactor),
-        intervalMaximum_(intervalMax) {
-    onCardsCreated(cardIds.toSet());
-    appendScrutinies(scrutinies);
-}
+        intervalMaximum_(intervalMax) {}
 
 CardLearningModel *SuperMemo2Strategy::firstCard() {
     if (lastShownCard_) { throw std::logic_error("SuperMemo2Strategy::firstCard called while lastShownCard is not null"); }
@@ -236,6 +213,9 @@ CardLearningModel *SuperMemo2Strategy::firstCard() {
 
 CardLearningModel *SuperMemo2Strategy::nextCard() {
     if (!lastShownCard_) { throw std::logic_error("SuperMemo2Strategy::nextCard called while lastShownCard is null."); }
+    if (!lastShownCard_->isEmpty()) {
+        World::Instance().addScrutiny(currentScrutiny());
+    }
 
     if (lastShownCardInfo_) {
         cardQueue_.push(alteredCardInfo(*lastShownCardInfo_, lastShownCard_->getCardDifficultyRate()));
@@ -247,6 +227,9 @@ CardLearningModel *SuperMemo2Strategy::nextCard() {
 
 void SuperMemo2Strategy::finish() {
     if (!lastShownCard_) { throw std::logic_error("SuperMemo2Strategy::finish called while lastShownCard is null."); }
+    if (!lastShownCard_->isEmpty()) {
+        World::Instance().addScrutiny(currentScrutiny());
+    }
 
     if (lastShownCardInfo_) {
         auto newCardInfo = alteredCardInfo(*lastShownCardInfo_, lastShownCard_->getCardDifficultyRate());

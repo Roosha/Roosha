@@ -97,11 +97,13 @@ ChangePtr ProtobufConverter::changeFromProtobuf(const roosha::Change &rawChange)
                     return ChangePtr(nullptr);
 
             }
+        case roosha::Change::kScrutiny: return QSharedPointer<Scrutiny>::create(rawChange);
         case roosha::Change::CHANGE_NOT_SET:
             qWarning("ProtobufConverter::changeFromProtobuf: empty Change passed. Return nullptr");
             return ChangePtr(nullptr);
 
     }
+    throw std::logic_error("Unexpected rawChange.change_case in ProtobufConverter::changeFromProtobuf");
 }
 
 roosha::ScrutinyInput ProtobufConverter::learningInputToProtobuf(const LearningInputType &type) {
@@ -116,6 +118,7 @@ LearningInputType ProtobufConverter::learningInputFromProtobuf(const roosha::Scr
         case roosha::TEXT_INPUT: return LearningInputType::TEXT_USER_INPUT;
         default: qWarning("ProtobufConverter::learningInputFromProtobuf: unexpected type passed.");
     }
+    throw std::logic_error("ProtobufConverter::learningInputFromProtobuf: unexpected type passed.")
 }
 
 roosha::ScrutinyView ProtobufConverter::learningViewToProtobuf(const LearningViewType &type) {
@@ -130,6 +133,7 @@ LearningViewType ProtobufConverter::learningViewFromProtobuf(const roosha::Scrut
         case roosha::TARGETS_AND_EXAMPLE: return LearningViewType::TARGETS_AND_EXAMPLE;
         default: qWarning("ProtobufConverter::learningViewFromProtobuf: unexpected type passed");
     }
+    throw std::logic_error("ProtobufConverter::learningViewFromProtobuf: unexpected type passed");
 }
 
 roosha::ScrutinyStatus ProtobufConverter::cardDifficultyRateToProtobuf(const CardDifficulty::Rate &status) {
@@ -143,6 +147,7 @@ roosha::ScrutinyStatus ProtobufConverter::cardDifficultyRateToProtobuf(const Car
         case CardDifficulty::Rate::NORMAL: return roosha::NORMAL;
         case CardDifficulty::Rate::DIFFICULT: return roosha::DIFFICULT;
     }
+    throw std::logic_error("ProtobufConverter::cardDifficultyRateToProtobuf: unexpected status passed");
 }
 
 CardDifficulty::Rate ProtobufConverter::cardDifficultyRateFromProtobuf(const roosha::ScrutinyStatus &status) {

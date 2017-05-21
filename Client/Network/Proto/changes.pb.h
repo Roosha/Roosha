@@ -29,6 +29,7 @@
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 #include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
+#include "learning.pb.h"
 // @@protoc_insertion_point(includes)
 namespace roosha {
 class CardChange;
@@ -55,6 +56,9 @@ extern CardChange_InsertElemDefaultTypeInternal _CardChange_InsertElem_default_i
 class Change;
 class ChangeDefaultTypeInternal;
 extern ChangeDefaultTypeInternal _Change_default_instance_;
+class Scrutiny;
+class ScrutinyDefaultTypeInternal;
+extern ScrutinyDefaultTypeInternal _Scrutiny_default_instance_;
 }  // namespace roosha
 
 namespace roosha {
@@ -111,6 +115,7 @@ class Change : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
 
   enum ChangeCase {
     kCardChange = 1,
+    kScrutiny = 2,
     CHANGE_NOT_SET = 0,
   };
 
@@ -175,10 +180,20 @@ class Change : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   ::roosha::CardChange* release_cardchange();
   void set_allocated_cardchange(::roosha::CardChange* cardchange);
 
+  // .roosha.Scrutiny scrutiny = 2;
+  bool has_scrutiny() const;
+  void clear_scrutiny();
+  static const int kScrutinyFieldNumber = 2;
+  const ::roosha::Scrutiny& scrutiny() const;
+  ::roosha::Scrutiny* mutable_scrutiny();
+  ::roosha::Scrutiny* release_scrutiny();
+  void set_allocated_scrutiny(::roosha::Scrutiny* scrutiny);
+
   ChangeCase change_case() const;
   // @@protoc_insertion_point(class_scope:roosha.Change)
  private:
   void set_has_cardchange();
+  void set_has_scrutiny();
 
   inline bool has_change() const;
   void clear_change();
@@ -188,6 +203,7 @@ class Change : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   union ChangeUnion {
     ChangeUnion() {}
     ::roosha::CardChange* cardchange_;
+    ::roosha::Scrutiny* scrutiny_;
   } change_;
   mutable int _cached_size_;
   ::google::protobuf::uint32 _oneof_case_[1];
@@ -1027,6 +1043,54 @@ inline void Change::set_allocated_cardchange(::roosha::CardChange* cardchange) {
     change_.cardchange_ = cardchange;
   }
   // @@protoc_insertion_point(field_set_allocated:roosha.Change.cardChange)
+}
+
+// .roosha.Scrutiny scrutiny = 2;
+inline bool Change::has_scrutiny() const {
+  return change_case() == kScrutiny;
+}
+inline void Change::set_has_scrutiny() {
+  _oneof_case_[0] = kScrutiny;
+}
+inline void Change::clear_scrutiny() {
+  if (has_scrutiny()) {
+    delete change_.scrutiny_;
+    clear_has_change();
+  }
+}
+inline  const ::roosha::Scrutiny& Change::scrutiny() const {
+  // @@protoc_insertion_point(field_get:roosha.Change.scrutiny)
+  return has_scrutiny()
+      ? *change_.scrutiny_
+      : ::roosha::Scrutiny::default_instance();
+}
+inline ::roosha::Scrutiny* Change::mutable_scrutiny() {
+  if (!has_scrutiny()) {
+    clear_change();
+    set_has_scrutiny();
+    change_.scrutiny_ = new ::roosha::Scrutiny;
+  }
+  // @@protoc_insertion_point(field_mutable:roosha.Change.scrutiny)
+  return change_.scrutiny_;
+}
+inline ::roosha::Scrutiny* Change::release_scrutiny() {
+  // @@protoc_insertion_point(field_release:roosha.Change.scrutiny)
+  if (has_scrutiny()) {
+    clear_has_change();
+    ::roosha::Scrutiny* temp = change_.scrutiny_;
+    change_.scrutiny_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+inline void Change::set_allocated_scrutiny(::roosha::Scrutiny* scrutiny) {
+  clear_change();
+  if (scrutiny) {
+    set_has_scrutiny();
+    change_.scrutiny_ = scrutiny;
+  }
+  // @@protoc_insertion_point(field_set_allocated:roosha.Change.scrutiny)
 }
 
 inline bool Change::has_change() const {

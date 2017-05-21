@@ -15,15 +15,10 @@ enum class LearningStrategyType;
 class LearningManager : public QObject {
     Q_OBJECT
  public:
-    LearningManager();
+    LearningManager(QObject *parent = Q_NULLPTR);
 
     QSharedPointer<LearningStrategyBase> loadStrategy(const LearningStrategyType &strategyType);
     void saveStrategy(QSharedPointer<LearningStrategyBase> strategy);
-
- private:
-    LearningStrategyBase *loadStrategyForType(const LearningStrategyType &strategyType);
-
-    QMap<LearningStrategyType, QWeakPointer<LearningStrategyBase>> strategies_;
 };
 
 #endif //ROOSHA_CLIENT_LEARNINGMANAGER_H

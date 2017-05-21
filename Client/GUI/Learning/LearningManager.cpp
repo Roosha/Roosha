@@ -2,58 +2,44 @@
 // Created by gylo on 02.04.17.
 //
 
+#include <iostream>
 #include "LearningManager.h"
 #include "LearningStrategy.h"
 
-LearningManager::LearningManager() :
-        QObject(Q_NULLPTR) {
-    strategies_[LearningStrategyType::SIMPLE_DIFF] = QWeakPointer<SimpleDiffStrategy>();
-    strategies_[LearningStrategyType::SUPERMEMO_2] = QWeakPointer<SuperMemo2Strategy>();
-}
+
+LearningManager::LearningManager(QObject *parent) : QObject(parent) {}
 
 QSharedPointer<LearningStrategyBase> LearningManager::loadStrategy(const LearningStrategyType &strategyType) {
-    QSharedPointer<LearningStrategyBase> strategy = strategies_[strategyType].toStrongRef();
-    if (strategy.isNull()) {
-        strategy = QSharedPointer<LearningStrategyBase>(loadStrategyForType(strategyType));
+    QSharedPointer<LearningStrategyBase> strategy;
+    switch (strategyType) {
+        case LearningStrategyType::SIMPLE_DIFF:
+            strategy = QSharedPointer<SimpleDiffStrategy>::create();
+            break;
+        case LearningStrategyType::SUPERMEMO_2:
+            strategy = QSharedPointer<SuperMemo2Strategy>::create();
+            break;
     }
 
-    auto changes = World::Instance().getChanges();
-    for (int i = strategy->getChangesNumber(); i < changes.size(); i++) {
-        const auto protoChange = changes[i]->toProtobuf();
-        if (protoChange.change_case() == protoChange.kCardChange) {
-            const auto cardChange = protoChange.cardchange();
-            if (cardChange.change_case() == cardChange.kCreateCard) {
-                strategy->onCardCreated(((CreateCard *) changes[i].data())->getCardId());
-            } else if (cardChange.change_case() == cardChange.kDeleteCard) {
-                strategy->onCardDeleted(((DeleteCard *) changes[i].data())->getCardId());
+    for (auto &&change :World::Instance().getChanges()) {
+        roosha::Change rawChange = change->toProtobuf();
+        if (change->toProtobuf().change_case() == roosha::Change::kCardChange) {
+            CardChange *cardChange = (CardChange *)change.data();
+            roosha::CardChange rawCardChange = rawChange.cardchange();
+            if (rawCardChange.change_case() == roosha::CardChange::kCreateCard) {
+                std::cout << "Create card" << rawCardChange.cardid() << std::endl;
+                strategy->onCardCreated(cardChange->getCardId());
+            } else if (rawCardChange.change_case() == roosha::CardChange::kDeleteCard) {
+                std::cout << "Delete card" << rawCardChange.cardid() << std::endl;
+                strategy->onCardDeleted(cardChange->getCardId());
             }
+        } else if (change->toProtobuf().change_case() == roosha::Change::kScrutiny) {
+            std::cout << "Append scrutiny" << ((Scrutiny*) change.data())->getCardId().toString().toStdString() << std::endl;
+            strategy->appendScrutiny(*((Scrutiny*) change.data()));
         }
     }
-    strategy->setChangesNumber((quint32) changes.size());
-
-    const auto scrutinies = World::Instance().getLearningHistory();
-    strategy->appendScrutinies(scrutinies.mid(strategy->getScrutiniesNumber()).toList());
-
-    return strategies_[strategyType] = strategy;
+    return strategy;
 }
 
 void LearningManager::saveStrategy(QSharedPointer<LearningStrategyBase> strategy) {
-    // save to disk
-}
-
-LearningStrategyBase *LearningManager::loadStrategyForType(const LearningStrategyType &strategyType) {
-    switch (strategyType) {
-        case LearningStrategyType::SIMPLE_DIFF:
-            return new SimpleDiffStrategy(
-                    (quint32) World::Instance().getChanges().size(),
-                    World::Instance().getCards().keys(),
-                    World::Instance().getLearningHistory().toList()
-            );
-        case LearningStrategyType::SUPERMEMO_2:
-            return new SuperMemo2Strategy(
-                    (quint32) World::Instance().getChanges().size(),
-                    World::Instance().getCards().keys(),
-                    World::Instance().getLearningHistory().toList()
-            );
-    }
+    // nop
 }

@@ -16,6 +16,7 @@ namespace roosha {
 class ChangeDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Change> {
   public:
   const ::roosha::CardChange* cardchange_;
+  const ::roosha::Scrutiny* scrutiny_;
 } _Change_default_instance_;
 class CardChange_CreateCardDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<CardChange_CreateCard> {
 } _CardChange_CreateCard_default_instance_;
@@ -55,6 +56,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _extensions_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Change, _oneof_case_[0]),
   PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET((&_Change_default_instance_), cardchange_),
+  PROTO2_GENERATED_DEFAULT_ONEOF_FIELD_OFFSET((&_Change_default_instance_), scrutiny_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Change, change_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CardChange_CreateCard, _internal_metadata_),
@@ -105,13 +107,13 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
 
 static const ::google::protobuf::internal::MigrationSchema schemas[] = {
   { 0, -1, sizeof(Change)},
-  { 6, -1, sizeof(CardChange_CreateCard)},
-  { 10, -1, sizeof(CardChange_DeleteCard)},
-  { 14, -1, sizeof(CardChange_ChangeSource)},
-  { 19, -1, sizeof(CardChange_InsertElem)},
-  { 26, -1, sizeof(CardChange_DeleteElem)},
-  { 32, -1, sizeof(CardChange_EditElem)},
-  { 39, -1, sizeof(CardChange)},
+  { 7, -1, sizeof(CardChange_CreateCard)},
+  { 11, -1, sizeof(CardChange_DeleteCard)},
+  { 15, -1, sizeof(CardChange_ChangeSource)},
+  { 20, -1, sizeof(CardChange_InsertElem)},
+  { 27, -1, sizeof(CardChange_DeleteElem)},
+  { 33, -1, sizeof(CardChange_EditElem)},
+  { 40, -1, sizeof(CardChange)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -171,6 +173,7 @@ void TableStruct::InitDefaultsImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::internal::InitProtobufDefaults();
+  ::roosha::protobuf_learning_2eproto::InitDefaults();
   _Change_default_instance_.DefaultConstruct();
   _CardChange_CreateCard_default_instance_.DefaultConstruct();
   _CardChange_DeleteCard_default_instance_.DefaultConstruct();
@@ -181,6 +184,8 @@ void TableStruct::InitDefaultsImpl() {
   _CardChange_default_instance_.DefaultConstruct();
   _Change_default_instance_.cardchange_ = const_cast< ::roosha::CardChange*>(
       ::roosha::CardChange::internal_default_instance());
+  _Change_default_instance_.scrutiny_ = const_cast< ::roosha::Scrutiny*>(
+      ::roosha::Scrutiny::internal_default_instance());
   _CardChange_default_instance_.createcard_ = const_cast< ::roosha::CardChange_CreateCard*>(
       ::roosha::CardChange_CreateCard::internal_default_instance());
   _CardChange_default_instance_.deletecard_ = const_cast< ::roosha::CardChange_DeleteCard*>(
@@ -202,33 +207,35 @@ void InitDefaults() {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
-      "\n\rchanges.proto\022\006roosha\"<\n\006Change\022(\n\ncar"
-      "dChange\030\001 \001(\0132\022.roosha.CardChangeH\000B\010\n\006c"
-      "hange\"\303\005\n\nCardChange\022\016\n\006cardId\030\001 \001(\t\0223\n\n"
-      "createCard\030\002 \001(\0132\035.roosha.CardChange.Cre"
-      "ateCardH\000\0223\n\ndeleteCard\030\003 \001(\0132\035.roosha.C"
-      "ardChange.DeleteCardH\000\0227\n\014changeSource\030\004"
-      " \001(\0132\037.roosha.CardChange.ChangeSourceH\000\022"
-      "3\n\ninsertElem\030\005 \001(\0132\035.roosha.CardChange."
-      "InsertElemH\000\0223\n\ndeleteElem\030\006 \001(\0132\035.roosh"
-      "a.CardChange.DeleteElemH\000\022/\n\010editElem\030\007 "
-      "\001(\0132\033.roosha.CardChange.EditElemH\000\032\014\n\nCr"
-      "eateCard\032\014\n\nDeleteCard\032!\n\014ChangeSource\022\021"
-      "\n\tnewSource\030\001 \001(\t\032S\n\nInsertElem\022\'\n\005field"
-      "\030\001 \001(\0162\030.roosha.CardChange.Field\022\r\n\005inde"
-      "x\030\002 \001(\014\022\r\n\005value\030\003 \001(\t\032D\n\nDeleteElem\022\'\n\005"
-      "field\030\001 \001(\0162\030.roosha.CardChange.Field\022\r\n"
-      "\005index\030\002 \001(\014\032T\n\010EditElem\022\'\n\005field\030\001 \001(\0162"
-      "\030.roosha.CardChange.Field\022\020\n\010position\030\002 "
-      "\001(\014\022\r\n\005value\030\003 \001(\t\"-\n\005Field\022\013\n\007UNKNOWN\020\000"
-      "\022\n\n\006TARGET\020\001\022\013\n\007EXAMPLE\020\002B\010\n\006changeB,\n\027c"
-      "om.github.roosha.protoB\014ChangesProtoH\001\370\001"
-      "\000b\006proto3"
+      "\n\rchanges.proto\022\006roosha\032\016learning.proto\""
+      "b\n\006Change\022(\n\ncardChange\030\001 \001(\0132\022.roosha.C"
+      "ardChangeH\000\022$\n\010scrutiny\030\002 \001(\0132\020.roosha.S"
+      "crutinyH\000B\010\n\006change\"\303\005\n\nCardChange\022\016\n\006ca"
+      "rdId\030\001 \001(\t\0223\n\ncreateCard\030\002 \001(\0132\035.roosha."
+      "CardChange.CreateCardH\000\0223\n\ndeleteCard\030\003 "
+      "\001(\0132\035.roosha.CardChange.DeleteCardH\000\0227\n\014"
+      "changeSource\030\004 \001(\0132\037.roosha.CardChange.C"
+      "hangeSourceH\000\0223\n\ninsertElem\030\005 \001(\0132\035.roos"
+      "ha.CardChange.InsertElemH\000\0223\n\ndeleteElem"
+      "\030\006 \001(\0132\035.roosha.CardChange.DeleteElemH\000\022"
+      "/\n\010editElem\030\007 \001(\0132\033.roosha.CardChange.Ed"
+      "itElemH\000\032\014\n\nCreateCard\032\014\n\nDeleteCard\032!\n\014"
+      "ChangeSource\022\021\n\tnewSource\030\001 \001(\t\032S\n\nInser"
+      "tElem\022\'\n\005field\030\001 \001(\0162\030.roosha.CardChange"
+      ".Field\022\r\n\005index\030\002 \001(\014\022\r\n\005value\030\003 \001(\t\032D\n\n"
+      "DeleteElem\022\'\n\005field\030\001 \001(\0162\030.roosha.CardC"
+      "hange.Field\022\r\n\005index\030\002 \001(\014\032T\n\010EditElem\022\'"
+      "\n\005field\030\001 \001(\0162\030.roosha.CardChange.Field\022"
+      "\020\n\010position\030\002 \001(\014\022\r\n\005value\030\003 \001(\t\"-\n\005Fiel"
+      "d\022\013\n\007UNKNOWN\020\000\022\n\n\006TARGET\020\001\022\013\n\007EXAMPLE\020\002B"
+      "\010\n\006changeB,\n\027com.github.roosha.protoB\014Ch"
+      "angesProtoH\001\370\001\000b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 849);
+      descriptor, 903);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "changes.proto", &protobuf_RegisterTypes);
+  ::roosha::protobuf_learning_2eproto::AddDescriptors();
   ::google::protobuf::internal::OnShutdown(&TableStruct::Shutdown);
 }
 
@@ -273,6 +280,7 @@ const int CardChange::Field_ARRAYSIZE;
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Change::kCardChangeFieldNumber;
+const int Change::kScrutinyFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Change::Change()
@@ -292,6 +300,10 @@ Change::Change(const Change& from)
   switch (from.change_case()) {
     case kCardChange: {
       mutable_cardchange()->::roosha::CardChange::MergeFrom(from.cardchange());
+      break;
+    }
+    case kScrutiny: {
+      mutable_scrutiny()->::roosha::Scrutiny::MergeFrom(from.scrutiny());
       break;
     }
     case CHANGE_NOT_SET: {
@@ -347,6 +359,10 @@ void Change::clear_change() {
       delete change_.cardchange_;
       break;
     }
+    case kScrutiny: {
+      delete change_.scrutiny_;
+      break;
+    }
     case CHANGE_NOT_SET: {
       break;
     }
@@ -375,6 +391,17 @@ bool Change::MergePartialFromCodedStream(
         if (tag == 10u) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_cardchange()));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .roosha.Scrutiny scrutiny = 2;
+      case 2: {
+        if (tag == 18u) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_scrutiny()));
         } else {
           goto handle_unusual;
         }
@@ -411,6 +438,12 @@ void Change::SerializeWithCachedSizes(
       1, *change_.cardchange_, output);
   }
 
+  // .roosha.Scrutiny scrutiny = 2;
+  if (has_scrutiny()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, *change_.scrutiny_, output);
+  }
+
   // @@protoc_insertion_point(serialize_end:roosha.Change)
 }
 
@@ -423,6 +456,13 @@ void Change::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageNoVirtualToArray(
         1, *change_.cardchange_, false, target);
+  }
+
+  // .roosha.Scrutiny scrutiny = 2;
+  if (has_scrutiny()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageNoVirtualToArray(
+        2, *change_.scrutiny_, false, target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:roosha.Change)
@@ -439,6 +479,13 @@ size_t Change::ByteSizeLong() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           *change_.cardchange_);
+      break;
+    }
+    // .roosha.Scrutiny scrutiny = 2;
+    case kScrutiny: {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          *change_.scrutiny_);
       break;
     }
     case CHANGE_NOT_SET: {
@@ -474,6 +521,10 @@ void Change::MergeFrom(const Change& from) {
   switch (from.change_case()) {
     case kCardChange: {
       mutable_cardchange()->::roosha::CardChange::MergeFrom(from.cardchange());
+      break;
+    }
+    case kScrutiny: {
+      mutable_scrutiny()->::roosha::Scrutiny::MergeFrom(from.scrutiny());
       break;
     }
     case CHANGE_NOT_SET: {
@@ -564,6 +615,54 @@ void Change::set_allocated_cardchange(::roosha::CardChange* cardchange) {
     change_.cardchange_ = cardchange;
   }
   // @@protoc_insertion_point(field_set_allocated:roosha.Change.cardChange)
+}
+
+// .roosha.Scrutiny scrutiny = 2;
+bool Change::has_scrutiny() const {
+  return change_case() == kScrutiny;
+}
+void Change::set_has_scrutiny() {
+  _oneof_case_[0] = kScrutiny;
+}
+void Change::clear_scrutiny() {
+  if (has_scrutiny()) {
+    delete change_.scrutiny_;
+    clear_has_change();
+  }
+}
+ const ::roosha::Scrutiny& Change::scrutiny() const {
+  // @@protoc_insertion_point(field_get:roosha.Change.scrutiny)
+  return has_scrutiny()
+      ? *change_.scrutiny_
+      : ::roosha::Scrutiny::default_instance();
+}
+::roosha::Scrutiny* Change::mutable_scrutiny() {
+  if (!has_scrutiny()) {
+    clear_change();
+    set_has_scrutiny();
+    change_.scrutiny_ = new ::roosha::Scrutiny;
+  }
+  // @@protoc_insertion_point(field_mutable:roosha.Change.scrutiny)
+  return change_.scrutiny_;
+}
+::roosha::Scrutiny* Change::release_scrutiny() {
+  // @@protoc_insertion_point(field_release:roosha.Change.scrutiny)
+  if (has_scrutiny()) {
+    clear_has_change();
+    ::roosha::Scrutiny* temp = change_.scrutiny_;
+    change_.scrutiny_ = NULL;
+    return temp;
+  } else {
+    return NULL;
+  }
+}
+void Change::set_allocated_scrutiny(::roosha::Scrutiny* scrutiny) {
+  clear_change();
+  if (scrutiny) {
+    set_has_scrutiny();
+    change_.scrutiny_ = scrutiny;
+  }
+  // @@protoc_insertion_point(field_set_allocated:roosha.Change.scrutiny)
 }
 
 bool Change::has_change() const {
