@@ -20,7 +20,7 @@ class Synchronizer: public QObject {
     ~Synchronizer();
 
 public slots:
-    void receivedChanges(qint32 requestId, ChangeList serverChanges);
+    void receivedChanges(qint32 requestId, ChangeList serverSuffix);
     void pullSucceeded(qint32 requestId);
     void syncFailed(qint32 requestId, RPCErrorStatus status);
  signals:

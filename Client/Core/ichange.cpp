@@ -4,6 +4,8 @@
 
 
 #include "ichange.h"
+#include "Helpers/protobuf_converter.h"
+#include <QDebug>
 
 IChange::~IChange() {}
 IChange::IChange(roosha::Change change) : rawChange(change) {}
@@ -23,15 +25,22 @@ CMP IChange::compare(QSharedPointer<IChange> otherChange) {
     if (changeCase == roosha::CardChange::kChangeSource) {
         if (cch1.changesource().newsource() == cch2.changesource().newsource())
             return EQUAL;
-        else
+        else {
+            qDebug() << "conflict: " << QString::fromStdString(cch1.cardid()) << " in Source " <<
+                     QString::fromStdString(cch1.changesource().newsource()) << " VS " << QString::fromStdString(cch1.changesource().newsource());
             return CONFLICT;
+        }
     }
     if (changeCase == roosha::CardChange::kEditElem) {
         if (cch1.editelem().field() == cch1.editelem().field() && cch1.editelem().position() == cch2.editelem().position()) {
-            if (cch1.editelem().value() == cch1.editelem().value())
+            if (cch1.editelem().value() == cch2.editelem().value())
                 return EQUAL;
-            else
+            else {
+                qDebug() << "conflict: " << QString::fromStdString(cch1.cardid()) << " in "
+                         << ProtobufConverter::rooshaFieldToString(cch1.editelem().field()) << " "
+                         << QString::fromStdString(cch1.editelem().value()) << " VS " << QString::fromStdString(cch2.editelem().value()) ;
                 return CONFLICT;
+            }
         }
     }
     return DIFFER;

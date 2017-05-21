@@ -16,6 +16,8 @@ ChangePtr changeFromProtobuf(const roosha::Change &rawChange);
 
 RPCErrorStatus errorStatusFromGrpc(const grpc::Status &rawStatus);
 const char* grpcStatusCodeToCString(const grpc::StatusCode &rawStatus);
+QString rooshaCardChangeToString(const roosha::CardChange &rawChange);
+QString rooshaFieldToString(const roosha::CardChange::Field &rawField);
 };
 
 #endif // PROTOBUFCONVERTER_H

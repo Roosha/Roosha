@@ -41,35 +41,48 @@ void Synchronizer::pullSucceeded(qint32 requestId) {
 void Synchronizer::syncFailed(qint32 requestId, RPCErrorStatus status) {
     synchronize(clientChanges);
 }
-void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverChanges) {
+void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverSuffix) {
     suffix.clear();
-    for (int i = synchronized_prefix_length; i < clientChanges.length(); i++) {
-        bool conflict = false;
-        int lenServ = serverChanges.length();
-        for (int j = 0; j < lenServ; j++) {
-            CMP changes_are = serverChanges[j]->compare(clientChanges[i]);
-            if (changes_are == CONFLICT) {
-                bool conflict = true;
-                // TODO: alert window with Cards for choosing the one.
-                // Now alert just dialog window with option "Client" or "Server"
-                QStringList items;
-                items << "Server" << "Client";
+    ChangeList clientSuffix;
 
-                QString choice = QInputDialog::getItem(nullptr, "Choose item", "", items, 0, false);
-                suffix.append((choice == "Client") ? clientChanges[i] : serverChanges[j]);
-                if (choice == "Client") {
-                    serverChanges.remove(j);
-                    j--;
-                    lenServ--;
-                }
+    for (int i = synchronized_prefix_length; i < clientChanges.length(); i++) {
+        bool include = true;
+        for (int j = i; j < clientChanges.length(); j++) {
+            if (clientChanges[i]->compare(clientChanges[j]) == CONFLICT) {
+                include = false;
+                break;
             }
         }
-        if (!conflict) {
-            suffix.append(clientChanges[i]);
+        if (include) {
+            clientSuffix.append(clientChanges[i]);
         }
     }
-    serverChangesInSync = serverChanges;
-    networkManager_->saveChanges(suffix, synchronized_prefix_length + serverChanges.length());
+
+    for (int i = 0; i < clientSuffix.length(); i++) {
+        int last_conflict = -1;
+        for (int j = 0; j < serverSuffix.length(); j++) {
+            CMP changes_are = serverSuffix[j]->compare(clientSuffix[i]);
+            if (changes_are == CONFLICT) {
+                last_conflict = j;
+            }
+        }
+        if (last_conflict == -1) {
+            suffix.append(clientSuffix[i]);
+        } else {
+            // TODO: alert window with Cards for choosing the one.
+            // Now alert just dialog window with option "Client" or "Server"
+            QStringList items;
+            items << "Server" << "Client";
+
+            QString choice = QInputDialog::getItem(nullptr, "Choose item", "", items, 0, false);
+            suffix.append((choice == "Client") ? clientSuffix[i] : serverSuffix[last_conflict]);
+            if (choice == "Client") {
+                suffix.append(clientSuffix[i]);
+            }
+        }
+    }
+    serverChangesInSync = serverSuffix;
+    networkManager_->saveChanges(suffix, synchronized_prefix_length + serverSuffix.length());
 }
 
 qint32 Synchronizer::synchronize(ChangeList fullClientHistory) {
