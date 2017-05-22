@@ -45,11 +45,32 @@ Translations ProtobufConverter::translationsFromProtobuf(const roosha::Translati
     return result;
 }
 
+QString ProtobufConverter::rooshaCardChangeToString(const roosha::CardChange &rawChange) {
+    switch (rawChange.change_case()) {
+        case roosha::CardChange::kCreateCard: return "CreateCard";
+        case roosha::CardChange::kDeleteCard: return "DeleteCard";
+        case roosha::CardChange::kChangeSource: return "ChangeSource";
+        case roosha::CardChange::kInsertElem: return "InsertElem";
+        case roosha::CardChange::kDeleteElem: return "DeleteElem";
+        case roosha::CardChange::kEditElem: return "EditElem";
+        case roosha::CardChange::CHANGE_NOT_SET: return "CHANGE_NOT_SET";
+    }
+}
+
+QString ProtobufConverter::rooshaFieldToString(const roosha::CardChange::Field &rawField) {
+    switch (rawField) {
+        case roosha::CardChange::Field::CardChange_Field_EXAMPLE: return "Example";
+        case roosha::CardChange::Field::CardChange_Field_TARGET: return "Target";
+        case roosha::CardChange::Field::CardChange_Field_UNKNOWN: return "UNKNOWN";
+    }
+}
+
 RPCErrorStatus ProtobufConverter::errorStatusFromGrpc(const grpc::Status &rawStatus) {
     switch (rawStatus.error_code()) {
         case grpc::StatusCode::DEADLINE_EXCEEDED: return RPCErrorStatus::DEADLINE_EXCEEDED;
         case grpc::StatusCode::UNAUTHENTICATED: return RPCErrorStatus::NOT_AUTHENTICATED;
         case grpc::StatusCode::UNAVAILABLE: return RPCErrorStatus::NO_CONNECTION;
+        case grpc::StatusCode::ABORTED: return RPCErrorStatus::CONCURRENT_HISTORY_MODIFICATION;
         default:
             qWarning("Unknown grpc statusCode: %s. Message: '%s'",
                      grpcStatusCodeToCString(rawStatus.error_code()),

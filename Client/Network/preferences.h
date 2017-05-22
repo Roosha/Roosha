@@ -12,7 +12,7 @@
 #endif // QT_DEBUG
 
 #define TOKEN_METADATA_KEY "roosha-auth-token"
-
+#define HISTORY_LENGTH_METADATA_KEY "roosha-history-len"
 #define PING_INTERVAL_MILLIS 15000
 #define DEFAULT_TIMEOUT_MILLIS 5000u
 

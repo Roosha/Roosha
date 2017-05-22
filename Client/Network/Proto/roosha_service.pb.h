@@ -63,6 +63,12 @@ extern ChangeDefaultTypeInternal _Change_default_instance_;
 class Credentials;
 class CredentialsDefaultTypeInternal;
 extern CredentialsDefaultTypeInternal _Credentials_default_instance_;
+<<<<<<< HEAD
+=======
+class PullRequest;
+class PullRequestDefaultTypeInternal;
+extern PullRequestDefaultTypeInternal _PullRequest_default_instance_;
+>>>>>>> synchronization
 class Translation;
 class TranslationDefaultTypeInternal;
 extern TranslationDefaultTypeInternal _Translation_default_instance_;
@@ -113,6 +119,89 @@ inline bool TranslationProvider_Parse(
     TranslationProvider_descriptor(), name, value);
 }
 // ===================================================================
+
+class PullRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.PullRequest) */ {
+ public:
+  PullRequest();
+  virtual ~PullRequest();
+
+  PullRequest(const PullRequest& from);
+
+  inline PullRequest& operator=(const PullRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PullRequest& default_instance();
+
+  static inline const PullRequest* internal_default_instance() {
+    return reinterpret_cast<const PullRequest*>(
+               &_PullRequest_default_instance_);
+  }
+
+  void Swap(PullRequest* other);
+
+  // implements Message ----------------------------------------------
+
+  inline PullRequest* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  PullRequest* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const PullRequest& from);
+  void MergeFrom(const PullRequest& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output)
+      const PROTOBUF_FINAL {
+    return InternalSerializeWithCachedSizesToArray(
+        ::google::protobuf::io::CodedOutputStream::IsDefaultSerializationDeterministic(), output);
+  }
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(PullRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // int32 synchronized_prefix_length = 1;
+  void clear_synchronized_prefix_length();
+  static const int kSynchronizedPrefixLengthFieldNumber = 1;
+  ::google::protobuf::int32 synchronized_prefix_length() const;
+  void set_synchronized_prefix_length(::google::protobuf::int32 value);
+
+  // @@protoc_insertion_point(class_scope:roosha.PullRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::int32 synchronized_prefix_length_;
+  mutable int _cached_size_;
+  friend struct  protobuf_roosha_5fservice_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
 
 class TranslationRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:roosha.TranslationRequest) */ {
  public:
@@ -430,6 +519,24 @@ class Translation : public ::google::protobuf::Message /* @@protoc_insertion_poi
 // ===================================================================
 
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
+// PullRequest
+
+// int32 synchronized_prefix_length = 1;
+inline void PullRequest::clear_synchronized_prefix_length() {
+  synchronized_prefix_length_ = 0;
+}
+inline ::google::protobuf::int32 PullRequest::synchronized_prefix_length() const {
+  // @@protoc_insertion_point(field_get:roosha.PullRequest.synchronized_prefix_length)
+  return synchronized_prefix_length_;
+}
+inline void PullRequest::set_synchronized_prefix_length(::google::protobuf::int32 value) {
+  
+  synchronized_prefix_length_ = value;
+  // @@protoc_insertion_point(field_set:roosha.PullRequest.synchronized_prefix_length)
+}
+
+// -------------------------------------------------------------------
+
 // TranslationRequest
 
 // string source = 1;
@@ -699,6 +806,8 @@ inline void Translation::set_provider(::roosha::TranslationProvider value) {
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

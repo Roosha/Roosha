@@ -21,6 +21,8 @@ package com.github.roosha.server;
 import com.github.roosha.proto.ChangesProto.Change;
 import com.github.roosha.proto.CommonsProto;
 import com.github.roosha.proto.RooshaServiceGrpc.RooshaServiceImplBase;
+import com.github.roosha.proto.TranslationServiceProto;
+import com.github.roosha.proto.TranslationServiceProto.PullRequest;
 import com.github.roosha.proto.TranslationServiceProto.TranslationRequest;
 import com.github.roosha.proto.TranslationServiceProto.Translations;
 import com.github.roosha.server.auth.AuthManager;
@@ -45,6 +47,7 @@ import java.util.List;
 import static com.github.roosha.proto.CommonsProto.*;
 import static com.github.roosha.proto.CommonsProto.Void;
 import static com.github.roosha.server.ErrorsStatusExceptions.expiredAuthToken;
+import static com.github.roosha.server.ErrorsStatusExceptions.historyModified;
 import static com.github.roosha.server.util.Assertions.assertNotNull;
 
 @Component
@@ -57,18 +60,21 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     private final AuthManager authManager;
     private final Context.Key<Long> USER_ID_CONTEXT_KEY;
     private final WorldStorage worldStorage;
+    private final Context.Key<Long> HISTORY_LEN_CONTEXT_KEY;
 
     @Autowired
     public RooshaRpcService(
             TranslationsCacheManager cacheManager,
             TranslationProvider provider,
             AuthManager authManager,
+            @Qualifier("historyLenContextKey") Context.Key<Long> HISTORY_LEN_CONTEXT_KEY,
             @Qualifier("authorizedUserIdContextKey") Context.Key<Long> USER_ID_CONTEXT_KEY,
             WorldStorage worldStorage) {
         assertNotNull(cacheManager, "cache manager should not be null");
         assertNotNull(provider, "provider should not be null");
         assertNotNull(authManager, "authorization manager should not be null");
         assertNotNull(USER_ID_CONTEXT_KEY, "userId context key should not be null");
+        assertNotNull(HISTORY_LEN_CONTEXT_KEY, "len context key should not be null");
         assertNotNull(worldStorage, "world worldStorage should not be null");
 
         this.cacheManager = cacheManager;
@@ -76,6 +82,7 @@ public class RooshaRpcService extends RooshaServiceImplBase {
         this.authManager = authManager;
         this.USER_ID_CONTEXT_KEY = USER_ID_CONTEXT_KEY;
         this.worldStorage = worldStorage;
+        this.HISTORY_LEN_CONTEXT_KEY = HISTORY_LEN_CONTEXT_KEY;
     }
 
     @Override
@@ -146,7 +153,12 @@ public class RooshaRpcService extends RooshaServiceImplBase {
     @Override
     public StreamObserver<Change> saveChanges(StreamObserver<Void> responseObserver) {
         final long userId = requireCallerUserId();
+        final long expectedLen = HISTORY_LEN_CONTEXT_KEY.get();
 
+        final long actualLen = worldStorage.getHistoryLen(userId);
+        if (expectedLen != actualLen) {
+            throw historyModified(actualLen, expectedLen);
+        }
         return new StreamObserver<Change>() {
             private final List<Change> world = new LinkedList<>();
 
@@ -158,11 +170,12 @@ public class RooshaRpcService extends RooshaServiceImplBase {
             @Override
             public void onError(Throwable t) {
                 t.printStackTrace();
+                responseObserver.onError(t);
             }
 
             @Override
             public void onCompleted() {
-                worldStorage.setWorld(userId, world);
+                worldStorage.appendToWorld(userId, world);
 
                 responseObserver.onNext(Void.getDefaultInstance());
                 responseObserver.onCompleted();
@@ -172,12 +185,12 @@ public class RooshaRpcService extends RooshaServiceImplBase {
 
     @Override
     public void loadChanges(
-            Void request, StreamObserver<Change> responseObserver) {
+            PullRequest request, StreamObserver<Change> responseObserver) {
         final long userId = requireCallerUserId();
 
         final List<Change> world = worldStorage.getWorld(userId);
         if (world != null) {
-            world.forEach(responseObserver::onNext);
+            world.subList(request.getSynchronizedPrefixLength(), world.size()).forEach(responseObserver::onNext);
         }
         responseObserver.onCompleted();
     }

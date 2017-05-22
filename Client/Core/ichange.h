@@ -13,16 +13,22 @@ enum Field {
     EXAMPLE,
     TARGET
 };
+enum CMP {
+    EQUAL,
+    DIFFER,
+    CONFLICT
+};
 
 class IChange {
  public:
-    ~IChange() {}
-    IChange(roosha::Change change) : rawChange(change) {}
+    ~IChange();
+    IChange(roosha::Change change);
 
     virtual void apply(World *world) = 0;
     roosha::Change toProtobuf() const {
         return rawChange;
     }
+    CMP compare(QSharedPointer<IChange> otherChange);
  protected:
     roosha::Change rawChange;
 };

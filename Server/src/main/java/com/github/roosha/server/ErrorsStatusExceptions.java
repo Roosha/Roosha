@@ -52,4 +52,10 @@ public class ErrorsStatusExceptions {
                 "Failed to authorize user, most likely due to incorrect credentials."
         ).asRuntimeException();
     }
+
+    public static StatusRuntimeException historyModified(long actualLen, long expectedLen) {
+        return Status.ABORTED.augmentDescription(
+                "Server history length changed during synchronization from " + actualLen + " to " + expectedLen + "."
+        ).asRuntimeException();
+    }
 }

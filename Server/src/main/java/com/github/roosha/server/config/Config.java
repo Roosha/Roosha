@@ -41,8 +41,16 @@ public class Config {
     }
 
     @Bean
+    public Context.Key<Long> historyLenContextKey() { return Context.key("history-len"); }
+
+    @Bean
     public Metadata.Key<String> authTokenMetadataKey() {
         return Metadata.Key.of("roosha-auth-token", Metadata.ASCII_STRING_MARSHALLER);
+    }
+
+    @Bean
+    public Metadata.Key<String> historyLenMetadataKey() {
+        return Metadata.Key.of("roosha-history-len", Metadata.ASCII_STRING_MARSHALLER);
     }
 
     @Bean

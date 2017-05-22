@@ -38,7 +38,10 @@ class World {
 
     void insertCard(QUuid key, QSharedPointer<DBCard> card);
     void removeCard(QUuid key);
+
+#ifndef SYNC_TEST_H
  private:
+#endif
     World();
     ~World();
     World(const World &world) = delete;

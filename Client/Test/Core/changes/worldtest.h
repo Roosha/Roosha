@@ -1,13 +1,10 @@
-#ifndef WORLDTEST_H
-#define WORLDTEST_H
 #include "Core/world.h"
+#include <QtTest/QtTest>
 
-class WorldTest {
- public:
-    WorldTest();
+
+class WorldTest: public QObject  {
+Q_OBJECT
+private slots:
     void run();
-    void printCards(World *world);
-    void printCard(QSharedPointer<DBCard> card);
 };
 
-#endif // WORLDTEST_H

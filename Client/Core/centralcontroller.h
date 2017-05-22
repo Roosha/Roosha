@@ -13,6 +13,7 @@ class NetworkManager;
 class GUIManager;
 class HotkeyListener;
 class SystemTray;
+class Synchronizer;
 
 class CentralController : public QObject {
  Q_OBJECT
@@ -24,6 +25,7 @@ class CentralController : public QObject {
 
  private:
     ConfigureManager *configureManager;
+    Synchronizer *synchronizer;
     NetworkManager *networkManager;
     GUIManager *guiManager;
     HotkeyListener *hkListener;

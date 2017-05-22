@@ -23,8 +23,8 @@ class NetworkManager : public QObject {
     quint32 proposeUserTranslations(Translations translations, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
     quint32 authorize(QString login, QString password, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
     quint32 registrate(QString login, QString password, quint32 timeoutMills = DEFAULT_TIMEOUT_MILLIS);
-    quint32 saveChanges(ChangeList changes, quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
-    quint32 loadChanges(quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
+    quint32 saveChanges(ChangeList changes, qint32 history_len, quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
+    quint32 loadChanges(qint32 synchronized_prefix_len, quint32 timeoutMillis = DEFAULT_TIMEOUT_MILLIS);
 
  signals:
     void successTranslate(quint32 id, Translations translations);
