@@ -56,12 +56,9 @@ extern CardChange_InsertElemDefaultTypeInternal _CardChange_InsertElem_default_i
 class Change;
 class ChangeDefaultTypeInternal;
 extern ChangeDefaultTypeInternal _Change_default_instance_;
-<<<<<<< HEAD
 class Scrutiny;
 class ScrutinyDefaultTypeInternal;
 extern ScrutinyDefaultTypeInternal _Scrutiny_default_instance_;
-=======
->>>>>>> synchronization
 }  // namespace roosha
 
 namespace roosha {
@@ -196,10 +193,7 @@ class Change : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
   // @@protoc_insertion_point(class_scope:roosha.Change)
  private:
   void set_has_cardchange();
-<<<<<<< HEAD
   void set_has_scrutiny();
-=======
->>>>>>> synchronization
 
   inline bool has_change() const;
   void clear_change();

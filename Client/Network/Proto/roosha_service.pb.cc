@@ -6,18 +6,20 @@
 
 #include <algorithm>
 
+#include <google/protobuf/stubs/common.h>
+#include <google/protobuf/stubs/port.h>
+#include <google/protobuf/stubs/once.h>
+#include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
+#include <google/protobuf/descriptor.h>
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 
 namespace roosha {
-<<<<<<< HEAD
-=======
 class PullRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<PullRequest> {
 } _PullRequest_default_instance_;
->>>>>>> synchronization
 class TranslationRequestDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<TranslationRequest> {
 } _TranslationRequest_default_instance_;
 class TranslationsDefaultTypeInternal : public ::google::protobuf::internal::ExplicitlyConstructed<Translations> {
@@ -30,25 +32,18 @@ namespace protobuf_roosha_5fservice_2eproto {
 
 namespace {
 
-<<<<<<< HEAD
-::google::protobuf::Metadata file_level_metadata[3];
-=======
 ::google::protobuf::Metadata file_level_metadata[4];
->>>>>>> synchronization
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[1];
 
 }  // namespace
 
 const ::google::protobuf::uint32 TableStruct::offsets[] = {
   ~0u,  // no _has_bits_
-<<<<<<< HEAD
-=======
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PullRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PullRequest, synchronized_prefix_length_),
   ~0u,  // no _has_bits_
->>>>>>> synchronization
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TranslationRequest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -69,14 +64,6 @@ const ::google::protobuf::uint32 TableStruct::offsets[] = {
 };
 
 static const ::google::protobuf::internal::MigrationSchema schemas[] = {
-<<<<<<< HEAD
-  { 0, -1, sizeof(TranslationRequest)},
-  { 5, -1, sizeof(Translations)},
-  { 11, -1, sizeof(Translation)},
-};
-
-static ::google::protobuf::Message const * const file_default_instances[] = {
-=======
   { 0, -1, sizeof(PullRequest)},
   { 5, -1, sizeof(TranslationRequest)},
   { 10, -1, sizeof(Translations)},
@@ -85,7 +72,6 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&_PullRequest_default_instance_),
->>>>>>> synchronization
   reinterpret_cast<const ::google::protobuf::Message*>(&_TranslationRequest_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_Translations_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&_Translation_default_instance_),
@@ -109,24 +95,12 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-<<<<<<< HEAD
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 3);
-=======
   ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 4);
->>>>>>> synchronization
 }
 
 }  // namespace
 
 void TableStruct::Shutdown() {
-<<<<<<< HEAD
-  _TranslationRequest_default_instance_.Shutdown();
-  delete file_level_metadata[0].reflection;
-  _Translations_default_instance_.Shutdown();
-  delete file_level_metadata[1].reflection;
-  _Translation_default_instance_.Shutdown();
-  delete file_level_metadata[2].reflection;
-=======
   _PullRequest_default_instance_.Shutdown();
   delete file_level_metadata[0].reflection;
   _TranslationRequest_default_instance_.Shutdown();
@@ -135,7 +109,6 @@ void TableStruct::Shutdown() {
   delete file_level_metadata[2].reflection;
   _Translation_default_instance_.Shutdown();
   delete file_level_metadata[3].reflection;
->>>>>>> synchronization
 }
 
 void TableStruct::InitDefaultsImpl() {
@@ -144,10 +117,7 @@ void TableStruct::InitDefaultsImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
   ::roosha::protobuf_commons_2eproto::InitDefaults();
   ::roosha::protobuf_changes_2eproto::InitDefaults();
-<<<<<<< HEAD
-=======
   _PullRequest_default_instance_.DefaultConstruct();
->>>>>>> synchronization
   _TranslationRequest_default_instance_.DefaultConstruct();
   _Translations_default_instance_.DefaultConstruct();
   _Translation_default_instance_.DefaultConstruct();
@@ -161,31 +131,6 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] = {
       "\n\024roosha_service.proto\022\006roosha\032\rcommons."
-<<<<<<< HEAD
-      "proto\032\rchanges.proto\"$\n\022TranslationReque"
-      "st\022\016\n\006source\030\001 \001(\t\"H\n\014Translations\022\016\n\006so"
-      "urce\030\001 \001(\t\022(\n\013translation\030\002 \003(\0132\023.roosha"
-      ".Translation\"]\n\013Translation\022\016\n\006target\030\001 "
-      "\003(\t\022\017\n\007example\030\002 \003(\t\022-\n\010provider\030\003 \001(\0162\033"
-      ".roosha.TranslationProvider*P\n\023Translati"
-      "onProvider\022\013\n\007UNKNOWN\020\000\022\025\n\021YANDEX_DICTIO"
-      "NARY\020\001\022\025\n\021YANDEX_TRANSLATOR\020\0022\217\003\n\rRoosha"
-      "Service\022#\n\005knock\022\014.roosha.Void\032\014.roosha."
-      "Void\022>\n\nregistrate\022\023.roosha.Credentials\032"
-      "\033.roosha.AuthenticationToken\022=\n\tauthoriz"
-      "e\022\023.roosha.Credentials\032\033.roosha.Authenti"
-      "cationToken\022=\n\ttranslate\022\032.roosha.Transl"
-      "ationRequest\032\024.roosha.Translations\022=\n\027pr"
-      "oposeUserTranslations\022\024.roosha.Translati"
-      "ons\032\014.roosha.Void\022-\n\013saveChanges\022\016.roosh"
-      "a.Change\032\014.roosha.Void(\001\022-\n\013loadChanges\022"
-      "\014.roosha.Void\032\016.roosha.Change0\001B7\n\027com.g"
-      "ithub.roosha.protoB\027TranslationServicePr"
-      "otoH\001\370\001\000b\006proto3"
-  };
-  ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 816);
-=======
       "proto\032\rchanges.proto\"1\n\013PullRequest\022\"\n\032s"
       "ynchronized_prefix_length\030\001 \001(\005\"$\n\022Trans"
       "lationRequest\022\016\n\006source\030\001 \001(\t\"H\n\014Transla"
@@ -210,7 +155,6 @@ void AddDescriptorsImpl() {
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
       descriptor, 874);
->>>>>>> synchronization
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "roosha_service.proto", &protobuf_RegisterTypes);
   ::roosha::protobuf_commons_2eproto::AddDescriptors();
@@ -434,8 +378,6 @@ void PullRequest::CopyFrom(const PullRequest& from) {
   Clear();
   MergeFrom(from);
 }
-<<<<<<< HEAD
-=======
 
 bool PullRequest::IsInitialized() const {
   return true;
@@ -488,7 +430,6 @@ TranslationRequest::TranslationRequest()
   SharedCtor();
   // @@protoc_insertion_point(constructor:roosha.TranslationRequest)
 }
->>>>>>> synchronization
 TranslationRequest::TranslationRequest(const TranslationRequest& from)
   : ::google::protobuf::Message(),
       _internal_metadata_(NULL),
@@ -522,11 +463,7 @@ void TranslationRequest::SetCachedSize(int size) const {
 }
 const ::google::protobuf::Descriptor* TranslationRequest::descriptor() {
   protobuf_roosha_5fservice_2eproto::protobuf_AssignDescriptorsOnce();
-<<<<<<< HEAD
-  return protobuf_roosha_5fservice_2eproto::file_level_metadata[0].descriptor;
-=======
   return protobuf_roosha_5fservice_2eproto::file_level_metadata[1].descriptor;
->>>>>>> synchronization
 }
 
 const TranslationRequest& TranslationRequest::default_instance() {
@@ -700,11 +637,7 @@ void TranslationRequest::InternalSwap(TranslationRequest* other) {
 
 ::google::protobuf::Metadata TranslationRequest::GetMetadata() const {
   protobuf_roosha_5fservice_2eproto::protobuf_AssignDescriptorsOnce();
-<<<<<<< HEAD
-  return protobuf_roosha_5fservice_2eproto::file_level_metadata[0];
-=======
   return protobuf_roosha_5fservice_2eproto::file_level_metadata[1];
->>>>>>> synchronization
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -813,11 +746,7 @@ void Translations::SetCachedSize(int size) const {
 }
 const ::google::protobuf::Descriptor* Translations::descriptor() {
   protobuf_roosha_5fservice_2eproto::protobuf_AssignDescriptorsOnce();
-<<<<<<< HEAD
-  return protobuf_roosha_5fservice_2eproto::file_level_metadata[1].descriptor;
-=======
   return protobuf_roosha_5fservice_2eproto::file_level_metadata[2].descriptor;
->>>>>>> synchronization
 }
 
 const Translations& Translations::default_instance() {
@@ -949,7 +878,6 @@ void Translations::SerializeWithCachedSizes(
 size_t Translations::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:roosha.Translations)
   size_t total_size = 0;
-<<<<<<< HEAD
 
   // repeated .roosha.Translation translation = 2;
   {
@@ -962,20 +890,6 @@ size_t Translations::ByteSizeLong() const {
     }
   }
 
-=======
-
-  // repeated .roosha.Translation translation = 2;
-  {
-    unsigned int count = this->translation_size();
-    total_size += 1UL * count;
-    for (unsigned int i = 0; i < count; i++) {
-      total_size +=
-        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-          this->translation(i));
-    }
-  }
-
->>>>>>> synchronization
   // string source = 1;
   if (this->source().size() > 0) {
     total_size += 1 +
@@ -1046,11 +960,7 @@ void Translations::InternalSwap(Translations* other) {
 
 ::google::protobuf::Metadata Translations::GetMetadata() const {
   protobuf_roosha_5fservice_2eproto::protobuf_AssignDescriptorsOnce();
-<<<<<<< HEAD
-  return protobuf_roosha_5fservice_2eproto::file_level_metadata[1];
-=======
   return protobuf_roosha_5fservice_2eproto::file_level_metadata[2];
->>>>>>> synchronization
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -1187,11 +1097,7 @@ void Translation::SetCachedSize(int size) const {
 }
 const ::google::protobuf::Descriptor* Translation::descriptor() {
   protobuf_roosha_5fservice_2eproto::protobuf_AssignDescriptorsOnce();
-<<<<<<< HEAD
-  return protobuf_roosha_5fservice_2eproto::file_level_metadata[2].descriptor;
-=======
   return protobuf_roosha_5fservice_2eproto::file_level_metadata[3].descriptor;
->>>>>>> synchronization
 }
 
 const Translation& Translation::default_instance() {
@@ -1447,11 +1353,7 @@ void Translation::InternalSwap(Translation* other) {
 
 ::google::protobuf::Metadata Translation::GetMetadata() const {
   protobuf_roosha_5fservice_2eproto::protobuf_AssignDescriptorsOnce();
-<<<<<<< HEAD
-  return protobuf_roosha_5fservice_2eproto::file_level_metadata[2];
-=======
   return protobuf_roosha_5fservice_2eproto::file_level_metadata[3];
->>>>>>> synchronization
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS

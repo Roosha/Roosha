@@ -63,12 +63,9 @@ extern ChangeDefaultTypeInternal _Change_default_instance_;
 class Credentials;
 class CredentialsDefaultTypeInternal;
 extern CredentialsDefaultTypeInternal _Credentials_default_instance_;
-<<<<<<< HEAD
-=======
 class PullRequest;
 class PullRequestDefaultTypeInternal;
 extern PullRequestDefaultTypeInternal _PullRequest_default_instance_;
->>>>>>> synchronization
 class Translation;
 class TranslationDefaultTypeInternal;
 extern TranslationDefaultTypeInternal _Translation_default_instance_;
