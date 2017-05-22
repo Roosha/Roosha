@@ -80,7 +80,6 @@ void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverSuffix) {
             items << "Server" << "Client";
 
             QString choice = QInputDialog::getItem(nullptr, "Choose item", "", items, 0, false);
-            suffix.append((choice == "Client") ? clientSuffix[i] : serverSuffix[last_conflict]);
             if (choice == "Client") {
                 suffix.append(clientSuffix[i]);
             }
