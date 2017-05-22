@@ -15,7 +15,7 @@ class Synchronizer: public QObject {
  Q_OBJECT
 
  public:
-    qint32 synchronize(ChangeList fullClientHistory);
+    void synchronize(ChangeList fullClientHistory);
     Synchronizer(QObject *parent = Q_NULLPTR, NetworkManager * nm =Q_NULLPTR);
     ~Synchronizer();
 

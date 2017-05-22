@@ -19,6 +19,12 @@ enum CMP {
     CONFLICT
 };
 
+enum Deletion {
+    THIS_DELETES_OTHER,
+    OTHER_DELETES_THIS,
+    NONE
+};
+
 class IChange {
  public:
     ~IChange();
@@ -29,8 +35,12 @@ class IChange {
         return rawChange;
     }
     CMP compare(QSharedPointer<IChange> otherChange);
+    Deletion checkForDeletion(QSharedPointer<IChange> otherChange);
  protected:
     roosha::Change rawChange;
+
+ private:
+    static bool isFirstDeletedBySecond(const roosha::Change &first, const roosha::Change &second);
 };
 
 typedef QSharedPointer<IChange> ChangePtr;

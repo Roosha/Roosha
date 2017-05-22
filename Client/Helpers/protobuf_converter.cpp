@@ -139,7 +139,7 @@ LearningInputType ProtobufConverter::learningInputFromProtobuf(const roosha::Scr
         case roosha::TEXT_INPUT: return LearningInputType::TEXT_USER_INPUT;
         default: qWarning("ProtobufConverter::learningInputFromProtobuf: unexpected type passed.");
     }
-    throw std::logic_error("ProtobufConverter::learningInputFromProtobuf: unexpected type passed.")
+    throw std::logic_error("ProtobufConverter::learningInputFromProtobuf: unexpected type passed.");
 }
 
 roosha::ScrutinyView ProtobufConverter::learningViewToProtobuf(const LearningViewType &type) {

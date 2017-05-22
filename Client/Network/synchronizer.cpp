@@ -5,7 +5,6 @@
 #include <QtWidgets/QInputDialog>
 #include <QtCore/QSet>
 #include <QDebug>
-#include <Core/QLSeq.h>
 #include "synchronizer.h"
 #include "Helpers/configuremanager.h"
 
@@ -60,12 +59,18 @@ void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverSuffix) {
 
     for (int i = 0; i < clientSuffix.length(); i++) {
         int last_conflict = -1;
+        bool isDeleted = false;
         for (int j = 0; j < serverSuffix.length(); j++) {
             CMP changes_are = serverSuffix[j]->compare(clientSuffix[i]);
             if (changes_are == CONFLICT) {
                 last_conflict = j;
             }
+            if (clientSuffix[i]->checkForDeletion(serverSuffix[j]) == OTHER_DELETES_THIS) {
+                isDeleted = true;
+                break;
+            }
         }
+        if (isDeleted) continue;
         if (last_conflict == -1) {
             suffix.append(clientSuffix[i]);
         } else {
@@ -85,7 +90,7 @@ void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverSuffix) {
     networkManager_->saveChanges(suffix, synchronized_prefix_length + serverSuffix.length());
 }
 
-qint32 Synchronizer::synchronize(ChangeList fullClientHistory) {
+void Synchronizer::synchronize(ChangeList fullClientHistory) {
     qDebug("Synchronization started");
     clientChanges = fullClientHistory;
     qDebug() << synchronized_prefix_length;
