@@ -90,37 +90,20 @@ Rectangle {
             enabled: !stateHolder.synchronizationInProgress
         }
 
-        Button {
-            id: pushButton
 
-            text: qsTr("Push")
+        Button {
+            id: syncButton
+
+            text: qsTr("Synchronize")
             height: parent.height - 6
             width: 100
             anchors.right: createButton.left
             anchors.rightMargin: 10
             background: Rectangle {
-                color: pushButton.down ? '#7fb5b5' : '#c7d0cc'
+                color: syncButton.down ? '#7fb5b5' : '#c7d0cc'
             }
             onClicked: {
-                controller.pushCards();
-            }
-            enabled: stateHolder.editionWindowOpen === 0
-
-        }
-
-        Button {
-            id: pullButton
-
-            text: qsTr("Pull")
-            height: parent.height - 6
-            width: 100
-            anchors.right: pushButton.left
-            anchors.rightMargin: 10
-            background: Rectangle {
-                color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
-            }
-            onClicked: {
-                controller.pullCards();
+                controller.synchronize();
             }
             enabled: stateHolder.editionWindowOpen === 0
         }

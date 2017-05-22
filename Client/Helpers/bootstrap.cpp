@@ -2,6 +2,7 @@
 #include "Core/centralcontroller.h"
 #include "Core/hotkeylistener.h"
 #include "Helpers/configuremanager.h"
+#include "Network/synchronizer.h"
 #include "Network/network_manager.h"
 #include "GUI/guimanager.h"
 #include "GUI/system_tray.h"
@@ -16,7 +17,10 @@ void Bootstrap::run() { // TODO: create all stages of initialisation
     * so {@link GUIManager} should be created after network manager is set in confifure manager.
     */
     NetworkManager *nm = new NetworkManager(cc_);
+    Synchronizer *sync = new Synchronizer(cc_, nm);
+
     cm->setNetworkManager(nm);
+    cm->setSynchronizer(sync);
 
     GUIManager *guim = new GUIManager(cc_);
     HotkeyListener *hkl = new HotkeyListener(cc_);
@@ -27,6 +31,7 @@ void Bootstrap::run() { // TODO: create all stages of initialisation
 
     cc_->configureManager = cm;
     cc_->guiManager = guim;
+    cc_->synchronizer = sync;
     cc_->networkManager = nm;
     cc_->hkListener = hkl;
     cc_->systemTray = sysTray;

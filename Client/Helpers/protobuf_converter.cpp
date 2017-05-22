@@ -45,11 +45,32 @@ Translations ProtobufConverter::translationsFromProtobuf(const roosha::Translati
     return result;
 }
 
+QString ProtobufConverter::rooshaCardChangeToString(const roosha::CardChange &rawChange) {
+    switch (rawChange.change_case()) {
+        case roosha::CardChange::kCreateCard: return "CreateCard";
+        case roosha::CardChange::kDeleteCard: return "DeleteCard";
+        case roosha::CardChange::kChangeSource: return "ChangeSource";
+        case roosha::CardChange::kInsertElem: return "InsertElem";
+        case roosha::CardChange::kDeleteElem: return "DeleteElem";
+        case roosha::CardChange::kEditElem: return "EditElem";
+        case roosha::CardChange::CHANGE_NOT_SET: return "CHANGE_NOT_SET";
+    }
+}
+
+QString ProtobufConverter::rooshaFieldToString(const roosha::CardChange::Field &rawField) {
+    switch (rawField) {
+        case roosha::CardChange::Field::CardChange_Field_EXAMPLE: return "Example";
+        case roosha::CardChange::Field::CardChange_Field_TARGET: return "Target";
+        case roosha::CardChange::Field::CardChange_Field_UNKNOWN: return "UNKNOWN";
+    }
+}
+
 RPCErrorStatus ProtobufConverter::errorStatusFromGrpc(const grpc::Status &rawStatus) {
     switch (rawStatus.error_code()) {
         case grpc::StatusCode::DEADLINE_EXCEEDED: return RPCErrorStatus::DEADLINE_EXCEEDED;
         case grpc::StatusCode::UNAUTHENTICATED: return RPCErrorStatus::NOT_AUTHENTICATED;
         case grpc::StatusCode::UNAVAILABLE: return RPCErrorStatus::NO_CONNECTION;
+        case grpc::StatusCode::ABORTED: return RPCErrorStatus::CONCURRENT_HISTORY_MODIFICATION;
         default:
             qWarning("Unknown grpc statusCode: %s. Message: '%s'",
                      grpcStatusCodeToCString(rawStatus.error_code()),
@@ -97,11 +118,13 @@ ChangePtr ProtobufConverter::changeFromProtobuf(const roosha::Change &rawChange)
                     return ChangePtr(nullptr);
 
             }
+        case roosha::Change::kScrutiny: return QSharedPointer<Scrutiny>::create(rawChange);
         case roosha::Change::CHANGE_NOT_SET:
             qWarning("ProtobufConverter::changeFromProtobuf: empty Change passed. Return nullptr");
             return ChangePtr(nullptr);
 
     }
+    throw std::logic_error("Unexpected rawChange.change_case in ProtobufConverter::changeFromProtobuf");
 }
 
 roosha::ScrutinyInput ProtobufConverter::learningInputToProtobuf(const LearningInputType &type) {
@@ -116,6 +139,7 @@ LearningInputType ProtobufConverter::learningInputFromProtobuf(const roosha::Scr
         case roosha::TEXT_INPUT: return LearningInputType::TEXT_USER_INPUT;
         default: qWarning("ProtobufConverter::learningInputFromProtobuf: unexpected type passed.");
     }
+    throw std::logic_error("ProtobufConverter::learningInputFromProtobuf: unexpected type passed.");
 }
 
 roosha::ScrutinyView ProtobufConverter::learningViewToProtobuf(const LearningViewType &type) {
@@ -130,6 +154,7 @@ LearningViewType ProtobufConverter::learningViewFromProtobuf(const roosha::Scrut
         case roosha::TARGETS_AND_EXAMPLE: return LearningViewType::TARGETS_AND_EXAMPLE;
         default: qWarning("ProtobufConverter::learningViewFromProtobuf: unexpected type passed");
     }
+    throw std::logic_error("ProtobufConverter::learningViewFromProtobuf: unexpected type passed");
 }
 
 roosha::ScrutinyStatus ProtobufConverter::cardDifficultyRateToProtobuf(const CardDifficulty::Rate &status) {
@@ -143,6 +168,7 @@ roosha::ScrutinyStatus ProtobufConverter::cardDifficultyRateToProtobuf(const Car
         case CardDifficulty::Rate::NORMAL: return roosha::NORMAL;
         case CardDifficulty::Rate::DIFFICULT: return roosha::DIFFICULT;
     }
+    throw std::logic_error("ProtobufConverter::cardDifficultyRateToProtobuf: unexpected status passed");
 }
 
 CardDifficulty::Rate ProtobufConverter::cardDifficultyRateFromProtobuf(const roosha::ScrutinyStatus &status) {

@@ -124,7 +124,7 @@ Rectangle {
     /// @param difficulty difficulty of the card or null, if it is not set(
     ///                   will be used current strategy.currentCard().difficultyRate value)
     function onNextCard(difficulty) {
-        if (!(difficulty === null)) {
+        if (difficulty !== null) {
             strategy.currentCard().difficultyRate = difficulty
         }
 

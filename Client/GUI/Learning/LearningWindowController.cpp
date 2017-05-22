@@ -11,7 +11,7 @@
 
 LearningWindowController::LearningWindowController(QObject *parent) :
         QObject(parent),
-        strategyType_(LearningStrategyType::SIMPLE_DIFF),
+        strategyType_(LearningStrategyType::SUPERMEMO_2),
         learningManager_(QPointer<LearningManager>(new LearningManager())),
         window_(Q_NULLPTR) {
     strategy_ = learningManager_->loadStrategy(strategyType_);
@@ -60,5 +60,4 @@ void LearningWindowController::closeLearningWindow() {
     strategy_->cancel();
     learningManager_->saveStrategy(strategy_);
 }
-
 

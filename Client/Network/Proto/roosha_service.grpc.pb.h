@@ -75,10 +75,10 @@ class RooshaService final {
     std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::roosha::Change>> AsyncsaveChanges(::grpc::ClientContext* context, ::roosha::Void* response, ::grpc::CompletionQueue* cq, void* tag) {
       return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::roosha::Change>>(AsyncsaveChangesRaw(context, response, cq, tag));
     }
-    std::unique_ptr< ::grpc::ClientReaderInterface< ::roosha::Change>> loadChanges(::grpc::ClientContext* context, const ::roosha::Void& request) {
+    std::unique_ptr< ::grpc::ClientReaderInterface< ::roosha::Change>> loadChanges(::grpc::ClientContext* context, const ::roosha::PullRequest& request) {
       return std::unique_ptr< ::grpc::ClientReaderInterface< ::roosha::Change>>(loadChangesRaw(context, request));
     }
-    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::roosha::Change>> AsyncloadChanges(::grpc::ClientContext* context, const ::roosha::Void& request, ::grpc::CompletionQueue* cq, void* tag) {
+    std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::roosha::Change>> AsyncloadChanges(::grpc::ClientContext* context, const ::roosha::PullRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
       return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::roosha::Change>>(AsyncloadChangesRaw(context, request, cq, tag));
     }
   private:
@@ -89,8 +89,8 @@ class RooshaService final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::roosha::Void>* AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::Translations& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientWriterInterface< ::roosha::Change>* saveChangesRaw(::grpc::ClientContext* context, ::roosha::Void* response) = 0;
     virtual ::grpc::ClientAsyncWriterInterface< ::roosha::Change>* AsyncsaveChangesRaw(::grpc::ClientContext* context, ::roosha::Void* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
-    virtual ::grpc::ClientReaderInterface< ::roosha::Change>* loadChangesRaw(::grpc::ClientContext* context, const ::roosha::Void& request) = 0;
-    virtual ::grpc::ClientAsyncReaderInterface< ::roosha::Change>* AsyncloadChangesRaw(::grpc::ClientContext* context, const ::roosha::Void& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientReaderInterface< ::roosha::Change>* loadChangesRaw(::grpc::ClientContext* context, const ::roosha::PullRequest& request) = 0;
+    virtual ::grpc::ClientAsyncReaderInterface< ::roosha::Change>* AsyncloadChangesRaw(::grpc::ClientContext* context, const ::roosha::PullRequest& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -121,10 +121,10 @@ class RooshaService final {
     std::unique_ptr< ::grpc::ClientAsyncWriter< ::roosha::Change>> AsyncsaveChanges(::grpc::ClientContext* context, ::roosha::Void* response, ::grpc::CompletionQueue* cq, void* tag) {
       return std::unique_ptr< ::grpc::ClientAsyncWriter< ::roosha::Change>>(AsyncsaveChangesRaw(context, response, cq, tag));
     }
-    std::unique_ptr< ::grpc::ClientReader< ::roosha::Change>> loadChanges(::grpc::ClientContext* context, const ::roosha::Void& request) {
+    std::unique_ptr< ::grpc::ClientReader< ::roosha::Change>> loadChanges(::grpc::ClientContext* context, const ::roosha::PullRequest& request) {
       return std::unique_ptr< ::grpc::ClientReader< ::roosha::Change>>(loadChangesRaw(context, request));
     }
-    std::unique_ptr< ::grpc::ClientAsyncReader< ::roosha::Change>> AsyncloadChanges(::grpc::ClientContext* context, const ::roosha::Void& request, ::grpc::CompletionQueue* cq, void* tag) {
+    std::unique_ptr< ::grpc::ClientAsyncReader< ::roosha::Change>> AsyncloadChanges(::grpc::ClientContext* context, const ::roosha::PullRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
       return std::unique_ptr< ::grpc::ClientAsyncReader< ::roosha::Change>>(AsyncloadChangesRaw(context, request, cq, tag));
     }
 
@@ -137,8 +137,8 @@ class RooshaService final {
     ::grpc::ClientAsyncResponseReader< ::roosha::Void>* AsyncproposeUserTranslationsRaw(::grpc::ClientContext* context, const ::roosha::Translations& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientWriter< ::roosha::Change>* saveChangesRaw(::grpc::ClientContext* context, ::roosha::Void* response) override;
     ::grpc::ClientAsyncWriter< ::roosha::Change>* AsyncsaveChangesRaw(::grpc::ClientContext* context, ::roosha::Void* response, ::grpc::CompletionQueue* cq, void* tag) override;
-    ::grpc::ClientReader< ::roosha::Change>* loadChangesRaw(::grpc::ClientContext* context, const ::roosha::Void& request) override;
-    ::grpc::ClientAsyncReader< ::roosha::Change>* AsyncloadChangesRaw(::grpc::ClientContext* context, const ::roosha::Void& request, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientReader< ::roosha::Change>* loadChangesRaw(::grpc::ClientContext* context, const ::roosha::PullRequest& request) override;
+    ::grpc::ClientAsyncReader< ::roosha::Change>* AsyncloadChangesRaw(::grpc::ClientContext* context, const ::roosha::PullRequest& request, ::grpc::CompletionQueue* cq, void* tag) override;
     const ::grpc::RpcMethod rpcmethod_knock_;
     const ::grpc::RpcMethod rpcmethod_registrate_;
     const ::grpc::RpcMethod rpcmethod_authorize_;
@@ -160,7 +160,7 @@ class RooshaService final {
     virtual ::grpc::Status translate(::grpc::ServerContext* context, const ::roosha::TranslationRequest* request, ::roosha::Translations* response);
     virtual ::grpc::Status proposeUserTranslations(::grpc::ServerContext* context, const ::roosha::Translations* request, ::roosha::Void* response);
     virtual ::grpc::Status saveChanges(::grpc::ServerContext* context, ::grpc::ServerReader< ::roosha::Change>* reader, ::roosha::Void* response);
-    virtual ::grpc::Status loadChanges(::grpc::ServerContext* context, const ::roosha::Void* request, ::grpc::ServerWriter< ::roosha::Change>* writer);
+    virtual ::grpc::Status loadChanges(::grpc::ServerContext* context, const ::roosha::PullRequest* request, ::grpc::ServerWriter< ::roosha::Change>* writer);
   };
   template <class BaseClass>
   class WithAsyncMethod_knock : public BaseClass {
@@ -294,11 +294,11 @@ class RooshaService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status loadChanges(::grpc::ServerContext* context, const ::roosha::Void* request, ::grpc::ServerWriter< ::roosha::Change>* writer) final override {
+    ::grpc::Status loadChanges(::grpc::ServerContext* context, const ::roosha::PullRequest* request, ::grpc::ServerWriter< ::roosha::Change>* writer) final override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestloadChanges(::grpc::ServerContext* context, ::roosha::Void* request, ::grpc::ServerAsyncWriter< ::roosha::Change>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestloadChanges(::grpc::ServerContext* context, ::roosha::PullRequest* request, ::grpc::ServerAsyncWriter< ::roosha::Change>* writer, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncServerStreaming(6, context, request, writer, new_call_cq, notification_cq, tag);
     }
   };
@@ -417,7 +417,7 @@ class RooshaService final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status loadChanges(::grpc::ServerContext* context, const ::roosha::Void* request, ::grpc::ServerWriter< ::roosha::Change>* writer) final override {
+    ::grpc::Status loadChanges(::grpc::ServerContext* context, const ::roosha::PullRequest* request, ::grpc::ServerWriter< ::roosha::Change>* writer) final override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -530,18 +530,18 @@ class RooshaService final {
    public:
     WithSplitStreamingMethod_loadChanges() {
       ::grpc::Service::MarkMethodStreamed(6,
-        new ::grpc::SplitServerStreamingHandler< ::roosha::Void, ::roosha::Change>(std::bind(&WithSplitStreamingMethod_loadChanges<BaseClass>::StreamedloadChanges, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::SplitServerStreamingHandler< ::roosha::PullRequest, ::roosha::Change>(std::bind(&WithSplitStreamingMethod_loadChanges<BaseClass>::StreamedloadChanges, this, std::placeholders::_1, std::placeholders::_2)));
     }
     ~WithSplitStreamingMethod_loadChanges() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status loadChanges(::grpc::ServerContext* context, const ::roosha::Void* request, ::grpc::ServerWriter< ::roosha::Change>* writer) final override {
+    ::grpc::Status loadChanges(::grpc::ServerContext* context, const ::roosha::PullRequest* request, ::grpc::ServerWriter< ::roosha::Change>* writer) final override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with split streamed
-    virtual ::grpc::Status StreamedloadChanges(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::roosha::Void,::roosha::Change>* server_split_streamer) = 0;
+    virtual ::grpc::Status StreamedloadChanges(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::roosha::PullRequest,::roosha::Change>* server_split_streamer) = 0;
   };
   typedef WithSplitStreamingMethod_loadChanges<Service > SplitStreamedService;
   typedef WithStreamedUnaryMethod_knock<WithStreamedUnaryMethod_registrate<WithStreamedUnaryMethod_authorize<WithStreamedUnaryMethod_translate<WithStreamedUnaryMethod_proposeUserTranslations<WithSplitStreamingMethod_loadChanges<Service > > > > > > StreamedService;

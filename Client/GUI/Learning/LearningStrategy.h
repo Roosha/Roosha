@@ -12,6 +12,7 @@
 #include <Core/dbcard.h>
 #include <Core/Scrutiny.h>
 #include <queue>
+#include <QtCore/QPointer>
 #include "UserInputModels.h"
 #include "CardLearningViewModels.h"
 #include "CardDifficulty.h"
@@ -39,9 +40,9 @@ class CardLearningModel : public QObject {
 
     /// Empty model constructor
     CardLearningModel();
-    CardLearningModel(Card *card_,
-                      CardViewModelBase *viewModel_,
-                      UserInputModelBase *inputModel_,
+    CardLearningModel(QSharedPointer<Card> card_,
+                      QPointer<CardViewModelBase> viewModel_,
+                      QPointer<UserInputModelBase> inputModel_,
                       QObject *parent = Q_NULLPTR);
 
     /// if this flag is set, there is no cards to learn, so nothing to show
@@ -54,15 +55,15 @@ class CardLearningModel : public QObject {
 
     bool empty_;
     CardDifficulty::Rate difficultyRate_;
-    Card *card_;
-    CardViewModelBase *viewModel_;
-    UserInputModelBase *inputModel_;
+    QSharedPointer<Card> card_;
+    QPointer<CardViewModelBase> viewModel_;
+    QPointer<UserInputModelBase> inputModel_;
 };
 
 class LearningStrategyBase : public QObject {
  Q_OBJECT
  public:
-    LearningStrategyBase(quint32 changesNumber, QObject *parent = Q_NULLPTR);
+    LearningStrategyBase(QObject *parent = Q_NULLPTR);
 
     /**
      * This function should be called to get the first card in learning session. To get subsequent cards, use
@@ -94,12 +95,6 @@ class LearningStrategyBase : public QObject {
     /** Finish learning session with the last shown card not learned. If no cards have shown yet, do nothing. */
     Q_INVOKABLE virtual void cancel() = 0;
 
-    /** @see LearningStrategyBase::scrutiniesNumber_ */
-    quint32 getScrutiniesNumber();
-
-    /** @see LearningStrategyBase::changesNumber_ */
-    quint32 getChangesNumber() const;
-
     virtual LearningStrategyType getType() = 0;
 
  public slots:
@@ -112,9 +107,6 @@ class LearningStrategyBase : public QObject {
      * <b>NOTE:</b> recurrent call of this method with the same cardId may make following behaviour of the strategy
      * undefined.
      * @param cardIds ids of created cards
-
-     * @note update LearningStrategyBase::changesNumber_ whenever you notify the strategy about new card creations and
-     *       deletions
      */
     virtual void onCardsCreated(QSet<QUuid> cardIds) = 0;
 
@@ -124,9 +116,6 @@ class LearningStrategyBase : public QObject {
     /**
      * Notify the strategy on deletion of cards.
      * @param cardIds ids of deleted cards
-     *
-     * @note update LearningStrategyBase::changesNumber_ whenever you notify the strategy about new card creations and
-     *       deletions
      */
     virtual void onCardsDeleted(QSet<QUuid> cardIds) = 0;
 
@@ -135,33 +124,16 @@ class LearningStrategyBase : public QObject {
      *
      * <b>NOTE:</b> the strategy should be familiar with existence of all cards specified in scrutinies. Otherwise,
      * these scrutinies will be ignored.
-     * @see LearningStrategyBase::scrutiniesNumber_
      */
     virtual void appendScrutinies(QList<Scrutiny> scrutinies) = 0;
 
-    /** @see LearningStrategyBase::changesNumber_ */
-    void setChangesNumber(quint32 changesNumber_);
+    void appendScrutiny(Scrutiny scrutiny);
+
  protected:
     /** @throws logic_exception if lastCardShown_ is nullptr or its */
     Scrutiny currentScrutiny() throw(std::logic_error);
 
-    /**
-     * This counter stores length of learning history taken into account by the strategy. It should be incremented
-     * whenever strategy receives new scrutiny, whether from QML or LearningStrategyBase::appendScrutinies method.
-     */
-    quint32 scrutiniesNumber_;
-
-    /**
-     * This counter stores length of changes history prefix that is known for the strategy.
-     * It should be set by client whenever he notifies the strategy about creations and deletions of cards in the world.
-     *
-     * It should be used to avoid recurrence of notifications on the same event, which may cause errors in the strategy,
-     * including segmentation faults.
-     */
-    quint32 changesNumber_;
- protected:
-
-    CardLearningModel *lastCardShown_;
+    QPointer<CardLearningModel> lastShownCard_;
 };
 
 class SimpleDiffStrategy : public LearningStrategyBase {
@@ -175,10 +147,7 @@ class SimpleDiffStrategy : public LearningStrategyBase {
      * @param scrutinies learning history
      * @param parent parent
      */
-    SimpleDiffStrategy(quint32 changesNumber,
-                       QList<QUuid> cardIds = QList<QUuid>(),
-                       QList<Scrutiny> scrutinies = QList<Scrutiny>(),
-                       QObject *parent = Q_NULLPTR);
+    SimpleDiffStrategy(QObject *parent = Q_NULLPTR);
 
     CardLearningModel *firstCard() override;
     CardLearningModel *nextCard() override;
@@ -215,12 +184,9 @@ class SuperMemo2Strategy : public LearningStrategyBase {
     static constexpr double DIFFICULT_DEFAULT_FACTOR = 1.2;
     static constexpr double NORMAL_DEFAULT_FACTOR = 1.5;
     static constexpr double EASY_DEFAULT_FACTOR = 2.;
-    static constexpr quint32 DEFAULT_INTERVAL_MAXIMUM = 60 * 60 * 24 * 60; // 60 days
+    static constexpr quint32 DEFAULT_INTERVAL_MAXIMUM = 60 * 24 * 60 * 60; // 60 days
 
-    SuperMemo2Strategy(quint32 changesNumber,
-                       QList<QUuid> cardIds = QList<QUuid>(),
-                       QList<Scrutiny> scrutinies = QList<Scrutiny>(),
-                       QObject *parent = Q_NULLPTR,
+    SuperMemo2Strategy(QObject *parent = Q_NULLPTR,
                        double difficultFactor = DIFFICULT_DEFAULT_FACTOR,
                        double normalFactor = NORMAL_DEFAULT_FACTOR,
                        double easyFactor = EASY_DEFAULT_FACTOR,
@@ -258,14 +224,17 @@ class SuperMemo2Strategy : public LearningStrategyBase {
     struct Comparator {bool operator()(const CardInfo &lhv, const CardInfo &rhv) {return lhv.nextScrutiny_ > rhv.nextScrutiny_;}};
     //@formatter:on
 
-    CardInfo nextCardInfo(const CardInfo &cardInfo, CardDifficulty::Rate scrutinyStatus);
+    CardInfo alteredCardInfo(const CardInfo &cardInfo, CardDifficulty::Rate scrutinyStatus);
     quint32 nextIntervalWhenSucceeded(quint32 currentInterval, double factor);
+    CardLearningModel * learningModelForCard(const std::unique_ptr<CardInfo> &cardInfo);
+    std::unique_ptr<CardInfo> nextCardInfo();
 
     double difficultFactor_;
     double normalFactor_;
     double easyFactor_;
     quint32 intervalMaximum_;
 
+    std::unique_ptr<CardInfo> lastShownCardInfo_;
     std::priority_queue<CardInfo, std::vector<CardInfo>, Comparator> cardQueue_;
 };
 

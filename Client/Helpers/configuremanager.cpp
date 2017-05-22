@@ -13,6 +13,13 @@ NetworkManager *ConfigureManager::getNetworkManager() {
 void ConfigureManager::setNetworkManager(NetworkManager *manager) {
     networkManager_ = manager;
 }
+Synchronizer *ConfigureManager::getSynchronizer() {
+    return synchronizer_;
+}
+
+void ConfigureManager::setSynchronizer(Synchronizer *synchronizer){
+    synchronizer_ = synchronizer;
+}
 
 QString ConfigureManager::getLogin() {
     return settings_.value("auth/login", "").toString();
@@ -44,4 +51,12 @@ qint8 ConfigureManager::getMachineId() {
 
 void ConfigureManager::setMachineId(qint8 machineId) {
     settings_.setValue("auth/machineId", QVariant::fromValue(machineId));
+}
+
+qint32 ConfigureManager::getSyncLength() {
+    return settings_.value("sync/len", 0).toInt();
+}
+
+void ConfigureManager::setSyncLength(qint32 len) {
+    settings_.setValue("sync/len", QVariant::fromValue(len));
 }

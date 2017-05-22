@@ -5,8 +5,14 @@
 #include "roosha_service.pb.h"
 #include "roosha_service.grpc.pb.h"
 
+#include <grpc++/impl/codegen/async_stream.h>
+#include <grpc++/impl/codegen/async_unary_call.h>
+#include <grpc++/impl/codegen/channel_interface.h>
 #include <grpc++/impl/codegen/client_unary_call.h>
-
+#include <grpc++/impl/codegen/method_handler_impl.h>
+#include <grpc++/impl/codegen/rpc_service_method.h>
+#include <grpc++/impl/codegen/service_type.h>
+#include <grpc++/impl/codegen/sync_stream.h>
 namespace roosha {
 
 static const char* RooshaService_method_names[] = {
@@ -82,11 +88,11 @@ RooshaService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& chan
   return new ::grpc::ClientAsyncWriter< ::roosha::Change>(channel_.get(), cq, rpcmethod_saveChanges_, context, response, tag);
 }
 
-::grpc::ClientReader< ::roosha::Change>* RooshaService::Stub::loadChangesRaw(::grpc::ClientContext* context, const ::roosha::Void& request) {
+::grpc::ClientReader< ::roosha::Change>* RooshaService::Stub::loadChangesRaw(::grpc::ClientContext* context, const ::roosha::PullRequest& request) {
   return new ::grpc::ClientReader< ::roosha::Change>(channel_.get(), rpcmethod_loadChanges_, context, request);
 }
 
-::grpc::ClientAsyncReader< ::roosha::Change>* RooshaService::Stub::AsyncloadChangesRaw(::grpc::ClientContext* context, const ::roosha::Void& request, ::grpc::CompletionQueue* cq, void* tag) {
+::grpc::ClientAsyncReader< ::roosha::Change>* RooshaService::Stub::AsyncloadChangesRaw(::grpc::ClientContext* context, const ::roosha::PullRequest& request, ::grpc::CompletionQueue* cq, void* tag) {
   return new ::grpc::ClientAsyncReader< ::roosha::Change>(channel_.get(), cq, rpcmethod_loadChanges_, context, request, tag);
 }
 
@@ -124,7 +130,7 @@ RooshaService::Service::Service() {
   AddMethod(new ::grpc::RpcServiceMethod(
       RooshaService_method_names[6],
       ::grpc::RpcMethod::SERVER_STREAMING,
-      new ::grpc::ServerStreamingHandler< RooshaService::Service, ::roosha::Void, ::roosha::Change>(
+      new ::grpc::ServerStreamingHandler< RooshaService::Service, ::roosha::PullRequest, ::roosha::Change>(
           std::mem_fn(&RooshaService::Service::loadChanges), this)));
 }
 
@@ -173,7 +179,7 @@ RooshaService::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status RooshaService::Service::loadChanges(::grpc::ServerContext* context, const ::roosha::Void* request, ::grpc::ServerWriter< ::roosha::Change>* writer) {
+::grpc::Status RooshaService::Service::loadChanges(::grpc::ServerContext* context, const ::roosha::PullRequest* request, ::grpc::ServerWriter< ::roosha::Change>* writer) {
   (void) context;
   (void) request;
   (void) writer;

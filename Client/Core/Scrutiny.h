@@ -11,18 +11,20 @@
 #include <GUI/Learning/UserInputModels.h>
 #include <GUI/Learning/CardDifficulty.h>
 #include "Network/Proto/learning.pb.h"
+#include "ichange.h"
 
-class Scrutiny {
+class Scrutiny : public IChange {
  public:
     Scrutiny();
+
     Scrutiny(QUuid cardId,
              QDateTime moment,
              LearningInputType inputMethod,
              LearningViewType viewMethod,
              CardDifficulty::Rate cardDifficulty);
-    Scrutiny(const roosha::Scrutiny &data_);
+    Scrutiny(const roosha::Change &data);
 
-    roosha::Scrutiny rawScrutiny() { return data_; }
+    void apply(World *world) override;
 
     QUuid getCardId() const;
     QDateTime getMoment() const;
@@ -31,7 +33,7 @@ class Scrutiny {
     CardDifficulty::Rate getDifficultyRate() const;
 
  private:
-    roosha::Scrutiny data_;
+    const roosha::Scrutiny &rawScrutiny() const;
 };
 
 #endif //ROOSHA_CLIENT_SCRUTINY_H

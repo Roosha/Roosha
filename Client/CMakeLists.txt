@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5.1)
 
 project(roosha.client)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 #------------------------ QHotkey
 add_subdirectory(lib/QHotkey)
@@ -14,8 +14,6 @@ set(LIBS_TO_LINK ${LIBS_TO_LINK} lib.qhotkey )
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
-#TODO: come up with more convenient way to set qt installation path
-set(CMAKE_PREFIX_PATH $ENV{HOME}/.Qt/5.8/gcc_64)
 
 set(QT5_USED_MODULES Qml Quick Widgets Core QuickWidgets QuickControls2 Concurrent Test)
 find_package(Qt5 COMPONENTS ${QT5_USED_MODULES} REQUIRED)
@@ -56,7 +54,6 @@ set(ROOSHA_SOURCES main.cpp
         Helpers/protobuf_converter.cpp
         Core/world.cpp
         GUI/system_tray.cpp
-        Test/Core/changes/worldtest.cpp
         GUI/cardlistcontroller.cpp
         GUI/authentication_controller.cpp
         GUI/cardeditioncontroller.cpp
@@ -79,7 +76,7 @@ set(ROOSHA_RESOURCES QML/qml.qrc
 #------------------------------/Project sources
 
 set(HEADERS ${QHK_HEADERS} ${ROOSHA_HEADERS} ${PROTO_HEADERS})
-set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES})
+set(SOURCES ${QHK_SOURCES} ${ROOSHA_SOURCES} ${PROTO_SOURCES} Core/ichange.cpp Network/synchronizer.cpp Network/synchronizer.h)
 qt5_add_resources(RESOURCES ${ROOSHA_RESOURCES})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCES})
@@ -93,9 +90,16 @@ enable_testing()
 
 find_package(Qt5Test REQUIRED)
 
-set(TESTED_SOURCES Core/QLSeq.cpp)
+set(TESTED_SOURCES
+        Core/QLSeq.cpp
+        Core/world.cpp
+        Core/card.cpp
+        Core/dbcard.cpp
+        Core/changes.cpp
+        Core/ichange.cpp
+        ${PROTO_SOURCES})
 
-set(TESTS_SOURCES Test/Core/TestLSequence.cpp)
+set(TESTS_SOURCES Test/Core/TestLSequence.cpp Test/Core/changes/worldtest.cpp)
 
 add_executable(TestApp Test/runTests.cpp ${TESTED_SOURCES} ${TESTS_SOURCES})
 add_test(TestApp TestApp)

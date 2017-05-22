@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package roosha;
 
+import "learning.proto";
+
 option java_package = "com.github.roosha.proto";
 option java_outer_classname = "ChangesProto";
 
@@ -11,7 +13,8 @@ option optimize_for = SPEED;
 
 message Change {
 	oneof change {
-		CardChange cardChange = 1;	
+		CardChange cardChange = 1;
+		Scrutiny scrutiny = 2;	
 	}
 }
 

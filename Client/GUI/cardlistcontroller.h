@@ -19,6 +19,7 @@ class CardListController : public QObject {
     Q_INVOKABLE void closeWindow();
     Q_INVOKABLE void pullCards();
     Q_INVOKABLE void pushCards();
+    Q_INVOKABLE void synchronize();
     Q_INVOKABLE void createCard();
     Q_INVOKABLE void deleteCard(QUuid id);
     Q_INVOKABLE void editCard(QUuid id);
@@ -30,7 +31,7 @@ class CardListController : public QObject {
     void learnCards();
  public slots:
     void showCardListWindow();
-    void applyPulledChanges(quint32 requestId, ChangeList pulledChanges);
+    void applySynchronizedChanges(ChangeList synchronizedChanges);
 
  private:
     QmlWidget *widget_;

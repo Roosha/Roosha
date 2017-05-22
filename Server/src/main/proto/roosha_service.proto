@@ -41,7 +41,10 @@ service RooshaService {
     rpc proposeUserTranslations(Translations) returns (Void);
 
 	rpc saveChanges(stream Change) returns (Void);
-	rpc loadChanges(Void) returns (stream Change);
+	rpc loadChanges(PullRequest) returns (stream Change);
+}
+message PullRequest {
+    int32 synchronized_prefix_length = 1;
 }
 
 message TranslationRequest {

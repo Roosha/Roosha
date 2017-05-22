@@ -88,21 +88,22 @@ quint32 NetworkManager::registrate(QString login, QString password, quint32 time
     return call->id_;
 }
 
-quint32 NetworkManager::saveChanges(ChangeList changes, quint32 timeoutMillis) {
+quint32 NetworkManager::saveChanges(ChangeList changes, qint32 history_len, quint32 timeoutMillis) {
     DEBUG_CALL("saveChanges")
     SaveChangesAsyncCall *call = new SaveChangesAsyncCall(++currentId_, timeoutMillis);
     for (auto change : changes) {
         call->request_.append(change->toProtobuf());
     }
+    call->context_.AddMetadata(HISTORY_LENGTH_METADATA_KEY, std::to_string(history_len));
 
     call->authenticate(authenticationManager_);
     return call->id_;
 }
 
-quint32 NetworkManager::loadChanges(quint32 timeoutMillis) {
+quint32 NetworkManager::loadChanges(qint32 synchronized_prefix_len, quint32 timeoutMillis) {
     DEBUG_CALL("loadChanges")
     LoadChangesAsyncCall *call = new LoadChangesAsyncCall(++currentId_, timeoutMillis);
-
+    call->request_.set_synchronized_prefix_length(int(synchronized_prefix_len));
     call->authenticate(authenticationManager_);
     return call->id_;
 }

@@ -4,6 +4,7 @@
 #include <QString>
 #include <QSettings>
 
+class Synchronizer;
 class NetworkManager;
 
 class ConfigureManager {
@@ -15,17 +16,21 @@ class ConfigureManager {
     }
 
     NetworkManager *getNetworkManager();
+    Synchronizer *getSynchronizer();
     void setNetworkManager(NetworkManager *manager);
+    void setSynchronizer(Synchronizer *synchronizer);
 
     QString getLogin();
     QString getPasswordHash();
     QString getToken();
     qint8 getMachineId();
+    qint32 getSyncLength();
 
     void setLogin(QString login);
     void setPasswordHash(QString password);
     void setToken(QString token);
     void setMachineId(qint8 machineId);
+    void setSyncLength(qint32 len);
 
  protected:
     ConfigureManager();
@@ -33,6 +38,7 @@ class ConfigureManager {
     ConfigureManager(const ConfigureManager &manager) = delete;
     ConfigureManager &operator=(const ConfigureManager &) = delete;
 
+    Synchronizer *synchronizer_;
     NetworkManager *networkManager_;
     QSettings settings_;
 };

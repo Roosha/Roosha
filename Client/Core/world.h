@@ -18,8 +18,6 @@ class World {
  public:
     static World &Instance();
 
-    const QVector<Scrutiny> &getLearningHistory() const;
-    void setLearningHistory(QVector<Scrutiny> newHistory);
     void addScrutiny(Scrutiny scrutiny);
 
     const QMap<QUuid, QSharedPointer<DBCard>> &getCards();
@@ -40,7 +38,10 @@ class World {
 
     void insertCard(QUuid key, QSharedPointer<DBCard> card);
     void removeCard(QUuid key);
+
+#ifndef SYNC_TEST_H
  private:
+#endif
     World();
     ~World();
     World(const World &world) = delete;
@@ -48,7 +49,6 @@ class World {
 
     QMap<QUuid, QSharedPointer<DBCard>> cards_;
     ChangeList changes_;
-    QVector<Scrutiny> learningHistory_;
 };
 
 #endif // WORLD_H
