@@ -4,6 +4,7 @@
 
 #include <QQmlContext>
 #include <Core/world.h>
+#include <Helpers/StateHolder.h>
 
 #include "LearningWindowController.h"
 #include "LearningStrategy.h"
@@ -31,8 +32,7 @@ void LearningWindowController::registerQmlTypes() {
 }
 
 void LearningWindowController::showLearningWindow() {
-    if (window_) { closeLearningWindow(); }
-
+    StateHolder::Instance().setLearning(true);
     strategy_ = learningManager_->loadStrategy(strategyType_);
 
     window_ = new QmlWidget();
@@ -59,5 +59,6 @@ void LearningWindowController::closeLearningWindow() {
 
     strategy_->cancel();
     learningManager_->saveStrategy(strategy_);
+    StateHolder::Instance().setLearning(false);
 }
 

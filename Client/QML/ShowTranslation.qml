@@ -108,7 +108,7 @@ Rectangle {
 
                         font.family: "Helvetica"
                         text: qsTr("🗋Create")
-                        enabled: !stateHolder.synchronizationInProgress
+                        enabled: !(stateHolder.sync || stateHolder.learn)
                         //ToolTip.visible: stateHolder.synchronizationInProgress
                         //ToolTip.text: qsTr("you cannot create card when synchronization is in progress")
                         onClicked: {

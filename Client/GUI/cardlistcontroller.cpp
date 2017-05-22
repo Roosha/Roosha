@@ -63,29 +63,12 @@ void CardListController::synchronize() {
 
 }
 
-//TODO:delete this completely
-void CardListController::pullCards() {
-    StateHolder::Instance().setSync(true);
-    ConfigureManager::Instance().getNetworkManager()->loadChanges(0);
-    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
-    StateHolder::Instance().setSync(false);
-    qDebug() << "pull";
-}
-
-void CardListController::pushCards() {
-    StateHolder::Instance().setSync(true);
-    ConfigureManager::Instance().getNetworkManager()->saveChanges(world_.getChanges(), 0);
-    QTimer::singleShot(3000, this, [this]{ StateHolder::Instance().setSync(false); });
-    StateHolder::Instance().setSync(false);
-    qDebug() << "push";
-}
-
 void CardListController::deleteCard(QUuid id) {
     if (!StateHolder::Instance().isEditing(id)) {
         world_.deleteCard(id);
         showCardListWindow();
     } else
-        SystemTray::Notify(QString("Deletion ignored"), QString("You are now editing this card"));
+        SystemTray::Notify(QString("Deletion ignored"), QString("You are now editing or learn this card"));
 }
 
 void CardListController::editCard(QUuid id) {

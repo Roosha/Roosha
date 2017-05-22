@@ -11,6 +11,7 @@ class StateHolder : public QObject {
     Q_PROPERTY(bool auth READ isAuth WRITE setAuth NOTIFY authChanged)
     Q_PROPERTY(qint32 editionWindowOpen READ getEditors WRITE setEditors NOTIFY editionChange)
     Q_PROPERTY(bool sync READ isSync WRITE setSync NOTIFY syncChanged)
+    Q_PROPERTY(bool learn READ isLearning WRITE setLearning NOTIFY learnChanged)
     //@formatter:on
  public:
     static StateHolder &Instance();
@@ -23,9 +24,12 @@ class StateHolder : public QObject {
     bool isEditing(QUuid id);
     void startEdit(QUuid id);
     void endEdit(QUuid id);
+    void setLearning(bool newLearning);
+    bool isLearning();
  signals:
     void editionChange();
     void syncChanged();
+    void learnChanged();
     void authChanged();
 
  private:
@@ -37,6 +41,7 @@ class StateHolder : public QObject {
 
     bool isAuthorized;
     bool synchronizationInProgress;
+    bool learningProcess;
     qint32 editors;
     QSet<QUuid> editingCards;
 };

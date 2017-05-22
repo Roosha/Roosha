@@ -38,5 +38,14 @@ void StateHolder::startEdit(QUuid id) {
 };
 void StateHolder::endEdit(QUuid id) {
     editingCards.remove(id);
+}
+
+void StateHolder::setLearning(bool newLearning) {
+    learningProcess = newLearning;
+    emit learnChanged();
+}
+
+bool StateHolder::isLearning() {
+    return learningProcess;
 };
 

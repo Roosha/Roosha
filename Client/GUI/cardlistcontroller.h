@@ -17,8 +17,6 @@ class CardListController : public QObject {
     World &world_;
 
     Q_INVOKABLE void closeWindow();
-    Q_INVOKABLE void pullCards();
-    Q_INVOKABLE void pushCards();
     Q_INVOKABLE void synchronize();
     Q_INVOKABLE void createCard();
     Q_INVOKABLE void deleteCard(QUuid id);

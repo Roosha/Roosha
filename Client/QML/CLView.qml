@@ -81,7 +81,7 @@ Rectangle {
                     color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
                 }
 
-                enabled: !stateHolder.synchronizationInProgress
+                enabled:  !(stateHolder.sync || stateHolder.learn)
 
                 //ToolTip.visible: stateHolder.synchronizationInProgress
                 //ToolTip.text: qsTr("you cannot delete card when synchronization is in progress")
@@ -100,7 +100,7 @@ Rectangle {
                 background: Rectangle {
                     color: pullButton.down ? '#7fb5b5' : '#c7d0cc'
                 }
-                enabled: !stateHolder.synchronizationInProgress
+                enabled:  !(stateHolder.sync || stateHolder.learn)
 
                 //ToolTip.visible: stateHolder.synchronizationInProgress
                 //ToolTip.text: qsTr("you cannot edit card when synchronization is in progress")

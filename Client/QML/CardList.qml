@@ -87,7 +87,7 @@ Rectangle {
             onClicked: {
                 controller.createCard();
             }
-            enabled: !stateHolder.synchronizationInProgress
+            enabled: !(stateHolder.sync || stateHolder.learn)
         }
 
 
@@ -105,7 +105,7 @@ Rectangle {
             onClicked: {
                 controller.synchronize();
             }
-            enabled: stateHolder.editionWindowOpen === 0
+            enabled: stateHolder.editionWindowOpen === 0 && !stateHolder.learn
         }
 
 
@@ -115,7 +115,6 @@ Rectangle {
             text: qsTr("Learn Cards")
             height: parent.height - 6
             width: 100
-            anchors.right: pullButton.left
             anchors.rightMargin: 10
             background: Rectangle {
                 color: learnButton.down ? '#7fb5b5' : '#c7d0cc'
@@ -123,7 +122,7 @@ Rectangle {
             onClicked: {
                 controller.learn();
             }
-            enabled: true
+            enabled: stateHolder.editionWindowOpen === 0 && !(stateHolder.sync || stateHolder.learn)
         }
     }
 }

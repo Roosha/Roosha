@@ -45,7 +45,7 @@ Rectangle {
             anchors.fill: parent
             onClicked: translationList.currentIndex = index
             onDoubleClicked: {
-                if (stateHolder.isAuthorized & !stateHolder.synchronizationInProgress) controller.createCard(self, index)
+                if (stateHolder.isAuthorized & !(stateHolder.sync || stateHolder.learn)) controller.createCard(self, index)
             }
         }
     }
