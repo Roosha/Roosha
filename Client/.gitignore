@@ -1,3 +1,7 @@
+# Protobuf-generated sources
+*.pb.cc
+*.pb.h
+
 .idea/
 cmake-build-*/
 
