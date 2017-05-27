@@ -97,9 +97,19 @@ set(TESTED_SOURCES
         Core/dbcard.cpp
         Core/changes.cpp
         Core/ichange.cpp
+        Helpers/configuremanager.cpp
+        Core/Scrutiny.cpp
+        Helpers/protobuf_converter.cpp
+        Core/translation.cpp
+        Network/synchronizer.cpp
+        Network/authentication_manager.cpp
+        Network/roosha_service_connector.cpp
+        Network/network_manager.cpp
+        Network/server_response.cpp
+        Test/Core/authTests/worldtest.cpp
         ${PROTO_SOURCES})
 
-set(TESTS_SOURCES Test/Core/TestLSequence.cpp Test/Core/changes/worldtest.cpp)
+set(TESTS_SOURCES Test/Core/TestLSequence.cpp Test/Core/authTests/testNet.cpp)
 
 add_executable(TestApp Test/runTests.cpp ${TESTED_SOURCES} ${TESTS_SOURCES})
 add_test(TestApp TestApp)

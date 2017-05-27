@@ -39,7 +39,7 @@ class World {
     void insertCard(QUuid key, QSharedPointer<DBCard> card);
     void removeCard(QUuid key);
 
-#ifndef SYNC_TEST_H
+#ifndef TESTS_H
  private:
 #endif
     World();

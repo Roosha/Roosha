@@ -46,6 +46,9 @@ void ConfigureManager::setToken(QString token) {
 }
 
 qint8 ConfigureManager::getMachineId() {
+//#ifdef TESTS_H
+//    return 1;
+//#endif
     return static_cast<qint8>(settings_.value("auth/machineId", QVariant::fromValue(0)).toInt());
 }
 
