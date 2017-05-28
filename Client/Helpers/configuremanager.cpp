@@ -1,5 +1,9 @@
 #include "Helpers/configuremanager.h"
 
+
+int ConfigureManager::version = 0;
+
+
 ConfigureManager::ConfigureManager() {
 }
 

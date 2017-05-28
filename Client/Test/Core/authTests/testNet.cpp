@@ -18,27 +18,27 @@ void TestNet::exec_my_tests() {
     (*argv)[0] = '!';
     QApplication test(*argc, argv);
     QWidget* w = new QWidget();
-    ConfigureManager *cm = &ConfigureManager::Instance();
-    NetworkManager *nm = new NetworkManager(nullptr);
-    Synchronizer *sync = new Synchronizer(nullptr, nm);
+    ConfigureManager::version = 1;
+    ConfigureManager *cm1 = &ConfigureManager::Instance();
+    NetworkManager *nm1 = new NetworkManager(nullptr);
+    Synchronizer *sync1 = new Synchronizer(nullptr, nm1);
+    cm1->setNetworkManager(nm1);
+    cm1->setSynchronizer(sync1);
 
+    ConfigureManager::version = 2;
+    ConfigureManager *cm2 = &ConfigureManager::Instance();
+    NetworkManager *nm2 = new NetworkManager(nullptr);
+    Synchronizer *sync2 = new Synchronizer(nullptr, nm2);
+    cm2->setNetworkManager(nm2);
+    cm2->setSynchronizer(sync2);
 
-    WorldTest * testAuth = new WorldTest();
-    connect(nm, &NetworkManager::successAuthorize,
-            testAuth, &WorldTest::authenticationSuccess);
-    connect(nm, &NetworkManager::failAuthorize,
-            this, [&](qint32 id) {
-                std::cout << "send auth" << std::endl;
-                nm->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
+    qRegisterMetaType<ChangeList>("ChangeList");
 
-    connect(nm, &NetworkManager::successRegistrate,
-            testAuth, &WorldTest::authenticationSuccess);
-    connect(nm, &NetworkManager::failRegistrate,this, [&](qint32 id) {
-        std::cout << "send auth" << std::endl;
-        nm->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
-//    w->setWindowIconText(QString("test"));
-//    w->show();
-    nm->registrate(QString("test"), QString("test"));
-//    testAuth->sendRegistrateRequest(QString("test"), QString("test"));
+    WorldTest * wt = new WorldTest(cm1, cm2);
+    nm1->registrate(QString("test"), QString("test"));
+    QSignalSpy spy(wt, &WorldTest::endTestEdition);
+    QVERIFY(spy.wait(5000));
+    nm2->registrate(QString("test"), QString("test"));
+
     test.exec();
 }

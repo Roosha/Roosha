@@ -1,5 +1,33 @@
 #include <iostream>
+#include <Helpers/configuremanager.h>
 #include "worldtest.h"
+
+WorldTest::WorldTest(ConfigureManager *cm1, ConfigureManager *cm2): cm1(cm1), cm2(cm2) {
+
+    nm1 = cm1->getNetworkManager();
+    nm2 = cm2->getNetworkManager();
+
+    sync1 = cm1->getSynchronizer();
+    sync2 = cm2->getSynchronizer();
+
+    connect(nm1, &NetworkManager::successAuthorize, this, &WorldTest::authenticationSuccess);
+    connect(nm1, &NetworkManager::failAuthorize, this, [&](qint32 id) { std::cout << "send auth" << std::endl;
+        nm1->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
+
+    connect(nm1, &NetworkManager::successRegistrate, this, &WorldTest::authenticationSuccess);
+    connect(nm1, &NetworkManager::failRegistrate, this, [&](qint32 id) { std::cout << "send auth" << std::endl;
+        nm1->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
+    connect(sync1, &Synchronizer::finishSynchronization, this, &WorldTest::updateWorld);
+// connecting other CM
+    connect(nm2, &NetworkManager::successAuthorize, this, &WorldTest::testSync);
+    connect(nm2, &NetworkManager::failAuthorize, this, [&](qint32 id) { std::cout << "send auth" << std::endl;
+        nm2->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
+
+    connect(nm2, &NetworkManager::successRegistrate, this, &WorldTest::authenticationSuccess);
+    connect(nm2, &NetworkManager::failRegistrate, this, [&](qint32 id) { std::cout << "send auth" << std::endl;
+        nm2->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
+    connect(sync2, &Synchronizer::finishSynchronization, this, &WorldTest::updateWorld);
+}
 
 void WorldTest::authenticationSuccess(quint32 id){
     World::version = 1;
@@ -104,6 +132,36 @@ void WorldTest::testEdition() {
     QCOMPARE(world.changes_.size(), 14);
 
     std::cout << "end TE" << std::endl;
-    qApp->exit(0);  
+    emit endTestEdition();
+}
+
+void WorldTest::updateWorld(ChangeList changes) {
+    std::cout << "smth" << std::endl;
+    World::Instance().setChanges(changes);
+}
+
+void WorldTest::testSync() {
+    World::version = 1;
+    World &world1 = World::Instance();
+    world1.cards_.clear();
+    world1.changes_.clear();
+
+    QSharedPointer<DBCard> card = world1.createCard();
+
+    sync1->synchronize(world1.getChanges());
+    QSignalSpy spy1(sync1, &Synchronizer::finishSynchronization);
+    QVERIFY(spy1.wait(3000));
+    World::version = 2;
+    World &world2 = World::Instance();
+    world2.cards_.clear();
+    world2.changes_.clear();
+
+    card = world2.createCard();
+
+    sync2->synchronize(world2.getChanges());
+    QSignalSpy spy2(sync2, &Synchronizer::finishSynchronization);
+    QVERIFY(spy2.wait(3000));
+    std::cout << "HERE" << std::endl;
+
 }
 
