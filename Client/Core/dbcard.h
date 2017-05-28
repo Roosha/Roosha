@@ -9,11 +9,13 @@
 #include "world.h"
 
 class DBCard : public Card {
+    friend class WorldTest;
     //@formatter:off
     Q_PROPERTY(QUuid id READ getId)
     //@formatter:on
  public:
     DBCard(QUuid newId);
+    void setWorld(World &world);
     void setId(QUuid newId);
     void setSource(QString newSource);
     void setField(const enum Field &fieldName, QStringList newField);

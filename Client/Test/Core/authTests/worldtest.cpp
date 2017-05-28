@@ -2,6 +2,7 @@
 #include "worldtest.h"
 
 void WorldTest::authenticationSuccess(quint32 id){
+    World::version = 1;
     World &world = World::Instance();
     QSharedPointer<DBCard> card = world.createCard();
     QUuid id1 = card->getId();
@@ -69,6 +70,40 @@ void WorldTest::authenticationSuccess(quint32 id){
     QCOMPARE(world.getCards()[id3]->getTargets()[0], QString("tr"));
     QCOMPARE(world.getCards()[id3]->getExamples()[0], QString("e"));
     std::cout << "end WT" << std::endl;
-    qApp->exit(0);
+    testEdition();
+}
+
+void WorldTest::testEdition() {
+    World::version = 2;
+    World &world = World::Instance();
+    QSharedPointer<DBCard> card = world.createCard();
+    QUuid id1 = card->getId();
+    card->setSource(QString("src1"));
+    QStringList newEx;
+    QStringList newTar;
+    newEx << "a" << "b" << "c";
+    newTar << "x" << "y" << "z";
+    card->setField(EXAMPLE, newEx);
+    card->setField(TARGET, newTar);
+    QCOMPARE(world.changes_.size(), 8);
+    newEx.clear();
+    newTar.clear();
+    newEx << "a" << "c";
+    newTar << "y" << "q";
+
+    card->setField(EXAMPLE, newEx);
+    card->setField(TARGET, newTar);
+    QCOMPARE(world.changes_.size(), 11);
+    newEx.clear();
+    newTar.clear();
+    newEx << "a" << "d" << "c";
+    newTar << "b" << "y" ;
+
+    card->setField(EXAMPLE, newEx);
+    card->setField(TARGET, newTar);
+    QCOMPARE(world.changes_.size(), 14);
+
+    std::cout << "end TE" << std::endl;
+    qApp->exit(0);  
 }
 

@@ -1,13 +1,17 @@
 #include "world.h"
 #include <QtDebug>
 
+#define MAX_WORLDS 3
+
+int World::version = 0;
+
 World::World() {}
 
 World::~World() {}
 
 World &World::Instance() {
-    static World world;
-    return world;
+    static World world[MAX_WORLDS];
+    return world[World::version];
 }
 
 void World::addScrutiny(Scrutiny scrutiny) {
