@@ -41,7 +41,7 @@ class World {
     void insertCard(QUuid key, QSharedPointer<DBCard> card);
     void removeCard(QUuid key);
 
-    static int version;
+    static qint8 version;
 
  private:
     World();

@@ -18,12 +18,15 @@ void TestNet::exec_my_tests() {
     (*argv)[0] = '!';
     QApplication test(*argc, argv);
     QWidget* w = new QWidget();
+    WorldTest::testing = 1;
+
     ConfigureManager::version = 1;
     ConfigureManager *cm1 = &ConfigureManager::Instance();
     NetworkManager *nm1 = new NetworkManager(nullptr);
     Synchronizer *sync1 = new Synchronizer(nullptr, nm1);
     cm1->setNetworkManager(nm1);
     cm1->setSynchronizer(sync1);
+    cm1->setMachineId(1);
 
     ConfigureManager::version = 2;
     ConfigureManager *cm2 = &ConfigureManager::Instance();
@@ -31,6 +34,7 @@ void TestNet::exec_my_tests() {
     Synchronizer *sync2 = new Synchronizer(nullptr, nm2);
     cm2->setNetworkManager(nm2);
     cm2->setSynchronizer(sync2);
+    cm2->setMachineId(2);
 
     qRegisterMetaType<ChangeList>("ChangeList");
 

@@ -3,7 +3,7 @@
 
 #define MAX_WORLDS 3
 
-int World::version = 0;
+qint8 World::version = 0;
 
 World::World() {}
 

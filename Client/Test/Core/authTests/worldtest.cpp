@@ -2,6 +2,8 @@
 #include <Helpers/configuremanager.h>
 #include "worldtest.h"
 
+qint8 WorldTest::testing = 0;
+
 WorldTest::WorldTest(ConfigureManager *cm1, ConfigureManager *cm2): cm1(cm1), cm2(cm2) {
 
     nm1 = cm1->getNetworkManager();

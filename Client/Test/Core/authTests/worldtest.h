@@ -11,6 +11,8 @@ class WorldTest: public QObject  {
 Q_OBJECT
 public:
     WorldTest(ConfigureManager *cm1, ConfigureManager *cm2);
+
+    static qint8 testing;
 public slots:
     void authenticationSuccess(quint32 id);
     void updateWorld(ChangeList changes);

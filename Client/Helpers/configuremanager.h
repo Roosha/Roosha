@@ -33,7 +33,7 @@ class ConfigureManager {
     void setMachineId(qint8 machineId);
     void setSyncLength(qint32 len);
 
-    static int version;
+    static qint8 version;
  protected:
     ConfigureManager();
     ~ConfigureManager();
@@ -43,6 +43,7 @@ class ConfigureManager {
     Synchronizer *synchronizer_;
     NetworkManager *networkManager_;
     QSettings settings_;
+    qint8 testMID;
 };
 
 #endif // CONFIGUREMANAGER_H
