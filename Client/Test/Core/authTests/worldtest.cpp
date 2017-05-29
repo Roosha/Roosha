@@ -256,6 +256,39 @@ void WorldTest::testSync() {
 
     testEqualsHistory(world1.changes_, world2.changes_);
 
+    World::version = 1;
+    card = world1.getCards()[id1];
+    newTar1.clear();
+    newEx1.clear();
+    newTar1  << "sahsdv";
+    newEx1 << "gadd";
+    card->setSource("adh");
+    card->setField(TARGET, newTar1);
+    card->setField(EXAMPLE, newEx1);
+
+    sync1->synchronize(world1.getChanges());
+    QVERIFY(spy1.wait(1000));
+
+    World::version = 2;
+    card = world2.getCards()[id1];
+    newTar1.clear();
+    newEx1.clear();
+    newTar1  << "sahsdv" << "aldfhl" << "gyasbdl";
+    newEx1 << "gadd" << "adshh" << "uasdhf";
+    card->setSource("adh");
+    card->setField(TARGET, newTar1);
+    card->setField(EXAMPLE, newEx1);
+
+    sync2->synchronize(world2.getChanges());
+    QVERIFY(spy2.wait(1000));
+
+    World::version = 1;
+
+    sync1->synchronize(world1.getChanges());
+    QVERIFY(spy1.wait(1000));
+
+    testEqualsHistory(world1.changes_, world2.changes_);
+
     std::cout << "END" << std::endl;
     qApp->exit(0);
 }
