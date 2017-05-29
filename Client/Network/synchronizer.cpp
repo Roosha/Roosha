@@ -7,6 +7,7 @@
 #include <QDebug>
 #include "synchronizer.h"
 #include "Helpers/configuremanager.h"
+#include <Test/Core/authTests/worldtest.h>
 
 Synchronizer::Synchronizer(QObject *parent, NetworkManager * nm) :
         QObject(parent), networkManager_(nm), synchronized_prefix_length(/*ConfigureManager::Instance().getSyncLength()*/ 0     ) {
@@ -76,10 +77,13 @@ void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverSuffix) {
         } else {
             // TODO: alert window with Cards for choosing the one.
             // Now alert just dialog window with option "Client" or "Server"
-            QStringList items;
-            items << "Server" << "Client";
+            QString choice;
+            if (WorldTest::testing == 0) {
+                QStringList items;
+                items << "Server" << "Client";
 
-            QString choice = QInputDialog::getItem(nullptr, "Choose item", "", items, 0, false);
+                choice = QInputDialog::getItem(nullptr, "Choose item", "", items, 0, false);
+            } else { choice = WorldTest::testing % 2 == 0? "Client" : "Server"; WorldTest::testing++;}
             if (choice == "Client") {
                 suffix.append(clientSuffix[i]);
             }

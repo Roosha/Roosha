@@ -11,6 +11,7 @@
 #include "error_status.h"
 #include "network_manager.h"
 
+
 class Synchronizer: public QObject {
  Q_OBJECT
 

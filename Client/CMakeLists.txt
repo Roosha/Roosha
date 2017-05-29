@@ -68,6 +68,7 @@ set(ROOSHA_SOURCES main.cpp
         Core/Scrutiny.cpp Core/Scrutiny.cpp
         GUI/Learning/CardDifficulty.cpp
         GUI/Learning/LearningManager.cpp
+        Test/Core/authTests/worldtest.cpp
         )
 
 set(ROOSHA_RESOURCES QML/qml.qrc

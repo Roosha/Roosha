@@ -1,5 +1,5 @@
-#include <Test/Core/authTests/worldtest.h>
 #include "Helpers/configuremanager.h"
+#include <Test/Core/authTests/worldtest.h>
 
 
 qint8 ConfigureManager::version = 0;

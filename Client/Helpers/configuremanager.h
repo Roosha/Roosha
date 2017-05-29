@@ -5,6 +5,7 @@
 #include <QString>
 #include <QSettings>
 
+
 class Synchronizer;
 class NetworkManager;
 
