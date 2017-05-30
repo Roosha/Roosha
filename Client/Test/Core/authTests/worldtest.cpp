@@ -12,30 +12,56 @@ WorldTest::WorldTest(ConfigureManager *cm1, ConfigureManager *cm2): cm1(cm1), cm
     sync1 = cm1->getSynchronizer();
     sync2 = cm2->getSynchronizer();
 
-
     auto channel = grpc::CreateChannel(ROOSHA_SERVER_ADDRESS, grpc::InsecureChannelCredentials());
     stub = roosha::RooshaService::NewStub(channel);
 
-    connect(nm1, &NetworkManager::successAuthorize, this, &WorldTest::authenticationSuccess);
     connect(nm1, &NetworkManager::failAuthorize, this, [&](qint32 id) { std::cout << "send auth" << std::endl;
         nm1->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
 
-    connect(nm1, &NetworkManager::successRegistrate, this, &WorldTest::authenticationSuccess);
     connect(nm1, &NetworkManager::failRegistrate, this, [&](qint32 id) { std::cout << "send auth" << std::endl;
         nm1->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
+
     connect(sync1, &Synchronizer::finishSynchronization, this, &WorldTest::updateWorld);
+
 // connecting other CM
-    connect(nm2, &NetworkManager::successAuthorize, this, &WorldTest::testSync);
+
     connect(nm2, &NetworkManager::failAuthorize, this, [&](qint32 id) { std::cout << "send auth" << std::endl;
         nm2->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
 
-    connect(nm2, &NetworkManager::successRegistrate, this, &WorldTest::authenticationSuccess);
     connect(nm2, &NetworkManager::failRegistrate, this, [&](qint32 id) { std::cout << "send auth" << std::endl;
         nm2->authorize(QString("test"), QString("test"));}, Qt::ConnectionType::QueuedConnection);
+
     connect(sync2, &Synchronizer::finishSynchronization, this, &WorldTest::updateWorld);
 }
 
-void WorldTest::authenticationSuccess(quint32 id){
+bool WorldTest::resetHistory() {
+    World::version = 1;
+    World &world1 = World::Instance();
+    world1.cards_.clear();
+    world1.changes_.clear();
+    World::version = 2;
+    World &world2 = World::Instance();
+    world2.cards_.clear();
+    world2.changes_.clear();
+    sync1->resetSyncPrefix();
+    sync2->resetSyncPrefix();
+
+    roosha::Void request;
+    roosha::Void response;
+    grpc::ClientContext context;
+    context.AddMetadata(TOKEN_METADATA_KEY, ConfigureManager::Instance().getToken().toStdString());
+    grpc::Status status = stub->resetHistory(&context, request, &response);
+    return status.ok();
+}
+
+void WorldTest::testEqualsHistory(ChangeList history1, ChangeList history2) {
+    QCOMPARE(history1.size(), history2.size());
+    for (int i = 0; i < history1.size(); i++) {
+        QCOMPARE(history1[i]->compare(history2[i]), EQUAL);
+    }
+}
+
+void WorldTest::testSimpleOps() {
     World::version = 1;
     World &world = World::Instance();
     QSharedPointer<DBCard> card = world.createCard();
@@ -104,7 +130,6 @@ void WorldTest::authenticationSuccess(quint32 id){
     QCOMPARE(world.getCards()[id3]->getTargets()[0], QString("tr"));
     QCOMPARE(world.getCards()[id3]->getExamples()[0], QString("e"));
     std::cout << "end WT" << std::endl;
-    testEdition();
 }
 
 void WorldTest::testEdition() {
@@ -138,174 +163,229 @@ void WorldTest::testEdition() {
     QCOMPARE(world.changes_.size(), 14);
 
     std::cout << "end TE" << std::endl;
-    emit endTestEdition();
 }
 
 void WorldTest::updateWorld(ChangeList changes) {
-    std::cout << "smth" << std::endl;
+    std::cout << "world was updated" << std::endl;
     World::Instance().setChanges(changes);
 }
-
-void WorldTest::testSync() {
+// creates one or two cards: one from first device, send it to server, then if two create another card from second device else just sync second device
+void WorldTest::setup(bool two) {
     while (!resetHistory()) { std::cout << "smth went wrong"; }
+
     World::version = 1;
     World &world1 = World::Instance();
-    world1.cards_.clear();
-    world1.changes_.clear();
-
     // two changes always generate when user creates new card: creation of the card and setting empty source, let's do the same in our tests
     QSharedPointer<DBCard> card = world1.createCard();
     card->setSource("");
-    QUuid id1 = card->getId();
+    ids[0] = card->getId();
 
-    sync1->synchronize(world1.getChanges());
     QSignalSpy spy1(sync1, &Synchronizer::finishSynchronization);
+    sync1->synchronize(world1.getChanges());
     QVERIFY(spy1.wait(1000));
 
     World::version = 2;
     World &world2 = World::Instance();
-    world2.cards_.clear();
-    world2.changes_.clear();
+    if (two) {
+        card = world2.createCard();
+        card->setSource("");
 
-    card = world2.createCard();
-    card->setSource("");
-
-    QUuid id2 = card->getId();
-
-    sync2->synchronize(world2.getChanges());
+        ids[1] = card->getId();
+    }
     QSignalSpy spy2(sync2, &Synchronizer::finishSynchronization);
+    sync2->synchronize(world2.getChanges());
     QVERIFY(spy2.wait(1000));
     // now we send 1 card create change from "first" device of client "test/test" (and source setter)
     // and after get it from "second" device and send its card create change
+}
+
+void WorldTest::testSetupSync() {
+    setup(true);
+    World::version = 1;
+    World &world1 = World::Instance();
+    World::version = 2;
+    World &world2 = World::Instance();
+
+
     QCOMPARE(world1.cards_.size(), 1);
     QCOMPARE(world2.cards_.size(), 2);
     QCOMPARE(world1.changes_.size(), 2);
     QCOMPARE(world2.changes_.size(), 4);
-    QSet<QUuid> ids;
-    ids << id1 << id2;
-    QCOMPARE(QSet<QUuid>::fromList(world2.cards_.keys()), ids);
+    QSet<QUuid> Id;
+    Id << ids[0] << ids[1];
+    QCOMPARE(QSet<QUuid>::fromList(world2.cards_.keys()), Id);
 
-    // emulate actions from first device
+    std::cout << "test setup OK" << std::endl;
+    emit endTestCase();
+}
 
+void WorldTest::testCardDeletionSync() {
+    setup(true);
     World::version = 1;
-    QSharedPointer<DBCard> card1 = world1.getCards()[id1];
-    card1->setSource("a");
-    QStringList newTar1;
-    QStringList newEx1;
-    newTar1  << "б" << "в";
-    newEx1 << "asdf";
-    card1->setField(TARGET, newTar1);
-    card1->setField(EXAMPLE, newEx1);
-    // now it should generate 4 new changes on first device, let's synchronize it
+    World &world1 = World::Instance();
+    QSignalSpy spy1(sync1, &Synchronizer::finishSynchronization);
     sync1->synchronize(world1.getChanges());
     QVERIFY(spy1.wait(1000));
-    // now we have 2 cards and 4 changes + 2 create card changes + 2 initial setters, they also exists on the server
-    QCOMPARE(world1.cards_.size(), 2);
-    QCOMPARE(world1.changes_.size(), 8);
+
+    // two cards on each devices
+
+    World::version = 2;
+    World &world2 = World::Instance();
+    // before synchronization will delete second card
+    world2.deleteCard(ids[1]);
+
+    QSignalSpy spy2(sync2, &Synchronizer::finishSynchronization);
+    sync2->synchronize(world2.getChanges());
+    QVERIFY(spy2.wait(1000));
+
+    // then if we try edit it from other device and try to synchronize, it should be deleted from other device anyway
+    // let's try edit card that already deleted on server
+    World::version = 1;
+
+    QSharedPointer<DBCard> card = world1.getCards()[ids[1]];
+    card->setSource("fegkh"); // conflicting change of source field
+    QStringList newTar;
+    QStringList newEx;
+    newTar  << "jsan" << "sdbl";
+    newEx << "fajn" << "bhsadl";
+    card->setField(TARGET, newTar);
+    card->setField(EXAMPLE, newEx);
+
+    sync1->synchronize(world1.getChanges());
+    QVERIFY(spy1.wait(1000));
+
+    QCOMPARE(world1.cards_.size(), 1);
+    QCOMPARE(world1.changes_.size(), 5);
+    std::cout << "test card deletion OK" << std::endl;
+    emit endTestCase();
+}
+
+void WorldTest::testConflictSync() {
+    setup(false);
+
+    // emulate actions from first device
+    World::version = 1;
+    World &world1 = World::Instance();
+
+    QSharedPointer<DBCard> card = world1.getCards()[ids[0]];
+    card->setSource("a");
+    QStringList newTar;
+    QStringList newEx;
+    newTar  << "б" << "в";
+    newEx << "asdf";
+    card->setField(TARGET, newTar);
+    card->setField(EXAMPLE, newEx);
+    // now it should generate 4 new changes on first device, let's synchronize it
+    QSignalSpy spy1(sync1, &Synchronizer::finishSynchronization);
+    sync1->synchronize(world1.getChanges());
+    QVERIFY(spy1.wait(1000));
+    // now we have 1 card and 4 changes + 1 create card change + 1 initial setter, they also exists on the server
+    QCOMPARE(world1.cards_.size(), 1);
+    QCOMPARE(world1.changes_.size(), 6);
 
 
     // emulate actions from second device
 
     World::version = 2;
-    card1 = world2.getCards()[id1];
-    card1->setSource("g"); // conflicting change of source field
-    newTar1.clear();
-    newEx1.clear();
-    newTar1  << "г";
-    newEx1 << "fdsa";
-    card1->setField(TARGET, newTar1);
-    card1->setField(EXAMPLE, newEx1);
+    World &world2 = World::Instance();
+
+    card = world2.getCards()[ids[0]];
+    card->setSource("g"); // conflicting change of source field
+    newTar.clear();
+    newEx.clear();
+    newTar  << "г";
+    newEx << "fdsa";
+    card->setField(TARGET, newTar);
+    card->setField(EXAMPLE, newEx);
     // now it should generate 3 new changes on second device, one of them conflicting, choose server from conflicting pair when we will syncronize
     // server change now is setting "a" as a source field, it is already synchronized from first device
     // server change will be chosen when WorldTest::testing is odd, client change will be chosen when WorldTest::testing is even
     // we increment it each time when making choice, so we know which behavior we expect
     WorldTest::testing = 1;
-    // before synchronization also will delete second card
-    // then if we try edit it from other device and try to synchronize, it should be deleted from other device anyway
-    world2.deleteCard(id2);
 
+    World::version = 2;
+    QSignalSpy spy2(sync1, &Synchronizer::finishSynchronization);
     sync2->synchronize(world2.getChanges());
     QVERIFY(spy2.wait(1000));
-    QCOMPARE(world2.cards_.size(), 1);
-    QCOMPARE(world2.changes_.size(), 11);
-    QCOMPARE(world2.cards_[id1]->getSource(), QString("a"));
-    // we don't know ordering of elements, inserting from differ devices in lseq
-    // thus one more testcase when we manually check the result and after will make some changes and sync both devices with comparing result
 
+    QCOMPARE(world2.cards_[ids[0]]->getSource(), QString("a"));
 
-    // let's try edit card that already deleted on server
     World::version = 1;
-
-    QSharedPointer<DBCard> card2 = world1.getCards()[id2];
-    card2->setSource("fegkh"); // conflicting change of source field
-    QStringList newTar2;
-    QStringList newEx2;
-    newTar2  << "jsan" << "sdbl";
-    newEx2 << "fajn" << "bhsadl";
-    card2->setField(TARGET, newTar1);
-    card2->setField(EXAMPLE, newEx1);
 
     sync1->synchronize(world1.getChanges());
     QVERIFY(spy1.wait(1000));
 
+    testEqualsHistory(world1.getChanges(), world2.getChanges());
+    std::cout << "test conflict OK" << std::endl;
+    emit endTestCase();
+}
 
-    QCOMPARE(world1.changes_.size(), 11);
+void WorldTest::testSync() {
 
+    // we don't know ordering of elements, inserting from differ devices in lseq
+    // more testcases when we don't manually check the result but make some changes and sync both devices with comparing result
 
-    // now state must be equal on both devices
-
-    testEqualsHistory(world1.changes_, world2.changes_);
+    setup(false);
 
     World::version = 1;
-    card = world1.getCards()[id1];
-    newTar1.clear();
-    newEx1.clear();
-    newTar1  << "sahsdv";
-    newEx1 << "gadd";
-    card->setSource("adh");
-    card->setField(TARGET, newTar1);
-    card->setField(EXAMPLE, newEx1);
+    World &world1 = World::Instance();
 
-    sync1->synchronize(world1.getChanges());
+    World::version = 1;
+    QSharedPointer<DBCard> card = world1.getCards()[ids[0]];
+    QStringList newTar;
+    QStringList newEx;
+    newTar  << "sahsdv" << "aldfhl" << "gyasbdl";
+    newEx << "gadd" << "adshh" << "uasdhf";
+    card->setField(TARGET, newTar);
+    card->setField(EXAMPLE, newEx);
+
+    QSignalSpy spy1(sync1, &Synchronizer::finishSynchronization);
+    sync1->synchronize(world1.getChanges()); // send changes to server
     QVERIFY(spy1.wait(1000));
 
     World::version = 2;
-    card = world2.getCards()[id1];
-    newTar1.clear();
-    newEx1.clear();
-    newTar1  << "sahsdv" << "aldfhl" << "gyasbdl";
-    newEx1 << "gadd" << "adshh" << "uasdhf";
-    card->setSource("adh");
-    card->setField(TARGET, newTar1);
-    card->setField(EXAMPLE, newEx1);
+    World &world2 = World::Instance();
 
-    sync2->synchronize(world2.getChanges());
+    QSignalSpy spy2(sync2, &Synchronizer::finishSynchronization);
+    sync2->synchronize(world2.getChanges()); // get changes from another device
+    QVERIFY(spy2.wait(1000));
+
+    card = world2.getCards()[ids[0]];
+    newTar.clear();
+    newEx.clear();
+    newTar  << "sahsdv"; // this will add 2 change deleteElems to server
+    newEx << "gadd"; // the same
+    card->setSource("adh");
+
+    card->setSource("adh");
+    card->setField(TARGET, newTar);
+    card->setField(EXAMPLE, newEx);
+
+    sync2->synchronize(world2.getChanges()); // send changes to server from second device
     QVERIFY(spy2.wait(1000));
 
     World::version = 1;
+    card = world1.getCards()[ids[0]];
+    newTar.clear();
+    newEx.clear();
+    newTar  << "sfas" << "aldfsl" << "abdl"; //conflicting edit of first elem, and edition elems that already deleted in server state (should be deleted anyway)
+    newEx << "gd" << "uahf";
+    card->setField(TARGET, newTar);
+    card->setField(EXAMPLE, newEx);
 
-    sync1->synchronize(world1.getChanges());
+    sync1->synchronize(world1.getChanges()); // send changes to server
     QVERIFY(spy1.wait(1000));
+
+    // finally, get current server state from second device
+
+    World::version = 2;
+    sync2->synchronize(world2.getChanges());
+    QVERIFY(spy2.wait(1000));
+
+    QVERIFY(WorldTest::testing > 1); // we encountered several conflicts during tests
 
     testEqualsHistory(world1.changes_, world2.changes_);
 
     std::cout << "END" << std::endl;
     qApp->exit(0);
 }
-
-bool WorldTest::resetHistory() {
-    roosha::Void request;
-    roosha::Void response;
-    grpc::ClientContext context;
-    context.AddMetadata(TOKEN_METADATA_KEY, ConfigureManager::Instance().getToken().toStdString());
-    grpc::Status status = stub->resetHistory(&context, request, &response);
-    return status.ok();
-}
-
-void WorldTest::testEqualsHistory(ChangeList history1, ChangeList history2) {
-    QCOMPARE(history1.size(), history2.size());
-    for (int i = 0; i < history1.size(); i++) {
-        QCOMPARE(history1[i]->compare(history2[i]), EQUAL);
-    }
-}
-

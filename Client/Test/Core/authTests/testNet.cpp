@@ -17,7 +17,6 @@ void TestNet::exec_my_tests() {
     *argv = new char;
     (*argv)[0] = '!';
     QApplication test(*argc, argv);
-    QWidget* w = new QWidget();
     WorldTest::testing = 1;
 
     ConfigureManager::version = 1;
@@ -39,10 +38,22 @@ void TestNet::exec_my_tests() {
     qRegisterMetaType<ChangeList>("ChangeList");
 
     WorldTest * wt = new WorldTest(cm1, cm2);
+
+    wt->testSimpleOps();
+    wt->testEdition();
+
+    QSignalSpy spyAuth1(nm1, &NetworkManager::successAuthorize);
     nm1->registrate(QString("test"), QString("test"));
-    QSignalSpy spy(wt, &WorldTest::endTestEdition);
-    QVERIFY(spy.wait(5000));
+    QVERIFY(spyAuth1.wait(5000));
+
+    QSignalSpy spyAuth2(nm2, &NetworkManager::successAuthorize);
     nm2->registrate(QString("test"), QString("test"));
+    QVERIFY(spyAuth2.wait(1000));
+
+    wt->testSetupSync();
+    wt->testCardDeletionSync();
+    wt->testConflictSync();
+    wt->testSync();
 
     test.exec();
 }

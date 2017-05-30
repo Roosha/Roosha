@@ -14,25 +14,33 @@ Q_OBJECT
 public:
     WorldTest(ConfigureManager *cm1, ConfigureManager *cm2);
 
+    void testSimpleOps();
+    void testEdition();
+    void testSetupSync();
+    void testSync();
+    void testConflictSync();
+    void testCardDeletionSync();
+
+
     static qint8 testing;
 public slots:
-    void authenticationSuccess(quint32 id);
     void updateWorld(ChangeList changes);
-
 signals:
-    void endTestEdition();
+    void endTestCase();
+
 
 private:
-    void testEdition();
-    void testSync();
     void testEqualsHistory(ChangeList history1, ChangeList history2);
     bool resetHistory();
+    void setup(bool two);
+    QUuid ids[2];
     ConfigureManager *cm1;
     ConfigureManager *cm2;
     NetworkManager *nm1;
     NetworkManager *nm2;
     Synchronizer *sync1;
     Synchronizer *sync2;
+
     std::unique_ptr<roosha::RooshaService::Stub> stub;
 
 };

@@ -83,7 +83,10 @@ void Synchronizer::receivedChanges(qint32 requestId, ChangeList serverSuffix) {
                 items << "Server" << "Client";
 
                 choice = QInputDialog::getItem(nullptr, "Choose item", "", items, 0, false);
-            } else { choice = WorldTest::testing % 2 == 0? "Client" : "Server"; WorldTest::testing++;}
+            } else {
+                choice = WorldTest::testing % 2 == 0? "Client" : "Server";
+                WorldTest::testing++;
+            }
             if (choice == "Client") {
                 suffix.append(clientSuffix[i]);
             }
@@ -98,4 +101,8 @@ void Synchronizer::synchronize(ChangeList fullClientHistory) {
     clientChanges = fullClientHistory;
     qDebug() << synchronized_prefix_length;
     networkManager_->loadChanges(synchronized_prefix_length);
+}
+
+void Synchronizer::resetSyncPrefix() {
+    synchronized_prefix_length = 0;
 }
