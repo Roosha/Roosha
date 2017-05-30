@@ -28,7 +28,7 @@ CMP IChange::compare(QSharedPointer<IChange> otherChange) {
                 return EQUAL;
             else {
                 qDebug() << "conflict: " << QString::fromStdString(cch1.cardid()) << " in Source " <<
-                         QString::fromStdString(cch1.changesource().newsource()) << " VS " << QString::fromStdString(cch1.changesource().newsource());
+                         QString::fromStdString(cch1.changesource().newsource()) << " VS " << QString::fromStdString(cch2.changesource().newsource());
                 return CONFLICT;
             }
         case(roosha::CardChange::kEditElem):
@@ -86,7 +86,7 @@ bool IChange::isFirstDeletedBySecond(const roosha::Change &first, const roosha::
         if (first.change_case() != roosha::Change::kCardChange) return false;
         roosha::CardChange cch1 = first.cardchange();
         return cch1.change_case() == roosha::CardChange::kEditElem &&
-                cch1.cardid() == cch2.cardid() &&
+                cch1.cardid() == cch2.cardid() && cch2.deleteelem().index() == cch1.editelem().position() &&
                 cch1.editelem().field() == cch2.deleteelem().field();
 
     } else {

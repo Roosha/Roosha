@@ -304,7 +304,7 @@ void WorldTest::testConflictSync() {
     WorldTest::testing = 1;
 
     World::version = 2;
-    QSignalSpy spy2(sync1, &Synchronizer::finishSynchronization);
+    QSignalSpy spy2(sync2, &Synchronizer::finishSynchronization);
     sync2->synchronize(world2.getChanges());
     QVERIFY(spy2.wait(1000));
 
@@ -350,14 +350,15 @@ void WorldTest::testSync() {
     sync2->synchronize(world2.getChanges()); // get changes from another device
     QVERIFY(spy2.wait(1000));
 
+    testEqualsHistory(world1.changes_, world2.changes_);
+
     card = world2.getCards()[ids[0]];
     newTar.clear();
     newEx.clear();
-    newTar  << "sahsdv"; // this will add 2 change deleteElems to server
-    newEx << "gadd"; // the same
+    newTar  << "sahdv"; // this will add 2 change deleteElems to server
+    newEx << "gad"; // the same
     card->setSource("adh");
 
-    card->setSource("adh");
     card->setField(TARGET, newTar);
     card->setField(EXAMPLE, newEx);
 
@@ -373,19 +374,30 @@ void WorldTest::testSync() {
     card->setField(TARGET, newTar);
     card->setField(EXAMPLE, newEx);
 
+
     sync1->synchronize(world1.getChanges()); // send changes to server
     QVERIFY(spy1.wait(1000));
 
+    // card should be:
+    // source: adh
+    // targets: sfas
+    // examples: gadd
+
+    card = world1.getCards()[ids[0]];
+    QCOMPARE(card->getSource(), QString("adh"));
+    QCOMPARE(card->getExamples().size(), 1);
+    QCOMPARE(card->getTargets()[0], QString("sfas"));
+    QCOMPARE(card->getTargets().size(), 1);
+    QCOMPARE(card->getExamples()[0], QString("gad"));
     // finally, get current server state from second device
 
     World::version = 2;
     sync2->synchronize(world2.getChanges());
     QVERIFY(spy2.wait(1000));
 
-    QVERIFY(WorldTest::testing > 1); // we encountered several conflicts during tests
+    QVERIFY(WorldTest::testing > 3); // we encountered several conflicts during tests
 
     testEqualsHistory(world1.changes_, world2.changes_);
 
     std::cout << "END" << std::endl;
-    qApp->exit(0);
 }

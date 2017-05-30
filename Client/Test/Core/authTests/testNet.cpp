@@ -54,6 +54,4 @@ void TestNet::exec_my_tests() {
     wt->testCardDeletionSync();
     wt->testConflictSync();
     wt->testSync();
-
-    test.exec();
 }
