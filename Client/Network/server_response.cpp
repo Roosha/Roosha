@@ -1,12 +1,14 @@
 #include <QtDebug>
 
 #include <grpc++/grpc++.h>
+#include <Test/Core/authTests/worldtest.h>
 
 #include "server_response.h"
 #include "authentication_manager.h"
 #include "roosha_service_connector.h"
 #include "Helpers/protobuf_converter.h"
 #include "network_manager.h"
+#include "Test/Core/authTests/worldtest.h"
 
 using namespace ProtobufConverter;
 
@@ -41,7 +43,12 @@ void RegistrateAsyncCall::send(RooshaServiceConnector *connector) {
 
 void RegistrateAsyncCall::succeed(NetworkManager *netManager) {
     DEBUG("RegistrateAsyncCall::succeed");
-    emit netManager->successRegistrate(id_);
+    if (WorldTest::testing > 0) {
+        emit netManager->successAuthorize(id_);
+    }
+    else {
+        emit netManager->successRegistrate(id_);
+    }
     delete this;
 }
 

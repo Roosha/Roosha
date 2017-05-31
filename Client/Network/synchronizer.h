@@ -11,6 +11,7 @@
 #include "error_status.h"
 #include "network_manager.h"
 
+
 class Synchronizer: public QObject {
  Q_OBJECT
 
@@ -23,6 +24,8 @@ public slots:
     void receivedChanges(qint32 requestId, ChangeList serverSuffix);
     void pullSucceeded(qint32 requestId);
     void syncFailed(qint32 requestId, RPCErrorStatus status);
+    void resetSyncPrefix();
+
  signals:
     void finishSynchronization(ChangeList changes);
 private:

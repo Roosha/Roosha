@@ -15,6 +15,8 @@ enum Action {
 };
 
 class World {
+    friend class WorldTest;
+    friend class DBCard;
  public:
     static World &Instance();
 
@@ -39,14 +41,16 @@ class World {
     void insertCard(QUuid key, QSharedPointer<DBCard> card);
     void removeCard(QUuid key);
 
-#ifndef SYNC_TEST_H
+    static qint8 version;
+
  private:
-#endif
     World();
     ~World();
-    World(const World &world) = delete;
-    World &operator=(const World &) = delete;
 
+#ifndef TESTS_H
+//    World(const World &world) = delete;
+//    World &operator=(const World &) = delete;
+#endif // TESTS_H
     QMap<QUuid, QSharedPointer<DBCard>> cards_;
     ChangeList changes_;
 };

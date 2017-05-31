@@ -21,28 +21,46 @@ CMP IChange::compare(QSharedPointer<IChange> otherChange) {
     if (cch1.cardid() != cch2.cardid() || cch1.change_case() != cch2.change_case())
         return DIFFER;
     roosha::CardChange::ChangeCase changeCase = cch1.change_case();
-    if (changeCase == roosha::CardChange::kChangeSource) {
-        if (cch1.changesource().newsource() == cch2.changesource().newsource())
-            return EQUAL;
-        else {
-            qDebug() << "conflict: " << QString::fromStdString(cch1.cardid()) << " in Source " <<
-                     QString::fromStdString(cch1.changesource().newsource()) << " VS " << QString::fromStdString(cch1.changesource().newsource());
-            return CONFLICT;
-        }
-    }
-    if (changeCase == roosha::CardChange::kEditElem) {
-        if (cch1.editelem().field() == cch2.editelem().field() && cch1.editelem().position() == cch2.editelem().position()) {
-            if (cch1.editelem().value() == cch2.editelem().value())
+
+    switch(changeCase) {
+        case(roosha::CardChange::kChangeSource):
+            if (cch1.changesource().newsource() == cch2.changesource().newsource())
                 return EQUAL;
             else {
-                qDebug() << "conflict: " << QString::fromStdString(cch1.cardid()) << " in "
-                         << ProtobufConverter::rooshaFieldToString(cch1.editelem().field()) << " "
-                         << QString::fromStdString(cch1.editelem().value()) << " VS " << QString::fromStdString(cch2.editelem().value()) ;
+                qDebug() << "conflict: " << QString::fromStdString(cch1.cardid()) << " in Source " <<
+                         QString::fromStdString(cch1.changesource().newsource()) << " VS " << QString::fromStdString(cch2.changesource().newsource());
                 return CONFLICT;
             }
-        }
+        case(roosha::CardChange::kEditElem):
+            if (cch1.editelem().field() == cch2.editelem().field() && cch1.editelem().position() == cch2.editelem().position()) {
+                if (cch1.editelem().value() == cch2.editelem().value())
+                    return EQUAL;
+                else {
+                    qDebug() << "conflict: " << QString::fromStdString(cch1.cardid()) << " in "
+                             << ProtobufConverter::rooshaFieldToString(cch1.editelem().field()) << " "
+                             << QString::fromStdString(cch1.editelem().value()) << " VS " << QString::fromStdString(cch2.editelem().value()) ;
+                    return CONFLICT;
+                }
+            }
+            return DIFFER;
+        case(roosha::CardChange::kCreateCard):
+            return EQUAL;
+        case(roosha::CardChange::kDeleteCard):
+            return EQUAL;
+        case(roosha::CardChange::kDeleteElem):
+            if (cch1.deleteelem().field() == cch2.deleteelem().field() && cch1.deleteelem().index() == cch2.deleteelem().index())
+                return EQUAL;
+            else
+                return DIFFER;
+        case(roosha::CardChange::kInsertElem):
+            if (cch1.insertelem().field() == cch2.insertelem().field() && cch1.insertelem().index() == cch2.insertelem().index()) {
+                if (cch1.insertelem().value() == cch2.insertelem().value())
+                    return EQUAL;
+                else
+                    return DIFFER;
+            } else
+                return DIFFER;
     }
-    return DIFFER;
 }
 
 Deletion IChange::checkForDeletion(QSharedPointer<IChange> otherChange) {
@@ -68,7 +86,7 @@ bool IChange::isFirstDeletedBySecond(const roosha::Change &first, const roosha::
         if (first.change_case() != roosha::Change::kCardChange) return false;
         roosha::CardChange cch1 = first.cardchange();
         return cch1.change_case() == roosha::CardChange::kEditElem &&
-                cch1.cardid() == cch2.cardid() &&
+                cch1.cardid() == cch2.cardid() && cch2.deleteelem().index() == cch1.editelem().position() &&
                 cch1.editelem().field() == cch2.deleteelem().field();
 
     } else {
